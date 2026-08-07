@@ -63,8 +63,13 @@ public class BuildService
 
                 if (path != null && path.Count > 0 && path.Count < minPathLength)
                 {
-                    minPathLength = path.Count;
-                    bestPath = path;
+                    int currentPath = CalculatePath(path, room);
+
+                    if (currentPath < minPathLength)
+                    {
+                        minPathLength = currentPath;
+                        bestPath = path;
+                    }
                 }
             }
         }
@@ -79,18 +84,29 @@ public class BuildService
             return null;
         }
 
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        Dictionary<Vector2Int, int> dist = new Dictionary<Vector2Int, int>();
         Dictionary<Vector2Int, Vector2Int> parent = new Dictionary<Vector2Int, Vector2Int>();
-        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        List<Vector2Int> open = new List<Vector2Int>();
 
-        queue.Enqueue(start);
-        visited.Add(start);
+        dist[start] = 0;
+        open.Add(start);
 
         bool isFind = false;
 
-        while (queue.Count > 0)
+        while (open.Count > 0)
         {
-            Vector2Int current = queue.Dequeue();
+            int minIdx = 0;
+
+            for (int i = 1; i < open.Count; i++)
+            {
+                if (dist[open[i]] < dist[open[minIdx]])
+                {
+                    minIdx = i;
+                }
+            }
+
+            Vector2Int current = open[minIdx];
+            open.RemoveAt(minIdx);
 
             if (current == end)
             {
@@ -102,14 +118,35 @@ public class BuildService
             {
                 Vector2Int next = current + dir;
 
-                if (visited.Contains(next) || IsRoom(next, room))
+                if (IsRoom(next, room))
                 {
                     continue;
                 }
 
-                visited.Add(next);
-                parent[next] = current;
-                queue.Enqueue(next);
+                if (room.TryGetValue(next, out RoomViewModel vm) && vm.BuildType == BuildType.Room)
+                {
+                    continue;
+                }
+
+                int move = 100;
+
+                if (room.TryGetValue(next, out RoomViewModel roomVM) && roomVM.BuildType == BuildType.Aisle)
+                {
+                    move = 1;
+                }
+
+                int newDis = dist[current] + move;
+
+                if (!dist.ContainsKey(next) || newDis < dist[next])
+                {
+                    dist[next] = newDis;
+                    parent[next] = current;
+
+                    if (!open.Contains(next))
+                    {
+                        open.Add(next);
+                    }
+                }
             }
         }
 
@@ -121,10 +158,24 @@ public class BuildService
         List<Vector2Int> path = new List<Vector2Int>();
         Vector2Int curr = end;
 
-        while (curr != start)
+        int count = 0;
+        int maxCount = 1000;
+
+        while (curr != start && count < maxCount)
         {
             path.Add(curr);
-            curr = parent[curr];
+
+            if (!parent.TryGetValue(curr, out curr))
+            {
+                return null;
+            }
+
+            count++;
+        }
+
+        if (count >= maxCount)
+        {
+            return null;
         }
 
         path.Add(start);
@@ -133,13 +184,27 @@ public class BuildService
         return path;
     }
 
-    private bool IsRoom(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> room)
+    private int CalculatePath(List<Vector2Int> path, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        if (room.TryGetValue(pos, out RoomViewModel vm))
+        int total = 0;
+
+        foreach (Vector2Int pos in path)
         {
-            return vm.BuildType == BuildType.Room;
+            if (room.TryGetValue(pos, out RoomViewModel vm) && vm.BuildType == BuildType.Aisle)
+            {
+                total += 1;
+            }
+            else
+            {
+                total += 100;
+            }
         }
 
-        return false;
+        return total;
+    }
+
+    private bool IsRoom(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> roomMap)
+    {
+        return roomMap.TryGetValue(pos, out RoomViewModel vm) && vm.BuildType == BuildType.Room;
     }
 }

@@ -220,7 +220,7 @@ public class RoomViewModel : ViewModelBase
         {
             foreach (DoorData data in DoorDataList)
             {
-                if (data.Offset == doorOffset)
+                if (data.Offset == doorOffset && data.DirectionIndex > 0 && data.DirectionIndex <= 3)
                 {
                     dirIndex = data.DirectionIndex;
                     break;
