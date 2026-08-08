@@ -84,7 +84,7 @@ public class BuildViewModel : ViewModelBase
     {
         if (!_hasStartPos)
         {
-            if (!_builds.TryGetValue(pos, out RoomViewModel clickedVM) || clickedVM.BuildType != BuildType.Room)
+            if (!_builds.TryGetValue(pos, out RoomViewModel clickedVM) || clickedVM.BuildType != BuildType.Room || !clickedVM.IsReady)
             {
                 return false;
             }
@@ -95,13 +95,7 @@ public class BuildViewModel : ViewModelBase
             return true;
         }
 
-        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room)
-        {
-            ResetAisle();
-            return false;
-        }
-
-        if (_startRoom == targetVM)
+        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || _startRoom == targetVM)
         {
             ResetAisle();
             return false;
@@ -109,12 +103,15 @@ public class BuildViewModel : ViewModelBase
 
         List<Vector2Int> path = _buildService.SearchBestPath(_startRoom, targetVM, _builds);
 
-        ResetAisle();
-
         if (path == null || path.Count == 0)
         {
+            Debug.LogWarning("[Build] 연결 가능한 경로가 없습니다.");
+            ResetAisle();
             return false;
         }
+
+        ResetAisle();
+        RoomViewModel lastAisle = null;
 
         foreach (Vector2Int aislePos in path)
         {
@@ -132,6 +129,11 @@ public class BuildViewModel : ViewModelBase
 
             UpdateConnection(aislePos);
             UpdateNearConnection(aislePos);
+        }
+
+        if (lastAisle != null)
+        {
+            LastBuild = lastAisle;
         }
 
         return true;

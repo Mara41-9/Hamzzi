@@ -75,12 +75,12 @@ public class BuildView : ViewBase
         if (roomVM.BuildType == BuildType.Room)
         {
             worldX = (roomVM.OriginPos.x + roomVM.Size.x * 0.5f) * _cellSize;
-            worldY = (roomVM.OriginPos.y + roomVM.Size.y * 0.5f - 0.5f) * _cellSize;
+            worldY = (roomVM.OriginPos.y + roomVM.Size.y * 0.5f) * _cellSize;
         }
         else
         {
             worldX = (roomVM.OriginPos.x + 0.5f) * _cellSize;
-            worldY = roomVM.OriginPos.y * _cellSize;
+            worldY = (roomVM.OriginPos.y + 0.5f) * _cellSize;
         }
 
         worldX = Mathf.Round(worldX * 100f) / 100f;

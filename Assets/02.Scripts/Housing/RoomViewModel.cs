@@ -24,6 +24,8 @@ public struct DoorData
 
 public class RoomViewModel : ViewModelBase
 {
+    public bool IsReady { get; set; } = false;
+
     public List<DoorData> DoorDataList { get; private set; } = new List<DoorData>();
 
     private string _instanceID;
@@ -106,6 +108,7 @@ public class RoomViewModel : ViewModelBase
 
         if (type == BuildType.Aisle)
         {
+            IsReady = true;
             DoorDataList.Add(new DoorData { Offset = Vector2Int.zero, DirectionIndex = 0 });
         }
         else if (type == BuildType.Room)
@@ -116,13 +119,13 @@ public class RoomViewModel : ViewModelBase
 
     private void InitDefaultDoor()
     {
-        int centerX = Size.x / 2;
+        //int centerX = Size.x / 2;
         int centerY = Size.y / 2;
 
         List<DoorData> defaultDoors = new List<DoorData>
         {
-            new DoorData { Offset = new Vector2Int(centerX, Size.y - 1), DirectionIndex = 0 },
-            new DoorData { Offset = new Vector2Int(centerX, 0), DirectionIndex = 1 },
+            //new DoorData { Offset = new Vector2Int(centerX, Size.y - 1), DirectionIndex = 0 },
+            //new DoorData { Offset = new Vector2Int(centerX, 0), DirectionIndex = 1 },
             new DoorData { Offset = new Vector2Int(0, centerY), DirectionIndex = 2 },
             new DoorData { Offset = new Vector2Int(Size.x - 1, centerY), DirectionIndex = 3 }
         };
@@ -196,31 +199,13 @@ public class RoomViewModel : ViewModelBase
     public DoorInfo GetDoorInfo(Vector2Int doorOffset)
     {
         Vector2Int inside = OriginPos + doorOffset;
-
-        int dirIndex = 0;
-
-        if (doorOffset.y == 0)
-        {
-            dirIndex = 1;
-        }
-        else if (doorOffset.y == Size.y - 1)
-        {
-            dirIndex = 0;
-        }
-        else if (doorOffset.x == 0)
-        {
-            dirIndex = 2;
-        }
-        else if (doorOffset.x == Size.x - 1)
-        {
-            dirIndex = 3;
-        }
+        int dirIndex = (doorOffset.x == 0) ? 2 : 3;
 
         if (DoorDataList != null)
         {
             foreach (DoorData data in DoorDataList)
             {
-                if (data.Offset == doorOffset && data.DirectionIndex > 0 && data.DirectionIndex <= 3)
+                if (data.Offset == doorOffset && data.DirectionIndex >= 0 && data.DirectionIndex <= 3)
                 {
                     dirIndex = data.DirectionIndex;
                     break;
@@ -231,6 +216,21 @@ public class RoomViewModel : ViewModelBase
         Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         Vector2Int outside = inside + dirs[dirIndex];
 
-        return new DoorInfo{ InsidePos = inside, OutsidePos = outside, DirectionIndex = dirIndex };
+        if (outside.x >= OriginPos.x && outside.x < OriginPos.x + Size.x &&
+            outside.y >= OriginPos.y && outside.y < OriginPos.y + Size.y)
+        {
+            switch (dirIndex)
+            {
+                case 2:
+                    outside = new Vector2Int(OriginPos.x - 1, inside.y);
+                    break;
+
+                case 3:
+                    outside = new Vector2Int(OriginPos.x + Size.x, inside.y);
+                    break;
+            }
+        }
+
+        return new DoorInfo { InsidePos = inside, OutsidePos = outside, DirectionIndex = dirIndex };
     }
 }

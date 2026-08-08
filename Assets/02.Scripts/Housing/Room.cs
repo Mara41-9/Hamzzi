@@ -12,8 +12,6 @@ public struct DoorConfig
 
 public class Room : MonoBehaviour
 {
-    [SerializeField] private GameObject Object_Up;
-    [SerializeField] private GameObject Object_Down;
     [SerializeField] private GameObject Object_Left;
     [SerializeField] private GameObject Object_Right;
 
@@ -46,17 +44,28 @@ public class Room : MonoBehaviour
 
         foreach (var door in DoorConfig)
         {
-            Vector2Int offset = CalculateDoor(door.Transform.localPosition, halfWidth, halfHeight);
+            Vector2Int offset = CalculateDoor(door.Transform.localPosition, halfWidth, halfHeight, door.Index);
             doorData.Add(new DoorData { Offset = offset, DirectionIndex = door.Index });
         }
 
         _roomVM.SetDoorData(doorData);
+        _roomVM.IsReady = true;
     }
 
-    private Vector2Int CalculateDoor(Vector3 localPos, float halfWidth, float halfHeight)
+    private Vector2Int CalculateDoor(Vector3 localPos, float halfWidth, float halfHeight, int dirIndex)
     {
-        int x = Mathf.Clamp(Mathf.RoundToInt((localPos.x + halfWidth - _cellSize * 0.5f) / _cellSize), 0, _roomVM.Size.x - 1);
-        int y = Mathf.Clamp(Mathf.RoundToInt((localPos.y + halfHeight - _cellSize * 0.5f) / _cellSize), 0, _roomVM.Size.y - 1);
+        int x = Mathf.Clamp(Mathf.FloorToInt((localPos.x + halfWidth) / _cellSize), 0, _roomVM.Size.x - 1);
+        int y = Mathf.Clamp(Mathf.FloorToInt((localPos.y + halfHeight) / _cellSize), 0, _roomVM.Size.y - 1);
+
+        switch (dirIndex)
+        {
+            case 2: x = 0;
+                break;
+
+            case 3:
+                x = _roomVM.Size.x - 1;
+                break;
+        }
 
         return new Vector2Int(x, y);
     }
@@ -81,8 +90,6 @@ public class Room : MonoBehaviour
 
     public void SetRoomConnection(AisleConnection connection)
     {
-        Object_Up.SetActive(!connection.Up);
-        Object_Down.SetActive(!connection.Down);
         Object_Left.SetActive(!connection.Left);
         Object_Right.SetActive(!connection.Right);
     }

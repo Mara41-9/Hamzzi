@@ -61,7 +61,7 @@ public class BuildService
                 Vector2Int startDir = _directions[startInfo.DirectionIndex];
                 List<Vector2Int> path = GetAislePath(startInfo.OutsidePos, endInfo.OutsidePos, room);
 
-                if (path != null && path.Count > 0 && path.Count < minPathLength)
+                if (path != null && path.Count > 0)
                 {
                     int currentPath = CalculatePath(path, room);
 
@@ -79,9 +79,14 @@ public class BuildService
 
     public List<Vector2Int> GetAislePath(Vector2Int start, Vector2Int end, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        if (start == end || IsRoom(start, room) || IsRoom(end, room))
+        if (IsRoom(start, room) || IsRoom(end, room))
         {
             return null;
+        }
+
+        if (start == end)
+        {
+            return new List<Vector2Int> { start };
         }
 
         Dictionary<Vector2Int, int> dist = new Dictionary<Vector2Int, int>();
@@ -96,11 +101,15 @@ public class BuildService
         while (open.Count > 0)
         {
             int minIdx = 0;
+            int minScore = dist[open[0]] + CalculateDistance(open[0], end);
 
             for (int i = 1; i < open.Count; i++)
             {
-                if (dist[open[i]] < dist[open[minIdx]])
+                int score = dist[open[i]] + CalculateDistance(open[i], end);
+
+                if (score < minScore)
                 {
+                    minScore = score;
                     minIdx = i;
                 }
             }
@@ -118,12 +127,7 @@ public class BuildService
             {
                 Vector2Int next = current + dir;
 
-                if (IsRoom(next, room))
-                {
-                    continue;
-                }
-
-                if (room.TryGetValue(next, out RoomViewModel vm) && vm.BuildType == BuildType.Room)
+                if (IsRoom(next, room) || IsNearRoomCorner(next, room))
                 {
                     continue;
                 }
@@ -205,6 +209,48 @@ public class BuildService
 
     private bool IsRoom(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> roomMap)
     {
-        return roomMap.TryGetValue(pos, out RoomViewModel vm) && vm.BuildType == BuildType.Room;
+        foreach (var vm in roomMap.Values)
+        {
+            if (vm.BuildType == BuildType.Room)
+            {
+                if (pos.x >= vm.OriginPos.x && pos.x < vm.OriginPos.x + vm.Size.x && pos.y >= vm.OriginPos.y && pos.y < vm.OriginPos.y + vm.Size.y)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool IsNearRoomCorner(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> room)
+    {
+        foreach (var vm in room.Values)
+        {
+            if (vm.BuildType == BuildType.Room)
+            {
+                Vector2Int[] corners = new Vector2Int[]
+                {
+                    new Vector2Int(vm.OriginPos.x - 1, vm.OriginPos.y - 1),
+                    new Vector2Int(vm.OriginPos.x - 1, vm.OriginPos.y + vm.Size.y),
+                    new Vector2Int(vm.OriginPos.x + vm.Size.x, vm.OriginPos.y - 1),
+                    new Vector2Int(vm.OriginPos.x + vm.Size.x, vm.OriginPos.y + vm.Size.y)
+                };
+
+                foreach (var corner in corners)
+                {
+                    if (pos == corner)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private int CalculateDistance(Vector2Int a, Vector2Int b)
+    {
+        return (Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y)) * 100;
     }
 }
