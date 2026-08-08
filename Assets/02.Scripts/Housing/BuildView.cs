@@ -8,6 +8,9 @@ public class BuildView : ViewBase
     [SerializeField] private List<Vector2Int> Transform_DefaultRoom;
     [SerializeField] private List<Vector2Int> Transform_DefaultAisle;
 
+    // 임시
+    [SerializeField] private BuildUI BuildUI;
+
     private float _cellSize = 1.0f;
     private Camera _mainCamera;
 
@@ -19,10 +22,11 @@ public class BuildView : ViewBase
         _mainCamera = Camera.main;
     }
 
-    // 임시
     private void Start()
     {
+        // 임시
         BindViewModel(new BuildViewModel());
+        BuildUI.BindViewModel(_buildVM);
 
         _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }

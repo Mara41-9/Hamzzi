@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class BuildViewModel : ViewModelBase
 {
@@ -37,6 +36,18 @@ public class BuildViewModel : ViewModelBase
                 OnPropertyChanged(nameof(LastBuild));
             }
         }
+    }
+
+    public void EnterBuildMode()
+    {
+        ResetAisle();
+        SelectType = BuildType.Room;
+    }
+
+    public void ExitBuildMode()
+    {
+        ResetAisle();
+        SelectType = BuildType.None;
     }
 
     public void InitDefaultRoom(List<Vector2Int> defaultRoom, List<Vector2Int> defaultAisle)
@@ -90,6 +101,11 @@ public class BuildViewModel : ViewModelBase
         UpdateRoomConnection(newRoom);
 
         LastBuild = newRoom;
+
+        _startRoom = newRoom;
+        _hasStartPos = true;
+        SelectType = BuildType.Aisle;
+
         return true;
     }
 
@@ -172,6 +188,8 @@ public class BuildViewModel : ViewModelBase
         {
             LastBuild = lastAisle;
         }
+
+        SelectType = BuildType.None;
 
         return true;
     }
