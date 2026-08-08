@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +12,15 @@ public class ShopSlotUI : MonoBehaviour
 
     public long ItemSlotUniqueId { get; private set; }
 
+    public int CostAmount { get; private set; }
+
     public ItemData ItemData { get; private set; }
 
     public Sprite IconSprite { get; private set; }
 
     public event Action<long> OnClickItemSlot;
+
+    private ShopSlotViewModel _slotVm;
 
     private void OnEnable()
     {
@@ -31,6 +36,29 @@ public class ShopSlotUI : MonoBehaviour
     {
         OnClickItemSlot?.Invoke(ItemSlotUniqueId);
         Debug.Log($"{ItemSlotUniqueId} 눌러졌다   아이템명: {ItemData.Name}");
+    }
+
+    public void BindSlotViewModel(ShopSlotViewModel slotVm)
+    {
+        _slotVm = slotVm;
+        _slotVm.PropertyChanged += OnPropChanged_View;
+        _slotVm.InvokeOnceOnInit();
+    }
+
+    private void OnPropChanged_View(object sender, PropertyChangedEventArgs e)
+    {
+        switch(e.PropertyName)
+        {
+            case nameof(ShopSlotViewModel.ItemUniqueId):
+                ItemSlotUniqueId = _slotVm.ItemUniqueId;
+                break;
+            case nameof(ShopSlotViewModel.ItemDataId):
+                SetIcon(_slotVm.ItemDataId);
+                break;
+            case nameof(ShopSlotViewModel.CostAmount):
+                CostAmount = _slotVm.CostAmount;
+                break;
+        }
     }
 
     public void SetIcon(string itemDataId)
@@ -64,12 +92,6 @@ public class ShopSlotUI : MonoBehaviour
         IconSprite = loadedSprite;
 
         Image_Icon.sprite = IconSprite;
-    }
-
-    public void InitSlot(long slotUniqueId, string itemDataId)
-    {
-        ItemSlotUniqueId = slotUniqueId;
-        SetIcon(itemDataId);
     }
 
     public void BindSlotSelectEvent(Action<long> onClickItemSlot)

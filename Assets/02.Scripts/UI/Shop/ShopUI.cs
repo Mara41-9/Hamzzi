@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public enum ShopCategory
     Decor
 }
 
-public class ShopUI : MonoBehaviour
+public class ShopUI : UIBase
 {
     [Header("아이템 슬롯 정보")]
     [SerializeField] private GameObject Prefab_ItemSlot;
@@ -29,17 +29,17 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private UIButton Button_PlayCategory;
     [SerializeField] private UIButton Button_DecorCategory;
 
-    private long _slotUniqueId;
-    private ItemData _itemData;
-    private ShopSlotUI _shopSlotUI;
+    private ItemData _selectedItemData;
+    private ShopViewModel _shopVm;
+
+    private ShopCategory _selectedCategory = ShopCategory.All;
 
     private Dictionary<long, ShopSlotUI> _itemSlotList = new Dictionary<long, ShopSlotUI>();
-    private List<ItemData> _itemDataList = new List<ItemData>();
 
     private void Start()
     {
-        TestLoadItemData();
-        SetShopLayoutByCategory(ShopCategory.All);
+        _selectedCategory = ShopCategory.All;
+        SetShopItemSlotOnEnable();
     }
 
     private void OnEnable()
@@ -72,48 +72,58 @@ public class ShopUI : MonoBehaviour
 
     private void SetShopLayoutByCategory(ShopCategory category)
     {
-        SetShopItemSlotOnEnable(category);
+        _selectedCategory = category;
+
+        ResetItemSlotAndCreateAll();
     }
 
-    private void TestLoadItemData()
+    private void SetShopItemSlotOnEnable()
     {
-        GameDataManager.Instance.LoadData<ItemData>();
-
-        _itemDataList = GameDataManager.Instance.GetAllData<ItemData>();
-        if (_itemDataList == null)
-        {
-            Debug.LogWarning("아이템 데이터가 존재하지 않습니다.");
-            return;
-        }
-
-        foreach (var item in _itemDataList)
-        {
-            Debug.Log($"{item.Name}");
-        }
-    }
-
-    private void SetShopItemSlotOnEnable(ShopCategory category)
-    {
-        _slotUniqueId = 0;
         ClearSlotList();
 
-        if (_itemDataList == null || _itemDataList.Count == 0)
+        FindShopViewModelAndBind();
+    }
+
+    private void FindShopViewModelAndBind()
+    {
+        var shopVm = SampleNetworkManager.Instance.ShopService.GetShopViewModel();
+        if(shopVm.ItemList == null || shopVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다");
             return;
         }
 
-        foreach(var item in _itemDataList)
+        _shopVm = shopVm;
+        _shopVm.PropertyChanged += OnPropChanged_ShopView;
+        _shopVm.InvokeOnceOnInit();
+    }
+
+    private void OnPropChanged_ShopView(object sender, PropertyChangedEventArgs e)
+    {
+        switch(e.PropertyName)
         {
-            if(item.Category == category.ToString() || category == ShopCategory.All)
+            case nameof(ShopViewModel.ItemList):
+                ResetItemSlotAndCreateAll();
+                break;
+        }
+    }
+
+    private void ResetItemSlotAndCreateAll()
+    {
+        ClearSlotList();
+
+        foreach (var itemKv in _shopVm.ItemList)
+        {
+            var slotVm = itemKv.Value;
+
+            if (slotVm.Category == _selectedCategory.ToString() || _selectedCategory == ShopCategory.All)
             {
-                CreateItemSlot(_slotUniqueId, item.Id);
-                _slotUniqueId++;
+                CreateItemSlot(slotVm);
             }
         }
     }
 
-    private void CreateItemSlot(long slotUniqueId, string itemDataId)
+    private void CreateItemSlot(ShopSlotViewModel slotVm)
     {
         var gObj = Instantiate(Prefab_ItemSlot, Transform_SlotRoot);
         if(gObj == null)
@@ -121,30 +131,31 @@ public class ShopUI : MonoBehaviour
             return;
         }
 
-        _shopSlotUI = gObj.GetComponent<ShopSlotUI>();
-        if(_shopSlotUI == null)
+        var slotView = gObj.GetComponent<ShopSlotUI>();
+        if(slotView == null)
         {
             return;
         }
 
-        _shopSlotUI.InitSlot(slotUniqueId, itemDataId);
+        slotView.BindSlotViewModel(slotVm);
 
-        _itemSlotList.Add(slotUniqueId, _shopSlotUI);
-        _shopSlotUI.BindSlotSelectEvent(OnChildSlotSelected);
+        _itemSlotList.Add(slotVm.ItemUniqueId, slotView);
+        slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
     private void OnChildSlotSelected(long slotUniqueId)
     {
-        if(_itemSlotList.TryGetValue(slotUniqueId, out _shopSlotUI) == false)
+        if(_itemSlotList.TryGetValue(slotUniqueId, out ShopSlotUI slotView) == false)
         {
             return;
         }
 
-        _itemData = _shopSlotUI.ItemData;
+        _selectedItemData = slotView.ItemData;
 
-        Image_Icon.sprite = _shopSlotUI.IconSprite;
-        Text_ItemName.text = _itemData.Name;
-        Text_ItemDescription.text = _itemData.Description;
+        Image_Icon.sprite = slotView.IconSprite;
+        Text_ItemName.text = _selectedItemData.Name;
+        Text_ItemDescription.text = _selectedItemData.Description;
+        Text_ItemPrice.text = slotView.CostAmount.ToString();
     }
 
     private void ClearSlotList()
@@ -154,7 +165,7 @@ public class ShopUI : MonoBehaviour
             foreach (var slotKv in _itemSlotList)
             {
                 var slot = slotKv.Value;
-                DestroyImmediate(slot.gameObject);
+                Destroy(slot.gameObject);
             }
 
             _itemSlotList.Clear();
