@@ -104,7 +104,7 @@ public class RoomViewModel : ViewModelBase
         InstanceID = Guid.NewGuid().ToString();
         BuildType = type;
         OriginPos = pos;
-        Size = (type == BuildType.Room) ? new Vector2Int(4, 3) : Vector2Int.one;
+        Size = (type == BuildType.Room) ? new Vector2Int(6, 5) : Vector2Int.one;
 
         if (type == BuildType.Aisle)
         {
@@ -119,7 +119,7 @@ public class RoomViewModel : ViewModelBase
 
     private void InitDefaultDoor()
     { 
-        int centerY = Size.y / 2;
+        int centerY = 0;
 
         List<DoorData> defaultDoors = new List<DoorData>
         {

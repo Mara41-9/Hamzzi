@@ -6215,7 +6215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildView
   Transform_DefaultRoom:
-  - {x: -5, y: 4}
+  - {x: -7, y: 4}
   Transform_DefaultAisle:
   - {x: 0, y: 9}
   - {x: 0, y: 8}
