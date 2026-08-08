@@ -1,9 +1,13 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
 public class BuildView : ViewBase
 {
+    [SerializeField] private List<Vector2Int> Transform_DefaultRoom;
+    [SerializeField] private List<Vector2Int> Transform_DefaultAisle;
+
     private float _cellSize = 1.0f;
     private Camera _mainCamera;
 
@@ -19,6 +23,8 @@ public class BuildView : ViewBase
     private void Start()
     {
         BindViewModel(new BuildViewModel());
+
+        _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
 
     public void BindViewModel(BuildViewModel buildVM)

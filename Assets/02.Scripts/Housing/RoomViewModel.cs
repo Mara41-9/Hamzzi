@@ -118,14 +118,11 @@ public class RoomViewModel : ViewModelBase
     }
 
     private void InitDefaultDoor()
-    {
-        //int centerX = Size.x / 2;
+    { 
         int centerY = Size.y / 2;
 
         List<DoorData> defaultDoors = new List<DoorData>
         {
-            //new DoorData { Offset = new Vector2Int(centerX, Size.y - 1), DirectionIndex = 0 },
-            //new DoorData { Offset = new Vector2Int(centerX, 0), DirectionIndex = 1 },
             new DoorData { Offset = new Vector2Int(0, centerY), DirectionIndex = 2 },
             new DoorData { Offset = new Vector2Int(Size.x - 1, centerY), DirectionIndex = 3 }
         };

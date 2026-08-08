@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class BuildViewModel : ViewModelBase
 {
@@ -35,6 +36,27 @@ public class BuildViewModel : ViewModelBase
                 _lastBuild = value;
                 OnPropertyChanged(nameof(LastBuild));
             }
+        }
+    }
+
+    public void InitDefaultRoom(List<Vector2Int> defaultRoom, List<Vector2Int> defaultAisle)
+    {
+        foreach (Vector2Int pos in defaultRoom)
+        {
+            TryBuildRoom(pos);
+        }
+
+        foreach (Vector2Int pos in defaultAisle)
+        {
+            BuildDefaultAisle(pos);
+        }
+
+        Vector2Int exitAislePos = defaultAisle[0];
+
+        if (_builds.TryGetValue(exitAislePos, out RoomViewModel aisleVM) && aisleVM.BuildType == BuildType.Aisle)
+        {
+            aisleVM.SetWallActive(0, true);
+            aisleVM.Refresh();
         }
     }
 
@@ -80,6 +102,22 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    public void BuildDefaultAisle(Vector2Int pos)
+    {
+        if (_builds.ContainsKey(pos))
+        {
+            return;
+        }
+
+        RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
+        _builds[pos] = newAisle;
+
+        UpdateConnection(pos);
+        UpdateNearConnection(pos);
+
+        LastBuild = newAisle;
+    }
+
     public bool TryBuildAisle(Vector2Int pos)
     {
         if (!_hasStartPos)
@@ -105,7 +143,6 @@ public class BuildViewModel : ViewModelBase
 
         if (path == null || path.Count == 0)
         {
-            Debug.LogWarning("[Build] 연결 가능한 경로가 없습니다.");
             ResetAisle();
             return false;
         }
