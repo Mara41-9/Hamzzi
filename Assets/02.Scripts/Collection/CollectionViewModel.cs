@@ -17,7 +17,8 @@ public class CollectionViewModel : ViewModelBase
         }
     }
 
-    private HashSet<string> _collectedHamsterIdList = new HashSet<string>();
+    // 테스트용 아이디 넣음
+    private HashSet<string> _collectedHamsterIdList = new HashSet<string>() { "Hamster_01", "Hamster_03" };
     public HashSet<string> CollectedHamsterIdList
     {
         get { return _collectedHamsterIdList; }

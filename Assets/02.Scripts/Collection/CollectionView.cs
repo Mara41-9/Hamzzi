@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 
 
@@ -23,6 +25,7 @@ public class CollectionView : UIBase
     [SerializeField] private TextMeshProUGUI HamsterAbility1;
     [SerializeField] private TextMeshProUGUI HamsterAbiltiy2;
 
+    private Dictionary<string, HamsterSlot> _spawnSlotList = new Dictionary<string, HamsterSlot>();
     private CollectionViewModel _collectionViewModel;
 
     private void OnEnable()
@@ -33,8 +36,12 @@ public class CollectionView : UIBase
         _collectionViewModel = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.PropertyChanged += OnPropertyChanged;
         _collectionViewModel.InvokeOnceOnInit();
-
+        
+        // 슬롯이 없다면 초기화
         InitCollectionList();
+
+        // 첫번 째 슬롯으로 표시
+        ShowFirstSlot();
     }
 
     private void OnDisable()
@@ -61,6 +68,10 @@ public class CollectionView : UIBase
     private void InitCollectionList()
     {
         HashSet<string> allHamsterList = _collectionViewModel.AllHamsterIdList;
+
+        if (_spawnSlotList.Count > 0)
+            return;
+
         foreach(var hamsterId in allHamsterList)
         {
             GameObject hamsterSlotObject = Instantiate(SlotPrefab, SlotContent);
@@ -75,8 +86,12 @@ public class CollectionView : UIBase
             if (hamsterData == null)
                 return;
 
-            hamsterSlot.InitSlot(hamsterData);
+            bool isCollected = _collectionViewModel.CollectedHamsterIdList.Contains(hamsterId);
+
+            hamsterSlot.InitSlot(hamsterData, isCollected);
             hamsterSlot.OnSlotClicked += UpdateHamsterInfo;
+
+            _spawnSlotList.Add(hamsterId, hamsterSlot);
         }
     }
 
@@ -87,6 +102,7 @@ public class CollectionView : UIBase
             return;
 
         // 아이콘 로드
+
         // 햄스터 이름
         HamsterName.text = hamsterData.ItemName;
         // 햄스터 설명
@@ -94,5 +110,11 @@ public class CollectionView : UIBase
 
         // 햄스터 디테일 정보
         HamsterAbility1.text = $"{hamsterData.CollectSpeed}";
+    }
+
+    private void ShowFirstSlot()
+    {
+        string hamsterId = _spawnSlotList.Keys.First();
+        UpdateHamsterInfo(hamsterId);
     }
 }
