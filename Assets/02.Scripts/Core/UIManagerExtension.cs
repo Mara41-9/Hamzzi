@@ -30,6 +30,7 @@ public enum UIType
     FarmPlotStatusUI,
     GeneratorUI,
     LobbyBackgroundUI,
+    BuildUI
 }
 
 public static class UIManagerExtension
@@ -40,5 +41,15 @@ public static class UIManagerExtension
 
         path = $"UI/{uiRootType}/{uiType}";
         return path;
+    }
+
+    public static void OpenBuildUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.BuildUI);
+    }
+
+    public static void CloseBuildUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.BuildUI);
     }
 }

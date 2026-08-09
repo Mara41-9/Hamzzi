@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildView : ViewBase
 {
@@ -49,23 +50,39 @@ public class BuildView : ViewBase
 
     private void Update()
     {
-        // UI 구현 전 테스트용
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (_buildVM.SelectType == BuildType.None)
         {
-            _buildVM.SelectType = BuildType.Room;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _buildVM.SelectType = BuildType.Aisle;
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            _buildVM.SelectType = BuildType.None;
+            return;
         }
 
-        if (_buildVM.SelectType != BuildType.None && Input.GetMouseButtonDown(0))
+        if (Input.touchCount > 0)
         {
-            BuildRoom();
+            Touch touch = Input.GetTouch(0);
+
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                return;
+            }
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                Ray ray = _mainCamera.ScreenPointToRay(touch.position);
+
+                if (_gridPlane.Raycast(ray, out var hit))
+                {
+                    Vector3 hitPoint = ray.GetPoint(hit);
+                    Vector2Int gridPos = ChangeGridPosition(hitPoint);
+
+                    if (_buildVM.SelectType == BuildType.Room)
+                    {
+                        _buildVM.TryBuildRoom(gridPos);
+                    }
+                    else if (_buildVM.SelectType == BuildType.Aisle)
+                    {
+                        _buildVM.TryBuildAisle(gridPos);
+                    }
+                }
+            }
         }
     }
 
@@ -121,28 +138,6 @@ public class BuildView : ViewBase
         else if (prefab.TryGetComponent(out Aisle aisle))
         {
             aisle.Bind(roomVM);
-        }
-    }
-
-    private void BuildRoom()
-    {
-        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (_gridPlane.Raycast(ray, out float hit))
-        {
-            Vector3 hitPoint = ray.GetPoint(hit);
-            Vector2Int gridPos = ChangeGridPosition(hitPoint);
-
-            switch (_buildVM.SelectType)
-            {
-                case BuildType.Room:
-                    _buildVM.TryBuildRoom(gridPos);
-                    break;
-
-                case BuildType.Aisle:
-                    _buildVM.TryBuildAisle(gridPos);
-                    break;
-            }
         }
     }
 

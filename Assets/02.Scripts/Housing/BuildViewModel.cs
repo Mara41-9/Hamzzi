@@ -133,27 +133,12 @@ public class BuildViewModel : ViewModelBase
     {
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
 
-        for (int x = 0; x < newRoom.Size.x; x++)
+        if (!CanPlaceRoom(pos, newRoom.Size))
         {
-            for (int y = 0; y < newRoom.Size.y; y++)
-            {
-                Vector2Int checkPos = pos + new Vector2Int(x, y);
-
-                if (_builds.ContainsKey(checkPos))
-                {
-                    return false;
-                }
-            }
+            return false;
         }
 
-        for (int x = 0; x < newRoom.Size.x; x++)
-        {
-            for (int y = 0; y < newRoom.Size.y; y++)
-            {
-                Vector2Int tilePos = pos + new Vector2Int(x, y);
-                _builds[tilePos] = newRoom;
-            }
-        }
+        RegisterRoom(newRoom, pos);
 
         newRoom.PropertyChanged += OnRoomPropertyChanged;
         UpdateRoomConnection(newRoom);
@@ -182,14 +167,7 @@ public class BuildViewModel : ViewModelBase
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
         newRoom.IsReady = true;
 
-        for (int x = 0; x < newRoom.Size.x; x++)
-        {
-            for (int y = 0; y < newRoom.Size.y; y++)
-            {
-                Vector2Int tilePos = pos + new Vector2Int(x, y);
-                _builds[tilePos] = newRoom;
-            }
-        }
+        RegisterRoom(newRoom, pos);
 
         newRoom.PropertyChanged += OnRoomPropertyChanged;
         UpdateRoomConnection(newRoom);
@@ -453,6 +431,32 @@ public class BuildViewModel : ViewModelBase
             case 2: return 3;
             case 3: return 2;
             default: return 0;
+        }
+    }
+
+    private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                if (_builds.ContainsKey(pos + new Vector2Int(x, y)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void RegisterRoom(RoomViewModel room, Vector2Int pos)
+    {
+        for (int x = 0; x < room.Size.x; x++)
+        {
+            for (int y = 0; y < room.Size.y; y++)
+            {
+                _builds[pos + new Vector2Int(x, y)] = room;
+            }
         }
     }
 }

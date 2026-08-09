@@ -71,6 +71,8 @@ public class BuildUI : ViewBase
     private void OnClickBuild()
     {
         _buildVM.EnterBuildMode();
+
+        Button_Build.gameObject.SetActive(false);
         Button_Exit.gameObject.SetActive(true);
 
         Panel_InfoText.SetActive(true);
