@@ -10,6 +10,37 @@ public class BuildViewModel : ViewModelBase
     private bool _hasStartPos = false;
     private RoomViewModel _startRoom;
 
+    private RoomViewModel _pendingRoom;
+    private List<RoomViewModel> _pendingAisle = new List<RoomViewModel>();
+
+    private bool _canConfirm = false;
+    public bool CanConfirm
+    {
+        get => _canConfirm;
+        set
+        {
+            if (_canConfirm != value)
+            {
+                _canConfirm = value;
+                OnPropertyChanged(nameof(CanConfirm));
+            }
+        }
+    }
+
+    private RoomViewModel _destroyBuild;
+    public RoomViewModel DestroyBuild
+    {
+        get => _destroyBuild;
+        set
+        {
+            if (_destroyBuild != value)
+            {
+                _destroyBuild = value;
+                OnPropertyChanged(nameof(DestroyBuild));
+            }
+        }
+    }
+
     private BuildType _selectType = BuildType.None;
     public BuildType SelectType
     {
@@ -40,13 +71,40 @@ public class BuildViewModel : ViewModelBase
 
     public void EnterBuildMode()
     {
-        ResetAisle();
+        CancelBuildMode();
         SelectType = BuildType.Room;
     }
 
-    public void ExitBuildMode()
+    public void ConfirmBuild()
     {
+        if (_pendingRoom != null)
+        {
+            _pendingRoom.IsReady = true;
+            _pendingRoom = null;
+        }
+
+        foreach (RoomViewModel aisle in _pendingAisle)
+        {
+            aisle.IsReady = true;
+        }
+
+        _pendingAisle.Clear();
+        CanConfirm = false;
+        SelectType = BuildType.None;
+    }
+
+    public void CancelBuildMode()
+    {
+        if (_pendingRoom != null)
+        {
+            RemoveBuild(_pendingRoom);
+            _pendingRoom = null;
+        }
+
+        ClearPendingAisle();
+
         ResetAisle();
+        CanConfirm = false;
         SelectType = BuildType.None;
     }
 
@@ -54,7 +112,7 @@ public class BuildViewModel : ViewModelBase
     {
         foreach (Vector2Int pos in defaultRoom)
         {
-            TryBuildRoom(pos);
+            BuildDefaultRoom(pos);
         }
 
         foreach (Vector2Int pos in defaultAisle)
@@ -100,6 +158,7 @@ public class BuildViewModel : ViewModelBase
         newRoom.PropertyChanged += OnRoomPropertyChanged;
         UpdateRoomConnection(newRoom);
 
+        _pendingRoom = newRoom;
         LastBuild = newRoom;
 
         _startRoom = newRoom;
@@ -116,6 +175,26 @@ public class BuildViewModel : ViewModelBase
             UpdateRoomConnection(room);
             room.PropertyChanged -= OnRoomPropertyChanged;
         }
+    }
+
+    private void BuildDefaultRoom(Vector2Int pos)
+    {
+        RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+        newRoom.IsReady = true;
+
+        for (int x = 0; x < newRoom.Size.x; x++)
+        {
+            for (int y = 0; y < newRoom.Size.y; y++)
+            {
+                Vector2Int tilePos = pos + new Vector2Int(x, y);
+                _builds[tilePos] = newRoom;
+            }
+        }
+
+        newRoom.PropertyChanged += OnRoomPropertyChanged;
+        UpdateRoomConnection(newRoom);
+
+        LastBuild = newRoom;
     }
 
     public void BuildDefaultAisle(Vector2Int pos)
@@ -177,6 +256,8 @@ public class BuildViewModel : ViewModelBase
             {
                 RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
                 _builds[aislePos] = newAisle;
+
+                _pendingAisle.Add(newAisle);
                 LastBuild = newAisle;
             }
 
@@ -191,6 +272,7 @@ public class BuildViewModel : ViewModelBase
 
         SelectType = BuildType.None;
 
+        CanConfirm = true;
         return true;
     }
 
@@ -198,6 +280,38 @@ public class BuildViewModel : ViewModelBase
     {
         _hasStartPos = false;
         _startRoom = null;
+    }
+
+    private void ClearPendingAisle()
+    {
+        foreach (RoomViewModel aisle in _pendingAisle)
+        {
+            RemoveBuild(aisle);
+        }
+
+        _pendingAisle.Clear();
+        CanConfirm = false;
+    }
+
+    private void RemoveBuild(RoomViewModel target)
+    {
+        List<Vector2Int> removePos = new List<Vector2Int>();
+
+        foreach (var pair in _builds)
+        {
+            if (pair.Value == target)
+            {
+                removePos.Add(pair.Key);
+            }
+        }
+
+        foreach (var key in removePos)
+        {
+            _builds.Remove(key);
+        }
+
+        UpdateNearConnection(target.OriginPos);
+        DestroyBuild = target;
     }
 
     public void UpdateRoomConnection(RoomViewModel room)

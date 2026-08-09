@@ -8,6 +8,8 @@ public class BuildView : ViewBase
     [SerializeField] private List<Vector2Int> Transform_DefaultRoom;
     [SerializeField] private List<Vector2Int> Transform_DefaultAisle;
 
+    private Dictionary<string, GameObject> _spawnRoom = new Dictionary<string, GameObject>();
+
     // 임시
     [SerializeField] private BuildUI BuildUI;
 
@@ -71,8 +73,17 @@ public class BuildView : ViewBase
     {
         switch (e.PropertyName)
         {
-            case nameof(BuildViewModel.LastBuild):
+            case nameof(_buildVM.LastBuild):
                 SpawnBuildPrefab(_buildVM.LastBuild).Forget();
+                break;
+
+            case nameof(_buildVM.DestroyBuild):
+                if (_spawnRoom.TryGetValue(_buildVM.DestroyBuild.InstanceID, out GameObject target))
+                {
+                    GameObjectManager.Instance.RequestDestroyObject(target);
+
+                    _spawnRoom.Remove(_buildVM.DestroyBuild.InstanceID);
+                }
                 break;
         }
     }
@@ -100,6 +111,8 @@ public class BuildView : ViewBase
 
         string path = roomVM.BuildType == BuildType.Room ? "Prefabs/Room" : "Prefabs/Aisle";
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(roomVM.InstanceID, path, worldPos);
+
+        _spawnRoom[roomVM.InstanceID] = prefab;
 
         if (prefab.TryGetComponent(out Room room))
         {

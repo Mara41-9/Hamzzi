@@ -11,14 +11,13 @@ public class BuildUI : ViewBase
 
     [SerializeField] private Button Button_Build;
     [SerializeField] private Button Button_Exit;
+    [SerializeField] private Button Button_Confirm;
 
     private BuildViewModel _buildVM;
 
     private void Awake()
     {
-        Panel_Vignette.SetActive(false);
-        Panel_InfoText.SetActive(false);
-        Button_Exit.gameObject.SetActive(false);
+        ResetUI();
     }
 
     public void BindViewModel(BuildViewModel buildVM)
@@ -28,6 +27,7 @@ public class BuildUI : ViewBase
 
         Button_Build.onClick.AddListener(OnClickBuild);
         Button_Exit.onClick.AddListener(OnClickClose);
+        Button_Confirm.onClick.AddListener(OnClickConfirm);
     }
 
     private void OnDestroy()
@@ -48,6 +48,10 @@ public class BuildUI : ViewBase
                 else if (_buildVM.SelectType == BuildType.Aisle)
                 {
                     EnterAisleMode();
+                }
+                else
+                {
+                    Button_Confirm.gameObject.SetActive(true);
                 }
 
                 break;
@@ -75,8 +79,22 @@ public class BuildUI : ViewBase
 
     private void OnClickClose()
     {
-        _buildVM.ExitBuildMode();
-        Panel_Vignette.SetActive(false);
+        _buildVM.CancelBuildMode();
+        ResetUI();
+    }
+
+    private void OnClickConfirm()
+    {
+        _buildVM.ConfirmBuild();
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        Button_Build.gameObject.SetActive(true);
+        Button_Confirm.gameObject.SetActive(false);
         Button_Exit.gameObject.SetActive(false);
+        Panel_InfoText.gameObject.SetActive(false);
+        Panel_Vignette.SetActive(false);
     }
 }
