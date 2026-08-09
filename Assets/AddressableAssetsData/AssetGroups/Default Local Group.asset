@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b33404aedd811744bbea043681cebc0
+    m_Address: Prefabs/Aisle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93ea6eecfe64e814e9c4a37c60c8f1d9
     m_Address: Image/Item/Furniture/Bed_03
     m_ReadOnly: 0
@@ -72,6 +77,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e37e012f6ad72ae4a90336a4f39b1ef0
     m_Address: Image/Item/Furniture/Bed_05
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e39fdcc6d90d9f74b99a9410e1f08a0a
+    m_Address: Prefabs/Room
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
