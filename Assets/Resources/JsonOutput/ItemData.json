@@ -1,0 +1,114 @@
+[
+  {
+    "Id": "Furniture_Bed_01",
+    "Name": "올리브 더블 침대",
+    "Description": "햄찌들이 둘이서도 포근하게 쉴 수 있는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_02",
+    "Name": "아쿠아 더블 침대",
+    "Description": "시원한 색감으로 편안한 잠을 선물하는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_03",
+    "Name": "아쿠아 싱글 침대",
+    "Description": "혼자 쉬기 딱 좋은 아늑한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_04",
+    "Name": "올리브 싱글 침대",
+    "Description": "자연의 색감을 담은 편안한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_05",
+    "Name": "코랄 싱글 침대",
+    "Description": "따뜻한 분위기가 느껴지는 원목 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_06",
+    "Name": "코랄 더블 침대",
+    "Description": "넓고 튼튼한 프레임의 포근한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_01",
+    "Name": "따뜻한 러그",
+    "Description": "발끝까지 포근함이 전해지는 러그",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Carpet_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_02",
+    "Name": "포근한 러그",
+    "Description": "햄찌들이 편하게 쉬기 좋은 러그",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Carpet_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Fireplace_01",
+    "Name": "벽난로",
+    "Description": "방 안을 아늑하게 만들어 주는 벽난로",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Fireplace_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Fireplace_02",
+    "Name": "클래식 벽난로",
+    "Description": "은은한 분위기를 더해 주는 클래식 벽난로",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Fireplace_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Plants_01",
+    "Name": "선인장 화분",
+    "Description": "작지만 존재감 있는 초록 친구",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Plants_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Plants_02",
+    "Name": "다육이 화분",
+    "Description": "싱그러운 분위기를 더해 주는 작은 화분",
+    "Category": "Decor",
+    "IconPath": "Image/Item/Decor/Plants_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_BarbellStand_01",
+    "Name": "운동 기구",
+    "Description": "오늘도 힘내서 운동하는 햄찌를 위한 운동 기구",
+    "Category": "Play",
+    "IconPath": "Image/Item/Play/BarbellStand_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_05",
+    "Name": "리듬 북",
+    "Description": "통통 두드리며 신나는 리듬을 즐길 수 있는 북",
+    "Category": "Play",
+    "IconPath": "Image/Item/Play/Toy_05",
+    "PrefabPath": ""
+  }
+]

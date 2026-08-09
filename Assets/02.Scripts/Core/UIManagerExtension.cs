@@ -30,6 +30,7 @@ public enum UIType
     FarmPlotStatusUI,
     GeneratorUI,
     LobbyBackgroundUI,
+    ShopUI,
 }
 
 public static class UIManagerExtension

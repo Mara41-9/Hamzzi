@@ -1,0 +1,72 @@
+[
+  {
+    "Id": "Shop_001",
+    "ItemId": "Furniture_Bed_01",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_002",
+    "ItemId": "Furniture_Bed_02",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_003",
+    "ItemId": "Furniture_Bed_03",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_004",
+    "ItemId": "Furniture_Bed_04",
+    "CostAmount": 130
+  },
+  {
+    "Id": "Shop_005",
+    "ItemId": "Furniture_Bed_05",
+    "CostAmount": 140
+  },
+  {
+    "Id": "Shop_006",
+    "ItemId": "Furniture_Bed_06",
+    "CostAmount": 150
+  },
+  {
+    "Id": "Shop_007",
+    "ItemId": "Decoration_Carpet_01",
+    "CostAmount": 50
+  },
+  {
+    "Id": "Shop_008",
+    "ItemId": "Decoration_Carpet_02",
+    "CostAmount": 40
+  },
+  {
+    "Id": "Shop_009",
+    "ItemId": "Decoration_Fireplace_01",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_010",
+    "ItemId": "Decoration_Fireplace_02",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_011",
+    "ItemId": "Decoration_Plants_01",
+    "CostAmount": 30
+  },
+  {
+    "Id": "Shop_012",
+    "ItemId": "Decoration_Plants_02",
+    "CostAmount": 35
+  },
+  {
+    "Id": "Shop_013",
+    "ItemId": "Play_BarbellStand_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_014",
+    "ItemId": "Play_Toy_05",
+    "CostAmount": 50
+  }
+]
