@@ -24,6 +24,9 @@ public struct DoorData
 
 public class RoomViewModel : ViewModelBase
 {
+    private int _roomWidth = 6;
+    private int _roomHeight = 4;
+
     public bool IsReady { get; set; } = false;
 
     public List<DoorData> DoorDataList { get; private set; } = new List<DoorData>();
@@ -104,7 +107,7 @@ public class RoomViewModel : ViewModelBase
         InstanceID = Guid.NewGuid().ToString();
         BuildType = type;
         OriginPos = pos;
-        Size = (type == BuildType.Room) ? new Vector2Int(6, 5) : Vector2Int.one;
+        Size = (type == BuildType.Room) ? new Vector2Int(_roomWidth, _roomHeight) : Vector2Int.one;
 
         if (type == BuildType.Aisle)
         {

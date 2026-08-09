@@ -426,8 +426,6 @@ public class BuildViewModel : ViewModelBase
     {
         switch (direction)
         {
-            case 0: return 1;
-            case 1: return 0;
             case 2: return 3;
             case 3: return 2;
             default: return 0;
