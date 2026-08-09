@@ -49,11 +49,11 @@ public class BuildUI : ViewBase
                 {
                     EnterAisleMode();
                 }
-                else
-                {
-                    Button_Confirm.gameObject.SetActive(true);
-                }
 
+                break;
+
+            case nameof(_buildVM.CanConfirm):
+                Button_Confirm.gameObject.SetActive(_buildVM.CanConfirm);
                 break;
         }
     }

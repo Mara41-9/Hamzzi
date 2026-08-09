@@ -13,6 +13,8 @@ public class BuildService
 {
     private static readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
+    private const int MAX_SEARCH = 500;
+
     private BuildViewModel _buildVM;
 
     public BuildViewModel GetBuildViewModel()
@@ -98,8 +100,12 @@ public class BuildService
 
         bool isFind = false;
 
-        while (open.Count > 0)
+        int searchCount = 0;
+
+        while (open.Count > 0 && searchCount < MAX_SEARCH)
         {
+            searchCount++;
+
             int minIdx = 0;
             int minScore = dist[open[0]] + CalculateDistance(open[0], end);
 
@@ -209,39 +215,30 @@ public class BuildService
 
     private bool IsRoom(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> roomMap)
     {
-        foreach (var vm in roomMap.Values)
+        if (roomMap.TryGetValue(pos, out RoomViewModel vm))
         {
-            if (vm.BuildType == BuildType.Room)
-            {
-                if (pos.x >= vm.OriginPos.x && pos.x < vm.OriginPos.x + vm.Size.x && pos.y >= vm.OriginPos.y && pos.y < vm.OriginPos.y + vm.Size.y)
-                {
-                    return true;
-                }
-            }
+            return vm.BuildType == BuildType.Room;
         }
+
         return false;
     }
 
     private bool IsNearRoomCorner(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        foreach (var vm in room.Values)
-        {
-            if (vm.BuildType == BuildType.Room)
-            {
-                Vector2Int[] corners = new Vector2Int[]
-                {
-                    new Vector2Int(vm.OriginPos.x - 1, vm.OriginPos.y - 1),
-                    new Vector2Int(vm.OriginPos.x - 1, vm.OriginPos.y + vm.Size.y),
-                    new Vector2Int(vm.OriginPos.x + vm.Size.x, vm.OriginPos.y - 1),
-                    new Vector2Int(vm.OriginPos.x + vm.Size.x, vm.OriginPos.y + vm.Size.y)
-                };
+        Vector2Int[] diagonalDirs = { new Vector2Int(-1, -1), new Vector2Int(-1, 1), new Vector2Int(1, -1), new Vector2Int(1, 1) };
 
-                foreach (var corner in corners)
+        foreach (Vector2Int dir in diagonalDirs)
+        {
+            Vector2Int checkPos = pos + dir;
+
+            if (IsRoom(checkPos, room))
+            {
+                bool nearRoomX = IsRoom(new Vector2Int(pos.x + dir.x, pos.y), room);
+                bool nearRoomY = IsRoom(new Vector2Int(pos.x, pos.y + dir.y), room);
+
+                if (!nearRoomX && !nearRoomY)
                 {
-                    if (pos == corner)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }

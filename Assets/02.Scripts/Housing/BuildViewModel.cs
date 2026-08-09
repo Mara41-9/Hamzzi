@@ -193,22 +193,13 @@ public class BuildViewModel : ViewModelBase
 
     public bool TryBuildAisle(Vector2Int pos)
     {
-        if (!_hasStartPos)
+        if (!_hasStartPos || _startRoom == null)
         {
-            if (!_builds.TryGetValue(pos, out RoomViewModel clickedVM) || clickedVM.BuildType != BuildType.Room || !clickedVM.IsReady)
-            {
-                return false;
-            }
-
-            _startRoom = clickedVM;
-            _hasStartPos = true;
-
-            return true;
+            return false;
         }
 
-        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || _startRoom == targetVM)
+        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || !targetVM.IsReady || _startRoom == targetVM)
         {
-            ResetAisle();
             return false;
         }
 
@@ -216,12 +207,8 @@ public class BuildViewModel : ViewModelBase
 
         if (path == null || path.Count == 0)
         {
-            ResetAisle();
             return false;
         }
-
-        ResetAisle();
-        RoomViewModel lastAisle = null;
 
         foreach (Vector2Int aislePos in path)
         {
@@ -241,11 +228,6 @@ public class BuildViewModel : ViewModelBase
 
             UpdateConnection(aislePos);
             UpdateNearConnection(aislePos);
-        }
-
-        if (lastAisle != null)
-        {
-            LastBuild = lastAisle;
         }
 
         SelectType = BuildType.None;
