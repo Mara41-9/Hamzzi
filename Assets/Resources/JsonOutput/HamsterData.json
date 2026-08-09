@@ -1,0 +1,62 @@
+[
+  {
+    "Id": "Hamster_01",
+    "ItemName": "햄스터 1",
+    "Description": "햄스터 1입니다.<br>햄스터 1에 대한 설명입니다. <br>1 아무 능력이 없습니다.",
+    "CollectSpeed": 0.2
+  },
+  {
+    "Id": "Hamster_02",
+    "ItemName": "햄스터 2",
+    "Description": "햄스터 2입니다.<br>햄스터 2에 대한 설명입니다. <br>2 능력이 있습니다.",
+    "CollectSpeed": 0.3
+  },
+  {
+    "Id": "Hamster_03",
+    "ItemName": "햄스터 3",
+    "Description": "햄스터 3입니다.<br>햄스터 3에 대한 설명입니다. <br>3 능력이 있습니다.",
+    "CollectSpeed": 0.4
+  },
+  {
+    "Id": "Hamster_04",
+    "ItemName": "햄스터 4",
+    "Description": "햄스터 4입니다.<br>햄스터 4에 대한 설명입니다. <br>4 아무 능력이 없습니다.",
+    "CollectSpeed": 0.5
+  },
+  {
+    "Id": "Hamster_05",
+    "ItemName": "햄스터 5",
+    "Description": "햄스터 5입니다.<br>햄스터 5에 대한 설명입니다. <br>5 아무 능력이 없습니다.",
+    "CollectSpeed": 0.6
+  },
+  {
+    "Id": "Hamster_06",
+    "ItemName": "햄스터 6",
+    "Description": "햄스터 6입니다.<br>햄스터 6에 대한 설명입니다. <br>6 아무 능력이 없습니다.",
+    "CollectSpeed": 0.7
+  },
+  {
+    "Id": "Hamster_07",
+    "ItemName": "햄스터 7",
+    "Description": "햄스터 7입니다.<br>햄스터 7에 대한 설명입니다. <br>7 아무 능력이 없습니다.",
+    "CollectSpeed": 0.8
+  },
+  {
+    "Id": "Hamster_08",
+    "ItemName": "햄스터 8",
+    "Description": "햄스터 8입니다.<br>햄스터 8에 대한 설명입니다. <br>8 아무 능력이 없습니다.",
+    "CollectSpeed": 0.9
+  },
+  {
+    "Id": "Hamster_09",
+    "ItemName": "햄스터 9",
+    "Description": "햄스터 9입니다.<br>햄스터 9에 대한 설명입니다. <br>9 아무 능력이 없습니다.",
+    "CollectSpeed": 1
+  },
+  {
+    "Id": "Hamster_10",
+    "ItemName": "햄스터 10",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>10 아무 능력이 없습니다.",
+    "CollectSpeed": 1.1
+  }
+]
