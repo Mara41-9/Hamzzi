@@ -48,6 +48,126 @@
     "PrefabPath": ""
   },
   {
+    "Id": "Furniture_Bed_07",
+    "Name": "핑크 싱글 침대",
+    "Description": "마치 공주가 된 것 같은 느낌을 주는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_08",
+    "Name": "핑크 더블 침대",
+    "Description": "공주들은 작은 침대는 사치라는 것을 깨닫게 해주는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_09",
+    "Name": "하늘 싱글 침대",
+    "Description": "구름같이 푹신한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_10",
+    "Name": "분홍 싱글 침대",
+    "Description": "전국 모든 딸들이 탐내는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_11",
+    "Name": "심플 2층 침대",
+    "Description": "원목이 단단해 흔들림이 전혀 없는 2층 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_12",
+    "Name": "새싹 싱글 침대",
+    "Description": "싱그러운 색감이 돋보이는 산뜻한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_13",
+    "Name": "라일락 싱글 침대",
+    "Description": "은은한 라일락빛과 포근한 분홍빛이 어우러진 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_14",
+    "Name": "햇살 싱글 침대",
+    "Description": "따스한 햇살과 푸른 하늘을 담은 듯한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_14",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_15",
+    "Name": "노을 싱글 침대",
+    "Description": "따스한 노을빛을 닮은 포근한 색감의 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_15",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_16",
+    "Name": "알록달록 싱글 침대",
+    "Description": "알록달록한 색감이 기분까지 밝게 해주는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_16",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_17",
+    "Name": "호두나무 싱글 침대",
+    "Description": "짙은 원목 프레임이 편안하고 아늑한 느낌을 주는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_17",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_18",
+    "Name": "햇살 2층 침대",
+    "Description": "따스한 햇살빛 프레임이 돋보이는 아늑한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_18",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_19",
+    "Name": "파도 싱글 침대",
+    "Description": "시원한 파도빛을 담은 깔끔하고 산뜻한 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_19",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_20",
+    "Name": "초록숲 싱글 침대",
+    "Description": "싱그러운 초록빛이 편안한 숲을 떠올리게 하는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_20",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_21",
+    "Name": "벚꽃 싱글 침대",
+    "Description": "화사한 벚꽃빛 침구가 포근한 분위기를 더해주는 침대",
+    "Category": "Furniture",
+    "IconPath": "Image/Item/Furniture/Bed_21",
+    "PrefabPath": ""
+  },
+  {
     "Id": "Decoration_Carpet_01",
     "Name": "따뜻한 러그",
     "Description": "발끝까지 포근함이 전해지는 러그",
@@ -111,4 +231,5 @@
     "IconPath": "Image/Item/Play/Toy_05",
     "PrefabPath": ""
   }
+  
 ]

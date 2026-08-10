@@ -1,71 +1,146 @@
 [
   {
-    "Id": "Shop_001",
+    "Id": "Shop_Fur_001",
     "ItemId": "Furniture_Bed_01",
     "CostAmount": 90
   },
   {
-    "Id": "Shop_002",
+    "Id": "Shop_Fur_002",
     "ItemId": "Furniture_Bed_02",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_003",
+    "Id": "Shop_Fur_003",
     "ItemId": "Furniture_Bed_03",
     "CostAmount": 110
   },
   {
-    "Id": "Shop_004",
+    "Id": "Shop_Fur_004",
     "ItemId": "Furniture_Bed_04",
     "CostAmount": 130
   },
   {
-    "Id": "Shop_005",
+    "Id": "Shop_Fur_005",
     "ItemId": "Furniture_Bed_05",
     "CostAmount": 140
   },
   {
-    "Id": "Shop_006",
+    "Id": "Shop_Fur_006",
     "ItemId": "Furniture_Bed_06",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_007",
+    "Id": "Shop_Fur_007",
+    "ItemId": "Furniture_Bed_07",
+    "CostAmount": 160
+  },
+  {
+    "Id": "Shop_Fur_008",
+    "ItemId": "Furniture_Bed_08",
+    "CostAmount": 170
+  },
+  {
+    "Id": "Shop_Fur_009",
+    "ItemId": "Furniture_Bed_09",
+    "CostAmount": 180
+  },
+  {
+    "Id": "Shop_Fur_010",
+    "ItemId": "Furniture_Bed_10",
+    "CostAmount": 190
+  },
+  {
+    "Id": "Shop_Fur_011",
+    "ItemId": "Furniture_Bed_11",
+    "CostAmount": 200
+  },
+  {
+    "Id": "Shop_Fur_012",
+    "ItemId": "Furniture_Bed_12",
+    "CostAmount": 210
+  },
+  {
+    "Id": "Shop_Fur_013",
+    "ItemId": "Furniture_Bed_13",
+    "CostAmount": 220
+  },
+  {
+    "Id": "Shop_Fur_014",
+    "ItemId": "Furniture_Bed_14",
+    "CostAmount": 230
+  },
+  {
+    "Id": "Shop_Fur_015",
+    "ItemId": "Furniture_Bed_15",
+    "CostAmount": 240
+  },
+  {
+    "Id": "Shop_Fur_016",
+    "ItemId": "Furniture_Bed_16",
+    "CostAmount": 250
+  },
+  {
+    "Id": "Shop_Fur_017",
+    "ItemId": "Furniture_Bed_17",
+    "CostAmount": 260
+  },
+  {
+    "Id": "Shop_Fur_018",
+    "ItemId": "Furniture_Bed_18",
+    "CostAmount": 270
+  },
+  {
+    "Id": "Shop_Fur_019",
+    "ItemId": "Furniture_Bed_19",
+    "CostAmount": 280
+  },
+  {
+    "Id": "Shop_Fur_020",
+    "ItemId": "Furniture_Bed_20",
+    "CostAmount": 290
+  },
+  {
+    "Id": "Shop_Fur_021",
+    "ItemId": "Furniture_Bed_21",
+    "CostAmount": 300
+  },
+  {
+    "Id": "Shop_Decor_001",
     "ItemId": "Decoration_Carpet_01",
     "CostAmount": 50
   },
   {
-    "Id": "Shop_008",
+    "Id": "Shop_Decor_002",
     "ItemId": "Decoration_Carpet_02",
     "CostAmount": 40
   },
   {
-    "Id": "Shop_009",
+    "Id": "Shop_Decor_003",
     "ItemId": "Decoration_Fireplace_01",
     "CostAmount": 70
   },
   {
-    "Id": "Shop_010",
+    "Id": "Shop_Decor_004",
     "ItemId": "Decoration_Fireplace_02",
     "CostAmount": 80
   },
   {
-    "Id": "Shop_011",
+    "Id": "Shop_Decor_005",
     "ItemId": "Decoration_Plants_01",
     "CostAmount": 30
   },
   {
-    "Id": "Shop_012",
+    "Id": "Shop_Decor_006",
     "ItemId": "Decoration_Plants_02",
     "CostAmount": 35
   },
   {
-    "Id": "Shop_013",
+    "Id": "Shop_Play_001",
     "ItemId": "Play_BarbellStand_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_014",
+    "Id": "Shop_Play_002",
     "ItemId": "Play_Toy_05",
     "CostAmount": 50
   }
