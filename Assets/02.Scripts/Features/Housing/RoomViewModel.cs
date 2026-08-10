@@ -28,8 +28,18 @@ public class RoomViewModel : ViewModelBase
     private int _roomHeight = 4;
 
     public bool IsReady { get; set; } = false;
-
     public List<DoorData> DoorDataList { get; private set; } = new List<DoorData>();
+
+    private Dictionary<Vector2Int, FurnitureViewModel> _furnitureGrid = new Dictionary<Vector2Int, FurnitureViewModel>();
+    
+    public List<FurnitureViewModel> FurnitureList { get; private set; } = new List<FurnitureViewModel>();
+    public Vector2Int SubGridSize => new Vector2Int(Size.x * _gridFactor, Size.y * _gridFactor);
+
+    private int _gridFactor = 2;
+    public int GridFactor
+    {
+        get => _gridFactor;
+    }
 
     private string _instanceID;
     public string InstanceID
@@ -120,6 +130,7 @@ public class RoomViewModel : ViewModelBase
         }
     }
 
+    // 건설 관련
     private void InitDefaultDoor()
     { 
         int centerY = 0;
@@ -232,5 +243,85 @@ public class RoomViewModel : ViewModelBase
         }
 
         return new DoorInfo { InsidePos = inside, OutsidePos = outside, DirectionIndex = dirIndex };
+    }
+
+    // 하우징 관련
+    public Vector2Int ChangeLocalGrid(Vector3 worldPos, float cellSize = 1.0f)
+    {
+        float subCellSize = cellSize / _gridFactor;
+        float localX = worldPos.x - (OriginPos.x * cellSize);
+        float localZ = worldPos.z - (OriginPos.y * cellSize);
+
+        int subX = Mathf.Clamp(Mathf.FloorToInt(localX / subCellSize), 0, SubGridSize.x - 1);
+        int subZ = Mathf.Clamp(Mathf.FloorToInt(localZ / subCellSize), 0, SubGridSize.y - 1);
+
+        return new Vector2Int(subX, subZ);
+    }
+
+    public bool IsValidPlace(Vector2Int localPos, Vector2Int furnitureSize)
+    {
+        for (int x = 0; x < furnitureSize.x; x++)
+        {
+            for (int y = 0; y < furnitureSize.y; y++)
+            {
+                Vector2Int checkPos = localPos + new Vector2Int(x, y);
+
+                if (checkPos.x < 0 || checkPos.x >= SubGridSize.x || checkPos.y < 0 || checkPos.y >= SubGridSize.y)
+                {
+                    return false;
+                }
+
+                if (_furnitureGrid.ContainsKey(checkPos))
+                {
+                    return false;
+                }
+
+                if (IsDoorPos(checkPos))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsDoorPos(Vector2Int checkPos)
+    {
+        foreach (DoorData door in DoorDataList)
+        {
+            int minX = door.Offset.x * _gridFactor;
+            int maxX = minX + _gridFactor;
+            int minY = door.Offset.y * _gridFactor;
+            int maxY = minY + _gridFactor;
+
+            if (checkPos.x >= minX && checkPos.x < maxX && checkPos.y >= minY && checkPos.y < minY)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool AddFuniture(FurnitureViewModel furnitureVM)
+    {
+        if (!IsValidPlace(furnitureVM.LocalPos, furnitureVM.Size))
+        {
+            return false;
+        }
+
+        for (int x = 0; x < furnitureVM.Size.x; x++)
+        {
+            for (int y = 0; y < furnitureVM.Size.y; y++)
+            {
+                _furnitureGrid[furnitureVM.LocalPos + new Vector2Int(x, y)] = furnitureVM;
+            }
+        }
+
+        FurnitureList.Add(furnitureVM);
+        OnPropertyChanged(nameof(FurnitureList));
+
+        return true;
     }
 }
