@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 1622254428}
   - component: {fileID: 1622254427}
   - component: {fileID: 1622254429}
+  - component: {fileID: 1622254430}
   m_Layer: 0
   m_Name: Hamster_Test
   m_TagString: Untagged
@@ -418,6 +419,7 @@ MonoBehaviour:
   - rid: 5402918916675862555
   - rid: 5402918916675862556
   - rid: 5402918916675862557
+  - rid: 5402919007924256860
   m_OriginalGraph: {fileID: 6580756489491621071, guid: bae1fc90050f6c348888e3aa2a7faa5b, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -448,6 +450,14 @@ MonoBehaviour:
           m_Value1: 6784276635939550675
         Name: FarmDuration
         m_Value: 5
+    - rid: 5402919007924256860
+      type: {class: 'BlackboardVariable`1[[HamsterAnimatorController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 7987824695076692986
+          m_Value1: 756160618016444281
+        Name: HamsterAnimator
+        m_Value: {fileID: 1622254430}
 --- !u!4 &1622254428
 Transform:
   m_ObjectHideFlags: 0
@@ -486,6 +496,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1622254430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622254426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef942d9abd24c394bb0a0528503a8842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HamsterAnimatorController
+  Animator_Hamster: {fileID: 1622254429}
 --- !u!1 &1789664181
 GameObject:
   m_ObjectHideFlags: 0
