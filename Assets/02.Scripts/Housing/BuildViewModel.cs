@@ -1,0 +1,442 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using UnityEngine;
+
+public class BuildViewModel : ViewModelBase
+{
+    private Dictionary<Vector2Int, RoomViewModel> _builds = new Dictionary<Vector2Int, RoomViewModel>();
+    private BuildService _buildService = new BuildService();        // 임시
+
+    private bool _hasStartPos = false;
+    private RoomViewModel _startRoom;
+
+    private RoomViewModel _pendingRoom;
+    private List<RoomViewModel> _pendingAisle = new List<RoomViewModel>();
+
+    private bool _canConfirm = false;
+    public bool CanConfirm
+    {
+        get => _canConfirm;
+        set
+        {
+            if (_canConfirm != value)
+            {
+                _canConfirm = value;
+                OnPropertyChanged(nameof(CanConfirm));
+            }
+        }
+    }
+
+    private RoomViewModel _destroyBuild;
+    public RoomViewModel DestroyBuild
+    {
+        get => _destroyBuild;
+        set
+        {
+            if (_destroyBuild != value)
+            {
+                _destroyBuild = value;
+                OnPropertyChanged(nameof(DestroyBuild));
+            }
+        }
+    }
+
+    private BuildType _selectType = BuildType.None;
+    public BuildType SelectType
+    {
+        get => _selectType;
+        set
+        {
+            if (_selectType != value)
+            {
+                _selectType = value;
+                OnPropertyChanged(nameof(SelectType));
+            }
+        }
+    }
+
+    private RoomViewModel _lastBuild;
+    public RoomViewModel LastBuild
+    {
+        get => _lastBuild;
+        set
+        {
+            if (_lastBuild != value)
+            {
+                _lastBuild = value;
+                OnPropertyChanged(nameof(LastBuild));
+            }
+        }
+    }
+
+    public void EnterBuildMode()
+    {
+        CancelBuildMode();
+        SelectType = BuildType.Room;
+    }
+
+    public void ConfirmBuild()
+    {
+        if (_pendingRoom != null)
+        {
+            _pendingRoom.IsReady = true;
+            _pendingRoom = null;
+        }
+
+        foreach (RoomViewModel aisle in _pendingAisle)
+        {
+            aisle.IsReady = true;
+        }
+
+        _pendingAisle.Clear();
+        CanConfirm = false;
+        SelectType = BuildType.None;
+    }
+
+    public void CancelBuildMode()
+    {
+        if (_pendingRoom != null)
+        {
+            RemoveBuild(_pendingRoom);
+            _pendingRoom = null;
+        }
+
+        ClearPendingAisle();
+
+        ResetAisle();
+        CanConfirm = false;
+        SelectType = BuildType.None;
+    }
+
+    public void InitDefaultRoom(List<Vector2Int> defaultRoom, List<Vector2Int> defaultAisle)
+    {
+        foreach (Vector2Int pos in defaultRoom)
+        {
+            BuildDefaultRoom(pos);
+        }
+
+        foreach (Vector2Int pos in defaultAisle)
+        {
+            BuildDefaultAisle(pos);
+        }
+
+        Vector2Int exitAislePos = defaultAisle[0];
+
+        if (_builds.TryGetValue(exitAislePos, out RoomViewModel aisleVM) && aisleVM.BuildType == BuildType.Aisle)
+        {
+            aisleVM.SetWallActive(0, true);
+            aisleVM.Refresh();
+        }
+    }
+
+    public bool TryBuildRoom(Vector2Int pos)
+    {
+        RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+
+        if (!CanPlaceRoom(pos, newRoom.Size))
+        {
+            return false;
+        }
+
+        RegisterRoom(newRoom, pos);
+
+        newRoom.PropertyChanged += OnRoomPropertyChanged;
+        UpdateRoomConnection(newRoom);
+
+        _pendingRoom = newRoom;
+        LastBuild = newRoom;
+
+        _startRoom = newRoom;
+        _hasStartPos = true;
+        SelectType = BuildType.Aisle;
+
+        return true;
+    }
+
+    private void OnRoomPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(RoomViewModel.DoorDataList) && sender is RoomViewModel room)
+        {
+            UpdateRoomConnection(room);
+            room.PropertyChanged -= OnRoomPropertyChanged;
+        }
+    }
+
+    private void BuildDefaultRoom(Vector2Int pos)
+    {
+        RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+        newRoom.IsReady = true;
+
+        RegisterRoom(newRoom, pos);
+
+        newRoom.PropertyChanged += OnRoomPropertyChanged;
+        UpdateRoomConnection(newRoom);
+
+        LastBuild = newRoom;
+    }
+
+    public void BuildDefaultAisle(Vector2Int pos)
+    {
+        if (_builds.ContainsKey(pos))
+        {
+            return;
+        }
+
+        RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
+        _builds[pos] = newAisle;
+
+        UpdateConnection(pos);
+        UpdateNearConnection(pos);
+
+        LastBuild = newAisle;
+    }
+
+    public bool TryBuildAisle(Vector2Int pos)
+    {
+        if (!_hasStartPos || _startRoom == null)
+        {
+            return false;
+        }
+
+        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || !targetVM.IsReady || _startRoom == targetVM)
+        {
+            return false;
+        }
+
+        List<Vector2Int> path = _buildService.SearchBestPath(_startRoom, targetVM, _builds);
+
+        if (path == null || path.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (Vector2Int aislePos in path)
+        {
+            if (_builds.TryGetValue(aislePos, out RoomViewModel existing) && existing.BuildType == BuildType.Room)
+            {
+                continue;
+            }
+
+            if (!_builds.ContainsKey(aislePos))
+            {
+                RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
+                _builds[aislePos] = newAisle;
+
+                _pendingAisle.Add(newAisle);
+                LastBuild = newAisle;
+            }
+
+            UpdateConnection(aislePos);
+            UpdateNearConnection(aislePos);
+        }
+
+        SelectType = BuildType.None;
+
+        CanConfirm = true;
+        return true;
+    }
+
+    private void ResetAisle()
+    {
+        _hasStartPos = false;
+        _startRoom = null;
+    }
+
+    private void ClearPendingAisle()
+    {
+        foreach (RoomViewModel aisle in _pendingAisle)
+        {
+            RemoveBuild(aisle);
+        }
+
+        _pendingAisle.Clear();
+        CanConfirm = false;
+    }
+
+    private void RemoveBuild(RoomViewModel target)
+    {
+        List<Vector2Int> removePos = new List<Vector2Int>();
+
+        foreach (var pair in _builds)
+        {
+            if (pair.Value == target)
+            {
+                removePos.Add(pair.Key);
+            }
+        }
+
+        foreach (var key in removePos)
+        {
+            _builds.Remove(key);
+        }
+
+        UpdateNearConnection(target.OriginPos);
+        DestroyBuild = target;
+    }
+
+    public void UpdateRoomConnection(RoomViewModel room)
+    {
+        if (room == null || room.BuildType != BuildType.Room)
+        {
+            return;
+        }
+
+        if (room.DoorDataList == null || room.DoorDataList.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            room.SetWallActive(i, false);
+        }
+
+        foreach (DoorData doorData in room.DoorDataList)
+        {
+            DoorInfo doorInfo = room.GetDoorInfo(doorData.Offset);
+
+            if (_builds.TryGetValue(doorInfo.OutsidePos, out RoomViewModel targetVM))
+            {
+                if (targetVM == room)
+                {
+                    continue;
+                }
+
+                bool shouldConnect = false;
+
+                if (targetVM.BuildType == BuildType.Aisle)
+                {
+                    shouldConnect = true;
+                }
+                else if (targetVM.BuildType == BuildType.Room)
+                {
+                    Vector2Int neighborDoorPos = targetVM.GetNearDoor(doorInfo.InsidePos);
+                    shouldConnect = (doorInfo.OutsidePos == neighborDoorPos);
+                }
+
+                if (shouldConnect)
+                {
+                    room.SetWallActive(doorInfo.DirectionIndex, true);
+                    targetVM.SetWallActive(GetOppositeDirection(doorInfo.DirectionIndex), true);
+                    targetVM.Refresh();
+                }
+            }
+        }
+
+        room.Refresh();
+    }
+
+    public void UpdateConnection(Vector2Int current)
+    {
+        if (!_builds.TryGetValue(current, out RoomViewModel currentVM))
+        {
+            return;
+        }
+
+        if (currentVM.BuildType == BuildType.Room)
+        {
+            UpdateRoomConnection(currentVM);
+            return;
+        }
+
+        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+        for (int i = 0; i < directions.Length; i++)
+        {
+            Vector2Int targetPos = current + directions[i];
+            int oppDir = GetOppositeDirection(i);
+
+            if (_builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            {
+                if (currentVM == targetVM)
+                {
+                    continue;
+                }
+
+                bool shouldConnect = false;
+
+                if (targetVM.BuildType == BuildType.Aisle)
+                {
+                    shouldConnect = true;
+                }
+                else if (targetVM.BuildType == BuildType.Room)
+                {
+                    Vector2Int doorPos = targetVM.GetNearDoor(current);
+                    shouldConnect = (targetPos == doorPos);
+                }
+
+                currentVM.SetWallActive(i, shouldConnect);
+
+                if (shouldConnect)
+                {
+                    targetVM.SetWallActive(oppDir, true);
+                    targetVM.Refresh();
+                }
+            }
+            else
+            {
+                currentVM.SetWallActive(i, false);
+            }
+        }
+
+        currentVM.Refresh();
+    }
+
+    public void UpdateNearConnection(Vector2Int pos)
+    {
+        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+        foreach (Vector2Int dir in dirs)
+        {
+            Vector2Int target = pos + dir;
+
+            if (_builds.TryGetValue(target, out RoomViewModel vm))
+            {
+                if (vm.BuildType == BuildType.Room)
+                {
+                    UpdateRoomConnection(vm);
+                }
+                else
+                {
+                    UpdateConnection(target);
+                }
+            }
+        }
+    }
+
+    private int GetOppositeDirection(int direction)
+    {
+        switch (direction)
+        {
+            case 2: return 3;
+            case 3: return 2;
+            default: return 0;
+        }
+    }
+
+    private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                if (_builds.ContainsKey(pos + new Vector2Int(x, y)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void RegisterRoom(RoomViewModel room, Vector2Int pos)
+    {
+        for (int x = 0; x < room.Size.x; x++)
+        {
+            for (int y = 0; y < room.Size.y; y++)
+            {
+                _builds[pos + new Vector2Int(x, y)] = room;
+            }
+        }
+    }
+}

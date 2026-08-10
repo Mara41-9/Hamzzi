@@ -51,7 +51,8 @@ public class CollectionView : UIBase
 
     private void CloseCollectionUI()
     {
-        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.CollectionUI);
+        // TODO : UIManager에 UIType 추가 후 주석 제거
+        //UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.CollectionUI);
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
