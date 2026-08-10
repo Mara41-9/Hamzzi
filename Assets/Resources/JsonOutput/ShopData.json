@@ -105,9 +105,259 @@
     "CostAmount": 300
   },
   {
+    "Id": "Shop_Fur_022",
+    "ItemId": "Furniture_Armchair_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Fur_023",
+    "ItemId": "Furniture_Armchair_02",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_024",
+    "ItemId": "Furniture_Armchair_03",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_025",
+    "ItemId": "Furniture_Armchair_04",
+    "CostAmount": 115
+  },
+  {
+    "Id": "Shop_Fur_026",
+    "ItemId": "Furniture_Armchair_05",
+    "CostAmount": 105
+  },
+  {
+    "Id": "Shop_Fur_027",
+    "ItemId": "Furniture_Armchair_06",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Fur_028",
+    "ItemId": "Furniture_Armchair_07",
+    "CostAmount": 120
+  },
+  {
+    "Id": "Shop_Fur_029",
+    "ItemId": "Furniture_Armchair_08",
+    "CostAmount": 115
+  },
+  {
+    "Id": "Shop_Fur_030",
+    "ItemId": "Furniture_Armchair_09",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_031",
+    "ItemId": "Furniture_Armchair_10",
+    "CostAmount": 105
+  },
+  {
+    "Id": "Shop_Fur_032",
+    "ItemId": "Furniture_Armchair_11",
+    "CostAmount": 115
+  },
+  {
+    "Id": "Shop_Fur_033",
+    "ItemId": "Furniture_Armchair_12",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_034",
+    "ItemId": "Furniture_Armchair_13",
+    "CostAmount": 120
+  },
+  {
+    "Id": "Shop_Fur_035",
+    "ItemId": "Furniture_Armchair_14",
+    "CostAmount": 125
+  },
+  {
+    "Id": "Shop_Fur_036",
+    "ItemId": "Furniture_Armchair_15",
+    "CostAmount": 120
+  },
+  {
+    "Id": "Shop_Fur_037",
+    "ItemId": "Furniture_Armchair_16",
+    "CostAmount": 125
+  },
+  {
+    "Id": "Shop_Fur_038",
+    "ItemId": "Furniture_Armchair_17",
+    "CostAmount": 115
+  },
+  {
+    "Id": "Shop_Fur_039",
+    "ItemId": "Furniture_Armchair_18",
+    "CostAmount": 130
+  },
+  {
+    "Id": "Shop_Fur_040",
+    "ItemId": "Furniture_Armchair_19",
+    "CostAmount": 135
+  },
+  {
+    "Id": "Shop_Fur_041",
+    "ItemId": "Furniture_Armchair_20",
+    "CostAmount": 115
+  },
+  {
+    "Id": "Shop_Fur_042",
+    "ItemId": "Furniture_Armchair_21",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_043",
+    "ItemId": "Furniture_Armchair_22",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_044",
+    "ItemId": "Furniture_Armchair_23",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_045",
+    "ItemId": "Furniture_Armchair_24",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Fur_046",
+    "ItemId": "Furniture_Armchair_25",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_047",
+    "ItemId": "Furniture_Chair_01",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_048",
+    "ItemId": "Furniture_Chair_02",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_049",
+    "ItemId": "Furniture_Chair_03",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_050",
+    "ItemId": "Furniture_Chair_04",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_051",
+    "ItemId": "Furniture_Chair_05",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_052",
+    "ItemId": "Furniture_Chair_06",
+    "CostAmount": 60
+  },
+  {
+    "Id": "Shop_Fur_053",
+    "ItemId": "Furniture_Chair_07",
+    "CostAmount": 65
+  },
+  {
+    "Id": "Shop_Fur_054",
+    "ItemId": "Furniture_Chair_08",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_055",
+    "ItemId": "Furniture_Chair_09",
+    "CostAmount": 65
+  },
+  {
+    "Id": "Shop_Fur_056",
+    "ItemId": "Furniture_Chair_10",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Fur_057",
+    "ItemId": "Furniture_Chair_11",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Fur_058",
+    "ItemId": "Furniture_Chair_12",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_059",
+    "ItemId": "Furniture_Chair_13",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_060",
+    "ItemId": "Furniture_Chair_14",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_061",
+    "ItemId": "Furniture_Chair_15",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_062",
+    "ItemId": "Furniture_Chair_16",
+    "CostAmount": 65
+  },
+  {
+    "Id": "Shop_Fur_063",
+    "ItemId": "Furniture_Chair_17",
+    "CostAmount": 65
+  },
+  {
+    "Id": "Shop_Fur_064",
+    "ItemId": "Furniture_Chair_18",
+    "CostAmount": 60
+  },
+  {
+    "Id": "Shop_Fur_065",
+    "ItemId": "Furniture_Chair_19",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_066",
+    "ItemId": "Furniture_Chair_20",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_067",
+    "ItemId": "Furniture_Chair_PC_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Fur_068",
+    "ItemId": "Furniture_Chair_PC_02",
+    "CostAmount": 110
+  },
+  {
+    "Id": "Shop_Fur_069",
+    "ItemId": "Furniture_Chair_PC_03",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_070",
+    "ItemId": "Furniture_Chair_PC_04",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_071",
+    "ItemId": "Furniture_Chair_PC_05",
+    "CostAmount": 120
+  },
+  {
     "Id": "Shop_Decor_001",
     "ItemId": "Decoration_Carpet_01",
-    "CostAmount": 50
+    "CostAmount": 60
   },
   {
     "Id": "Shop_Decor_002",
@@ -116,21 +366,71 @@
   },
   {
     "Id": "Shop_Decor_003",
+    "ItemId": "Decoration_Carpet_03",
+    "CostAmount": 45
+  },
+  {
+    "Id": "Shop_Decor_004",
+    "ItemId": "Decoration_Carpet_04",
+    "CostAmount": 55
+  },
+  {
+    "Id": "Shop_Decor_005",
+    "ItemId": "Decoration_Carpet_05",
+    "CostAmount": 65
+  },
+  {
+    "Id": "Shop_Decor_006",
+    "ItemId": "Decoration_Carpet_06",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Decor_007",
+    "ItemId": "Decoration_Carpet_07",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Decor_008",
+    "ItemId": "Decoration_Carpet_08",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Decor_009",
+    "ItemId": "Decoration_Carpet_09",
+    "CostAmount": 50
+  },
+  {
+    "Id": "Shop_Decor_010",
+    "ItemId": "Decoration_Carpet_10",
+    "CostAmount": 50
+  },
+  {
+    "Id": "Shop_Decor_011",
+    "ItemId": "Decoration_Carpet_11",
+    "CostAmount": 50
+  },
+  {
+    "Id": "Shop_Decor_012",
+    "ItemId": "Decoration_Carpet_12",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Decor_013",
     "ItemId": "Decoration_Fireplace_01",
     "CostAmount": 70
   },
   {
-    "Id": "Shop_Decor_004",
+    "Id": "Shop_Decor_014",
     "ItemId": "Decoration_Fireplace_02",
     "CostAmount": 80
   },
   {
-    "Id": "Shop_Decor_005",
+    "Id": "Shop_Decor_015",
     "ItemId": "Decoration_Plants_01",
     "CostAmount": 30
   },
   {
-    "Id": "Shop_Decor_006",
+    "Id": "Shop_Decor_016",
     "ItemId": "Decoration_Plants_02",
     "CostAmount": 35
   },

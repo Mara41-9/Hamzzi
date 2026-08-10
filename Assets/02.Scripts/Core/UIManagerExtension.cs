@@ -31,7 +31,7 @@ public enum UIType
     GeneratorUI,
     LobbyBackgroundUI,
     ShopUI,
-    BuildUI
+    BuildUI,
     CollectionUI
 }
 
