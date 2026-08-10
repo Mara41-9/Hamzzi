@@ -105,7 +105,7 @@ public class CollectionView : UIBase
         // 아이콘 로드
 
         // 햄스터 이름
-        HamsterName.text = hamsterData.ItemName;
+        HamsterName.text = hamsterData.Name;
         // 햄스터 설명
         HamsterDescription.text = hamsterData.Description;
 
