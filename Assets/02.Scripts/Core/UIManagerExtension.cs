@@ -31,7 +31,11 @@ public enum UIType
     GeneratorUI,
     LobbyBackgroundUI,
     ShopUI,
-    BuildUI
+    BuildUI,
+    LoginUI,
+    AccountSearchUI,
+    AccountInfoUI,
+    SearchFailUI
 }
 
 public static class UIManagerExtension
