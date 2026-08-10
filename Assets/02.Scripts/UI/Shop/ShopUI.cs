@@ -86,7 +86,7 @@ public class ShopUI : UIBase
 
     private void FindShopViewModelAndBind()
     {
-        var shopVm = SampleNetworkManager.Instance.ShopService.GetShopViewModel();
+        var shopVm = ServiceManager.Instance.ShopService.GetShopViewModel();
         if(shopVm.ItemList == null || shopVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다");

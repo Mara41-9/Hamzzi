@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SampleNetworkManager : SingletonBase<SampleNetworkManager>
+public class ServiceManager : SingletonBase<ServiceManager>
 {
     public NetworkShopService ShopService { get; private set; }
 
