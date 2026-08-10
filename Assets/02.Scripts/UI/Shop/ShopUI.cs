@@ -29,6 +29,12 @@ public class ShopUI : UIBase
     [SerializeField] private UIButton Button_PlayCategory;
     [SerializeField] private UIButton Button_DecorCategory;
 
+    [Header("카테고리 선택 이미지")]
+    [SerializeField] private Image Image_SelectedAllCategory;
+    [SerializeField] private Image Image_SelectedFurnitureCategory;
+    [SerializeField] private Image Image_SelectedPlayCategory;
+    [SerializeField] private Image Image_SelectedDecorCategory;
+
     private ItemData _selectedItemData;
     private ShopViewModel _shopVm;
 
@@ -39,6 +45,7 @@ public class ShopUI : UIBase
     private void Start()
     {
         _selectedCategory = ShopCategory.All;
+        SetSelectedCategory(_selectedCategory);
         SetShopItemSlotOnEnable();
     }
 
@@ -53,6 +60,7 @@ public class ShopUI : UIBase
     private void OnClick_AllCategory()
     {
         SetShopLayoutByCategory(ShopCategory.All);
+        Image_SelectedAllCategory.gameObject.SetActive(true);
     }
 
     private void OnClick_FurnitureCategory()
@@ -73,8 +81,16 @@ public class ShopUI : UIBase
     private void SetShopLayoutByCategory(ShopCategory category)
     {
         _selectedCategory = category;
+        SetSelectedCategory(_selectedCategory);
 
         ResetItemSlotAndCreateAll();
+    }
+    private void SetSelectedCategory(ShopCategory category)
+    {
+        Image_SelectedAllCategory.gameObject.SetActive(category == ShopCategory.All);
+        Image_SelectedFurnitureCategory.gameObject.SetActive(category == ShopCategory.Furniture);
+        Image_SelectedPlayCategory.gameObject.SetActive(category == ShopCategory.Play);
+        Image_SelectedDecorCategory.gameObject.SetActive(category == ShopCategory.Decor);
     }
 
     private void SetShopItemSlotOnEnable()
