@@ -52,6 +52,20 @@ public class ShopSlotViewModel : ViewModelBase
         }
     }
 
+    private string _subCategory;
+    public string SubCategory
+    {
+        get => _subCategory;
+        set
+        {
+            if (_subCategory != value)
+            {
+                _subCategory = value;
+                OnPropertyChanged(nameof(SubCategory));
+            }
+        }
+    }
+
     private int _costAmount;
     public int CostAmount
     {

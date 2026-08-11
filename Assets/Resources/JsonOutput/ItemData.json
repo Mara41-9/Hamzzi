@@ -4,6 +4,7 @@
     "Name": "올리브 더블 침대",
     "Description": "햄찌들이 둘이서도 포근하게 쉴 수 있는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_01",
     "PrefabPath": ""
   },
@@ -12,6 +13,7 @@
     "Name": "아쿠아 더블 침대",
     "Description": "시원한 색감으로 편안한 잠을 선물하는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_02",
     "PrefabPath": ""
   },
@@ -20,6 +22,7 @@
     "Name": "아쿠아 싱글 침대",
     "Description": "혼자 쉬기 딱 좋은 아늑한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_03",
     "PrefabPath": ""
   },
@@ -28,6 +31,7 @@
     "Name": "올리브 싱글 침대",
     "Description": "자연의 색감을 담은 편안한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_04",
     "PrefabPath": ""
   },
@@ -36,6 +40,7 @@
     "Name": "코랄 싱글 침대",
     "Description": "따뜻한 분위기가 느껴지는 원목 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_05",
     "PrefabPath": ""
   },
@@ -44,39 +49,935 @@
     "Name": "코랄 더블 침대",
     "Description": "넓고 튼튼한 프레임의 포근한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_06",
     "PrefabPath": ""
   },
   {
+    "Id": "Furniture_Bed_07",
+    "Name": "핑크 싱글 침대",
+    "Description": "마치 공주가 된 것 같은 느낌을 주는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_08",
+    "Name": "핑크 더블 침대",
+    "Description": "공주들은 작은 침대는 사치라는 것을 깨닫게 해주는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_09",
+    "Name": "하늘 싱글 침대",
+    "Description": "구름같이 푹신한 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_10",
+    "Name": "분홍 싱글 침대",
+    "Description": "전국 모든 딸들이 탐내는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_11",
+    "Name": "심플 2층 침대",
+    "Description": "원목이 단단해 흔들림이 전혀 없는 2층 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_12",
+    "Name": "새싹 싱글 침대",
+    "Description": "싱그러운 색감이 돋보이는 산뜻한 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_13",
+    "Name": "라일락 싱글 침대",
+    "Description": "은은한 라일락빛과 포근한 분홍빛이 어우러진 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_14",
+    "Name": "햇살 싱글 침대",
+    "Description": "따스한 햇살과 푸른 하늘을 담은 듯한 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_14",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_15",
+    "Name": "노을 싱글 침대",
+    "Description": "따스한 노을빛을 닮은 포근한 색감의 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_15",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_16",
+    "Name": "알록달록 싱글 침대",
+    "Description": "알록달록한 색감이 기분까지 밝게 해주는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_16",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_17",
+    "Name": "호두나무 싱글 침대",
+    "Description": "짙은 원목 프레임이 편안하고 아늑한 느낌을 주는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_17",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_18",
+    "Name": "햇살 2층 침대",
+    "Description": "따스한 햇살빛 프레임이 돋보이는 아늑한 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_18",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_19",
+    "Name": "파도 싱글 침대",
+    "Description": "시원한 파도빛을 담은 깔끔하고 산뜻한 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_19",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_20",
+    "Name": "초록숲 싱글 침대",
+    "Description": "싱그러운 초록빛이 편안한 숲을 떠올리게 하는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_20",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Bed_21",
+    "Name": "벚꽃 싱글 침대",
+    "Description": "화사한 벚꽃빛 침구가 포근한 분위기를 더해주는 침대",
+    "Category": "Furniture",
+	"SubCategory": "Bed",
+    "IconPath": "Image/Item/Furniture/Bed_21",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_01",
+    "Name": "라벤더 소파",
+    "Description": "은은한 보랏빛이 공간을 포근하게 채워주는 1인용 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_02",
+    "Name": "블루 쿠션 소파",
+    "Description": "푹신한 쿠션과 깔끔한 디자인이 돋보이는 파란색 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_03",
+    "Name": "새싹 포근 소파",
+    "Description": "싱그러운 초록빛 쿠션과 따뜻한 원목 프레임이 어우러진 포근한 1인용 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_04",
+    "Name": "꽃잎 소파",
+    "Description": "꽃잎처럼 포근하게 감싸주는 사랑스러운 분홍빛 1인용 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_05",
+    "Name": "포옹 소파",
+    "Description": "꽃잎처럼 포근하게 감싸주는 사랑스러운 분홍빛 1인용 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_06",
+    "Name": "햇살 라운지 체어",
+    "Description": "따스한 햇살을 닮은 노란 쿠션과 주황빛 프레임이 돋보이는 편안한 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_07",
+    "Name": "푸른 호수 소파",
+    "Description": "잔잔한 호수를 닮은 푸른빛 쿠션이 편안한 분위기를 더해주는 1인용 소파",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_08",
+    "Name": "느긋한 원목 의자",
+    "Description": "따뜻한 원목 프레임과 폭신한 쿠션이 어우러진 편안한 안락의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_09",
+    "Name": "새싹 포근 의자",
+    "Description": "싱그러운 색감과 둥근 등받이가 어우러진 포근한 안락의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_10",
+    "Name": "포옹 의자",
+    "Description": "둥근 등받이가 포근하게 감싸주는 아늑한 안락의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_11",
+    "Name": "새싹 라운드 의자",
+    "Description": "새싹을 닮은 싱그러운 색감의 둥근 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_12",
+    "Name": "포근 원목 의자",
+    "Description": "따뜻한 원목 프레임에 푹신한 쿠션을 더한 편안한 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_13",
+    "Name": "돌돌 쿠션 의자",
+    "Description": "돌돌 말린 듯한 등받이와 좌석이 매력적인 개성 있는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_14",
+    "Name": "겹겹 포근 의자",
+    "Description": "겹겹이 둘러진 쿠션이 몸을 포근하게 감싸주는 안락의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_14",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_15",
+    "Name": "폭신 등받이 의자",
+    "Description": "높은 등받이와 폭신한 쿠션으로 편안하게 쉴 수 있는 안락의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_15",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_16",
+    "Name": "포근 헤드레스트 의자",
+    "Description": "푹신한 헤드레스트와 팔걸이가 편안하게 몸을 받쳐주는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_16",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_17",
+    "Name": "컬러 프레임 의자",
+    "Description": "선명한 색감의 프레임과 푹신한 쿠션이 어우러진 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_17",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_18",
+    "Name": "몽글 쿠션 의자",
+    "Description": "둥글고 폭신한 쿠션이 포근하게 감싸주는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_18",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_19",
+    "Name": "조개 등받이 의자",
+    "Description": "조개껍데기를 닮은 폭신한 등받이가 포근하게 감싸주는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_19",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_20",
+    "Name": "느긋한 흔들의자",
+    "Description": "앞뒤로 살랑살랑 흔들리며 여유롭게 쉬기 좋은 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_20",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_21",
+    "Name": "포근 등받이 의자",
+    "Description": "둥근 등받이와 폭신한 좌석이 편안함을 더해주는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_21",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_22",
+    "Name": "클래식 흔들의자",
+    "Description": "나무 프레임과 푹신한 쿠션이 어우러진 편안한 흔들의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_22",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_23",
+    "Name": "데일리 의자",
+    "Description": "어디에 두어도 잘 어울리는 깔끔하고 편안한 기본 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_23",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_24",
+    "Name": "새싹 의자",
+    "Description": "싱그러운 색감으로 공간에 생기를 더해주는 산뜻한 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_24",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Armchair_25",
+    "Name": "앤티크 그린 체어",
+    "Description": "둥근 장식 프레임과 짙은 초록빛이 어우러진 클래식한 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Armchair_25",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_01",
+    "Name": "레드 바 스툴",
+    "Description": "선명한 레드 쿠션과 메탈 프레임이 어우러진 깔끔한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_02",
+    "Name": "베리 바 체어",
+    "Description": "톡톡 튀는 베리 컬러와 둥근 프레임이 매력적인 높은 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_03",
+    "Name": "테라 스툴",
+    "Description": "따뜻한 브릭 컬러의 둥근 좌판과 차분한 프레임이 어우러진 심플한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_04",
+    "Name": "쿠키 스툴",
+    "Description": "폭신한 둥근 좌판과 따뜻한 우드톤이 어우러진 아담한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_05",
+    "Name": "세이지 스툴",
+    "Description": "은은한 세이지 그린 좌판과 짙은 프레임이 어우러진 심플한 높은 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_06",
+    "Name": "몽글 스툴",
+    "Description": "동글동글한 좌판과 통통한 다리가 귀여운 포인트 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_07",
+    "Name": "말랑 스툴",
+    "Description": "둥글고 말랑한 형태가 포근한 느낌을 주는 귀여운 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_08",
+    "Name": "꼬마 의자",
+    "Description": "작고 통통한 다리가 귀여운 포근한 느낌의 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_09",
+    "Name": "햇살 접이식 의자",
+    "Description": "노란빛이 산뜻한 실용적인 접이식 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_10",
+    "Name": "느긋한 의자",
+    "Description": "편하게 기대어 느긋한 시간을 보내기 좋은 나무 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_11",
+    "Name": "둥실 흔들의자",
+    "Description": "둥글둥글한 모양이 귀여운 포근한 흔들의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_12",
+    "Name": "반달 의자",
+    "Description": "반달 모양의 등받이가 포인트인 아담하고 귀여운 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_13",
+    "Name": "블록 스툴",
+    "Description": "블록처럼 단순하고 통통한 모양이 매력적인 작은 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_14",
+    "Name": "모래시계 스툴",
+    "Description": "잘록한 모래시계 모양이 돋보이는 독특한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_14",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_15",
+    "Name": "링 스툴",
+    "Description": "둥근 발받침이 더해진 심플하고 편안한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_15",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_16",
+    "Name": "라운드 스툴",
+    "Description": "동글동글한 좌판과 세 개의 다리가 어우러진 아담한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_16",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_17",
+    "Name": "올리브 스툴",
+    "Description": "둥근 좌판과 부드럽게 휘어진 다리가 어우러진 산뜻한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_17",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_18",
+    "Name": "퍼플 프레임 스툴",
+    "Description": "사각 좌판과 교차된 프레임이 돋보이는 튼튼한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_18",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_19",
+    "Name": "포레스트 쿠션 스툴",
+    "Description": "초록빛 쿠션과 주황색 프레임이 어우러진 포근한 스툴",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_19",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_20",
+    "Name": "릴렉스 체어",
+    "Description": "푹신한 좌판과 등받이를 기울여 편안하게 쉴 수 있는 휴식용 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_20",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_PC_01",
+    "Name": "게이밍 체어",
+    "Description": "푹신한 등받이와 바퀴가 달려 편안하게 사용할 수 있는 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_PC_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_PC_02",
+    "Name": "허니 게이밍 체어",
+    "Description": "폭신한 쿠션과 높은 등받이로 편안함을 더한 게이밍 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_PC_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_PC_03",
+    "Name": "스카이 오피스 체어",
+    "Description": "깔끔한 쿠션과 바퀴가 달린 심플하고 실용적인 사무용 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_PC_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_PC_04",
+    "Name": "핑크 데스크 체어",
+    "Description": "포근한 핑크 쿠션과 팔걸이가 돋보이는 편안한 사무용 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_PC_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Chair_PC_05",
+    "Name": "클래식 오피스 체어",
+    "Description": "묵직한 다크 쿠션과 브라운 프레임이 어우러진 중후한 사무용 의자",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Chair_PC_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_01",
+    "Name": "포근 벤치 푸프",
+    "Description": "폭신한 쿠션에 쏙 기대어 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_02",
+    "Name": "말랑 큐브 푸프",
+    "Description": "말랑하고 폭신한 쿠션에 푹 기대어 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_03",
+    "Name": "통통 푸프",
+    "Description": "동글동글 폭신한 쿠션에 앉아 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_04",
+    "Name": "도넛 푸프",
+    "Description": "도넛처럼 동그랗고 폭신해서 포근하게 몸을 맡길 수 있는 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_05",
+    "Name": "새싹 푸프",
+    "Description": "싱그러운 초록빛에 폭신한 쿠션을 더한 아늑한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_06",
+    "Name": "햇살 푸프",
+    "Description": "따스한 햇살을 닮은 노란빛의 폭신한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_07",
+    "Name": "체리 빈백",
+    "Description": "푹 파묻혀 느긋하게 쉬기 좋은 포근한 빈백",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_08",
+    "Name": "통통 푸프",
+    "Description": "동글동글 폭신한 쿠션에 앉아 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_01",
+    "Name": "클로버 푸프",
+    "Description": "싱그러운 클로버를 닮은 폭신한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_02",
+    "Name": "클래식 벽난로",
+    "Description": "은은한 분위기를 더해 주는 클래식 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_03",
+    "Name": "모던 벽난로",
+    "Description": "깔끔하고 심플한 디자인으로 공간에 따뜻한 분위기를 더해주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_04",
+    "Name": "글라스 벽난로",
+    "Description": "투명한 유리창 너머로 따스한 불빛을 감상할 수 있는 아늑한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_05",
+    "Name": "포근 벽난로",
+    "Description": "따뜻한 불 앞에서 햄찌가 포근하게 쉬어갈 수 있는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_06",
+    "Name": "대리석 벽난로",
+    "Description": "우아한 기둥 장식이 돋보이는 고급스러운 분위기의 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_07",
+    "Name": "굴뚝 벽난로",
+    "Description": "높게 솟은 굴뚝과 따뜻한 색감이 아늑한 분위기를 더해주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_08",
+    "Name": "굴뚝 난로",
+    "Description": "길쭉한 굴뚝 아래 은은한 불씨가 타오르는 아늑한 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_09",
+    "Name": "코너 벽난로",
+    "Description": "방 한쪽 모서리에 쏙 들어가 따뜻한 분위기를 만들어주는 벽난로.",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_10",
+    "Name": "장작 난로",
+    "Description": "빨갛게 타오르는 장작불로 햄찌의 공간을 따뜻하게 데워주는 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_11",
+    "Name": "원통형 장작 난로",
+    "Description": "작은 불씨가 은은하게 타오르며 햄찌의 공간을 포근하게 데워주는 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_12",
+    "Name": "화이트 골드 벽난로",
+    "Description": "은은한 금빛 장식이 포근한 분위기를 더해주는 깔끔한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_13",
+    "Name": "테라코타 벽난로",
+    "Description": "따뜻한 흙빛 색감으로 햄찌의 공간을 포근하게 채워주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_14",
+    "Name": "롱 파이프 벽난로",
+    "Description": "길쭉한 연통과 둥근 화로가 매력적인 아담한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_14",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_01",
+    "Name": "기본 변기",
+    "Description": "군더더기 없이 깔끔한 기본 디자인의 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_02",
+    "Name": "둥근 변기",
+    "Description": "둥글둥글한 디자인이 편안한 느낌을 주는 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_03",
+    "Name": "모던 변기",
+    "Description": "반듯하고 깔끔한 디자인의 모던한 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_04",
+    "Name": "레트로 변기",
+    "Description": "줄을 당겨 물을 내리는 독특한 레트로 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_04",
+    "PrefabPath": ""
+  },
+  {
     "Id": "Decoration_Carpet_01",
-    "Name": "따뜻한 러그",
-    "Description": "발끝까지 포근함이 전해지는 러그",
+    "Name": "항구 카펫",
+    "Description": "짙은 갈색과 푸른빛이 어우러진 포근한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_01",
     "PrefabPath": ""
   },
   {
     "Id": "Decoration_Carpet_02",
-    "Name": "포근한 러그",
-    "Description": "햄찌들이 편하게 쉬기 좋은 러그",
+    "Name": "초원 카펫",
+    "Description": "푸른 하늘과 싱그러운 초원을 닮은 산뜻한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_02",
     "PrefabPath": ""
   },
   {
-    "Id": "Decoration_Fireplace_01",
-    "Name": "벽난로",
-    "Description": "방 안을 아늑하게 만들어 주는 벽난로",
+    "Id": "Decoration_Carpet_03",
+    "Name": "벽난로 카펫",
+    "Description": "따뜻하고 포근한 분위기를 더해주는 붉은빛 카펫",
     "Category": "Decor",
-    "IconPath": "Image/Item/Decor/Fireplace_01",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_03",
     "PrefabPath": ""
   },
   {
-    "Id": "Decoration_Fireplace_02",
-    "Name": "클래식 벽난로",
-    "Description": "은은한 분위기를 더해 주는 클래식 벽난로",
+    "Id": "Decoration_Carpet_04",
+    "Name": "해변 카펫",
+    "Description": "따스한 모래빛과 시원한 바다빛이 어우러진 포근한 카펫",
     "Category": "Decor",
-    "IconPath": "Image/Item/Decor/Fireplace_02",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_05",
+    "Name": "핑크 웨이브 카펫",
+    "Description": "부드러운 핑크빛 물결무늬가 사랑스러운 분위기를 더해주는 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_06",
+    "Name": "사막빛 카펫",
+    "Description": "따스한 모랫빛과 짙은 푸른빛이 어우러진 멋스러운 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_07",
+    "Name": "황혼 카펫",
+    "Description": "따스한 황혼빛 색감과 기하학 무늬가 어우러진 포근한 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_08",
+    "Name": "가을 들판 카펫",
+    "Description": "따스한 가을 들판을 닮은 색감이 아늑함을 더해주는 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_09",
+    "Name": "복숭아 링 카펫",
+    "Description": "달콤한 복숭아를 닮은 부드러운 색감의 원형 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_10",
+    "Name": "밀크티 카펫",
+    "Description": "부드러운 밀크티를 닮은 따뜻한 색감의 원형 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_11",
+    "Name": "민트링 카펫",
+    "Description": "산뜻한 민트빛 원형 무늬가 포인트가 되는 포근한 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Decoration_Carpet_12",
+    "Name": "호박빛 카펫",
+    "Description": "따스한 호박빛 색감이 아늑한 분위기를 더해주는 카펫",
+    "Category": "Decor",
+	"SubCategory": "Carpet",
+    "IconPath": "Image/Item/Decor/Carpet_12",
     "PrefabPath": ""
   },
   {
@@ -84,6 +985,7 @@
     "Name": "선인장 화분",
     "Description": "작지만 존재감 있는 초록 친구",
     "Category": "Decor",
+	"SubCategory": "Plants",
     "IconPath": "Image/Item/Decor/Plants_01",
     "PrefabPath": ""
   },
@@ -92,15 +994,224 @@
     "Name": "다육이 화분",
     "Description": "싱그러운 분위기를 더해 주는 작은 화분",
     "Category": "Decor",
+	"SubCategory": "Plants",
     "IconPath": "Image/Item/Decor/Plants_02",
     "PrefabPath": ""
   },
   {
-    "Id": "Play_BarbellStand_01",
-    "Name": "운동 기구",
-    "Description": "오늘도 힘내서 운동하는 햄찌를 위한 운동 기구",
+    "Id": "Play_Audio_01",
+    "Name": "팝팝 스피커",
+    "Description": "신나는 음악으로 햄찌의 하루를 즐겁게 채워주는 스피커",
     "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_02",
+    "Name": "추억의 라디오",
+    "Description": "잔잔한 음악과 함께 느긋한 시간을 보낼 수 있는 라디오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_03",
+    "Name": "댄싱 붐박스",
+    "Description": "신나는 음악에 맞춰 절로 몸이 들썩이는 알록달록 붐박스",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_04",
+    "Name": "추억의 턴테이블",
+    "Description": "빙글빙글 돌아가는 레코드와 함께 감성에 빠져볼 수 있는 턴테이블",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_05",
+    "Name": "모던 스테레오",
+    "Description": "풍성한 사운드로 햄찌의 공간을 가득 채워주는 스테레오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_06",
+    "Name": "레트로 카세트 라디오",
+    "Description": "톡톡 튀는 색감과 레트로한 감성이 매력적인 카세트 라디오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_07",
+    "Name": "컬러풀 카세트 플레이어",
+    "Description": "헤드폰을 쓰고 나만의 음악에 푹 빠질 수 있는 카세트 플레이어",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_08",
+    "Name": "알록달록 마이크",
+    "Description": "햄찌의 숨겨둔 노래 실력을 마음껏 뽐낼 수 있는 알록달록 마이크",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Guitar_01",
+    "Name": "클래식 기타",
+    "Description": "따뜻한 선율로 햄찌의 하루를 감성 가득 채워주는 기타",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Guitar_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Piano_01",
+    "Name": "클래식 피아노",
+    "Description": "고운 선율로 햄찌의 공간을 우아하게 채워주는 클래식 피아노",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Piano_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Synthesizer_01",
+    "Name": "디지털 신디사이저",
+    "Description": "다양한 소리와 리듬으로 햄찌만의 음악을 만들어볼 수 있는 신디사이저",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Synthesizer_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Synthesizer_Stand_01",
+    "Name": "스탠드 신디사이저",
+    "Description": "스탠드에 올려 더욱 편하게 연주할 수 있는 신디사이저",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Synthesizer_Stand_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Barbell_01",
+    "Name": "튼튼한 바벨",
+    "Description": "근력 운동에 사용하기 좋은 기본 바벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Barbell_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_BarbellStand_01",
+    "Name": "바벨 벤치",
+    "Description": "바벨 운동을 편하게 즐길 수 있는 벤치 세트",
+    "Category": "Play",
+	"SubCategory": "Exercise",
     "IconPath": "Image/Item/Play/BarbellStand_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Dumbbell_01",
+    "Name": "핑크 덤벨",
+    "Description": "밝은 핑크색이 돋보이는 가벼운 덤벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Dumbbell_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Dumbbell_02",
+    "Name": "클래식 덤벨",
+    "Description": "기본적인 디자인의 묵직한 덤벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Dumbbell_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_ExerciseBike_01",
+    "Name": "실내 자전거",
+    "Description": "실내에서 간편하게 운동할 수 있는 자전거",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/ExerciseBike_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Treadmill_01",
+    "Name": "런닝머신",
+    "Description": "실내에서 편하게 달리기를 즐길 수 있는 런닝머신",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Treadmill_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Ball_01",
+    "Name": "알록달록 공",
+    "Description": "파란색과 노란색이 어우러진 알록달록한 공",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Ball_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Darts_01",
+    "Name": "다트판",
+    "Description": "가볍게 다트 놀이를 즐길 수 있는 다트판",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Darts_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_01",
+    "Name": "딸랑이",
+    "Description": "흔들면 재미있는 소리가 날 것 같은 알록달록한 딸랑이",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Toy_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_02",
+    "Name": "장난감 자동차",
+    "Description": "작고 귀여운 디자인의 빨간 장난감 자동차",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Toy_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_03",
+    "Name": "팽이",
+    "Description": "빙글빙글 돌리며 가지고 놀 수 있는 알록달록한 팽이",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Toy_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_04",
+    "Name": "고리 쌓기",
+    "Description": "알록달록한 고리를 차곡차곡 쌓아 올리는 장난감",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Toy_04",
     "PrefabPath": ""
   },
   {
@@ -108,7 +1219,134 @@
     "Name": "리듬 북",
     "Description": "통통 두드리며 신나는 리듬을 즐길 수 있는 북",
     "Category": "Play",
+	"SubCategory": "Toy",
     "IconPath": "Image/Item/Play/Toy_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Toy_06",
+    "Name": "컬러 블록",
+    "Description": "여러 가지 모양을 만들며 가지고 놀 수 있는 알록달록한 블록",
+    "Category": "Play",
+	"SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Toy_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Computer_01",
+    "Name": "미니 컴퓨터",
+    "Description": "작은 화면이 달린 심플한 디자인의 컴퓨터",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/Computer_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_GameConsole_01",
+    "Name": "게임 컨트롤러",
+    "Description": "알록달록한 버튼으로 게임을 즐길 수 있는 컨트롤러",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/GameConsole_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_GameConsole_02",
+    "Name": "레트로 조이스틱",
+    "Description": "조이스틱과 버튼이 달린 클래식한 게임기",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/GameConsole_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_GameConsole_03",
+    "Name": "레트로 게임기",
+    "Description": "옛날 감성이 느껴지는 아담한 크기의 게임기",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/GameConsole_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Keyboard_01",
+    "Name": "보라색 키보드",
+    "Description": "부드러운 보라색이 돋보이는 심플한 키보드",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/Keyboard_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Mouse_01",
+    "Name": "보라색 마우스",
+    "Description": "둥글고 귀여운 디자인의 보라색 마우스",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/Mouse_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_01",
+    "Name": "벽걸이 TV",
+    "Description": "군더더기 없이 깔끔한 디자인의 벽걸이 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_02",
+    "Name": "옐로우 레트로 TV",
+    "Description": "노란색 테두리가 돋보이는 레트로 감성의 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_03",
+    "Name": "스탠드 TV",
+    "Description": "길쭉한 다리가 달린 독특한 디자인의 스탠드 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_04",
+    "Name": "오렌지 미니 TV",
+    "Description": "둥근 형태와 따뜻한 색감이 어우러진 작은 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_05",
+    "Name": "민트 레트로 TV",
+    "Description": "산뜻한 민트색이 돋보이는 레트로 디자인의 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_06",
+    "Name": "클래식 TV",
+    "Description": "따뜻한 색감과 작은 다리가 어우러진 클래식한 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_TV_07",
+    "Name": "와이드 TV",
+    "Description": "넓은 화면과 심플한 디자인이 돋보이는 TV",
+    "Category": "Play",
+	"SubCategory": "Electronics",
+    "IconPath": "Image/Item/Play/TV_07",
     "PrefabPath": ""
   }
 ]
