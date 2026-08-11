@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "SS",
+    "SeedPerTap": 8,
+    "TriggerIntervalSec": 30,
+    "TapDurationSec": 5
+  },
+  {
+    "Id": "S",
+    "SeedPerTap": 4,
+    "TriggerIntervalSec": 15,
+    "TapDurationSec": 5
+  },
+  {
+    "Id": "A",
+    "SeedPerTap": 1,
+    "TriggerIntervalSec": 10,
+    "TapDurationSec": 10
+  }
+]
