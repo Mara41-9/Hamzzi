@@ -36,6 +36,10 @@ public class GameManager : SingletonBase<GameManager>
         {
             _playerModel = new PlayerModel();
         }
+
+#if UNITY_EDITOR
+        Debug.Log("PlayerData 로드됨: SeedCount=" + _playerModel.SeedCount);
+#endif
     }
 
     private void SavePlayerData()
