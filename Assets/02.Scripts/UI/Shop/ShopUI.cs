@@ -137,11 +137,6 @@ public class ShopUI : UIBase
             _subCategoryNameList.Add(slotVm.SubCategory);
         }
 
-        if(_subCategoryNameList.Count > 0)
-        {
-            _selectedSubCategory = _subCategoryNameList[0];
-        }
-
         foreach(var subCategory in _subCategoryNameList)
         {
             var gObj = Instantiate(Button_SubCategory, Transform_ButtonRoot);
@@ -159,6 +154,12 @@ public class ShopUI : UIBase
             component.SetSubCategory(subCategory);
             component.BindSubCategorySelectEvent(OnSubCategorySelected);
             _subCategoryButtonList.Add(component);
+        }
+
+        if (_subCategoryNameList.Count > 0)
+        {
+            _selectedSubCategory = _subCategoryNameList[0];
+            _subCategoryButtonList[0].SetSelected(true) ;
         }
     }
 
@@ -195,10 +196,24 @@ public class ShopUI : UIBase
 
     private void OnSubCategorySelected(string subCategory)
     {
-        _selectedSubCategory = subCategory; 
+        _selectedSubCategory = subCategory;
+
+        for (int i = 0; i < _subCategoryButtonList.Count; i++)
+        {
+            ShopSubCategoryUI subCategoryUI = _subCategoryButtonList[i];
+
+            if (subCategoryUI.SubCategory == _selectedSubCategory)
+            {
+                subCategoryUI.SetSelected(true);
+            }
+            else
+            {
+                subCategoryUI.SetSelected(false);
+            }
+        }
+
         ResetItemSlotAndCreateAll();
     }
-
 
     private void ResetItemSlotAndCreateAll()
     {
