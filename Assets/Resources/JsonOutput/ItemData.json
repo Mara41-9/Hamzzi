@@ -837,6 +837,42 @@
     "PrefabPath": ""
   },
   {
+    "Id": "Furniture_Toilet_01",
+    "Name": "기본 변기",
+    "Description": "군더더기 없이 깔끔한 기본 디자인의 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_02",
+    "Name": "둥근 변기",
+    "Description": "둥글둥글한 디자인이 편안한 느낌을 주는 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_03",
+    "Name": "모던 변기",
+    "Description": "반듯하고 깔끔한 디자인의 모던한 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Toilet_04",
+    "Name": "레트로 변기",
+    "Description": "줄을 당겨 물을 내리는 독특한 레트로 변기",
+    "Category": "Furniture",
+	"SubCategory": "Toilet",
+    "IconPath": "Image/Item/Furniture/Toilet_04",
+    "PrefabPath": ""
+  },
+  {
     "Id": "Decoration_Carpet_01",
     "Name": "항구 카펫",
     "Description": "짙은 갈색과 푸른빛이 어우러진 포근한 카펫",
@@ -963,12 +999,111 @@
     "PrefabPath": ""
   },
   {
-    "Id": "Play_BarbellStand_01",
-    "Name": "운동 기구",
-    "Description": "오늘도 힘내서 운동하는 햄찌를 위한 운동 기구",
+    "Id": "Play_Audio_01",
+    "Name": "팝팝 스피커",
+    "Description": "신나는 음악으로 햄찌의 하루를 즐겁게 채워주는 스피커",
     "Category": "Play",
-	"SubCategory": "Exercise",
-    "IconPath": "Image/Item/Play/BarbellStand_01",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_02",
+    "Name": "추억의 라디오",
+    "Description": "잔잔한 음악과 함께 느긋한 시간을 보낼 수 있는 라디오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_03",
+    "Name": "댄싱 붐박스",
+    "Description": "신나는 음악에 맞춰 절로 몸이 들썩이는 알록달록 붐박스",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_04",
+    "Name": "추억의 턴테이블",
+    "Description": "빙글빙글 돌아가는 레코드와 함께 감성에 빠져볼 수 있는 턴테이블",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_05",
+    "Name": "모던 스테레오",
+    "Description": "풍성한 사운드로 햄찌의 공간을 가득 채워주는 스테레오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_06",
+    "Name": "레트로 카세트 라디오",
+    "Description": "톡톡 튀는 색감과 레트로한 감성이 매력적인 카세트 라디오",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_07",
+    "Name": "컬러풀 카세트 플레이어",
+    "Description": "헤드폰을 쓰고 나만의 음악에 푹 빠질 수 있는 카세트 플레이어",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Audio_08",
+    "Name": "알록달록 마이크",
+    "Description": "햄찌의 숨겨둔 노래 실력을 마음껏 뽐낼 수 있는 알록달록 마이크",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Audio_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Guitar_01",
+    "Name": "클래식 기타",
+    "Description": "따뜻한 선율로 햄찌의 하루를 감성 가득 채워주는 기타",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Guitar_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Piano_01",
+    "Name": "클래식 피아노",
+    "Description": "고운 선율로 햄찌의 공간을 우아하게 채워주는 클래식 피아노",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Piano_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Synthesizer_01",
+    "Name": "디지털 신디사이저",
+    "Description": "다양한 소리와 리듬으로 햄찌만의 음악을 만들어볼 수 있는 신디사이저",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Synthesizer_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Synthesizer_Stand_01",
+    "Name": "스탠드 신디사이저",
+    "Description": "스탠드에 올려 더욱 편하게 연주할 수 있는 신디사이저",
+    "Category": "Play",
+	"SubCategory": "Music",
+    "IconPath": "Image/Item/Play/Synthesizer_Stand_01",
     "PrefabPath": ""
   },
   {
@@ -979,6 +1114,50 @@
 	"SubCategory": "Music",
     "IconPath": "Image/Item/Play/Toy_05",
     "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Barbell_01",
+    "Name": "튼튼한 바벨",
+    "Description": "근력 운동에 사용하기 좋은 기본 바벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Barbell_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_BarbellStand_01",
+    "Name": "바벨 벤치",
+    "Description": "바벨 운동을 편하게 즐길 수 있는 벤치 세트",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/BarbellStand_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Dumbbell_01",
+    "Name": "핑크 덤벨",
+    "Description": "밝은 핑크색이 돋보이는 가벼운 덤벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Dumbbell_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_Dumbbell_02",
+    "Name": "클래식 덤벨",
+    "Description": "기본적인 디자인의 묵직한 덤벨",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Dumbbell_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Play_ExerciseBike_01",
+    "Name": "실내 자전거",
+    "Description": "실내에서 간편하게 운동할 수 있는 자전거",
+    "Category": "Play",
+	"SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/ExerciseBike_01",
+    "PrefabPath": ""
   }
-  
 ]
