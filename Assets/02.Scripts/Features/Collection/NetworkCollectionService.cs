@@ -19,12 +19,13 @@ public class NetworkCollectionService
 
     private void SetCollectionViewModel(CollectionViewModel vm)
     {
-        // 뷰모델 초기화
+        GameDataManager.Instance.LoadData<HamsterData>();
+        LoadHamsterId(vm);
     }
 
-    public void LoadHamsterId()
+    public void LoadHamsterId(CollectionViewModel vm)
     {
         var allHamsterIds = GameDataManager.Instance.GetAllDataId<HamsterData>();
-        _collectionViewModel.AllHamsterIdList = allHamsterIds.ToHashSet<string>();
+        vm.AllHamsterIdList = allHamsterIds.ToHashSet<string>();
     }
 }
