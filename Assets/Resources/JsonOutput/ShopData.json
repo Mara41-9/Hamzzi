@@ -616,32 +616,137 @@
   },
   {
     "Id": "Shop_Play_013",
-    "ItemId": "Play_Toy_05",
-    "CostAmount": 250
-  },
-  {
-    "Id": "Shop_Play_014",
     "ItemId": "Play_Barbell_01",
     "CostAmount": 300
   },
   {
-    "Id": "Shop_Play_015",
+    "Id": "Shop_Play_014",
     "ItemId": "Play_BarbellStand_01",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Play_016",
+    "Id": "Shop_Play_015",
     "ItemId": "Play_Dumbbell_01",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_017",
+    "Id": "Shop_Play_016",
     "ItemId": "Play_Dumbbell_02",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_018",
+    "Id": "Shop_Play_017",
     "ItemId": "Play_ExerciseBike_01",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_018",
+    "ItemId": "Play_Treadmill_01",
+    "CostAmount": 700
+  },
+  {
+    "Id": "Shop_Play_019",
+    "ItemId": "Play_Ball_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Play_020",
+    "ItemId": "Play_Darts_01",
+    "CostAmount": 250
+  },
+  {
+    "Id": "Shop_Play_021",
+    "ItemId": "Play_Toy_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Play_022",
+    "ItemId": "Play_Toy_02",
+    "CostAmount": 150
+  },
+  {
+    "Id": "Shop_Play_023",
+    "ItemId": "Play_Toy_03",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Play_024",
+    "ItemId": "Play_Toy_04",
+    "CostAmount": 150
+  },
+  {
+    "Id": "Shop_Play_025",
+    "ItemId": "Play_Toy_05",
+    "CostAmount": 200
+  },
+  {
+    "Id": "Shop_Play_026",
+    "ItemId": "Play_Toy_06",
+    "CostAmount": 200
+  },
+  {
+    "Id": "Shop_Play_027",
+    "ItemId": "Play_Computer_01",
+    "CostAmount": 400
+  },
+  {
+    "Id": "Shop_Play_028",
+    "ItemId": "Play_GameConsole_01",
+    "CostAmount": 200
+  },
+  {
+    "Id": "Shop_Play_029",
+    "ItemId": "Play_GameConsole_02",
+    "CostAmount": 250
+  },
+  {
+    "Id": "Shop_Play_030",
+    "ItemId": "Play_GameConsole_03",
+    "CostAmount": 350
+  },
+  {
+    "Id": "Shop_Play_031",
+    "ItemId": "Play_Keyboard_01",
+    "CostAmount": 150
+  },
+  {
+    "Id": "Shop_Play_032",
+    "ItemId": "Play_Mouse_01",
+    "CostAmount": 100
+  },
+  {
+    "Id": "Shop_Play_033",
+    "ItemId": "Play_TV_01",
+    "CostAmount": 450
+  },
+  {
+    "Id": "Shop_Play_034",
+    "ItemId": "Play_TV_02",
+    "CostAmount": 500
+  },
+  {
+    "Id": "Shop_Play_035",
+    "ItemId": "Play_TV_03",
+    "CostAmount": 550
+  },
+  {
+    "Id": "Shop_Play_036",
+    "ItemId": "Play_TV_04",
+    "CostAmount": 400
+  },
+  {
+    "Id": "Shop_Play_037",
+    "ItemId": "Play_TV_05",
+    "CostAmount": 450
+  },
+  {
+    "Id": "Shop_Play_038",
+    "ItemId": "Play_TV_06",
+    "CostAmount": 500
+  },
+  {
+    "Id": "Shop_Play_039",
+    "ItemId": "Play_TV_07",
     "CostAmount": 600
   }
 ]
