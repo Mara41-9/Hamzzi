@@ -23,7 +23,7 @@ public class ShopUI : UIBase
     [SerializeField] private TMP_Text Text_ItemDescription;
     [SerializeField] private TMP_Text Text_ItemPrice;
 
-    [Header("카테고리")]
+    [Header("상위 카테고리")]
     [SerializeField] private UIButton Button_AllCategory;
     [SerializeField] private UIButton Button_FurnitureCategory;
     [SerializeField] private UIButton Button_PlayCategory;
@@ -35,17 +35,26 @@ public class ShopUI : UIBase
     [SerializeField] private Image Image_SelectedPlayCategory;
     [SerializeField] private Image Image_SelectedDecorCategory;
 
+    [Header("하위 카테고리")]
+    [SerializeField] private GameObject SubCategoryArea;
+    [SerializeField] private GameObject Button_SubCategory;
+    [SerializeField] private Transform Transform_ButtonRoot;
+
     private ItemData _selectedItemData;
     private ShopViewModel _shopVm;
+    private string _selectedSubCategory;
 
     private ShopCategory _selectedCategory = ShopCategory.All;
 
     private Dictionary<long, ShopSlotUI> _itemSlotList = new Dictionary<long, ShopSlotUI>();
+    private List<string> _subCategoryNameList = new List<string>();
+    private List<ShopSubCategoryUI> _subCategoryButtonList = new List<ShopSubCategoryUI>();
 
     private void Start()
     {
         _selectedCategory = ShopCategory.All;
         SetSelectedCategory(_selectedCategory);
+        SetSubCategory(_selectedCategory);
         SetShopItemSlotOnEnable();
     }
 
@@ -82,6 +91,7 @@ public class ShopUI : UIBase
     {
         _selectedCategory = category;
         SetSelectedCategory(_selectedCategory);
+        SetSubCategory(category);
 
         ResetItemSlotAndCreateAll();
     }
@@ -91,6 +101,65 @@ public class ShopUI : UIBase
         Image_SelectedFurnitureCategory.gameObject.SetActive(category == ShopCategory.Furniture);
         Image_SelectedPlayCategory.gameObject.SetActive(category == ShopCategory.Play);
         Image_SelectedDecorCategory.gameObject.SetActive(category == ShopCategory.Decor);
+    }
+
+    private void SetSubCategory(ShopCategory category)
+    {
+        if(category == ShopCategory.All)
+        {
+            SubCategoryArea.SetActive(false);
+        }
+        else
+        {
+            SubCategoryArea.SetActive(true);
+            CreateSubCategoryButton(category);
+        }
+    }
+
+    private void CreateSubCategoryButton(ShopCategory category)
+    {
+        ClearSubCategoryList();
+
+        foreach (var itemKv in _shopVm.ItemList)
+        {
+            var slotVm = itemKv.Value;
+
+            if (slotVm.Category != category.ToString())
+            {
+                continue;
+            }
+
+            if (_subCategoryNameList.Contains(slotVm.SubCategory))
+            {
+                continue;
+            }
+
+            _subCategoryNameList.Add(slotVm.SubCategory);
+        }
+
+        if(_subCategoryNameList.Count > 0)
+        {
+            _selectedSubCategory = _subCategoryNameList[0];
+        }
+
+        foreach(var subCategory in _subCategoryNameList)
+        {
+            var gObj = Instantiate(Button_SubCategory, Transform_ButtonRoot);
+            if(gObj == null)
+            {
+                return;
+            }
+
+            var component = gObj.GetComponent<ShopSubCategoryUI>();
+            if(component == null)
+            {
+                return;
+            }
+
+            component.SetSubCategory(subCategory);
+            component.BindSubCategorySelectEvent(OnSubCategorySelected);
+            _subCategoryButtonList.Add(component);
+        }
     }
 
     private void SetShopItemSlotOnEnable()
@@ -124,6 +193,13 @@ public class ShopUI : UIBase
         }
     }
 
+    private void OnSubCategorySelected(string subCategory)
+    {
+        _selectedSubCategory = subCategory; 
+        ResetItemSlotAndCreateAll();
+    }
+
+
     private void ResetItemSlotAndCreateAll()
     {
         ClearSlotList();
@@ -132,7 +208,18 @@ public class ShopUI : UIBase
         {
             var slotVm = itemKv.Value;
 
-            if (slotVm.Category == _selectedCategory.ToString() || _selectedCategory == ShopCategory.All)
+            if (_selectedCategory == ShopCategory.All)
+            {
+                CreateItemSlot(slotVm);
+                continue;
+            }
+
+            if(slotVm.Category != _selectedCategory.ToString())
+            {
+                continue;
+            }
+
+            if(slotVm.SubCategory == _selectedSubCategory)
             {
                 CreateItemSlot(slotVm);
             }
@@ -174,6 +261,7 @@ public class ShopUI : UIBase
         Text_ItemPrice.text = slotView.CostAmount.ToString();
     }
 
+    
     private void ClearSlotList()
     {
         if(_itemSlotList.Count > 0)
@@ -187,5 +275,19 @@ public class ShopUI : UIBase
             _itemSlotList.Clear();
         }
     }
-    
+
+    private void ClearSubCategoryList()
+    {
+        if (_subCategoryButtonList.Count > 0)
+        {
+            foreach (var buttonObj in _subCategoryButtonList)
+            {
+                Destroy(buttonObj.gameObject);
+            }
+
+            _subCategoryButtonList.Clear();
+        }
+
+        _subCategoryNameList.Clear();
+    }
 }

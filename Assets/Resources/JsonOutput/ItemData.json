@@ -4,6 +4,7 @@
     "Name": "올리브 더블 침대",
     "Description": "햄찌들이 둘이서도 포근하게 쉴 수 있는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_01",
     "PrefabPath": ""
   },
@@ -12,6 +13,7 @@
     "Name": "아쿠아 더블 침대",
     "Description": "시원한 색감으로 편안한 잠을 선물하는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_02",
     "PrefabPath": ""
   },
@@ -20,6 +22,7 @@
     "Name": "아쿠아 싱글 침대",
     "Description": "혼자 쉬기 딱 좋은 아늑한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_03",
     "PrefabPath": ""
   },
@@ -28,6 +31,7 @@
     "Name": "올리브 싱글 침대",
     "Description": "자연의 색감을 담은 편안한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_04",
     "PrefabPath": ""
   },
@@ -36,6 +40,7 @@
     "Name": "코랄 싱글 침대",
     "Description": "따뜻한 분위기가 느껴지는 원목 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_05",
     "PrefabPath": ""
   },
@@ -44,6 +49,7 @@
     "Name": "코랄 더블 침대",
     "Description": "넓고 튼튼한 프레임의 포근한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_06",
     "PrefabPath": ""
   },
@@ -52,6 +58,7 @@
     "Name": "핑크 싱글 침대",
     "Description": "마치 공주가 된 것 같은 느낌을 주는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_07",
     "PrefabPath": ""
   },
@@ -60,6 +67,7 @@
     "Name": "핑크 더블 침대",
     "Description": "공주들은 작은 침대는 사치라는 것을 깨닫게 해주는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_08",
     "PrefabPath": ""
   },
@@ -68,6 +76,7 @@
     "Name": "하늘 싱글 침대",
     "Description": "구름같이 푹신한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_09",
     "PrefabPath": ""
   },
@@ -76,6 +85,7 @@
     "Name": "분홍 싱글 침대",
     "Description": "전국 모든 딸들이 탐내는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_10",
     "PrefabPath": ""
   },
@@ -84,6 +94,7 @@
     "Name": "심플 2층 침대",
     "Description": "원목이 단단해 흔들림이 전혀 없는 2층 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_11",
     "PrefabPath": ""
   },
@@ -92,6 +103,7 @@
     "Name": "새싹 싱글 침대",
     "Description": "싱그러운 색감이 돋보이는 산뜻한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_12",
     "PrefabPath": ""
   },
@@ -100,6 +112,7 @@
     "Name": "라일락 싱글 침대",
     "Description": "은은한 라일락빛과 포근한 분홍빛이 어우러진 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_13",
     "PrefabPath": ""
   },
@@ -108,6 +121,7 @@
     "Name": "햇살 싱글 침대",
     "Description": "따스한 햇살과 푸른 하늘을 담은 듯한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_14",
     "PrefabPath": ""
   },
@@ -116,6 +130,7 @@
     "Name": "노을 싱글 침대",
     "Description": "따스한 노을빛을 닮은 포근한 색감의 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_15",
     "PrefabPath": ""
   },
@@ -124,6 +139,7 @@
     "Name": "알록달록 싱글 침대",
     "Description": "알록달록한 색감이 기분까지 밝게 해주는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_16",
     "PrefabPath": ""
   },
@@ -132,6 +148,7 @@
     "Name": "호두나무 싱글 침대",
     "Description": "짙은 원목 프레임이 편안하고 아늑한 느낌을 주는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_17",
     "PrefabPath": ""
   },
@@ -140,6 +157,7 @@
     "Name": "햇살 2층 침대",
     "Description": "따스한 햇살빛 프레임이 돋보이는 아늑한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_18",
     "PrefabPath": ""
   },
@@ -148,6 +166,7 @@
     "Name": "파도 싱글 침대",
     "Description": "시원한 파도빛을 담은 깔끔하고 산뜻한 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_19",
     "PrefabPath": ""
   },
@@ -156,6 +175,7 @@
     "Name": "초록숲 싱글 침대",
     "Description": "싱그러운 초록빛이 편안한 숲을 떠올리게 하는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_20",
     "PrefabPath": ""
   },
@@ -164,6 +184,7 @@
     "Name": "벚꽃 싱글 침대",
     "Description": "화사한 벚꽃빛 침구가 포근한 분위기를 더해주는 침대",
     "Category": "Furniture",
+	"SubCategory": "Bed",
     "IconPath": "Image/Item/Furniture/Bed_21",
     "PrefabPath": ""
   },
@@ -172,6 +193,7 @@
     "Name": "라벤더 소파",
     "Description": "은은한 보랏빛이 공간을 포근하게 채워주는 1인용 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_01",
     "PrefabPath": ""
   },
@@ -180,6 +202,7 @@
     "Name": "블루 쿠션 소파",
     "Description": "푹신한 쿠션과 깔끔한 디자인이 돋보이는 파란색 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_02",
     "PrefabPath": ""
   },
@@ -188,6 +211,7 @@
     "Name": "새싹 포근 소파",
     "Description": "싱그러운 초록빛 쿠션과 따뜻한 원목 프레임이 어우러진 포근한 1인용 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_03",
     "PrefabPath": ""
   },
@@ -196,6 +220,7 @@
     "Name": "꽃잎 소파",
     "Description": "꽃잎처럼 포근하게 감싸주는 사랑스러운 분홍빛 1인용 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_04",
     "PrefabPath": ""
   },
@@ -204,6 +229,7 @@
     "Name": "포옹 소파",
     "Description": "꽃잎처럼 포근하게 감싸주는 사랑스러운 분홍빛 1인용 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_05",
     "PrefabPath": ""
   },
@@ -212,6 +238,7 @@
     "Name": "햇살 라운지 체어",
     "Description": "따스한 햇살을 닮은 노란 쿠션과 주황빛 프레임이 돋보이는 편안한 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_06",
     "PrefabPath": ""
   },
@@ -220,6 +247,7 @@
     "Name": "푸른 호수 소파",
     "Description": "잔잔한 호수를 닮은 푸른빛 쿠션이 편안한 분위기를 더해주는 1인용 소파",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_07",
     "PrefabPath": ""
   },
@@ -228,6 +256,7 @@
     "Name": "느긋한 원목 의자",
     "Description": "따뜻한 원목 프레임과 폭신한 쿠션이 어우러진 편안한 안락의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_08",
     "PrefabPath": ""
   },
@@ -236,6 +265,7 @@
     "Name": "새싹 포근 의자",
     "Description": "싱그러운 색감과 둥근 등받이가 어우러진 포근한 안락의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_09",
     "PrefabPath": ""
   },
@@ -244,6 +274,7 @@
     "Name": "포옹 의자",
     "Description": "둥근 등받이가 포근하게 감싸주는 아늑한 안락의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_10",
     "PrefabPath": ""
   },
@@ -252,6 +283,7 @@
     "Name": "새싹 라운드 의자",
     "Description": "새싹을 닮은 싱그러운 색감의 둥근 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_11",
     "PrefabPath": ""
   },
@@ -260,6 +292,7 @@
     "Name": "포근 원목 의자",
     "Description": "따뜻한 원목 프레임에 푹신한 쿠션을 더한 편안한 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_12",
     "PrefabPath": ""
   },
@@ -268,6 +301,7 @@
     "Name": "돌돌 쿠션 의자",
     "Description": "돌돌 말린 듯한 등받이와 좌석이 매력적인 개성 있는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_13",
     "PrefabPath": ""
   },
@@ -276,6 +310,7 @@
     "Name": "겹겹 포근 의자",
     "Description": "겹겹이 둘러진 쿠션이 몸을 포근하게 감싸주는 안락의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_14",
     "PrefabPath": ""
   },
@@ -284,6 +319,7 @@
     "Name": "폭신 등받이 의자",
     "Description": "높은 등받이와 폭신한 쿠션으로 편안하게 쉴 수 있는 안락의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_15",
     "PrefabPath": ""
   },
@@ -292,6 +328,7 @@
     "Name": "포근 헤드레스트 의자",
     "Description": "푹신한 헤드레스트와 팔걸이가 편안하게 몸을 받쳐주는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_16",
     "PrefabPath": ""
   },
@@ -300,6 +337,7 @@
     "Name": "컬러 프레임 의자",
     "Description": "선명한 색감의 프레임과 푹신한 쿠션이 어우러진 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_17",
     "PrefabPath": ""
   },
@@ -308,6 +346,7 @@
     "Name": "몽글 쿠션 의자",
     "Description": "둥글고 폭신한 쿠션이 포근하게 감싸주는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_18",
     "PrefabPath": ""
   },
@@ -316,6 +355,7 @@
     "Name": "조개 등받이 의자",
     "Description": "조개껍데기를 닮은 폭신한 등받이가 포근하게 감싸주는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_19",
     "PrefabPath": ""
   },
@@ -324,6 +364,7 @@
     "Name": "느긋한 흔들의자",
     "Description": "앞뒤로 살랑살랑 흔들리며 여유롭게 쉬기 좋은 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_20",
     "PrefabPath": ""
   },
@@ -332,6 +373,7 @@
     "Name": "포근 등받이 의자",
     "Description": "둥근 등받이와 폭신한 좌석이 편안함을 더해주는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_21",
     "PrefabPath": ""
   },
@@ -340,6 +382,7 @@
     "Name": "클래식 흔들의자",
     "Description": "나무 프레임과 푹신한 쿠션이 어우러진 편안한 흔들의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_22",
     "PrefabPath": ""
   },
@@ -348,6 +391,7 @@
     "Name": "데일리 의자",
     "Description": "어디에 두어도 잘 어울리는 깔끔하고 편안한 기본 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_23",
     "PrefabPath": ""
   },
@@ -356,6 +400,7 @@
     "Name": "새싹 의자",
     "Description": "싱그러운 색감으로 공간에 생기를 더해주는 산뜻한 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_24",
     "PrefabPath": ""
   },
@@ -364,6 +409,7 @@
     "Name": "앤티크 그린 체어",
     "Description": "둥근 장식 프레임과 짙은 초록빛이 어우러진 클래식한 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Armchair_25",
     "PrefabPath": ""
   },
@@ -372,6 +418,7 @@
     "Name": "레드 바 스툴",
     "Description": "선명한 레드 쿠션과 메탈 프레임이 어우러진 깔끔한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_01",
     "PrefabPath": ""
   },
@@ -380,6 +427,7 @@
     "Name": "베리 바 체어",
     "Description": "톡톡 튀는 베리 컬러와 둥근 프레임이 매력적인 높은 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_02",
     "PrefabPath": ""
   },
@@ -388,6 +436,7 @@
     "Name": "테라 스툴",
     "Description": "따뜻한 브릭 컬러의 둥근 좌판과 차분한 프레임이 어우러진 심플한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_03",
     "PrefabPath": ""
   },
@@ -396,6 +445,7 @@
     "Name": "쿠키 스툴",
     "Description": "폭신한 둥근 좌판과 따뜻한 우드톤이 어우러진 아담한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_04",
     "PrefabPath": ""
   },
@@ -404,6 +454,7 @@
     "Name": "세이지 스툴",
     "Description": "은은한 세이지 그린 좌판과 짙은 프레임이 어우러진 심플한 높은 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_05",
     "PrefabPath": ""
   },
@@ -412,6 +463,7 @@
     "Name": "몽글 스툴",
     "Description": "동글동글한 좌판과 통통한 다리가 귀여운 포인트 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_06",
     "PrefabPath": ""
   },
@@ -420,6 +472,7 @@
     "Name": "말랑 스툴",
     "Description": "둥글고 말랑한 형태가 포근한 느낌을 주는 귀여운 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_07",
     "PrefabPath": ""
   },
@@ -428,6 +481,7 @@
     "Name": "꼬마 의자",
     "Description": "작고 통통한 다리가 귀여운 포근한 느낌의 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_08",
     "PrefabPath": ""
   },
@@ -436,6 +490,7 @@
     "Name": "햇살 접이식 의자",
     "Description": "노란빛이 산뜻한 실용적인 접이식 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_09",
     "PrefabPath": ""
   },
@@ -444,6 +499,7 @@
     "Name": "느긋한 의자",
     "Description": "편하게 기대어 느긋한 시간을 보내기 좋은 나무 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_10",
     "PrefabPath": ""
   },
@@ -452,6 +508,7 @@
     "Name": "둥실 흔들의자",
     "Description": "둥글둥글한 모양이 귀여운 포근한 흔들의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_11",
     "PrefabPath": ""
   },
@@ -460,6 +517,7 @@
     "Name": "반달 의자",
     "Description": "반달 모양의 등받이가 포인트인 아담하고 귀여운 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_12",
     "PrefabPath": ""
   },
@@ -468,6 +526,7 @@
     "Name": "블록 스툴",
     "Description": "블록처럼 단순하고 통통한 모양이 매력적인 작은 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_13",
     "PrefabPath": ""
   },
@@ -476,6 +535,7 @@
     "Name": "모래시계 스툴",
     "Description": "잘록한 모래시계 모양이 돋보이는 독특한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_14",
     "PrefabPath": ""
   },
@@ -484,6 +544,7 @@
     "Name": "링 스툴",
     "Description": "둥근 발받침이 더해진 심플하고 편안한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_15",
     "PrefabPath": ""
   },
@@ -492,6 +553,7 @@
     "Name": "라운드 스툴",
     "Description": "동글동글한 좌판과 세 개의 다리가 어우러진 아담한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_16",
     "PrefabPath": ""
   },
@@ -500,6 +562,7 @@
     "Name": "올리브 스툴",
     "Description": "둥근 좌판과 부드럽게 휘어진 다리가 어우러진 산뜻한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_17",
     "PrefabPath": ""
   },
@@ -508,6 +571,7 @@
     "Name": "퍼플 프레임 스툴",
     "Description": "사각 좌판과 교차된 프레임이 돋보이는 튼튼한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_18",
     "PrefabPath": ""
   },
@@ -516,6 +580,7 @@
     "Name": "포레스트 쿠션 스툴",
     "Description": "초록빛 쿠션과 주황색 프레임이 어우러진 포근한 스툴",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_19",
     "PrefabPath": ""
   },
@@ -524,6 +589,7 @@
     "Name": "릴렉스 체어",
     "Description": "푹신한 좌판과 등받이를 기울여 편안하게 쉴 수 있는 휴식용 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_20",
     "PrefabPath": ""
   },
@@ -532,6 +598,7 @@
     "Name": "게이밍 체어",
     "Description": "푹신한 등받이와 바퀴가 달려 편안하게 사용할 수 있는 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_PC_01",
     "PrefabPath": ""
   },
@@ -540,6 +607,7 @@
     "Name": "허니 게이밍 체어",
     "Description": "폭신한 쿠션과 높은 등받이로 편안함을 더한 게이밍 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_PC_02",
     "PrefabPath": ""
   },
@@ -548,6 +616,7 @@
     "Name": "스카이 오피스 체어",
     "Description": "깔끔한 쿠션과 바퀴가 달린 심플하고 실용적인 사무용 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_PC_03",
     "PrefabPath": ""
   },
@@ -556,6 +625,7 @@
     "Name": "핑크 데스크 체어",
     "Description": "포근한 핑크 쿠션과 팔걸이가 돋보이는 편안한 사무용 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_PC_04",
     "PrefabPath": ""
   },
@@ -564,6 +634,7 @@
     "Name": "클래식 오피스 체어",
     "Description": "묵직한 다크 쿠션과 브라운 프레임이 어우러진 중후한 사무용 의자",
     "Category": "Furniture",
+	"SubCategory": "Chair",
     "IconPath": "Image/Item/Furniture/Chair_PC_05",
     "PrefabPath": ""
   },
