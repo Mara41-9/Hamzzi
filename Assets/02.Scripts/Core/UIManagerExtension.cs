@@ -31,7 +31,8 @@ public enum UIType
     GeneratorUI,
     LobbyBackgroundUI,
     ShopUI,
-    BuildUI
+    BuildUI,
+    HousingUI
 }
 
 public static class UIManagerExtension
@@ -52,5 +53,15 @@ public static class UIManagerExtension
     public static void CloseBuildUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.BuildUI);
+    }
+
+    public static void OpenHousingUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.HousingUI);
+    }
+
+    public static void CloseHousingUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.HousingUI);
     }
 }

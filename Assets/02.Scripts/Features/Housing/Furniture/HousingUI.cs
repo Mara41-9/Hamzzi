@@ -9,6 +9,7 @@ public class HousingUI : ViewBase
     [SerializeField] private HousingView HousingView;
 
     [SerializeField] private GameObject Panel_FurnitureBar;
+    [SerializeField] private GameObject Panel_Info;
 
     [SerializeField] private Button Button_Rotation;
     [SerializeField] private Button Button_Confirm;
@@ -23,10 +24,12 @@ public class HousingUI : ViewBase
         Button_Cancel.onClick.AddListener(OnClickCancel);
     }
 
-    private void BindViewModel(HousingViewModel housingVM)
+    public void BindViewModel(HousingViewModel housingVM)
     {
         _housingVM = housingVM;
         _housingVM.PropertyChanged += OnPropertyChanged_View;
+
+        UpdateState();
     }
 
     private void OnDestroy()
@@ -41,14 +44,53 @@ public class HousingUI : ViewBase
     {
         switch (e.PropertyName)
         {
+            case nameof(_housingVM.CurrentState):
             case nameof(_housingVM.FurnitureVM):
             case nameof(_housingVM.CanConfirm):
+                UpdateState();
+                break;
 
+            case nameof(_housingVM.TargetRoom):
+                InitFurnitureSlot(GetDummyFurnitureList()).Forget();
                 break;
         }
     }
 
-    private async UniTask InitFurnitureSlot(List<ItemData> itemList)
+    private void UpdateState()
+    {
+        if (_housingVM.CurrentState == HousingState.SelectRoom)
+        {
+            Panel_Info.SetActive(true);
+
+            Panel_FurnitureBar.SetActive(false);
+
+            Button_Rotation.gameObject.SetActive(false);
+            Button_Confirm.gameObject.SetActive(false);
+            Button_Cancel.gameObject.SetActive(false);
+        }
+        else if (_housingVM.FurnitureVM != null)
+        {
+            Panel_Info.SetActive(false);
+
+            Panel_FurnitureBar.SetActive(false);
+
+            Button_Rotation.gameObject.SetActive(true);
+            Button_Confirm.gameObject.SetActive(true);
+            Button_Cancel.gameObject.SetActive(true);
+        }
+        else
+        {
+            Panel_Info.SetActive(false);
+
+            Panel_FurnitureBar.SetActive(true);
+
+            Button_Rotation.gameObject.SetActive(false);
+            Button_Confirm.gameObject.SetActive(false);
+            Button_Cancel.gameObject.SetActive(false);
+        }
+    }
+
+    public async UniTask InitFurnitureSlot(List<ItemData> itemList)
     {
         foreach (Transform child in Panel_FurnitureBar.transform)
         {
@@ -61,7 +103,7 @@ public class HousingUI : ViewBase
             slot.transform.SetParent(Panel_FurnitureBar.transform, false);
 
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
-            furnitureSlot.Bind(item, _housingVM, HousingView).Forget();
+            furnitureSlot.Bind(item, _housingVM).Forget();
         }
     }
 
@@ -76,8 +118,7 @@ public class HousingUI : ViewBase
 
         _housingVM.ConfirmPos();
 
-        HousingView.ClearGhostObject();
-        SpawnFurniture(confirmVM).Forget();
+        HousingView.SpawnFurniture(confirmVM).Forget();
     }
 
     private void OnClickCancel()
@@ -86,19 +127,29 @@ public class HousingUI : ViewBase
         HousingView.ClearGhostObject();
     }
 
-    private async UniTask SpawnFurniture(FurnitureViewModel furnitureVM)
+    // 테스트용
+    private List<ItemData> GetDummyFurnitureList()
     {
-        RoomViewModel targetRoom = _housingVM.TargetRoom;
-
-        float cellSize = 1.0f;
-        float subCellSize = cellSize / targetRoom.GridFactor;
-
-        float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
-        float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
-
-        Vector3 spawnPos = new Vector3((targetRoom.OriginPos.x * cellSize) + localX, 0f, (targetRoom.OriginPos.y * cellSize) + localZ);
-
-        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID, $"Prefabs/Furniture/{furnitureVM.FurnitureID}", spawnPos);
-        prefab.transform.rotation = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+        return new List<ItemData>
+        {
+            new ItemData
+            {
+                Id = "Armchair_01",
+                Name = "기본 의자",
+                IconPath = "Image/Item/Furniture/Armchair_01",
+                PrefabPath = "Prefabs/Furniture/Armchair_01",
+                SizeX = 2,
+                SizeY = 2
+            },
+            new ItemData
+            {
+                Id = "Fireplace_03",
+                Name = "원목 탁자",
+                IconPath = "Image/Item/Furniture/Fireplace_03",
+                PrefabPath = "Prefabs/Furniture/Fireplace_03",
+                SizeX = 2,
+                SizeY = 3
+            }
+        };
     }
 }

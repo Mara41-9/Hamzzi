@@ -1,8 +1,28 @@
-﻿using NUnit.Framework.Constraints;
+﻿using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+
+public enum HousingState
+{
+    SelectRoom,
+    Placing
+}
 
 public class HousingViewModel : ViewModelBase
 {
+    private HousingState _currentState = HousingState.SelectRoom;
+    public HousingState CurrentState
+    {
+        get => _currentState;
+        set
+        {
+            if (_currentState != value)
+            {
+                _currentState = value;
+                OnPropertyChanged(nameof(CurrentState));
+            }
+        }
+    }
+
     private FurnitureViewModel _furnitureVM;
     public FurnitureViewModel FurnitureVM
     {
@@ -28,8 +48,26 @@ public class HousingViewModel : ViewModelBase
             {
                 _targetRoom = value;
                 OnPropertyChanged(nameof(TargetRoom));
+
+                CurrentState = HousingState.Placing;
             }
         }
+    }
+
+    public void InvokeOnceOnInit()
+    {
+        OnPropertyChanged(nameof(CurrentState));
+        OnPropertyChanged(nameof(FurnitureVM));
+        OnPropertyChanged(nameof(TargetRoom));
+    }
+
+    public void EnterHousingMode()
+    {
+        _targetRoom = null;
+        _furnitureVM = null;
+        _currentState = HousingState.SelectRoom;
+
+        InvokeOnceOnInit();
     }
 
     public bool CanConfirm()
@@ -67,7 +105,6 @@ public class HousingViewModel : ViewModelBase
     public bool ConfirmPos()
     {
         FurnitureVM.IsValid = false;
-
         FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
 
         if (TargetRoom.AddFuniture(FurnitureVM))
@@ -82,6 +119,8 @@ public class HousingViewModel : ViewModelBase
     public void CancelPos()
     {
         FurnitureVM = null;
+
+        EnterHousingMode();
     }
 
     private void CheckCurrentPos()

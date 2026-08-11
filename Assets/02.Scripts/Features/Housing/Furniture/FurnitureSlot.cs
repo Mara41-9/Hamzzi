@@ -11,18 +11,16 @@ public class FurnitureSlot : MonoBehaviour
 
     private ItemData _data;
     private HousingViewModel _housingVM;
-    private HousingView _housingView;
 
     private void Awake()
     {
         Button_Select.onClick.AddListener(OnClickSelect);
     }
 
-    public async UniTask Bind(ItemData data, HousingViewModel housingVM, HousingView housingView)
+    public async UniTask Bind(ItemData data, HousingViewModel housingVM)
     {
         _data = data;
         _housingVM = housingVM;
-        _housingView = housingView;
 
         Image_Icon.sprite = await ResourceManager.Instance.LoadAsset<Sprite>(_data.IconPath);
         
@@ -33,6 +31,5 @@ public class FurnitureSlot : MonoBehaviour
     private void OnClickSelect()
     {
         _housingVM.SelectFurniture(_data.Id, _data.Size, _housingVM.TargetRoom);
-        _housingView.SpawnGhostObject(_data.Id, _data.PrefabPath).Forget();
     }
 }

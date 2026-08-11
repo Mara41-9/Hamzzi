@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BuildViewModel : ViewModelBase
 {
-    private Dictionary<Vector2Int, RoomViewModel> _builds = new Dictionary<Vector2Int, RoomViewModel>();
+    public Dictionary<Vector2Int, RoomViewModel> Builds { get; private set; } = new Dictionary<Vector2Int, RoomViewModel>();
+
     private BuildService _buildService = new BuildService();        // 임시
 
     private bool _hasStartPos = false;
@@ -122,7 +123,7 @@ public class BuildViewModel : ViewModelBase
 
         Vector2Int exitAislePos = defaultAisle[0];
 
-        if (_builds.TryGetValue(exitAislePos, out RoomViewModel aisleVM) && aisleVM.BuildType == BuildType.Aisle)
+        if (Builds.TryGetValue(exitAislePos, out RoomViewModel aisleVM) && aisleVM.BuildType == BuildType.Aisle)
         {
             aisleVM.SetWallActive(0, true);
             aisleVM.Refresh();
@@ -177,13 +178,13 @@ public class BuildViewModel : ViewModelBase
 
     public void BuildDefaultAisle(Vector2Int pos)
     {
-        if (_builds.ContainsKey(pos))
+        if (Builds.ContainsKey(pos))
         {
             return;
         }
 
         RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
-        _builds[pos] = newAisle;
+        Builds[pos] = newAisle;
 
         UpdateConnection(pos);
         UpdateNearConnection(pos);
@@ -198,12 +199,12 @@ public class BuildViewModel : ViewModelBase
             return false;
         }
 
-        if (!_builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || !targetVM.IsReady || _startRoom == targetVM)
+        if (!Builds.TryGetValue(pos, out RoomViewModel targetVM) || targetVM.BuildType != BuildType.Room || !targetVM.IsReady || _startRoom == targetVM)
         {
             return false;
         }
 
-        List<Vector2Int> path = _buildService.SearchBestPath(_startRoom, targetVM, _builds);
+        List<Vector2Int> path = _buildService.SearchBestPath(_startRoom, targetVM, Builds);
 
         if (path == null || path.Count == 0)
         {
@@ -212,15 +213,15 @@ public class BuildViewModel : ViewModelBase
 
         foreach (Vector2Int aislePos in path)
         {
-            if (_builds.TryGetValue(aislePos, out RoomViewModel existing) && existing.BuildType == BuildType.Room)
+            if (Builds.TryGetValue(aislePos, out RoomViewModel existing) && existing.BuildType == BuildType.Room)
             {
                 continue;
             }
 
-            if (!_builds.ContainsKey(aislePos))
+            if (!Builds.ContainsKey(aislePos))
             {
                 RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
-                _builds[aislePos] = newAisle;
+                Builds[aislePos] = newAisle;
 
                 _pendingAisle.Add(newAisle);
                 LastBuild = newAisle;
@@ -257,7 +258,7 @@ public class BuildViewModel : ViewModelBase
     {
         List<Vector2Int> removePos = new List<Vector2Int>();
 
-        foreach (var pair in _builds)
+        foreach (var pair in Builds)
         {
             if (pair.Value == target)
             {
@@ -267,7 +268,7 @@ public class BuildViewModel : ViewModelBase
 
         foreach (var key in removePos)
         {
-            _builds.Remove(key);
+            Builds.Remove(key);
         }
 
         UpdateNearConnection(target.OriginPos);
@@ -295,7 +296,7 @@ public class BuildViewModel : ViewModelBase
         {
             DoorInfo doorInfo = room.GetDoorInfo(doorData.Offset);
 
-            if (_builds.TryGetValue(doorInfo.OutsidePos, out RoomViewModel targetVM))
+            if (Builds.TryGetValue(doorInfo.OutsidePos, out RoomViewModel targetVM))
             {
                 if (targetVM == room)
                 {
@@ -328,7 +329,7 @@ public class BuildViewModel : ViewModelBase
 
     public void UpdateConnection(Vector2Int current)
     {
-        if (!_builds.TryGetValue(current, out RoomViewModel currentVM))
+        if (!Builds.TryGetValue(current, out RoomViewModel currentVM))
         {
             return;
         }
@@ -346,7 +347,7 @@ public class BuildViewModel : ViewModelBase
             Vector2Int targetPos = current + directions[i];
             int oppDir = GetOppositeDirection(i);
 
-            if (_builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
             {
                 if (currentVM == targetVM)
                 {
@@ -390,7 +391,7 @@ public class BuildViewModel : ViewModelBase
         {
             Vector2Int target = pos + dir;
 
-            if (_builds.TryGetValue(target, out RoomViewModel vm))
+            if (Builds.TryGetValue(target, out RoomViewModel vm))
             {
                 if (vm.BuildType == BuildType.Room)
                 {
@@ -420,7 +421,7 @@ public class BuildViewModel : ViewModelBase
         {
             for (int y = 0; y < size.y; y++)
             {
-                if (_builds.ContainsKey(pos + new Vector2Int(x, y)))
+                if (Builds.ContainsKey(pos + new Vector2Int(x, y)))
                 {
                     return false;
                 }
@@ -435,7 +436,7 @@ public class BuildViewModel : ViewModelBase
         {
             for (int y = 0; y < room.Size.y; y++)
             {
-                _builds[pos + new Vector2Int(x, y)] = room;
+                Builds[pos + new Vector2Int(x, y)] = room;
             }
         }
     }
