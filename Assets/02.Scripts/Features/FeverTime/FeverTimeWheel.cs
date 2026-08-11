@@ -8,16 +8,30 @@ public class FeverTimeWheel : MonoBehaviour
 
     private float _elapsedTime; //쳇바퀴가 마지막으로 리셋된 뒤부터 지금까지 흐른 시간을 초단위로 저장
     private bool _isReady;
+    private bool _isFeverInProgress;
+
+    private void Start()
+    {
+        FeverTimeManager.Instance.OnFeverTimeEnded += ResetTimerForNextFever;
+    }
+
+    private void OnDisable()
+    {
+        FeverTimeManager.Instance.OnFeverTimeEnded -= ResetTimerForNextFever;
+    }
 
     private void Update()
     {
-        if (_isReady == false)
+        if (_isReady)
         {
-            UpdateTimer();
+            CheckTouchInput();
             return;
         }
 
-        CheckTouchInput();
+        if (_isFeverInProgress)
+            return;
+
+        UpdateTimer();
     }
 
     private void UpdateTimer()
@@ -69,8 +83,14 @@ public class FeverTimeWheel : MonoBehaviour
     private void OnWheelTouched()
     {
         _isReady = false;
-        _elapsedTime = 0f;
+        _isFeverInProgress = true;
 
         FeverTimeManager.Instance.SetState(FeverTimeState.CutscenePlaying);
+    }
+
+    private void ResetTimerForNextFever()
+    {
+        _isFeverInProgress = false;
+        _elapsedTime = 0f;
     }
 }
