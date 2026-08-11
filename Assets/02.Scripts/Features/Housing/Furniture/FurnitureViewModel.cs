@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class FurnitureViewModel : ViewModelBase
 {
-    private string InstanceID {  get; set; }
-    public string FurnitureID { get; set; }
+    public string InstanceID { get; private set; }
+    public string FurnitureID { get; private set; }
 
     private string _roomInstanceID;
     public string RoomInstanceID

@@ -12,7 +12,7 @@ public class BuildView : ViewBase
     private Dictionary<string, GameObject> _spawnRoom = new Dictionary<string, GameObject>();
 
     // 임시
-    [SerializeField] private BuildUI BuildUI;
+    //[SerializeField] private BuildUI BuildUI;
 
     private float _cellSize = 1.0f;
     private Camera _mainCamera;
@@ -29,7 +29,7 @@ public class BuildView : ViewBase
     {
         // 임시
         BindViewModel(new BuildViewModel());
-        BuildUI.BindViewModel(_buildVM);
+        //BuildUI.BindViewModel(_buildVM);
 
         _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
