@@ -355,6 +355,116 @@
     "CostAmount": 120
   },
   {
+    "Id": "Shop_Fur_072",
+    "ItemId": "Furniture_Pouf_01",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_073",
+    "ItemId": "Furniture_Pouf_02",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_074",
+    "ItemId": "Furniture_Pouf_03",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_075",
+    "ItemId": "Furniture_Pouf_04",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Fur_076",
+    "ItemId": "Furniture_Pouf_05",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_077",
+    "ItemId": "Furniture_Pouf_06",
+    "CostAmount": 60
+  },
+  {
+    "Id": "Shop_Fur_078",
+    "ItemId": "Furniture_Pouf_07",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_079",
+    "ItemId": "Furniture_Pouf_08",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_080",
+    "ItemId": "Furniture_Fireplace_01",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_081",
+    "ItemId": "Furniture_Fireplace_02",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Fur_082",
+    "ItemId": "Furniture_Fireplace_03",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_083",
+    "ItemId": "Furniture_Fireplace_04",
+    "CostAmount": 80
+  },
+  {
+    "Id": "Shop_Fur_084",
+    "ItemId": "Furniture_Fireplace_05",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_085",
+    "ItemId": "Furniture_Fireplace_06",
+    "CostAmount": 90
+  },
+  {
+    "Id": "Shop_Fur_086",
+    "ItemId": "Furniture_Fireplace_07",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_087",
+    "ItemId": "Furniture_Fireplace_08",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_088",
+    "ItemId": "Furniture_Fireplace_09",
+    "CostAmount": 95
+  },
+  {
+    "Id": "Shop_Fur_089",
+    "ItemId": "Furniture_Fireplace_10",
+    "CostAmount": 75
+  },
+  {
+    "Id": "Shop_Fur_090",
+    "ItemId": "Furniture_Fireplace_11",
+    "CostAmount": 70
+  },
+  {
+    "Id": "Shop_Fur_091",
+    "ItemId": "Furniture_Fireplace_12",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_092",
+    "ItemId": "Furniture_Fireplace_13",
+    "CostAmount": 85
+  },
+  {
+    "Id": "Shop_Fur_093",
+    "ItemId": "Furniture_Fireplace_14",
+    "CostAmount": 70
+  },
+  {
     "Id": "Shop_Decor_001",
     "ItemId": "Decoration_Carpet_01",
     "CostAmount": 60
@@ -412,16 +522,6 @@
   {
     "Id": "Shop_Decor_012",
     "ItemId": "Decoration_Carpet_12",
-    "CostAmount": 80
-  },
-  {
-    "Id": "Shop_Decor_013",
-    "ItemId": "Decoration_Fireplace_01",
-    "CostAmount": 70
-  },
-  {
-    "Id": "Shop_Decor_014",
-    "ItemId": "Decoration_Fireplace_02",
     "CostAmount": 80
   },
   {

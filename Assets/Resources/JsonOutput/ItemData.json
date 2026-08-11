@@ -639,10 +639,209 @@
     "PrefabPath": ""
   },
   {
+    "Id": "Furniture_Pouf_01",
+    "Name": "포근 벤치 푸프",
+    "Description": "폭신한 쿠션에 쏙 기대어 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_02",
+    "Name": "말랑 큐브 푸프",
+    "Description": "말랑하고 폭신한 쿠션에 푹 기대어 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_03",
+    "Name": "통통 푸프",
+    "Description": "동글동글 폭신한 쿠션에 앉아 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_04",
+    "Name": "도넛 푸프",
+    "Description": "도넛처럼 동그랗고 폭신해서 포근하게 몸을 맡길 수 있는 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_05",
+    "Name": "새싹 푸프",
+    "Description": "싱그러운 초록빛에 폭신한 쿠션을 더한 아늑한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_06",
+    "Name": "햇살 푸프",
+    "Description": "따스한 햇살을 닮은 노란빛의 폭신한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_07",
+    "Name": "체리 빈백",
+    "Description": "푹 파묻혀 느긋하게 쉬기 좋은 포근한 빈백",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Pouf_08",
+    "Name": "통통 푸프",
+    "Description": "동글동글 폭신한 쿠션에 앉아 편안하게 쉬기 좋은 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Chair",
+    "IconPath": "Image/Item/Furniture/Pouf_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_01",
+    "Name": "클로버 푸프",
+    "Description": "싱그러운 클로버를 닮은 폭신한 푸프",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_01",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_02",
+    "Name": "클래식 벽난로",
+    "Description": "은은한 분위기를 더해 주는 클래식 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_02",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_03",
+    "Name": "모던 벽난로",
+    "Description": "깔끔하고 심플한 디자인으로 공간에 따뜻한 분위기를 더해주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_03",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_04",
+    "Name": "글라스 벽난로",
+    "Description": "투명한 유리창 너머로 따스한 불빛을 감상할 수 있는 아늑한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_04",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_05",
+    "Name": "포근 벽난로",
+    "Description": "따뜻한 불 앞에서 햄찌가 포근하게 쉬어갈 수 있는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_05",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_06",
+    "Name": "대리석 벽난로",
+    "Description": "우아한 기둥 장식이 돋보이는 고급스러운 분위기의 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_06",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_07",
+    "Name": "굴뚝 벽난로",
+    "Description": "높게 솟은 굴뚝과 따뜻한 색감이 아늑한 분위기를 더해주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_07",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_08",
+    "Name": "굴뚝 난로",
+    "Description": "길쭉한 굴뚝 아래 은은한 불씨가 타오르는 아늑한 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_08",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_09",
+    "Name": "코너 벽난로",
+    "Description": "방 한쪽 모서리에 쏙 들어가 따뜻한 분위기를 만들어주는 벽난로.",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_09",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_10",
+    "Name": "장작 난로",
+    "Description": "빨갛게 타오르는 장작불로 햄찌의 공간을 따뜻하게 데워주는 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_10",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_11",
+    "Name": "원통형 장작 난로",
+    "Description": "작은 불씨가 은은하게 타오르며 햄찌의 공간을 포근하게 데워주는 난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_11",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_12",
+    "Name": "화이트 골드 벽난로",
+    "Description": "은은한 금빛 장식이 포근한 분위기를 더해주는 깔끔한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_12",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_13",
+    "Name": "테라코타 벽난로",
+    "Description": "따뜻한 흙빛 색감으로 햄찌의 공간을 포근하게 채워주는 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_13",
+    "PrefabPath": ""
+  },
+  {
+    "Id": "Furniture_Fireplace_14",
+    "Name": "롱 파이프 벽난로",
+    "Description": "길쭉한 연통과 둥근 화로가 매력적인 아담한 벽난로",
+    "Category": "Furniture",
+	"SubCategory": "Fireplace",
+    "IconPath": "Image/Item/Furniture/Fireplace_14",
+    "PrefabPath": ""
+  },
+  {
     "Id": "Decoration_Carpet_01",
     "Name": "항구 카펫",
     "Description": "짙은 갈색과 푸른빛이 어우러진 포근한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_01",
     "PrefabPath": ""
   },
@@ -651,6 +850,7 @@
     "Name": "초원 카펫",
     "Description": "푸른 하늘과 싱그러운 초원을 닮은 산뜻한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_02",
     "PrefabPath": ""
   },
@@ -659,6 +859,7 @@
     "Name": "벽난로 카펫",
     "Description": "따뜻하고 포근한 분위기를 더해주는 붉은빛 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_03",
     "PrefabPath": ""
   },
@@ -667,6 +868,7 @@
     "Name": "해변 카펫",
     "Description": "따스한 모래빛과 시원한 바다빛이 어우러진 포근한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_04",
     "PrefabPath": ""
   },
@@ -675,6 +877,7 @@
     "Name": "핑크 웨이브 카펫",
     "Description": "부드러운 핑크빛 물결무늬가 사랑스러운 분위기를 더해주는 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_05",
     "PrefabPath": ""
   },
@@ -683,6 +886,7 @@
     "Name": "사막빛 카펫",
     "Description": "따스한 모랫빛과 짙은 푸른빛이 어우러진 멋스러운 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_06",
     "PrefabPath": ""
   },
@@ -691,6 +895,7 @@
     "Name": "황혼 카펫",
     "Description": "따스한 황혼빛 색감과 기하학 무늬가 어우러진 포근한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_07",
     "PrefabPath": ""
   },
@@ -699,6 +904,7 @@
     "Name": "가을 들판 카펫",
     "Description": "따스한 가을 들판을 닮은 색감이 아늑함을 더해주는 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_08",
     "PrefabPath": ""
   },
@@ -707,6 +913,7 @@
     "Name": "복숭아 링 카펫",
     "Description": "달콤한 복숭아를 닮은 부드러운 색감의 원형 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_09",
     "PrefabPath": ""
   },
@@ -715,6 +922,7 @@
     "Name": "밀크티 카펫",
     "Description": "부드러운 밀크티를 닮은 따뜻한 색감의 원형 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_10",
     "PrefabPath": ""
   },
@@ -723,6 +931,7 @@
     "Name": "민트링 카펫",
     "Description": "산뜻한 민트빛 원형 무늬가 포인트가 되는 포근한 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_11",
     "PrefabPath": ""
   },
@@ -731,23 +940,8 @@
     "Name": "호박빛 카펫",
     "Description": "따스한 호박빛 색감이 아늑한 분위기를 더해주는 카펫",
     "Category": "Decor",
+	"SubCategory": "Carpet",
     "IconPath": "Image/Item/Decor/Carpet_12",
-    "PrefabPath": ""
-  },
-  {
-    "Id": "Decoration_Fireplace_01",
-    "Name": "벽난로",
-    "Description": "방 안을 아늑하게 만들어 주는 벽난로",
-    "Category": "Decor",
-    "IconPath": "Image/Item/Decor/Fireplace_01",
-    "PrefabPath": ""
-  },
-  {
-    "Id": "Decoration_Fireplace_02",
-    "Name": "클래식 벽난로",
-    "Description": "은은한 분위기를 더해 주는 클래식 벽난로",
-    "Category": "Decor",
-    "IconPath": "Image/Item/Decor/Fireplace_02",
     "PrefabPath": ""
   },
   {
@@ -755,6 +949,7 @@
     "Name": "선인장 화분",
     "Description": "작지만 존재감 있는 초록 친구",
     "Category": "Decor",
+	"SubCategory": "Plants",
     "IconPath": "Image/Item/Decor/Plants_01",
     "PrefabPath": ""
   },
@@ -763,6 +958,7 @@
     "Name": "다육이 화분",
     "Description": "싱그러운 분위기를 더해 주는 작은 화분",
     "Category": "Decor",
+	"SubCategory": "Plants",
     "IconPath": "Image/Item/Decor/Plants_02",
     "PrefabPath": ""
   },
@@ -771,6 +967,7 @@
     "Name": "운동 기구",
     "Description": "오늘도 힘내서 운동하는 햄찌를 위한 운동 기구",
     "Category": "Play",
+	"SubCategory": "Exercise",
     "IconPath": "Image/Item/Play/BarbellStand_01",
     "PrefabPath": ""
   },
@@ -779,6 +976,7 @@
     "Name": "리듬 북",
     "Description": "통통 두드리며 신나는 리듬을 즐길 수 있는 북",
     "Category": "Play",
+	"SubCategory": "Music",
     "IconPath": "Image/Item/Play/Toy_05",
     "PrefabPath": ""
   }
