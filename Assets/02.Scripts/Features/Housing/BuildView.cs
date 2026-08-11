@@ -11,9 +11,6 @@ public class BuildView : ViewBase
 
     private Dictionary<string, GameObject> _spawnRoom = new Dictionary<string, GameObject>();
 
-    // 임시
-    //[SerializeField] private BuildUI BuildUI;
-
     private float _cellSize = 1.0f;
     private Camera _mainCamera;
 
@@ -27,9 +24,7 @@ public class BuildView : ViewBase
 
     private void Start()
     {
-        // 임시
-        BindViewModel(new BuildViewModel());
-        //BuildUI.BindViewModel(_buildVM);
+        BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
 
         _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
@@ -107,18 +102,18 @@ public class BuildView : ViewBase
 
     private async UniTaskVoid SpawnBuildPrefab(RoomViewModel roomVM)
     {
-        float worldX = 0f;
-        float worldY = 0f;
+        float worldX;
+        float worldY;
 
         if (roomVM.BuildType == BuildType.Room)
         {
             worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = (roomVM.OriginPos.y + roomVM.Size.y * (_cellSize / 2));
+            worldY = roomVM.OriginPos.y;
         }
         else
         {
-            worldX = (roomVM.OriginPos.x + (_cellSize / 2));
-            worldY = (roomVM.OriginPos.y + (_cellSize / 2));
+            worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
+            worldY = roomVM.OriginPos.y;
         }
 
         worldX = Mathf.Round(worldX * 100f) / 100f;

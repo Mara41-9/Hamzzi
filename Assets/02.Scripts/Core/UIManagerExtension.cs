@@ -32,7 +32,8 @@ public enum UIType
     LobbyBackgroundUI,
     ShopUI,
     BuildUI,
-    CollectionUI
+    CollectionUI,
+    HousingUI
 }
 
 public static class UIManagerExtension

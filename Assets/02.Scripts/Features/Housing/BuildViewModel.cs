@@ -6,8 +6,6 @@ public class BuildViewModel : ViewModelBase
 {
     public Dictionary<Vector2Int, RoomViewModel> Builds { get; private set; } = new Dictionary<Vector2Int, RoomViewModel>();
 
-    private BuildService _buildService = new BuildService();        // 임시
-
     private bool _hasStartPos = false;
     private RoomViewModel _startRoom;
 
@@ -204,7 +202,7 @@ public class BuildViewModel : ViewModelBase
             return false;
         }
 
-        List<Vector2Int> path = _buildService.SearchBestPath(_startRoom, targetVM, Builds);
+        List<Vector2Int> path = ServiceManager.Instance.BuildService.SearchBestPath(_startRoom, targetVM, Builds);
 
         if (path == null || path.Count == 0)
         {

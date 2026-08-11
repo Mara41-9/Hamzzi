@@ -295,7 +295,7 @@ public class RoomViewModel : ViewModelBase
             int minY = door.Offset.y * _gridFactor;
             int maxY = minY + _gridFactor;
 
-            if (checkPos.x >= minX && checkPos.x < maxX && checkPos.y >= minY && checkPos.y < minY)
+            if (checkPos.x >= minX && checkPos.x < maxX && checkPos.y >= minY && checkPos.y < maxY)
             {
                 return true;
             }
