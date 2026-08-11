@@ -108,7 +108,7 @@ public class BuildView : ViewBase
         if (roomVM.BuildType == BuildType.Room)
         {
             worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = roomVM.OriginPos.y;
+            worldY = roomVM.OriginPos.y + 2.0f;
         }
         else
         {

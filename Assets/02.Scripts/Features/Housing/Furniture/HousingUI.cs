@@ -138,8 +138,8 @@ public class HousingUI : ViewBase
                 Name = "기본 의자",
                 IconPath = "Image/Item/Furniture/Armchair_01",
                 PrefabPath = "Prefabs/Furniture/Armchair_01",
-                SizeX = 2,
-                SizeY = 2
+                SizeX = 1,
+                SizeY = 7
             },
             new ItemData
             {

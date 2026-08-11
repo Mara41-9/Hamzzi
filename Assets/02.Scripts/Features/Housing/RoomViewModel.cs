@@ -249,8 +249,9 @@ public class RoomViewModel : ViewModelBase
     public Vector2Int ChangeLocalGrid(Vector3 worldPos, float cellSize = 1.0f)
     {
         float subCellSize = cellSize / _gridFactor;
+
         float localX = worldPos.x - (OriginPos.x * cellSize);
-        float localZ = worldPos.z - (OriginPos.y * cellSize);
+        float localZ = 9.0f - worldPos.z;
 
         int subX = Mathf.Clamp(Mathf.FloorToInt(localX / subCellSize), 0, SubGridSize.x - 1);
         int subZ = Mathf.Clamp(Mathf.FloorToInt(localZ / subCellSize), 0, SubGridSize.y - 1);

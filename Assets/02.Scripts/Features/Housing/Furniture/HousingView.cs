@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SocialPlatforms;
 
 public class HousingView : ViewBase
 {
@@ -12,9 +13,10 @@ public class HousingView : ViewBase
     [SerializeField] private Color Color_Invalid = new Color(1f, 0f, 0f, 0.4f);
 
     private float _cellSize = 1.0f;
+    private float _yOffset = 2.0f;
 
     private Camera _mainCamera;
-    private Plane _gridPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+    private Plane _mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
 
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
@@ -69,10 +71,13 @@ public class HousingView : ViewBase
                 Debug.Log($"터치 {inputPosition}");
                 Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
 
-                if (_gridPlane.Raycast(ray, out float hit))
+                if (_mapPlane.Raycast(ray, out float hit))
                 {
                     Vector3 hitPoint = ray.GetPoint(hit);
-                    Vector2Int gridPos = new Vector2Int(Mathf.FloorToInt(hitPoint.x / _cellSize), Mathf.FloorToInt(hitPoint.y / _cellSize));
+
+                    int gridX = Mathf.FloorToInt(hitPoint.x / _cellSize);
+                    int gridY = Mathf.FloorToInt((hitPoint.y - _yOffset) / _cellSize);
+                    Vector2Int gridPos = new Vector2Int(gridX, gridY);
 
                     Debug.Log($"{gridPos}, 방 존재: {_buildVM.Builds.ContainsKey(gridPos)}");
 
@@ -86,21 +91,27 @@ public class HousingView : ViewBase
                 }
             }
         }
-        else if (_housingVM.CurrentState == HousingState.Placing)
+        else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM != null)
         {
             if (GetInputPosition(out Vector3 inputPosition))
             {
                 Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
+                RoomViewModel roomVM = _housingVM.TargetRoom;
 
-                if (_gridPlane.Raycast(ray, out float hit))
+                if (roomVM != null)
                 {
-                    Vector3 hitPoint = ray.GetPoint(hit);
-                    RoomViewModel roomVM = _housingVM.TargetRoom;
+                    float floorY = (roomVM.OriginPos.y + _yOffset) * _cellSize;
+                    Plane roomFloorPlane = new Plane(Vector3.up, new Vector3(0f, floorY, 0f));
 
-                    Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _cellSize);
-                    _housingVM.MovePos(localPos);
+                    if (roomFloorPlane.Raycast(ray, out float hit))
+                    {
+                        Vector3 hitPoint = ray.GetPoint(hit);
 
-                    UpdateGhostTransform(roomVM, _housingVM.FurnitureVM);
+                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _cellSize);
+                        _housingVM.MovePos(localPos);
+
+                        UpdateGhostTransform(roomVM, _housingVM.FurnitureVM);
+                    }
                 }
             }
         }
@@ -159,23 +170,19 @@ public class HousingView : ViewBase
 
     private void UpdateGhostTransform(RoomViewModel roomVM, FurnitureViewModel furnitureVM)
     {
-        float subCellSize = _cellSize / roomVM.GridFactor;
-
-        float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
-        float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
-
-        float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
-        float worldZ = (roomVM.OriginPos.y * _cellSize) + localZ;
+        GetFurniturePositionAndRotation(roomVM, furnitureVM, out Vector3 pos, out Quaternion rot);
 
         if (_ghostObject != null)
         {
-            _ghostObject.transform.position = new Vector3(worldX, 0, worldZ);
-            _ghostObject.transform.rotation = Quaternion.Euler(0, furnitureVM.RotationAngle, 0);
+            _ghostObject.transform.position = pos;
+            _ghostObject.transform.rotation = rot;
         }
 
-        if (SpriteRenderer_Grid !=  null)
+        if (SpriteRenderer_Grid != null)
         {
-            SpriteRenderer_Grid.transform.position = new Vector3(worldX, 0.01f, worldZ);
+            float subCellSize = _cellSize / roomVM.GridFactor;
+
+            SpriteRenderer_Grid.transform.position = new Vector3(pos.x, pos.y + 0.01f, pos.z);
             SpriteRenderer_Grid.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             SpriteRenderer_Grid.transform.localScale = new Vector3(furnitureVM.Size.x * subCellSize, furnitureVM.Size.y * subCellSize, 1f);
 
@@ -213,16 +220,44 @@ public class HousingView : ViewBase
     public async UniTask SpawnFurniture(FurnitureViewModel furnitureVM)
     {
         RoomViewModel targetRoom = _housingVM.TargetRoom;
+        GetFurniturePositionAndRotation(targetRoom, furnitureVM, out Vector3 spawnPos, out Quaternion spawnRot);
 
-        float cellSize = 1.0f;
-        float subCellSize = cellSize / targetRoom.GridFactor;
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID, $"Prefabs/Furniture/{furnitureVM.FurnitureID}", spawnPos);
+
+        if (prefab != null)
+        {
+            prefab.transform.rotation = spawnRot;
+        }
+    }
+
+    private void GetFurniturePositionAndRotation(RoomViewModel roomVM, FurnitureViewModel furnitureVM, out Vector3 pos, out Quaternion rot)
+    {
+        float subCellSize = _cellSize / roomVM.GridFactor;
 
         float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
         float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
 
-        Vector3 spawnPos = new Vector3((targetRoom.OriginPos.x * cellSize) + localX, 0f, (targetRoom.OriginPos.y * cellSize) + localZ);
+        float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
+        float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.25f;
+        float worldZ = 9.0f - localZ;
 
-        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID, $"Prefabs/Furniture/{furnitureVM.FurnitureID}", spawnPos);
-        prefab.transform.rotation = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+        pos = new Vector3(worldX, worldY, worldZ);
+        rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying || _buildVM == null || _buildVM.Builds == null)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.red;
+
+        foreach (var pair in _buildVM.Builds)
+        {
+            float offsetY = (pair.Value.BuildType == BuildType.Room) ? _yOffset : 0f;
+            Gizmos.DrawWireCube(new Vector3(pair.Key.x + 0.5f, pair.Key.y + 0.5f, 9f), new Vector3(1f, 1f, 0.1f));
+        }
     }
 }
