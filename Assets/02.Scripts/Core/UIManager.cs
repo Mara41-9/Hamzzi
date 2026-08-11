@@ -12,9 +12,10 @@ public class UIManager : SingletonBase<UIManager>
     private Dictionary<UIType, UIBase> _createdUIList = new Dictionary<UIType, UIBase>();
     private HashSet<UIType> _opendUIList = new HashSet<UIType>();
 
+    // [나라] TODO : 테스트용으로 만든 메인 UI 게임 시작하자마자 열리도록
     private void Start()
     {
-        OpenUI(UIRootType.ContentUI, UIType.ShopUI);
+        OpenUI(UIRootType.MainUI, UIType.SampleMainUI);
     }
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)

@@ -40,6 +40,9 @@ public class ShopUI : UIBase
     [SerializeField] private GameObject Button_SubCategory;
     [SerializeField] private Transform Transform_ButtonRoot;
 
+    [Header("닫기 버튼")]
+    [SerializeField] private UIButton Button_CloseShopUI;
+
     private ItemData _selectedItemData;
     private ShopViewModel _shopVm;
     private string _selectedSubCategory;
@@ -50,20 +53,33 @@ public class ShopUI : UIBase
     private List<string> _subCategoryNameList = new List<string>();
     private List<ShopSubCategoryUI> _subCategoryButtonList = new List<ShopSubCategoryUI>();
 
-    private void Start()
-    {
-        _selectedCategory = ShopCategory.All;
-        SetSelectedCategory(_selectedCategory);
-        SetSubCategory(_selectedCategory);
-        SetShopItemSlotOnEnable();
-    }
-
     private void OnEnable()
     {
         Button_AllCategory.BindOnClickButtonEvent(OnClick_AllCategory);
         Button_FurnitureCategory.BindOnClickButtonEvent(OnClick_FurnitureCategory);
         Button_PlayCategory.BindOnClickButtonEvent(OnClick_PlayCategory);
         Button_DecorCategory.BindOnClickButtonEvent(OnClick_DecorCategory);
+
+        Button_CloseShopUI.BindOnClickButtonEvent(OnClick_CloseShopUI);
+        InitShopUI();
+    }
+
+    private void OnDisable()
+    {
+        ClearSlotList();
+        ClearSubCategoryList();
+        ResetItemInfo();
+        ResetSelectedData();
+
+        _shopVm.PropertyChanged -= OnPropChanged_ShopView;
+    }
+
+    private void InitShopUI()
+    {
+        _selectedCategory = ShopCategory.All;
+        SetSelectedCategory(_selectedCategory);
+        SetSubCategory(_selectedCategory);
+        SetShopItemSlotOnEnable();
     }
 
     private void OnClick_AllCategory()
@@ -85,6 +101,12 @@ public class ShopUI : UIBase
     private void OnClick_DecorCategory()
     {
         SetShopLayoutByCategory(ShopCategory.Decor);
+    }
+
+    private void OnClick_CloseShopUI()
+    {
+        UIManager.Instance.CloseShopUI();
+        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.SampleMainUI);
     }
 
     private void SetShopLayoutByCategory(ShopCategory category)
@@ -304,5 +326,20 @@ public class ShopUI : UIBase
         }
 
         _subCategoryNameList.Clear();
+    }
+
+    private void ResetItemInfo()
+    {
+        Image_Icon.sprite = null;
+        Text_ItemName.text = "";
+        Text_ItemDescription.text = "";
+        Text_ItemPrice.text = "";
+    }
+
+    private void ResetSelectedData()
+    {
+        _selectedItemData = null;
+        _selectedSubCategory = null;
+        _selectedCategory = ShopCategory.All;
     }
 }

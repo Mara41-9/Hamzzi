@@ -32,7 +32,8 @@ public enum UIType
     LobbyBackgroundUI,
     ShopUI,
     BuildUI,
-    CollectionUI
+    CollectionUI,
+    SampleMainUI   //[나라] TODO : 테스트용으로 만든 메인 UI
 }
 
 public static class UIManagerExtension
@@ -53,5 +54,15 @@ public static class UIManagerExtension
     public static void CloseBuildUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.BuildUI);
+    }
+
+    public static void OpenShopUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.ShopUI);
+    }
+
+    public static void CloseShopUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.ShopUI);
     }
 }
