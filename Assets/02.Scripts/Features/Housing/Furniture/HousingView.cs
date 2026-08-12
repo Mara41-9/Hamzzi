@@ -244,6 +244,9 @@ public class HousingView : ViewBase
         if (prefab != null)
         {
             prefab.transform.rotation = spawnRot;
+        
+            FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
+            furnitureView.ResetMaterial();
         }
     }
 
