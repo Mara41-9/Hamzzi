@@ -124,7 +124,7 @@ public class HousingView : ViewBase
                     {
                         Vector3 hitPoint = ray.GetPoint(hit);
 
-                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _cellSize);
+                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
                         _housingVM.MovePos(localPos);
 
                         UpdateGhostTransform(roomVM, _housingVM.FurnitureVM);
