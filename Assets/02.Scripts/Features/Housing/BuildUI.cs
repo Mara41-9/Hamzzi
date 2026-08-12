@@ -17,17 +17,22 @@ public class BuildUI : ViewBase
 
     private void Awake()
     {
+        Button_Build.onClick.AddListener(OnClickBuild);
+        Button_Exit.onClick.AddListener(OnClickClose);
+        Button_Confirm.onClick.AddListener(OnClickConfirm);
+
         ResetUI();
+    }
+
+    private void Start()
+    {
+        BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
     }
 
     public void BindViewModel(BuildViewModel buildVM)
     {
         _buildVM = buildVM;
         _buildVM.PropertyChanged += OnPropertyChanged_View;
-
-        Button_Build.onClick.AddListener(OnClickBuild);
-        Button_Exit.onClick.AddListener(OnClickClose);
-        Button_Confirm.onClick.AddListener(OnClickConfirm);
     }
 
     private void OnDestroy()
@@ -70,6 +75,11 @@ public class BuildUI : ViewBase
 
     private void OnClickBuild()
     {
+        if (_buildVM == null)
+        {
+            BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
+        }
+
         _buildVM.EnterBuildMode();
 
         Button_Build.gameObject.SetActive(false);

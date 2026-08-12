@@ -54,6 +54,7 @@ public class NetworkShopService
         shopSlotVm.ItemUniqueId = uniqueId;
         shopSlotVm.ItemDataId = shopData.ItemId;
         shopSlotVm.Category = itemData.Category;
+        shopSlotVm.SubCategory = itemData.SubCategory;
         shopSlotVm.CostAmount = shopData.CostAmount;
 
         var shopVm = GetShopViewModel();
