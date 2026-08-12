@@ -122,7 +122,7 @@ public class ShopUI : UIBase
             return;
         }
 
-        Debug.Log($"아이템을 구매했다!  Id: {_shopVm.SelectedSlot.ItemDataId}  이름: {_shopVm.SelectedSlot.Name}");
+        ServiceManager.Instance.ShopService.BuyItem();
     }
 
     private void SetShopLayoutByCategory(ShopCategory category)

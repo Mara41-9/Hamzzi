@@ -66,7 +66,7 @@ public class NetworkShopService
         {
             loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
         }
-
+        
         var shopSlotVm = new ShopSlotViewModel();
         shopSlotVm.ItemUniqueId = uniqueId;
         shopSlotVm.ItemDataId = shopData.ItemId;
@@ -79,5 +79,11 @@ public class NetworkShopService
 
         var shopVm = GetShopViewModel();
         shopVm.AddItemSlotViewModel(shopSlotVm);
+    }
+
+    public void BuyItem()
+    {
+        ServiceManager.Instance.HousingService.AddItem(GetShopViewModel().SelectedSlot);
+        Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
     }
 }
