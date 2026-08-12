@@ -39,9 +39,6 @@ public class CollectionView : UIBase
         
         // 슬롯이 없다면 초기화
         InitCollectionList();
-
-        // 첫번 째 슬롯으로 표시
-        ShowFirstSlot();
     }
 
     private void OnDisable()
@@ -51,8 +48,7 @@ public class CollectionView : UIBase
 
     private void CloseCollectionUI()
     {
-        // TODO : UIManager에 UIType 추가 후 주석 제거
-        //UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.CollectionUI);
+        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.CollectionUI);
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -60,8 +56,12 @@ public class CollectionView : UIBase
         switch (e.PropertyName) 
         {
             case nameof(CollectionViewModel.CollectedHamsterIdList):
+                UpdateCollectedSlot();
                 break;
             case nameof(CollectionViewModel.AllHamsterIdList):
+                break;
+            case nameof(CollectionViewModel.CurrentSelectHamsterId):
+                UpdateHamsterInfo();
                 break;
         }
     }
@@ -90,14 +90,31 @@ public class CollectionView : UIBase
             bool isCollected = _collectionViewModel.CollectedHamsterIdList.Contains(hamsterId);
 
             hamsterSlot.InitSlot(hamsterData, isCollected);
-            hamsterSlot.OnSlotClicked += UpdateHamsterInfo;
+            hamsterSlot.OnSlotClicked += OnSelectedHamster;
 
             _spawnSlotList.Add(hamsterId, hamsterSlot);
         }
     }
 
-    private void UpdateHamsterInfo(string hamsterId)
+    private void UpdateCollectedSlot()
     {
+        HashSet<string> collectedHamsterList = _collectionViewModel.CollectedHamsterIdList;
+        foreach(string hamsterId in collectedHamsterList)
+        {
+            Debug.Log($"슬롯 업데이트 {hamsterId}");
+            HamsterSlot slot = _spawnSlotList[hamsterId];
+            slot.UpdateLockImage(true);
+        }
+    }
+
+    private void OnSelectedHamster(string hamsterId)
+    {
+        _collectionViewModel.RequestSelectedHamsterId(hamsterId);
+    }
+
+    private void UpdateHamsterInfo()
+    {
+        string hamsterId = _collectionViewModel.CurrentSelectHamsterId;
         HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
         if (hamsterData == null)
             return;
@@ -111,11 +128,5 @@ public class CollectionView : UIBase
 
         // 햄스터 디테일 정보
         HamsterAbility1.text = $"{hamsterData.CollectSpeed}";
-    }
-
-    private void ShowFirstSlot()
-    {
-        string hamsterId = _spawnSlotList.Keys.First();
-        UpdateHamsterInfo(hamsterId);
     }
 }

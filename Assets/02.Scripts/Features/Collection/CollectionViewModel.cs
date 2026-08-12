@@ -32,9 +32,33 @@ public class CollectionViewModel : ViewModelBase
         }
     }
 
+    private string _currentSelectHamsterId = "Hamster_01";
+    public string CurrentSelectHamsterId
+    {
+        get { return _currentSelectHamsterId; }
+        set
+        {
+            if (_currentSelectHamsterId != value)
+            {
+                _currentSelectHamsterId = value;
+                OnPropertyChanged(nameof(CurrentSelectHamsterId));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(_allHamsterIdList));
         OnPropertyChanged(nameof(_collectedHamsterIdList));
+        OnPropertyChanged(nameof(_currentSelectHamsterId));
+    }
+}
+
+
+public static class HamsterViewModelExtention 
+{
+    public static void RequestSelectedHamsterId(this CollectionViewModel collectionViewModel, string selectedHamsterId)
+    {
+        collectionViewModel.CurrentSelectHamsterId = selectedHamsterId;
     }
 }
