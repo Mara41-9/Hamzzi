@@ -35,7 +35,8 @@ public enum UIType
     LoginUI,
     AccountSearchUI,
     AccountInfoUI,
-    SearchFailUI
+    SearchFailUI,
+    SetPlayerNameUI
 }
 
 public static class UIManagerExtension

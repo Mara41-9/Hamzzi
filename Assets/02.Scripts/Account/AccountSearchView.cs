@@ -2,7 +2,7 @@
 using UnityEngine;
 using TMPro;
 
-public class AccountSearchView : ViewBase
+public class AccountSearchView : UIBase
 {
     [SerializeField] private TMP_InputField InputField_Id;
     [SerializeField] private UIButton Button_Search;
