@@ -11,6 +11,7 @@ public class HousingUI : ViewBase
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
 
+    [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Rotation;
     [SerializeField] private Button Button_Confirm;
     [SerializeField] private Button Button_Cancel;
@@ -19,6 +20,7 @@ public class HousingUI : ViewBase
 
     private void Awake()
     {
+        Button_Exit.onClick.AddListener(OnClickExit);
         Button_Rotation.onClick.AddListener(OnClickRotation);
         Button_Confirm.onClick.AddListener(OnClickConfirm);
         Button_Cancel.onClick.AddListener(OnClickCancel);
@@ -63,6 +65,7 @@ public class HousingUI : ViewBase
             Panel_Info.SetActive(true);
 
             Panel_FurnitureBar.SetActive(false);
+            Button_Exit.gameObject.SetActive(false);
 
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
@@ -73,16 +76,20 @@ public class HousingUI : ViewBase
             Panel_Info.SetActive(false);
 
             Panel_FurnitureBar.SetActive(false);
+            Button_Exit.gameObject.SetActive(false);
 
             Button_Rotation.gameObject.SetActive(true);
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
+
+            Button_Confirm.interactable = _housingVM.CanConfirm;
         }
         else
         {
             Panel_Info.SetActive(false);
 
             Panel_FurnitureBar.SetActive(true);
+            Button_Exit.gameObject.SetActive(true);
 
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
@@ -105,6 +112,11 @@ public class HousingUI : ViewBase
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
             furnitureSlot.Bind(item, _housingVM).Forget();
         }
+    }
+
+    private void OnClickExit()
+    {
+        _housingVM.ExitRoom();
     }
 
     private void OnClickRotation()

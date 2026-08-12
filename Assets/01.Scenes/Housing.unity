@@ -412,6 +412,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffee58dc612fa5645859e2ea8cbbe8a2, type: 3}
+--- !u!114 &1387015785 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3179597719233509043, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+  m_PrefabInstance: {fileID: 6249315171891511116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &1479230272 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2082253567173258967, guid: 62efbf2b731500641a86add7049bff82, type: 3}
@@ -631,6 +642,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1479230272}
     m_Modifications:
+    - target: {fileID: 921342322356967566, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1932997140701264843, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: _buildView
       value: 
@@ -639,6 +654,18 @@ PrefabInstance:
       propertyPath: _cameraController
       value: 
       objectReference: {fileID: 983853488}
+    - target: {fileID: 2325620758637732243, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355460335371116402, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129884728100478422, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5714831250538833242, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_Name
       value: HousingUI
@@ -723,6 +750,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7697154739756511361, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: Button_Exit
+      value: 
+      objectReference: {fileID: 1387015785}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
