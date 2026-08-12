@@ -1,13 +1,14 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SocialPlatforms;
 
 public class HousingView : ViewBase
 {
     [SerializeField] private Material Material_Ghost;
-    [SerializeField] private SpriteRenderer SpriteRenderer_Grid;
+    [SerializeField] private SpriteRenderer SpriteRenderer_Tile;
+    [SerializeField] private GameObject Prefab_Grid;
 
     [SerializeField] private Color Color_Valid = new Color(0f, 1f, 0f, 0.4f);
     [SerializeField] private Color Color_Invalid = new Color(1f, 0f, 0f, 0.4f);
@@ -22,10 +23,12 @@ public class HousingView : ViewBase
     private BuildViewModel _buildVM;
     private GameObject _ghostObject;
 
+    private List<GameObject> _activeGridLines = new List<GameObject>();
+
     private void Awake()
     {
         _mainCamera = Camera.main;
-        SpriteRenderer_Grid.gameObject.SetActive(false);
+        SpriteRenderer_Tile.gameObject.SetActive(false);
     }
 
     public void BindViewModel(HousingViewModel housingVM, BuildViewModel buildVM)
@@ -48,11 +51,25 @@ public class HousingView : ViewBase
     {
         switch (e.PropertyName)
         {
+            case nameof(_housingVM.TargetRoom):
+                if (_housingVM.TargetRoom != null)
+                {
+                    ShowRoomGrid(_housingVM.TargetRoom).Forget();
+                }
+                break;
+
             case nameof(_housingVM.FurnitureVM):
                 if (_housingVM.FurnitureVM != null)
                 {
-                    string prefabPath = $"Prefabs/Furniture/{_housingVM.FurnitureVM.FurnitureID}";
-                    SpawnGhostObject(_housingVM.FurnitureVM.FurnitureID, prefabPath).Forget();
+                    if (_ghostObject != null)
+                    {
+                        UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);
+                    }
+                    else
+                    {
+                        string prefabPath = $"Prefabs/Furniture/{_housingVM.FurnitureVM.FurnitureID}";
+                        SpawnGhostObject(_housingVM.FurnitureVM.FurnitureID, prefabPath).Forget();
+                    }
                 }
                 else
                 {
@@ -178,15 +195,15 @@ public class HousingView : ViewBase
             _ghostObject.transform.rotation = rot;
         }
 
-        if (SpriteRenderer_Grid != null)
+        if (SpriteRenderer_Tile != null)
         {
             float subCellSize = _cellSize / roomVM.GridFactor;
 
-            SpriteRenderer_Grid.transform.position = new Vector3(pos.x, pos.y + 0.01f, pos.z);
-            SpriteRenderer_Grid.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            SpriteRenderer_Grid.transform.localScale = new Vector3(furnitureVM.Size.x * subCellSize, furnitureVM.Size.y * subCellSize, 1f);
+            SpriteRenderer_Tile.transform.position = new Vector3(pos.x, pos.y + 0.01f, pos.z);
+            SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            SpriteRenderer_Tile.transform.localScale = new Vector3(furnitureVM.Size.x * subCellSize, furnitureVM.Size.y * subCellSize, 1f);
 
-            SpriteRenderer_Grid.color = furnitureVM.IsValid ? Color_Valid : Color_Invalid;
+            SpriteRenderer_Tile.color = furnitureVM.IsValid ? Color_Valid : Color_Invalid;
         }
     }
 
@@ -203,7 +220,7 @@ public class HousingView : ViewBase
 
         UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);
 
-        SpriteRenderer_Grid.gameObject.SetActive(true);
+        SpriteRenderer_Tile.gameObject.SetActive(true);
     }
 
     public void ClearGhostObject()
@@ -214,7 +231,7 @@ public class HousingView : ViewBase
             _ghostObject = null;
         }
 
-        SpriteRenderer_Grid.gameObject.SetActive(false);
+        SpriteRenderer_Tile.gameObject.SetActive(false);
     }
 
     public async UniTask SpawnFurniture(FurnitureViewModel furnitureVM)
@@ -238,26 +255,70 @@ public class HousingView : ViewBase
         float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
 
         float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
-        float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.25f;
+        float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.2f;
         float worldZ = 9.0f - localZ;
 
         pos = new Vector3(worldX, worldY, worldZ);
         rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
     }
 
-    private void OnDrawGizmos()
+    public async UniTask ShowRoomGrid(RoomViewModel roomVM)
     {
-        if (!Application.isPlaying || _buildVM == null || _buildVM.Builds == null)
+        ClearRoomGrid();
+
+        float subCellSize = _cellSize / roomVM.GridFactor;
+        float roomX = roomVM.OriginPos.x * _cellSize;
+        float roomY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.21f;
+
+        int subX = roomVM.SubGridSize.x;
+        int subY = roomVM.SubGridSize.y;
+
+        float totalWidth = subX * subCellSize;
+        float totalHeight = subY * subCellSize;
+
+        for (int x = 0; x <= subX; x++)
         {
-            return;
+            float currentX = roomX + (x * subCellSize);
+            Vector3 pos = new Vector3(currentX, roomY, 9.0f - (totalHeight * 0.5f));
+
+            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
+
+            if (line != null)
+            {
+                line.transform.SetParent(transform);
+                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                line.transform.localScale = new Vector3(0.02f, totalHeight, 1f);
+                _activeGridLines.Add(line);
+            }
         }
 
-        Gizmos.color = Color.red;
-
-        foreach (var pair in _buildVM.Builds)
+        for (int y = 0; y <= subY; y++)
         {
-            float offsetY = (pair.Value.BuildType == BuildType.Room) ? _yOffset : 0f;
-            Gizmos.DrawWireCube(new Vector3(pair.Key.x + 0.5f, pair.Key.y + 0.5f, 9f), new Vector3(1f, 1f, 0.1f));
+            float currentZ = 9.0f - (y * subCellSize);
+            Vector3 pos = new Vector3(roomX + (totalWidth * 0.5f), roomY, currentZ);
+
+            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
+
+            if (line != null)
+            {
+                line.transform.SetParent(transform);
+                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                line.transform.localScale = new Vector3(totalWidth, 0.02f, 1f);
+                _activeGridLines.Add(line);
+            }
         }
+    }
+
+    public void ClearRoomGrid()
+    {
+        for (int i = 0; i < _activeGridLines.Count; i++)
+        {
+            if (_activeGridLines[i] != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(_activeGridLines[i]);
+            }
+        }
+
+        _activeGridLines.Clear();
     }
 }

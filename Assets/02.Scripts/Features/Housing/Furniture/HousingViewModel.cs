@@ -100,6 +100,8 @@ public class HousingViewModel : ViewModelBase
     {
         FurnitureVM.Rotate();
         CheckCurrentPos();
+
+        OnPropertyChanged(nameof(FurnitureVM));
     }
 
     public bool ConfirmPos()

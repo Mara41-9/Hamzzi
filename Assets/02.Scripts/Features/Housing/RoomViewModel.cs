@@ -33,9 +33,15 @@ public class RoomViewModel : ViewModelBase
     private Dictionary<Vector2Int, FurnitureViewModel> _furnitureGrid = new Dictionary<Vector2Int, FurnitureViewModel>();
     
     public List<FurnitureViewModel> FurnitureList { get; private set; } = new List<FurnitureViewModel>();
-    public Vector2Int SubGridSize => new Vector2Int(Size.x * _gridFactor, Size.y * _gridFactor);
+    public Vector2Int SubGridSize
+    {
+        get
+        {
+            return new Vector2Int(Size.x * _gridFactor, Size.y * _gridFactor);
+        }
+    }
 
-    private int _gridFactor = 2;
+    private int _gridFactor = 4;
     public int GridFactor
     {
         get => _gridFactor;
@@ -261,23 +267,20 @@ public class RoomViewModel : ViewModelBase
 
     public bool IsValidPlace(Vector2Int localPos, Vector2Int furnitureSize)
     {
+        int wallMargin = 3;
+        
         for (int x = 0; x < furnitureSize.x; x++)
         {
             for (int y = 0; y < furnitureSize.y; y++)
             {
                 Vector2Int checkPos = localPos + new Vector2Int(x, y);
 
-                if (checkPos.x < 0 || checkPos.x >= SubGridSize.x || checkPos.y < 0 || checkPos.y >= SubGridSize.y)
+                if (checkPos.x < wallMargin || checkPos.x >= SubGridSize.x - wallMargin || checkPos.y < wallMargin || checkPos.y >= SubGridSize.y - wallMargin)
                 {
                     return false;
                 }
 
-                if (_furnitureGrid.ContainsKey(checkPos))
-                {
-                    return false;
-                }
-
-                if (IsDoorPos(checkPos))
+                if (_furnitureGrid.ContainsKey(checkPos) || IsDoorPos(checkPos))
                 {
                     return false;
                 }
