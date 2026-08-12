@@ -18,10 +18,13 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
     private FeverTimeState _currentState;
 
-    private const int TEMP_TAP_DURATION_SEC = 5; // TODO: HAM-68 데이터테이블 연동되면 교체
-
     private int _tapCount;
     private float _tapInputElapsedTime;
+
+    private void Start()
+    {
+        GameDataManager.Instance.LoadData<FeverTimeData>();
+    }
 
     private void Update()
     {
@@ -32,7 +35,10 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
         _tapInputElapsedTime += Time.deltaTime;
 
-        if (_tapInputElapsedTime >= TEMP_TAP_DURATION_SEC)
+        // TODO: 민형님 가챠 시스템 데이터 받아서 교체 예정
+        FeverTimeData feverTimeData = GameDataManager.Instance.GetData<FeverTimeData>("A");
+
+        if (_tapInputElapsedTime >= feverTimeData.TapDurationSec)
         {
             SetState(FeverTimeState.Result);
         }
@@ -119,8 +125,14 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
     private void HandleResultState()
     {
+        FeverTimeData feverTimeData = GameDataManager.Instance.GetData<FeverTimeData>("A");
+        int rewardAmount = _tapCount * feverTimeData.SeedPerTap;
+        GameManager.Instance.AddSeedCount(rewardAmount);
+
 #if UNITY_EDITOR
-        Debug.Log("FeverTimeState: Result (TODO: HAM-69 보상 계산 연결되면 이 로그를 교체, 계산 끝나면 SetState(Idle) 호출 필요)");
+        Debug.Log($"FeverTimeState: Result, 보상 {rewardAmount} 지급 (연타 {_tapCount}회 x {feverTimeData.SeedPerTap})");
 #endif
+
+        SetState(FeverTimeState.Idle);
     }
 }
