@@ -289,6 +289,12 @@ MonoBehaviour:
   Position_Overview: {x: 3, y: 4, z: -10}
   Rotation_Overview: {x: 0, y: 0, z: 0}
   Size_Ortho: 15
+  Zoom_Angle: {x: 30, y: 0, z: 0}
+  Zoom_Distance: 7
+  Zoom_FOV: 45
+  Zoom_Sensitive: 0.01
+  Size_MinOrtho: 4
+  Size_MaxOrtho: 12
   Duration: 0.8
   Bound_Min: {x: -7, y: -8}
   Bound_Max: {x: 7, y: 5}
@@ -629,6 +635,10 @@ PrefabInstance:
       propertyPath: _buildView
       value: 
       objectReference: {fileID: 968437211}
+    - target: {fileID: 1932997140701264843, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: _cameraController
+      value: 
+      objectReference: {fileID: 983853488}
     - target: {fileID: 5714831250538833242, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_Name
       value: HousingUI

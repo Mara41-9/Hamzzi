@@ -1,5 +1,4 @@
-﻿using Unity.Android.Gradle.Manifest;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum HousingState
 {
@@ -9,6 +8,20 @@ public enum HousingState
 
 public class HousingViewModel : ViewModelBase
 {
+    public bool CanConfirm
+    {
+        get
+        {
+            if (FurnitureVM.IsValid)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+
     private HousingState _currentState = HousingState.SelectRoom;
     public HousingState CurrentState
     {
@@ -49,7 +62,15 @@ public class HousingViewModel : ViewModelBase
                 _targetRoom = value;
                 OnPropertyChanged(nameof(TargetRoom));
 
-                CurrentState = HousingState.Placing;
+                if (_targetRoom != null)
+                {
+                    CurrentState = HousingState.Placing;
+                }
+                else
+                {
+                    CurrentState = HousingState.SelectRoom;
+                    FurnitureVM = null;
+                }
             }
         }
     }
@@ -68,16 +89,6 @@ public class HousingViewModel : ViewModelBase
         _currentState = HousingState.SelectRoom;
 
         InvokeOnceOnInit();
-    }
-
-    public bool CanConfirm()
-    {
-        if (FurnitureVM.IsValid)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public void SelectFurniture(string furnitureID, Vector2Int subSize, RoomViewModel targetRoom)
@@ -121,8 +132,11 @@ public class HousingViewModel : ViewModelBase
     public void CancelPos()
     {
         FurnitureVM = null;
+    }
 
-        EnterHousingMode();
+    public void ExitRoom()
+    {
+        TargetRoom = null;
     }
 
     private void CheckCurrentPos()

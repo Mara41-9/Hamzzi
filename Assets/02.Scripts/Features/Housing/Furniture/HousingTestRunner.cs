@@ -5,6 +5,7 @@ public class HousingTestRunner : MonoBehaviour
     [SerializeField] private BuildView _buildView;
     [SerializeField] private HousingView _housingView;
     [SerializeField] private HousingUI _housingUI;
+    [SerializeField] private CameraController _cameraController;
 
     private HousingViewModel _housingVM;
 
@@ -23,6 +24,11 @@ public class HousingTestRunner : MonoBehaviour
         if (_housingUI != null)
         {
             _housingUI.BindViewModel(_housingVM);
+        }
+
+        if (_cameraController != null)
+        {
+            _cameraController.BindViewModel(_housingVM);
         }
 
         _housingVM.EnterHousingMode();
