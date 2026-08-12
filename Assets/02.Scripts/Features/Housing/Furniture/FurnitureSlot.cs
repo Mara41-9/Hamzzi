@@ -30,6 +30,6 @@ public class FurnitureSlot : MonoBehaviour
 
     private void OnClickSelect()
     {
-        _housingVM.SelectFurniture(_data.Id, _data.Size, _housingVM.TargetRoom);
+        _housingVM.SelectFurniture(_data.Id, Vector2Int.one, _housingVM.TargetRoom);
     }
 }

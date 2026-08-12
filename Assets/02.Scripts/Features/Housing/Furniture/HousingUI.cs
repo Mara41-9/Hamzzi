@@ -137,18 +137,14 @@ public class HousingUI : ViewBase
                 Id = "Armchair_01",
                 Name = "기본 의자",
                 IconPath = "Image/Item/Furniture/Armchair_01",
-                PrefabPath = "Prefabs/Furniture/Armchair_01",
-                SizeX = 1,
-                SizeY = 7
+                PrefabPath = "Prefabs/Furniture/Armchair_01"
             },
             new ItemData
             {
                 Id = "Fireplace_03",
                 Name = "원목 탁자",
                 IconPath = "Image/Item/Furniture/Fireplace_03",
-                PrefabPath = "Prefabs/Furniture/Fireplace_03",
-                SizeX = 2,
-                SizeY = 3
+                PrefabPath = "Prefabs/Furniture/Fireplace_03"
             }
         };
     }

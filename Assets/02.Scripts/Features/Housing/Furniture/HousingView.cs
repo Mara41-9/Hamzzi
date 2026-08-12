@@ -216,6 +216,11 @@ public class HousingView : ViewBase
         if (_ghostObject.TryGetComponent<FurnitureView>(out var furnitureView))
         {
             furnitureView.SetGhostMode(Material_Ghost);
+
+            float subCellSize = _cellSize / _housingVM.TargetRoom.GridFactor;
+            Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            _housingVM.FurnitureVM.Size = calculatedSize;
         }
 
         UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);

@@ -273,7 +273,7 @@ public class RoomViewModel : ViewModelBase
 
     public bool IsValidPlace(Vector2Int localPos, Vector2Int furnitureSize)
     {
-        int wallMargin = 3;
+        int wallMargin = 0;
         
         for (int x = 0; x < furnitureSize.x; x++)
         {
