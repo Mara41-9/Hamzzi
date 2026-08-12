@@ -35,15 +35,21 @@ public class CollectionView : UIBase
         // 수집 데이터들 View에 표시
         _collectionViewModel = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.PropertyChanged += OnPropertyChanged;
+        _collectionViewModel.ContainerPropertyChanged += OnContainerPropChanged;
         _collectionViewModel.InvokeOnceOnInit();
         
         // 슬롯이 없다면 초기화
         InitCollectionList();
+
+        UpdateCollectedSlot();
     }
 
     private void OnDisable()
     {
         ExitButton.onClick.RemoveListener(CloseCollectionUI);
+
+        _collectionViewModel.PropertyChanged -= OnPropertyChanged;
+        _collectionViewModel.ContainerPropertyChanged -= OnContainerPropChanged;
     }
 
     private void CloseCollectionUI()
@@ -62,6 +68,23 @@ public class CollectionView : UIBase
                 break;
             case nameof(CollectionViewModel.CurrentSelectHamsterId):
                 UpdateHamsterInfo();
+                break;
+        }
+    }
+
+    private void OnContainerPropChanged(string propertyName, ContainerEventType eventType, string hamsterId)
+    {
+        if (propertyName == nameof(_collectionViewModel.CollectedHamsterIdList) == false)
+            return;
+
+        switch (eventType)
+        {
+            case ContainerEventType.Add:
+                UpdateCollectedSlot();
+                break;
+            case ContainerEventType.Remove:
+                break;
+            case ContainerEventType.Update:
                 break;
         }
     }

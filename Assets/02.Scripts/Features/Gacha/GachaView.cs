@@ -40,12 +40,8 @@ public class GachaView : ViewBase
     private void DrawHamster()
     {
         string hamsterId = NetworkManager_YMH.Instance.GachaService.DrawGacha();
+        _collectionViewModel.AddCollectedHamsterIdList(hamsterId);
         Debug.Log(hamsterId);
-
-        if (_collectionViewModel.CollectedHamsterIdList.Contains(hamsterId) == false)
-        {
-            _collectionViewModel.CollectedHamsterIdList.Add(hamsterId);
-        }
     }
 
     private void DrawTenHamster()

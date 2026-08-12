@@ -33,6 +33,7 @@ public enum UIType
     ShopUI,
     BuildUI,
     CollectionUI,
+    GachaUI,
     HousingUI
 }
 
