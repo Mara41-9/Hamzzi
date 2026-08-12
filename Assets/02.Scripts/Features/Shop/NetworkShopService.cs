@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class NetworkShopService
 {
@@ -21,7 +23,7 @@ public class NetworkShopService
         return shopVm;
     }
 
-    public void InitShop()
+    public async UniTask InitShop()
     {
         GameDataManager.Instance.LoadData<ShopData>();
         GameDataManager.Instance.LoadData<ItemData>();
@@ -33,7 +35,10 @@ public class NetworkShopService
             return;
         }
 
-        foreach(var shopData in shopDataList)
+        // 여러 비동기 작업들을 하나로 묶어서 관리하기 위한 리스트
+        var tasks = new List<UniTask>();
+
+        foreach (var shopData in shopDataList)
         {
             var itemData = GameDataManager.Instance.GetData<ItemData>(shopData.ItemId);
             if(itemData == null)
@@ -42,20 +47,35 @@ public class NetworkShopService
                 return;
             }
 
-            AddItem(shopData, itemData);
+            tasks.Add(AddItem(shopData, itemData));
         }
+
+        // 모든 아이템의 리소스 로드가 끝날 때까지 병렬로 동시 대기
+        await UniTask.WhenAll(tasks);
+
+        // 로드가 완벽히 끝난 후 1번만 UI에 알림
+        GetShopViewModel().NotifyItemListChanged();
     }
 
-    public void AddItem(ShopData shopData, ItemData itemData)
+    public async UniTask AddItem(ShopData shopData, ItemData itemData)
     {
         long uniqueId = SampleGameUtil.GenerateUniqueId();
+
+        Sprite loadedSprite = null;
+        if(string.IsNullOrEmpty(itemData.IconPath) == false)
+        {
+            loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
+        }
 
         var shopSlotVm = new ShopSlotViewModel();
         shopSlotVm.ItemUniqueId = uniqueId;
         shopSlotVm.ItemDataId = shopData.ItemId;
+        shopSlotVm.Name = itemData.Name;
+        shopSlotVm.Description = itemData.Description;
         shopSlotVm.Category = itemData.Category;
         shopSlotVm.SubCategory = itemData.SubCategory;
         shopSlotVm.CostAmount = shopData.CostAmount;
+        shopSlotVm.IconSprite = loadedSprite;
 
         var shopVm = GetShopViewModel();
         shopVm.AddItemSlotViewModel(shopSlotVm);

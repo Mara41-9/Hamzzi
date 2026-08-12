@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class ServiceManager : SingletonBase<ServiceManager>
 {
@@ -7,13 +8,13 @@ public class ServiceManager : SingletonBase<ServiceManager>
 
     public void Start()
     {
-        InitNetworkService();
-        ShopService.InitShop();
+        InitShopService();
+        ShopService.InitShop().Forget();
 
         InitBuildService();
     }
 
-    private void InitNetworkService()
+    private void InitShopService()
     {
         ShopService = new NetworkShopService();
     }

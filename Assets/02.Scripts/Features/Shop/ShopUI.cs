@@ -43,7 +43,6 @@ public class ShopUI : UIBase
     [Header("닫기 버튼")]
     [SerializeField] private UIButton Button_CloseShopUI;
 
-    private ItemData _selectedItemData;
     private ShopViewModel _shopVm;
     private string _selectedSubCategory;
 
@@ -71,7 +70,10 @@ public class ShopUI : UIBase
         ResetItemInfo();
         ResetSelectedData();
 
-        _shopVm.PropertyChanged -= OnPropChanged_ShopView;
+        if(_shopVm != null)
+        {
+            _shopVm.PropertyChanged -= OnPropChanged_ShopView;
+        }
     }
 
     private void InitShopUI()
@@ -195,13 +197,14 @@ public class ShopUI : UIBase
     private void FindShopViewModelAndBind()
     {
         var shopVm = ServiceManager.Instance.ShopService.GetShopViewModel();
-        if(shopVm.ItemList == null || shopVm.ItemList.Count == 0)
+        _shopVm = shopVm;
+
+        if(_shopVm.ItemList == null || _shopVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다");
             return;
         }
 
-        _shopVm = shopVm;
         _shopVm.PropertyChanged += OnPropChanged_ShopView;
         _shopVm.InvokeOnceOnInit();
     }
@@ -212,6 +215,9 @@ public class ShopUI : UIBase
         {
             case nameof(ShopViewModel.ItemList):
                 ResetItemSlotAndCreateAll();
+                break;
+            case nameof(ShopViewModel.SelectedSlot):
+                UpdateItemDetailInfo(_shopVm.SelectedSlot);
                 break;
         }
     }
@@ -241,6 +247,11 @@ public class ShopUI : UIBase
     {
         ClearSlotList();
 
+        if (_shopVm == null || _shopVm.ItemList == null)
+        {
+            return;
+        }
+
         foreach (var itemKv in _shopVm.ItemList)
         {
             var slotVm = itemKv.Value;
@@ -251,14 +262,12 @@ public class ShopUI : UIBase
                 continue;
             }
 
-            if(slotVm.Category != _selectedCategory.ToString())
+            if(slotVm.Category == _selectedCategory.ToString())
             {
-                continue;
-            }
-
-            if(slotVm.SubCategory == _selectedSubCategory)
-            {
-                CreateItemSlot(slotVm);
+                if (slotVm.SubCategory == _selectedSubCategory)
+                {
+                    CreateItemSlot(slotVm);
+                }
             }
         }
     }
@@ -283,22 +292,29 @@ public class ShopUI : UIBase
         slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
-    private void OnChildSlotSelected(long slotUniqueId)
+    private void OnChildSlotSelected(ShopSlotViewModel slotVm)
     {
-        if(_itemSlotList.TryGetValue(slotUniqueId, out ShopSlotUI slotView) == false)
+        if(slotVm == null)
         {
             return;
         }
 
-        _selectedItemData = slotView.ItemData;
-
-        Image_Icon.sprite = slotView.IconSprite;
-        Text_ItemName.text = _selectedItemData.Name;
-        Text_ItemDescription.text = _selectedItemData.Description;
-        Text_ItemPrice.text = slotView.CostAmount.ToString();
+        _shopVm.SelectedSlot = slotVm;
     }
 
-    
+    private void UpdateItemDetailInfo(ShopSlotViewModel slotVm)
+    {
+        if (slotVm == null)
+        {
+            return;
+        }
+
+        Image_Icon.sprite = slotVm.IconSprite;
+        Text_ItemName.text = slotVm.Name;
+        Text_ItemDescription.text = slotVm.Description;
+        Text_ItemPrice.text = slotVm.CostAmount.ToString();
+    }
+
     private void ClearSlotList()
     {
         if(_itemSlotList.Count > 0)
@@ -338,7 +354,6 @@ public class ShopUI : UIBase
 
     private void ResetSelectedData()
     {
-        _selectedItemData = null;
         _selectedSubCategory = null;
         _selectedCategory = ShopCategory.All;
     }
