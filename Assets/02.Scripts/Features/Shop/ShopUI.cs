@@ -40,8 +40,9 @@ public class ShopUI : UIBase
     [SerializeField] private GameObject Button_SubCategory;
     [SerializeField] private Transform Transform_ButtonRoot;
 
-    [Header("닫기 버튼")]
+    [Header("버튼")]
     [SerializeField] private UIButton Button_CloseShopUI;
+    [SerializeField] private UIButton Button_BuyItem;
 
     private ShopViewModel _shopVm;
     private string _selectedSubCategory;
@@ -60,6 +61,8 @@ public class ShopUI : UIBase
         Button_DecorCategory.BindOnClickButtonEvent(OnClick_DecorCategory);
 
         Button_CloseShopUI.BindOnClickButtonEvent(OnClick_CloseShopUI);
+        Button_BuyItem.BindOnClickButtonEvent(OnClick_BuyItem);
+
         InitShopUI();
     }
 
@@ -81,6 +84,7 @@ public class ShopUI : UIBase
         _selectedCategory = ShopCategory.All;
         SetSelectedCategory(_selectedCategory);
         SetSubCategory(_selectedCategory);
+        Button_BuyItem.SetInteractable(false);
         SetShopItemSlotOnEnable();
     }
 
@@ -109,6 +113,16 @@ public class ShopUI : UIBase
     {
         UIManager.Instance.CloseShopUI();
         UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.TestMainUI);
+    }
+
+    private void OnClick_BuyItem()
+    {
+        if(_shopVm.SelectedSlot == null)
+        {
+            return;
+        }
+
+        Debug.Log($"아이템을 구매했다!  Id: {_shopVm.SelectedSlot.ItemDataId}  이름: {_shopVm.SelectedSlot.Name}");
     }
 
     private void SetShopLayoutByCategory(ShopCategory category)
@@ -300,6 +314,7 @@ public class ShopUI : UIBase
         }
 
         _shopVm.SelectedSlot = slotVm;
+        Button_BuyItem.SetInteractable(true);
     }
 
     private void UpdateItemDetailInfo(ShopSlotViewModel slotVm)
@@ -354,6 +369,7 @@ public class ShopUI : UIBase
 
     private void ResetSelectedData()
     {
+        _shopVm.SelectedSlot = null;
         _selectedSubCategory = null;
         _selectedCategory = ShopCategory.All;
     }
