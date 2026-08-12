@@ -56,4 +56,14 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.BuildUI);
     }
+
+    public static void OpenShopUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.ShopUI);
+    }
+
+    public static void CloseShopUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.ShopUI);
+    }
 }
