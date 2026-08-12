@@ -16,6 +16,6 @@ public class FeverTimeCutsceneUI : UIBase
 
     private void OnClickTap()
     {
-        // TODO: HAM-67 연타 카운트 로직 연결되면 여기서 FeverTimeManager에 카운트 등록 호출
+        FeverTimeManager.Instance.RegisterTap();
     }
 }
