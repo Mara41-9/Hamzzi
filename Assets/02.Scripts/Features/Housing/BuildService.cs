@@ -60,7 +60,6 @@ public class BuildService
                     continue;
                 }
 
-                Vector2Int startDir = _directions[startInfo.DirectionIndex];
                 List<Vector2Int> path = GetAislePath(startInfo.OutsidePos, endInfo.OutsidePos, room);
 
                 if (path != null && path.Count > 0)
@@ -99,7 +98,6 @@ public class BuildService
         open.Add(start);
 
         bool isFind = false;
-
         int searchCount = 0;
 
         while (open.Count > 0 && searchCount < MAX_SEARCH)
