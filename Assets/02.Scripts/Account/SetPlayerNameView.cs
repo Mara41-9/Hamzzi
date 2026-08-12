@@ -9,14 +9,18 @@ public class SetPlayerNameView : UIBase
 
     private SetPlayerNameViewModel _vm;
 
-    public void BindViewModel(SetPlayerNameViewModel vm)
-    {
-        _vm = vm;
 
-        _vm.PropertyChanged += OnPropChanged_View;
-        _vm.OnCompleteSetName += OnCompleteSetName_View;
-        _vm.OnFailSetName += OnFailSetName_View;
+    // 임시 테스트용 초기화
+    private void Start()
+    {
+        SetPlayerNameService testService = new SetPlayerNameService();
+        SetPlayerNameViewModel testVm = new SetPlayerNameViewModel();
+
+        testVm.SetService(testService);
+
+        BindViewModel(testVm);
     }
+
 
     private void OnEnable()
     {
@@ -37,6 +41,15 @@ public class SetPlayerNameView : UIBase
             _vm.OnCompleteSetName -= OnCompleteSetName_View;
             _vm.OnFailSetName -= OnFailSetName_View;
         }
+    }
+
+    public void BindViewModel(SetPlayerNameViewModel vm)
+    {
+        _vm = vm;
+
+        _vm.PropertyChanged += OnPropChanged_View;
+        _vm.OnCompleteSetName += OnCompleteSetName_View;
+        _vm.OnFailSetName += OnFailSetName_View;
     }
 
     private void OnPropChanged_View(object sender, PropertyChangedEventArgs e)
@@ -62,11 +75,11 @@ public class SetPlayerNameView : UIBase
 
     private void OnCompleteSetName_View()
     {
-        Debug.Log("닉네임 설정 성공");
+        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.SetPlayerNameUI);
     }
 
     private void OnFailSetName_View()
     {
-        Debug.Log("닉네임 설정 실패");
+        InputField_Name.textComponent.color = Color.red;
     }
 }
