@@ -23,14 +23,26 @@ public class TestHousingService
 
     public void AddItem(ShopSlotViewModel shopSlotVm)
     {
-        var housingSlotVm = new TestHousingSlotViewModel();
+        var housingVm = GetHousingViewModel();
+        
+        foreach(var itemKv in housingVm.ItemList)
+        {
+            var housingSlotVm = itemKv.Value;
+            if(housingSlotVm.ItemDataId == shopSlotVm.ItemDataId)
+            {
+                housingSlotVm.StackCount++;
+                return;
+            }
+        }
+
+        var newhousingSlotVm = new TestHousingSlotViewModel();
         long uniqueId = TestGameUtil.GenerateUniqueId();
 
-        housingSlotVm.ItemUniqueId = uniqueId;
-        housingSlotVm.IconSprite = shopSlotVm.IconSprite;
-        housingSlotVm.StackCount = 1;
-
-        var housingVm = GetHousingViewModel();
-        housingVm.AddItemSlotViewModel(housingSlotVm);
+        newhousingSlotVm.ItemUniqueId = uniqueId;
+        newhousingSlotVm.ItemDataId = shopSlotVm.ItemDataId;
+        newhousingSlotVm.IconSprite = shopSlotVm.IconSprite;
+        newhousingSlotVm.StackCount = 1;
+        
+        housingVm.AddItemSlotViewModel(newhousingSlotVm);
     }
 }

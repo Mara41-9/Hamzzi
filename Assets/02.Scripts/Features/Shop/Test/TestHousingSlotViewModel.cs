@@ -5,6 +5,7 @@ public class TestHousingSlotViewModel : ViewModelBase
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(ItemUniqueId));
+        OnPropertyChanged(nameof(ItemDataId));
         OnPropertyChanged(nameof(StackCount));
         OnPropertyChanged(nameof(IconSprite));
     }
@@ -19,6 +20,20 @@ public class TestHousingSlotViewModel : ViewModelBase
             {
                 _itemUniqueId = value;
                 OnPropertyChanged(nameof(ItemUniqueId));
+            }
+        }
+    }
+
+    private string _itemDataId;
+    public string ItemDataId
+    {
+        get => _itemDataId;
+        set
+        {
+            if (_itemDataId != value)
+            {
+                _itemDataId = value;
+                OnPropertyChanged(nameof(ItemDataId));
             }
         }
     }
