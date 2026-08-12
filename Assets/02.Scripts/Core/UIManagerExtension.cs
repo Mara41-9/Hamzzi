@@ -34,7 +34,8 @@ public enum UIType
     BuildUI,
     CollectionUI,
     HousingUI,
-    SampleMainUI
+    TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
+    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
 
 public static class UIManagerExtension

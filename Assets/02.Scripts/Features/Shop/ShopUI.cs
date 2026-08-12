@@ -108,7 +108,7 @@ public class ShopUI : UIBase
     private void OnClick_CloseShopUI()
     {
         UIManager.Instance.CloseShopUI();
-        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.SampleMainUI);
+        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.TestMainUI);
     }
 
     private void SetShopLayoutByCategory(ShopCategory category)

@@ -59,7 +59,7 @@ public class NetworkShopService
 
     public async UniTask AddItem(ShopData shopData, ItemData itemData)
     {
-        long uniqueId = SampleGameUtil.GenerateUniqueId();
+        long uniqueId = TestGameUtil.GenerateUniqueId();
 
         Sprite loadedSprite = null;
         if(string.IsNullOrEmpty(itemData.IconPath) == false)
