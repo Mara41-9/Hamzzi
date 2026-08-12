@@ -35,7 +35,7 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
         _tapInputElapsedTime += Time.deltaTime;
 
-        // TODO: 민형님 가챠 시스템 데이터 받아서 교체 예정
+        // TODO: 주현님(?) 쳇바퀴 배치 시스템 데이터 받아서 교체 예정
         FeverTimeData feverTimeData = GameDataManager.Instance.GetData<FeverTimeData>("A");
 
         if (_tapInputElapsedTime >= feverTimeData.TapDurationSec)
