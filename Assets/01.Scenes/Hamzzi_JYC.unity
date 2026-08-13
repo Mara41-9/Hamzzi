@@ -131,6 +131,22 @@ PrefabInstance:
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 4228146621162666866, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: _spawnRangeMax.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228146621162666866, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: _spawnRangeMax.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228146621162666866, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: _spawnRangeMin.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228146621162666866, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: _spawnRangeMin.y
+      value: -3
+      objectReference: {fileID: 0}
     - target: {fileID: 5535246593697319480, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_LocalPosition.x
       value: 27.21909

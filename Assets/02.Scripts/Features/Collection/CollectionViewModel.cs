@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectionViewModel : ViewModelBase
+public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<string>
 {
+    public event Action<string, ContainerEventType, string> ContainerPropertyChanged;
+
     private HashSet<string> _allHamsterIdList = new HashSet<string>();
     public HashSet<string> AllHamsterIdList
     {
@@ -32,9 +35,45 @@ public class CollectionViewModel : ViewModelBase
         }
     }
 
+    private string _currentSelectHamsterId = "Hamster_01";
+    public string CurrentSelectHamsterId
+    {
+        get { return _currentSelectHamsterId; }
+        set
+        {
+            if (_currentSelectHamsterId != value)
+            {
+                _currentSelectHamsterId = value;
+                OnPropertyChanged(nameof(CurrentSelectHamsterId));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(_allHamsterIdList));
         OnPropertyChanged(nameof(_collectedHamsterIdList));
+        OnPropertyChanged(nameof(_currentSelectHamsterId));
+    }
+
+    public void AddCollectedHamsterIdList(string hamsterId)
+    {
+        if (CollectedHamsterIdList.Contains(hamsterId) == true)
+            return;
+
+        CollectedHamsterIdList.Add(hamsterId);
+        ContainerPropertyChanged?.Invoke(nameof(CollectedHamsterIdList), ContainerEventType.Add, hamsterId);
+        Debug.Log("햄스터 추가");
+    }
+}
+
+
+public static class HamsterViewModelExtention 
+{
+
+
+    public static void RequestSelectedHamsterId(this CollectionViewModel collectionViewModel, string selectedHamsterId)
+    {
+        collectionViewModel.CurrentSelectHamsterId = selectedHamsterId;
     }
 }
