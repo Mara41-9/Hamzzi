@@ -20,6 +20,11 @@ public class GameManager : SingletonBase<GameManager>
         LoadPlayerData();
     }
 
+    private void Start()
+    {
+        InitMap().Forget();
+    }
+
     public void AddSeedCount(int amount)
     {
         _playerModel.SeedCount += amount;

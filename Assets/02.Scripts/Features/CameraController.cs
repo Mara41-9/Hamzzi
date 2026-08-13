@@ -13,6 +13,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 Rotation_Overview = Vector3.zero;
     [SerializeField] private float Size_Ortho = 8f;
 
+    [Header("정원 시야")]
+    [SerializeField] private Vector3 Position_Garden = new Vector3(-5f, 10f, -10f);
+    [SerializeField] private Vector3 Rotation_Garden = new Vector3(30f, -45f, 0f);
+    [SerializeField] private float Garden_FOV = 50f;
+
     [Header("줌")]
     [SerializeField] private Vector3 Zoom_Angle = new Vector3(30f, -45f, 0f);
     [SerializeField] private float Zoom_Distance = 7f;
@@ -22,6 +27,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float Zoom_Sensitive = 0.01f;
     [SerializeField] private float Size_MinOrtho = 4f;
     [SerializeField] private float Size_MaxOrtho = 12f;
+    [SerializeField] private float FOV_Min = 30f;
+    [SerializeField] private float FOV_Max = 75f;
     [SerializeField] private float Duration = 0.8f;
     [SerializeField] private Vector2 Bound_Min = new Vector2(-10f, -5f);
     [SerializeField] private Vector2 Bound_Max = new Vector2(20f, 15f);
@@ -51,7 +58,7 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        if (Camera_Main.orthographic && !_isTransition)
+        if (!_isTransition)
         {
 #if UNITY_EDITOR || UNITY_STANDALONE
             GetMouseInput();
@@ -89,6 +96,17 @@ public class CameraController : MonoBehaviour
                     ShowOverview().Forget();
                 }
                 break;
+
+            case nameof(_housingVM.CurrentViewMode):
+                if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+                {
+                    ShowGardenView().Forget();
+                }
+                else if (_housingVM.CurrentViewMode == HousingViewMode.OverView)
+                {
+                    ShowOverview().Forget();
+                }
+                break;
         }
     }
 
@@ -106,9 +124,7 @@ public class CameraController : MonoBehaviour
             float currentMagnitude = (touch0.position - touch1.position).magnitude;
 
             float difference = currentMagnitude - prevMagnitude;
-
-            Camera_Main.orthographicSize -= difference * Zoom_Sensitive;
-            Camera_Main.orthographicSize = Mathf.Clamp(Camera_Main.orthographicSize, Size_MinOrtho, Size_MaxOrtho);
+            ApplyZoom(difference * Zoom_Sensitive);
         }
         else if (Input.touchCount == 1)
         {
@@ -122,13 +138,31 @@ public class CameraController : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 Vector2 delta = touch.deltaPosition;
-                float factor = (Camera_Main.orthographicSize * 2f) / Screen.height;
-                Vector3 move = new Vector3(-delta.x * factor, -delta.y * factor, 0f);
 
-                Vector3 targetPos = Camera_Main.transform.position + move;
+                if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+                {
+                    delta.y = 0f;
+                }
+
+                float factor = Camera_Main.orthographic ? (Camera_Main.orthographicSize * 2f) / Screen.height : (Camera_Main.fieldOfView * 0.1f) / Screen.height;
+
+                Vector3 targetPos;
+
+                if (_housingVM != null && _housingVM.CurrentViewMode == HousingViewMode.Garden)
+                {
+                    Vector3 move = Vector3.right * (-delta.x * factor);
+                    targetPos = Camera_Main.transform.position + move;
+                    targetPos.y = Position_Garden.y;
+                    targetPos.z = Position_Garden.z;
+                }
+                else
+                {
+                    Vector3 move = (-Camera_Main.transform.right * delta.x - Camera_Main.transform.up * delta.y) * factor;
+                    targetPos = Camera_Main.transform.position + move;
+                    targetPos.y = Mathf.Clamp(targetPos.y, Bound_Min.y, Bound_Max.y);
+                }
 
                 targetPos.x = Mathf.Clamp(targetPos.x, Bound_Min.x, Bound_Max.x);
-                targetPos.y = Mathf.Clamp(targetPos.y, Bound_Min.y, Bound_Max.y);
 
                 Camera_Main.transform.position = targetPos;
             }
@@ -141,8 +175,7 @@ public class CameraController : MonoBehaviour
 
         if (Mathf.Abs(scroll) > 0.001f)
         {
-            Camera_Main.orthographicSize -= scroll * Zoom_Sensitive * 100f;
-            Camera_Main.orthographicSize = Mathf.Clamp(Camera_Main.orthographicSize, Size_MinOrtho, Size_MaxOrtho);
+            ApplyZoom(scroll * Zoom_Sensitive * 100f);
         }
 
         if (Input.GetMouseButton(1))
@@ -150,16 +183,61 @@ public class CameraController : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
-            float factor = (Camera_Main.orthographicSize * 2f) / Screen.height;
-            Vector3 move = new Vector3(-mouseX * factor * 150f, -mouseY * factor * 150f, 0f);
+            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            {
+                mouseY = 0f;
+            }
 
-            Vector3 targetPos = Camera_Main.transform.position + move;
+            float factor = Camera_Main.orthographic ? (Camera_Main.orthographicSize * 2f) / Screen.height : (Camera_Main.fieldOfView * 0.1f) / Screen.height;
+
+            Vector3 targetPos;
+
+            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            {
+                Vector3 move = Vector3.right * (-mouseX * factor * 150f);
+                targetPos = Camera_Main.transform.position + move;
+                targetPos.y = Position_Garden.y;
+                targetPos.z = Position_Garden.z;
+            }
+            else
+            {
+                Vector3 move = (-Camera_Main.transform.right * mouseX * factor * 150f - Camera_Main.transform.up * mouseY * factor * 150f);
+                targetPos = Camera_Main.transform.position + move;
+                targetPos.y = Mathf.Clamp(targetPos.y, Bound_Min.y, Bound_Max.y);
+            }
 
             targetPos.x = Mathf.Clamp(targetPos.x, Bound_Min.x, Bound_Max.x);
-            targetPos.y = Mathf.Clamp(targetPos.y, Bound_Min.y, Bound_Max.y);
 
             Camera_Main.transform.position = targetPos;
         }
+    }
+
+    private void ApplyZoom(float delta)
+    {
+        if (Camera_Main.orthographic)
+        {
+            Camera_Main.orthographicSize -= delta;
+            Camera_Main.orthographicSize = Mathf.Clamp(Camera_Main.orthographicSize, Size_MinOrtho, Size_MaxOrtho);
+        }
+        else
+        {
+            Camera_Main.fieldOfView -= delta;
+            Camera_Main.fieldOfView = Mathf.Clamp(Camera_Main.fieldOfView, FOV_Min, FOV_Max);
+        }
+    }
+
+    public async UniTask ShowGardenView()
+    {
+        CancelZoom();
+        _zoomCancel = new CancellationTokenSource();
+
+        Vector3 targetPos = Position_Garden;
+        Quaternion targetRotation = Quaternion.Euler(Rotation_Garden);
+
+        Matrix4x4 startMatrix = Camera_Main.projectionMatrix;
+        Matrix4x4 targetMatrix = Matrix4x4.Perspective(Garden_FOV, Camera_Main.aspect, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
+
+        await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, _zoomCancel.Token);
     }
 
     public async UniTask ShowOverview()

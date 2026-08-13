@@ -6,6 +6,13 @@ public enum HousingState
     Placing
 }
 
+public enum HousingViewMode
+{
+    OverView,
+    FocusRoom,
+    Garden
+}
+
 public class HousingViewModel : ViewModelBase
 {
     public bool CanConfirm
@@ -21,6 +28,19 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private HousingViewMode _currentViewMode = HousingViewMode.OverView;
+    public HousingViewMode CurrentViewMode
+    {
+        get => _currentViewMode;
+        set
+        {
+            if (_currentViewMode != value)
+            {
+                _currentViewMode = value;
+                OnPropertyChanged(nameof(CurrentViewMode));
+            }
+        }
+    }
 
     private HousingState _currentState = HousingState.SelectRoom;
     public HousingState CurrentState
@@ -77,6 +97,7 @@ public class HousingViewModel : ViewModelBase
 
     public void InvokeOnceOnInit()
     {
+        OnPropertyChanged(nameof(CurrentViewMode));
         OnPropertyChanged(nameof(CurrentState));
         OnPropertyChanged(nameof(FurnitureVM));
         OnPropertyChanged(nameof(TargetRoom));
@@ -147,5 +168,16 @@ public class HousingViewModel : ViewModelBase
     {
         FurnitureVM.IsValid = TargetRoom.IsValidPlace(FurnitureVM.LocalPos, FurnitureVM.Size);
         OnPropertyChanged(nameof(CanConfirm));
+    }
+
+    public void EnterGardenMode()
+    {
+        CurrentViewMode = HousingViewMode.Garden;
+    }
+
+    public void EnterOverviewMode()
+    {
+        TargetRoom = null;
+        CurrentViewMode = HousingViewMode.OverView;
     }
 }

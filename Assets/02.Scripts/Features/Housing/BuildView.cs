@@ -24,10 +24,13 @@ public class BuildView : ViewBase
 
     private void Start()
     {
-        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
-        BindViewModel(buildVM);
+        if (_buildVM == null)
+        {
+            BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+            BindViewModel(buildVM);
+        }
 
-        _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
+        //_buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
 
     public void BindViewModel(BuildViewModel buildVM)
