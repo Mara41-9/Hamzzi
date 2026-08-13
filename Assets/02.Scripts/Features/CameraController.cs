@@ -43,28 +43,23 @@ public class CameraController : MonoBehaviour
         SetOverview();
     }
 
-    private void Start()
-    {
-        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
-        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
-
-        BindViewModel(housingVM, buildVM);
-    }
-
     private void Update()
     {
-        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
+        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null)
         {
             return;
         }
 
         if (!_isTransition)
         {
-#if UNITY_EDITOR || UNITY_STANDALONE
-            GetMouseInput();
-#else
-            GetTouchInput();
-#endif
+            if (Input.touchCount > 0)
+            {
+                GetTouchInput();
+            }
+            else
+            {
+                GetMouseInput();
+            }
         }
     }
 

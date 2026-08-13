@@ -80,5 +80,10 @@ public class GameManager : SingletonBase<GameManager>
                 buildVM.InitDefaultRoom(buildView.Transform_DefaultRoom, buildView.Transform_DefaultAisle);
             }
         }
+
+        BuildViewModel build = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        HousingViewModel housing = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
+        Camera.main.GetComponent<CameraController>().BindViewModel(housing, build);
     }
 }
