@@ -34,7 +34,7 @@ public enum UIType
     BuildUI,
     CollectionUI,
     GachaUI,
-    HousingUI
+    HousingUI,
     FeverTimeCutsceneUI
 }
 
