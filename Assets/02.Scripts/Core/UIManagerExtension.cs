@@ -33,7 +33,8 @@ public enum UIType
     ShopUI,
     BuildUI,
     CollectionUI,
-    HousingUI,
+    GachaUI,
+    HousingUI
     FeverTimeCutsceneUI
 }
 
