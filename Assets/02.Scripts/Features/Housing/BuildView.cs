@@ -24,7 +24,8 @@ public class BuildView : ViewBase
 
     private void Start()
     {
-        BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        BindViewModel(buildVM);
 
         _buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
@@ -50,35 +51,61 @@ public class BuildView : ViewBase
             return;
         }
 
-        if (Input.touchCount > 0)
+        if (GetInputPosition(out Vector3 inputPosition))
         {
-            Touch touch = Input.GetTouch(0);
+            Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
 
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (_gridPlane.Raycast(ray, out var hit))
             {
-                return;
-            }
+                Vector3 hitPoint = ray.GetPoint(hit);
+                Vector2Int gridPos = ChangeGridPosition(hitPoint);
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                Ray ray = _mainCamera.ScreenPointToRay(touch.position);
-
-                if (_gridPlane.Raycast(ray, out var hit))
+                if (_buildVM.SelectType == BuildType.Room)
                 {
-                    Vector3 hitPoint = ray.GetPoint(hit);
-                    Vector2Int gridPos = ChangeGridPosition(hitPoint);
-
-                    if (_buildVM.SelectType == BuildType.Room)
-                    {
-                        _buildVM.TryBuildRoom(gridPos);
-                    }
-                    else if (_buildVM.SelectType == BuildType.Aisle)
-                    {
-                        _buildVM.TryBuildAisle(gridPos);
-                    }
+                    _buildVM.TryBuildRoom(gridPos);
+                }
+                else if (_buildVM.SelectType == BuildType.Aisle)
+                {
+                    _buildVM.TryBuildAisle(gridPos);
                 }
             }
         }
+    }
+
+    private bool GetInputPosition (out Vector3 inputPosition)
+    {
+        inputPosition = Vector3.zero;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
+            inputPosition = Input.mousePosition;
+            return true;
+        }
+#else
+    if (Input.touchCount > 0)
+    {
+        Touch touch = Input.GetTouch(0);
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        {
+            return false;
+        }
+
+        if (touch.phase == TouchPhase.Began)
+        {
+            inputPosition = touch.position;
+            return true;
+        }
+    }
+#endif
+
+        return false;
     }
 
     private void OnPropertyChanged_View(object sender, PropertyChangedEventArgs e)

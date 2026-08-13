@@ -24,11 +24,6 @@ public class BuildUI : ViewBase
         ResetUI();
     }
 
-    private void Start()
-    {
-        BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
-    }
-
     public void BindViewModel(BuildViewModel buildVM)
     {
         _buildVM = buildVM;

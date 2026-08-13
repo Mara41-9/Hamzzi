@@ -26,6 +26,12 @@ public class HousingUI : ViewBase
         Button_Cancel.onClick.AddListener(OnClickCancel);
     }
 
+    private void Start()
+    {
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+        BindViewModel(housingVM);
+    }
+
     public void BindViewModel(HousingViewModel housingVM)
     {
         _housingVM = housingVM;
@@ -128,9 +134,10 @@ public class HousingUI : ViewBase
     {
         FurnitureViewModel confirmVM = _housingVM.FurnitureVM;
 
-        _housingVM.ConfirmPos();
-
-        HousingView.SpawnFurniture(confirmVM).Forget();
+        if (_housingVM.ConfirmPos())
+        {
+            HousingView.SpawnFurniture(confirmVM).Forget();
+        }
     }
 
     private void OnClickCancel()
@@ -142,22 +149,6 @@ public class HousingUI : ViewBase
     // 테스트용
     private List<ItemData> GetDummyFurnitureList()
     {
-        return new List<ItemData>
-        {
-            new ItemData
-            {
-                Id = "Armchair_01",
-                Name = "기본 의자",
-                IconPath = "Image/Item/Furniture/Armchair_01",
-                PrefabPath = "Prefabs/Furniture/Armchair_01"
-            },
-            new ItemData
-            {
-                Id = "Fireplace_03",
-                Name = "원목 탁자",
-                IconPath = "Image/Item/Furniture/Fireplace_03",
-                PrefabPath = "Prefabs/Furniture/Fireplace_03"
-            }
-        };
+        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
     }
 }

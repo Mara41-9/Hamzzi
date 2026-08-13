@@ -117,7 +117,11 @@ public class HousingViewModel : ViewModelBase
 
     public bool ConfirmPos()
     {
-        FurnitureVM.IsValid = false;
+        if (FurnitureVM == null || !FurnitureVM.IsValid || TargetRoom == null)
+        {
+            return false;
+        }
+
         FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
 
         if (TargetRoom.AddFuniture(FurnitureVM))

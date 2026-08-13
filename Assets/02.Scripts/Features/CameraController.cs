@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector2 Bound_Max = new Vector2(20f, 15f);
 
     private HousingViewModel _housingVM;
+    private BuildViewModel _buildVM;
     private CancellationTokenSource _zoomCancel;
     private bool _isTransition;
 
@@ -35,8 +36,21 @@ public class CameraController : MonoBehaviour
         SetOverview();
     }
 
+    private void Start()
+    {
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
+        BindViewModel(housingVM, buildVM);
+    }
+
     private void Update()
     {
+        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
+        {
+            return;
+        }
+
         if (Camera_Main.orthographic && !_isTransition)
         {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -47,9 +61,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void BindViewModel(HousingViewModel housingVM)
+    public void BindViewModel(HousingViewModel housingVM, BuildViewModel buildVM)
     {
         _housingVM = housingVM;
+        _buildVM = buildVM;
+
         _housingVM.PropertyChanged += OnPropertyChanged_VM;
     }
 

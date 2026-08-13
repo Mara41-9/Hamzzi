@@ -897,7 +897,6 @@ GameObject:
   - component: {fileID: 7579529490476105887}
   - component: {fileID: 7697154739756511361}
   - component: {fileID: 5363811663259471456}
-  - component: {fileID: 1932997140701264843}
   m_Layer: 5
   m_Name: HousingUI
   m_TagString: Untagged
@@ -966,22 +965,6 @@ MonoBehaviour:
   Prefab_Grid: {fileID: 1271177434866186640, guid: a99a269249d413648980512d3d89b99b, type: 3}
   Color_Valid: {r: 0, g: 1, b: 0, a: 0.4}
   Color_Invalid: {r: 1, g: 0, b: 0, a: 0.4}
---- !u!114 &1932997140701264843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5714831250538833242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 534a99ae8f4ef0840857ff84a33d8de2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HousingTestRunner
-  _buildView: {fileID: 0}
-  _housingView: {fileID: 5363811663259471456}
-  _housingUI: {fileID: 7697154739756511361}
-  _cameraController: {fileID: 0}
 --- !u!1 &5785661327955837745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,7 +1326,7 @@ GameObject:
   - component: {fileID: 406619123595155603}
   - component: {fileID: 836306110293100085}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

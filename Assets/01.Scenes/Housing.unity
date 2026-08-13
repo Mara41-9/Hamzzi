@@ -174,7 +174,7 @@ Camera:
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
+  m_projectionMatrixMode: 0
   m_GateFitMode: 2
   m_FOVAxisMode: 0
   m_Iso: 200
@@ -222,8 +222,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983853483}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22588627, y: 0, z: 0, w: 0.9741537}
-  m_LocalPosition: {x: -3.39, y: 9.77, z: 0.74}
+  m_LocalRotation: {x: 0.011946498, y: 0, z: 0, w: 0.99992865}
+  m_LocalPosition: {x: 2.6773803, y: 3.9308672, z: -9.482065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -397,6 +397,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4156095564805596741, guid: ffee58dc612fa5645859e2ea8cbbe8a2, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5983158095575287350, guid: ffee58dc612fa5645859e2ea8cbbe8a2, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6283683246644623913, guid: ffee58dc612fa5645859e2ea8cbbe8a2, type: 3}
@@ -644,6 +648,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 921342322356967566, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1932997140701264843, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1932997140701264843, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
@@ -656,19 +664,27 @@ PrefabInstance:
       objectReference: {fileID: 983853488}
     - target: {fileID: 2325620758637732243, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2355460335371116402, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3129884728100478422, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5714831250538833242, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_Name
       value: HousingUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5714831250538833242, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314898060810674606, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
+      propertyPath: m_Name
+      value: Square
       objectReference: {fileID: 0}
     - target: {fileID: 7579529490476105887, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
       propertyPath: m_Pivot.x
@@ -754,7 +770,8 @@ PrefabInstance:
       propertyPath: Button_Exit
       value: 
       objectReference: {fileID: 1387015785}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1932997140701264843, guid: 8f14136985c0b994b80ca4deee9698a6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

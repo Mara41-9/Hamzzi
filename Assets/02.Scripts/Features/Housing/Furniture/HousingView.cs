@@ -31,6 +31,14 @@ public class HousingView : ViewBase
         SpriteRenderer_Tile.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
+        BindViewModel(housingVM, buildVM);
+    }
+
     public void BindViewModel(HousingViewModel housingVM, BuildViewModel buildVM)
     {
         _housingVM = housingVM;
@@ -81,11 +89,15 @@ public class HousingView : ViewBase
 
     private void Update()
     {
+        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
+        {
+            return;
+        }
+
         if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
             if (GetInputPosition(out Vector3 inputPosition))
             {
-                Debug.Log($"터치 {inputPosition}");
                 Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
 
                 if (_mapPlane.Raycast(ray, out float hit))
@@ -95,8 +107,6 @@ public class HousingView : ViewBase
                     int gridX = Mathf.FloorToInt(hitPoint.x / _cellSize);
                     int gridY = Mathf.FloorToInt((hitPoint.y - _yOffset) / _cellSize);
                     Vector2Int gridPos = new Vector2Int(gridX, gridY);
-
-                    Debug.Log($"{gridPos}, 방 존재: {_buildVM.Builds.ContainsKey(gridPos)}");
 
                     if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
                     {
