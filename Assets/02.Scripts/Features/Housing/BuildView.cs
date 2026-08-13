@@ -69,7 +69,10 @@ public class BuildView : ViewBase
                 }
                 else if (_buildVM.SelectType == BuildType.Aisle)
                 {
-                    _buildVM.TryBuildAisle(gridPos);
+                    Vector3 adjustedHitPoint = new Vector3(hitPoint.x, hitPoint.y - 2.0f, hitPoint.z);
+                    Vector2Int pos = ChangeGridPosition(adjustedHitPoint);
+
+                    _buildVM.TryBuildAisle(pos);
                 }
             }
         }
