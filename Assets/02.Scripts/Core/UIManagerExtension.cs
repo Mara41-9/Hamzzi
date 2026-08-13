@@ -35,7 +35,9 @@ public enum UIType
     CollectionUI,
     GachaUI,
     HousingUI,
-    FeverTimeCutsceneUI
+    FeverTimeCutsceneUI,
+
+    TestUI  // 하우징 테스트용 (MainUI 대용)
 }
 
 public static class UIManagerExtension
@@ -77,4 +79,15 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
     }
+
+    public static void OpenTestUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.TestUI);
+    }
+
+    public static void CloseTestUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.TestUI);
+    }
+
 }

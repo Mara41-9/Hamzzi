@@ -87,7 +87,12 @@ public class FurnitureViewModel : ViewModelBase
 
     public void Rotate()
     {
-        RotationAngle = (RotationAngle + 90) % 360;
+        float currentCenterX = LocalPos.x + Size.x * 0.5f;
+        float currentCenterY = LocalPos.y + Size.y * 0.5f;
+
         Size = new Vector2Int(Size.y, Size.x);
+        RotationAngle = (RotationAngle + 90) % 360;
+
+        LocalPos = new Vector2Int(Mathf.RoundToInt(currentCenterX - Size.x * 0.5f), Mathf.RoundToInt(currentCenterY - Size.y * 0.5f));
     }
 }

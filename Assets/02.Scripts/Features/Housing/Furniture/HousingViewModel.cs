@@ -1,5 +1,4 @@
-﻿using Unity.Android.Gradle.Manifest;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum HousingState
 {
@@ -7,8 +6,42 @@ public enum HousingState
     Placing
 }
 
+public enum HousingViewMode
+{
+    OverView,
+    FocusRoom,
+    Garden
+}
+
 public class HousingViewModel : ViewModelBase
 {
+    public bool CanConfirm
+    {
+        get
+        {
+            if (FurnitureVM.IsValid)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private HousingViewMode _currentViewMode = HousingViewMode.OverView;
+    public HousingViewMode CurrentViewMode
+    {
+        get => _currentViewMode;
+        set
+        {
+            if (_currentViewMode != value)
+            {
+                _currentViewMode = value;
+                OnPropertyChanged(nameof(CurrentViewMode));
+            }
+        }
+    }
+
     private HousingState _currentState = HousingState.SelectRoom;
     public HousingState CurrentState
     {
@@ -49,13 +82,22 @@ public class HousingViewModel : ViewModelBase
                 _targetRoom = value;
                 OnPropertyChanged(nameof(TargetRoom));
 
-                CurrentState = HousingState.Placing;
+                if (_targetRoom != null)
+                {
+                    CurrentState = HousingState.Placing;
+                }
+                else
+                {
+                    CurrentState = HousingState.SelectRoom;
+                    FurnitureVM = null;
+                }
             }
         }
     }
 
     public void InvokeOnceOnInit()
     {
+        OnPropertyChanged(nameof(CurrentViewMode));
         OnPropertyChanged(nameof(CurrentState));
         OnPropertyChanged(nameof(FurnitureVM));
         OnPropertyChanged(nameof(TargetRoom));
@@ -68,16 +110,6 @@ public class HousingViewModel : ViewModelBase
         _currentState = HousingState.SelectRoom;
 
         InvokeOnceOnInit();
-    }
-
-    public bool CanConfirm()
-    {
-        if (FurnitureVM.IsValid)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public void SelectFurniture(string furnitureID, Vector2Int subSize, RoomViewModel targetRoom)
@@ -106,7 +138,11 @@ public class HousingViewModel : ViewModelBase
 
     public bool ConfirmPos()
     {
-        FurnitureVM.IsValid = false;
+        if (FurnitureVM == null || !FurnitureVM.IsValid || TargetRoom == null)
+        {
+            return false;
+        }
+
         FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
 
         if (TargetRoom.AddFuniture(FurnitureVM))
@@ -121,13 +157,27 @@ public class HousingViewModel : ViewModelBase
     public void CancelPos()
     {
         FurnitureVM = null;
+    }
 
-        EnterHousingMode();
+    public void ExitRoom()
+    {
+        TargetRoom = null;
     }
 
     private void CheckCurrentPos()
     {
         FurnitureVM.IsValid = TargetRoom.IsValidPlace(FurnitureVM.LocalPos, FurnitureVM.Size);
         OnPropertyChanged(nameof(CanConfirm));
+    }
+
+    public void EnterGardenMode()
+    {
+        CurrentViewMode = HousingViewMode.Garden;
+    }
+
+    public void EnterOverviewMode()
+    {
+        TargetRoom = null;
+        CurrentViewMode = HousingViewMode.OverView;
     }
 }

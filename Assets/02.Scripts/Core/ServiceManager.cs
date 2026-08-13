@@ -4,6 +4,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
 {
     public NetworkShopService ShopService { get; private set; }
     public BuildService BuildService { get; private set; }
+    public HousingService HousingService { get; private set; }
 
     public void Start()
     {
@@ -11,6 +12,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         ShopService.InitShop();
 
         InitBuildService();
+        InitHousingService();
     }
 
     private void InitNetworkService()
@@ -21,5 +23,10 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitBuildService()
     {
         BuildService = new BuildService();
+    }
+
+    private void InitHousingService()
+    {
+        HousingService = new HousingService();
     }
 }
