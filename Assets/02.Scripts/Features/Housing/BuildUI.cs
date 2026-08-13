@@ -9,7 +9,6 @@ public class BuildUI : ViewBase
     [SerializeField] private GameObject Panel_InfoText;
     [SerializeField] private TextMeshProUGUI Text_Info;
 
-    [SerializeField] private Button Button_Build;
     [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Confirm;
 
@@ -17,11 +16,25 @@ public class BuildUI : ViewBase
 
     private void Awake()
     {
-        Button_Build.onClick.AddListener(OnClickBuild);
         Button_Exit.onClick.AddListener(OnClickClose);
         Button_Confirm.onClick.AddListener(OnClickConfirm);
 
         ResetUI();
+    }
+
+    private void OnEnable()
+    {
+        if (_buildVM == null)
+        {
+            BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
+        }
+
+        Button_Exit.gameObject.SetActive(true);
+
+        Panel_InfoText.SetActive(true);
+        Text_Info.text = "땅을 터치해 햄스터의 새로운 보금자리를 만들어주세요!";
+
+        _buildVM.SelectType = BuildType.Room;
     }
 
     public void BindViewModel(BuildViewModel buildVM)
@@ -68,37 +81,26 @@ public class BuildUI : ViewBase
         Text_Info.text = "건설한 굴과 연결할 다른 굴을 터치해주세요!";
     }
 
-    private void OnClickBuild()
-    {
-        if (_buildVM == null)
-        {
-            BindViewModel(ServiceManager.Instance.BuildService.GetBuildViewModel());
-        }
-
-        _buildVM.EnterBuildMode();
-
-        Button_Build.gameObject.SetActive(false);
-        Button_Exit.gameObject.SetActive(true);
-
-        Panel_InfoText.SetActive(true);
-        Text_Info.text = "땅을 터치해 햄스터의 새로운 보금자리를 만들어주세요!";
-    }
-
     private void OnClickClose()
     {
         _buildVM.CancelBuildMode();
         ResetUI();
+
+        UIManager.Instance.CloseBuildUI();
+        UIManager.Instance.OpenTestUI();
     }
 
     private void OnClickConfirm()
     {
         _buildVM.ConfirmBuild();
         ResetUI();
+
+        UIManager.Instance.CloseBuildUI();
+        UIManager.Instance.OpenTestUI();
     }
 
     private void ResetUI()
     {
-        Button_Build.gameObject.SetActive(true);
         Button_Confirm.gameObject.SetActive(false);
         Button_Exit.gameObject.SetActive(false);
         Panel_InfoText.gameObject.SetActive(false);

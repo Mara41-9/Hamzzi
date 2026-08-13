@@ -15,6 +15,7 @@ public class HousingUI : ViewBase
     [SerializeField] private Button Button_Rotation;
     [SerializeField] private Button Button_Confirm;
     [SerializeField] private Button Button_Cancel;
+    [SerializeField] private Button Button_ExitMode;
 
     private HousingViewModel _housingVM;
 
@@ -24,6 +25,7 @@ public class HousingUI : ViewBase
         Button_Rotation.onClick.AddListener(OnClickRotation);
         Button_Confirm.onClick.AddListener(OnClickConfirm);
         Button_Cancel.onClick.AddListener(OnClickCancel);
+        Button_ExitMode.onClick.AddListener(OnClickExitMode);
     }
 
     private void Start()
@@ -52,6 +54,7 @@ public class HousingUI : ViewBase
     {
         switch (e.PropertyName)
         {
+            case nameof(_housingVM.CurrentViewMode):
             case nameof(_housingVM.CurrentState):
             case nameof(_housingVM.FurnitureVM):
             case nameof(_housingVM.CanConfirm):
@@ -76,6 +79,7 @@ public class HousingUI : ViewBase
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(true);
         }
         else if (_housingVM.FurnitureVM != null)
         {
@@ -87,6 +91,7 @@ public class HousingUI : ViewBase
             Button_Rotation.gameObject.SetActive(true);
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
+            Button_ExitMode.gameObject.SetActive(false);
 
             Button_Confirm.interactable = _housingVM.CanConfirm;
         }
@@ -100,6 +105,7 @@ public class HousingUI : ViewBase
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(false);
         }
     }
 
@@ -144,6 +150,20 @@ public class HousingUI : ViewBase
     {
         _housingVM.CancelPos();
         HousingView.ClearGhostObject();
+    }
+
+    private void OnClickExitMode()
+    {
+        if (_housingVM.FurnitureVM != null)
+        {
+            _housingVM.CancelPos();
+            HousingView.ClearGhostObject();
+        }
+
+        _housingVM.EnterOverviewMode();
+
+        UIManager.Instance.CloseHousingUI();
+        UIManager.Instance.OpenTestUI();
     }
 
     // 테스트용
