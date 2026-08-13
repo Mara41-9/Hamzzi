@@ -102,4 +102,14 @@ public class UIManager : SingletonBase<UIManager>
     {
         return _opendUIList.Contains(uiType);
     }
+
+    public void OpenCollectionUI()
+    {
+        OpenUI(UIRootType.PopupUI, UIType.CollectionUI);
+    }
+
+    public void OpenGachaUI()
+    {
+        OpenUI(UIRootType.PopupUI, UIType.GachaUI);
+    }
 }

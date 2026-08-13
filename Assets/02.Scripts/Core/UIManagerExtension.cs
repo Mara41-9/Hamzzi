@@ -33,7 +33,9 @@ public enum UIType
     ShopUI,
     BuildUI,
     CollectionUI,
+    GachaUI,
     HousingUI,
+    FeverTimeCutsceneUI,
     TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
     TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
@@ -66,5 +68,15 @@ public static class UIManagerExtension
     public static void CloseShopUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.ShopUI);
+    }
+
+    public static void OpenFeverTimeCutsceneUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
+    }
+
+    public static void CloseFeverTimeCutsceneUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
     }
 }
