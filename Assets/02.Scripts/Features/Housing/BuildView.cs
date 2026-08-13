@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 
 public class BuildView : ViewBase
 {
-    [SerializeField] private List<Vector2Int> Transform_DefaultRoom;
-    [SerializeField] private List<Vector2Int> Transform_DefaultAisle;
+    [SerializeField] public List<Vector2Int> Transform_DefaultRoom;
+    [SerializeField] public List<Vector2Int> Transform_DefaultAisle;
 
     private Dictionary<string, GameObject> _spawnRoom = new Dictionary<string, GameObject>();
 

@@ -47,13 +47,27 @@ public class HousingService
         };
     }
 
+    // 저장 관련
     public void SaveHousingData()
     {
+        ServiceManager.Instance.BuildService.SaveBuildData();
+
         // TODO: Builds랑 각 RoomViewModel.FurnitureList 가져와서 저장
+        // RoomInstanceID, FurnitureID, LocalPos, RotationAngle, Size 저장
     }
 
     public void LoadHousingData()
     {
+        ServiceManager.Instance.BuildService.LoadBuildData();
+
         // TODO: 가구 배치 정보 가져와서 각각 RoomViewModel.AddFuniture()
+        // RoomInstanceID로 RoomViewModel 찾기
+        // RoomViewModel.AddFuniture(furnitureVM)로 가구 배치 및 스폰
+    }
+
+    public void LoadAllHousingData()
+    {
+        ServiceManager.Instance.BuildService.LoadBuildData();
+        LoadHousingData();
     }
 }
