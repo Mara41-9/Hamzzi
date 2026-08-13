@@ -14,7 +14,7 @@ public class UIManager : SingletonBase<UIManager>
 
     private void Start()
     {
-        OpenUI(UIRootType.ContentUI, UIType.ShopUI);
+        //OpenUI(UIRootType.ContentUI, UIType.ShopUI);
     }
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
@@ -100,5 +100,15 @@ public class UIManager : SingletonBase<UIManager>
     public bool IsOpenUI(UIType uiType)
     {
         return _opendUIList.Contains(uiType);
+    }
+
+    public void OpenCollectionUI()
+    {
+        OpenUI(UIRootType.PopupUI, UIType.CollectionUI);
+    }
+
+    public void OpenGachaUI()
+    {
+        OpenUI(UIRootType.PopupUI, UIType.GachaUI);
     }
 }
