@@ -625,6 +625,7 @@ MonoBehaviour:
   - rid: 5402918916675862555
   - rid: 5402918916675862556
   - rid: 5402918916675862557
+  - rid: 5402919080173502464
   m_OriginalGraph: {fileID: 6580756489491621071, guid: bae1fc90050f6c348888e3aa2a7faa5b, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -655,6 +656,14 @@ MonoBehaviour:
           m_Value1: 6784276635939550675
         Name: FarmDuration
         m_Value: 5
+    - rid: 5402919080173502464
+      type: {class: 'BlackboardVariable`1[[HamsterAnimatorController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 7987824695076692986
+          m_Value1: 756160618016444281
+        Name: HamsterAnimator
+        m_Value: {fileID: 1622254430}
 --- !u!4 &1622254428
 Transform:
   m_ObjectHideFlags: 0
