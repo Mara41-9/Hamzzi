@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8658750781014133630}
   - component: {fileID: 8955998315225631515}
+  - component: {fileID: 593580255117590070}
   m_Layer: 0
   m_Name: BonusSeed
   m_TagString: Untagged
@@ -56,6 +57,19 @@ CapsuleCollider:
   m_Height: 2.22
   m_Direction: 1
   m_Center: {x: 0.01, y: 0.02, z: 0}
+--- !u!114 &593580255117590070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372386468817196175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fdce43a0db8cfb46997b820f5492eb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BonusSeed
+  _despawnDelaySec: 3
 --- !u!1001 &8931957997472979021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,15 +80,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 41d0c94f73a3c3d499e08b3448703513, type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 30.000002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41d0c94f73a3c3d499e08b3448703513, type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 30.000002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41d0c94f73a3c3d499e08b3448703513, type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 30.000002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41d0c94f73a3c3d499e08b3448703513, type: 3}
       propertyPath: m_LocalPosition.x
