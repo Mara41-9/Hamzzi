@@ -40,7 +40,10 @@ public class ShopUI : UIBase
     [SerializeField] private GameObject Button_SubCategory;
     [SerializeField] private Transform Transform_ButtonRoot;
 
-    private ItemData _selectedItemData;
+    [Header("버튼")]
+    [SerializeField] private UIButton Button_CloseShopUI;
+    [SerializeField] private UIButton Button_BuyItem;
+
     private ShopViewModel _shopVm;
     private string _selectedSubCategory;
 
@@ -50,20 +53,39 @@ public class ShopUI : UIBase
     private List<string> _subCategoryNameList = new List<string>();
     private List<ShopSubCategoryUI> _subCategoryButtonList = new List<ShopSubCategoryUI>();
 
-    private void Start()
-    {
-        _selectedCategory = ShopCategory.All;
-        SetSelectedCategory(_selectedCategory);
-        SetSubCategory(_selectedCategory);
-        SetShopItemSlotOnEnable();
-    }
-
     private void OnEnable()
     {
         Button_AllCategory.BindOnClickButtonEvent(OnClick_AllCategory);
         Button_FurnitureCategory.BindOnClickButtonEvent(OnClick_FurnitureCategory);
         Button_PlayCategory.BindOnClickButtonEvent(OnClick_PlayCategory);
         Button_DecorCategory.BindOnClickButtonEvent(OnClick_DecorCategory);
+
+        Button_CloseShopUI.BindOnClickButtonEvent(OnClick_CloseShopUI);
+        Button_BuyItem.BindOnClickButtonEvent(OnClick_BuyItem);
+
+        InitShopUI();
+    }
+
+    private void OnDisable()
+    {
+        ClearSlotList();
+        ClearSubCategoryList();
+        ResetItemInfo();
+        ResetSelectedData();
+
+        if(_shopVm != null)
+        {
+            _shopVm.PropertyChanged -= OnPropChanged_ShopView;
+        }
+    }
+
+    private void InitShopUI()
+    {
+        _selectedCategory = ShopCategory.All;
+        SetSelectedCategory(_selectedCategory);
+        SetSubCategory(_selectedCategory);
+        Button_BuyItem.SetInteractable(false);
+        SetShopItemSlotOnEnable();
     }
 
     private void OnClick_AllCategory()
@@ -85,6 +107,22 @@ public class ShopUI : UIBase
     private void OnClick_DecorCategory()
     {
         SetShopLayoutByCategory(ShopCategory.Decor);
+    }
+
+    private void OnClick_CloseShopUI()
+    {
+        UIManager.Instance.CloseShopUI();
+        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.TestMainUI);
+    }
+
+    private void OnClick_BuyItem()
+    {
+        if(_shopVm.SelectedSlot == null)
+        {
+            return;
+        }
+
+        ServiceManager.Instance.ShopService.BuyItem();
     }
 
     private void SetShopLayoutByCategory(ShopCategory category)
@@ -137,11 +175,6 @@ public class ShopUI : UIBase
             _subCategoryNameList.Add(slotVm.SubCategory);
         }
 
-        if(_subCategoryNameList.Count > 0)
-        {
-            _selectedSubCategory = _subCategoryNameList[0];
-        }
-
         foreach(var subCategory in _subCategoryNameList)
         {
             var gObj = Instantiate(Button_SubCategory, Transform_ButtonRoot);
@@ -160,6 +193,12 @@ public class ShopUI : UIBase
             component.BindSubCategorySelectEvent(OnSubCategorySelected);
             _subCategoryButtonList.Add(component);
         }
+
+        if (_subCategoryNameList.Count > 0)
+        {
+            _selectedSubCategory = _subCategoryNameList[0];
+            _subCategoryButtonList[0].SetSelected(true) ;
+        }
     }
 
     private void SetShopItemSlotOnEnable()
@@ -172,13 +211,14 @@ public class ShopUI : UIBase
     private void FindShopViewModelAndBind()
     {
         var shopVm = ServiceManager.Instance.ShopService.GetShopViewModel();
-        if(shopVm.ItemList == null || shopVm.ItemList.Count == 0)
+        _shopVm = shopVm;
+
+        if(_shopVm.ItemList == null || _shopVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다");
             return;
         }
 
-        _shopVm = shopVm;
         _shopVm.PropertyChanged += OnPropChanged_ShopView;
         _shopVm.InvokeOnceOnInit();
     }
@@ -190,19 +230,41 @@ public class ShopUI : UIBase
             case nameof(ShopViewModel.ItemList):
                 ResetItemSlotAndCreateAll();
                 break;
+            case nameof(ShopViewModel.SelectedSlot):
+                UpdateItemDetailInfo(_shopVm.SelectedSlot);
+                break;
         }
     }
 
     private void OnSubCategorySelected(string subCategory)
     {
-        _selectedSubCategory = subCategory; 
+        _selectedSubCategory = subCategory;
+
+        for (int i = 0; i < _subCategoryButtonList.Count; i++)
+        {
+            ShopSubCategoryUI subCategoryUI = _subCategoryButtonList[i];
+
+            if (subCategoryUI.SubCategory == _selectedSubCategory)
+            {
+                subCategoryUI.SetSelected(true);
+            }
+            else
+            {
+                subCategoryUI.SetSelected(false);
+            }
+        }
+
         ResetItemSlotAndCreateAll();
     }
-
 
     private void ResetItemSlotAndCreateAll()
     {
         ClearSlotList();
+
+        if (_shopVm == null || _shopVm.ItemList == null)
+        {
+            return;
+        }
 
         foreach (var itemKv in _shopVm.ItemList)
         {
@@ -214,14 +276,12 @@ public class ShopUI : UIBase
                 continue;
             }
 
-            if(slotVm.Category != _selectedCategory.ToString())
+            if(slotVm.Category == _selectedCategory.ToString())
             {
-                continue;
-            }
-
-            if(slotVm.SubCategory == _selectedSubCategory)
-            {
-                CreateItemSlot(slotVm);
+                if (slotVm.SubCategory == _selectedSubCategory)
+                {
+                    CreateItemSlot(slotVm);
+                }
             }
         }
     }
@@ -246,22 +306,30 @@ public class ShopUI : UIBase
         slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
-    private void OnChildSlotSelected(long slotUniqueId)
+    private void OnChildSlotSelected(ShopSlotViewModel slotVm)
     {
-        if(_itemSlotList.TryGetValue(slotUniqueId, out ShopSlotUI slotView) == false)
+        if(slotVm == null)
         {
             return;
         }
 
-        _selectedItemData = slotView.ItemData;
-
-        Image_Icon.sprite = slotView.IconSprite;
-        Text_ItemName.text = _selectedItemData.Name;
-        Text_ItemDescription.text = _selectedItemData.Description;
-        Text_ItemPrice.text = slotView.CostAmount.ToString();
+        _shopVm.SelectedSlot = slotVm;
+        Button_BuyItem.SetInteractable(true);
     }
 
-    
+    private void UpdateItemDetailInfo(ShopSlotViewModel slotVm)
+    {
+        if (slotVm == null)
+        {
+            return;
+        }
+
+        Image_Icon.sprite = slotVm.IconSprite;
+        Text_ItemName.text = slotVm.Name;
+        Text_ItemDescription.text = slotVm.Description;
+        Text_ItemPrice.text = slotVm.CostAmount.ToString();
+    }
+
     private void ClearSlotList()
     {
         if(_itemSlotList.Count > 0)
@@ -289,5 +357,20 @@ public class ShopUI : UIBase
         }
 
         _subCategoryNameList.Clear();
+    }
+
+    private void ResetItemInfo()
+    {
+        Image_Icon.sprite = null;
+        Text_ItemName.text = "";
+        Text_ItemDescription.text = "";
+        Text_ItemPrice.text = "";
+    }
+
+    private void ResetSelectedData()
+    {
+        _shopVm.SelectedSlot = null;
+        _selectedSubCategory = null;
+        _selectedCategory = ShopCategory.All;
     }
 }

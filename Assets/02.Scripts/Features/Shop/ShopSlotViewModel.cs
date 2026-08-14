@@ -6,8 +6,11 @@ public class ShopSlotViewModel : ViewModelBase
     {
         OnPropertyChanged(nameof(ItemUniqueId));
         OnPropertyChanged(nameof(ItemDataId));
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(Description));
         OnPropertyChanged(nameof(Category));
         OnPropertyChanged(nameof(CostAmount));
+        OnPropertyChanged(nameof(IconSprite));
     }
 
     private long _itemUniqueId;
@@ -34,6 +37,34 @@ public class ShopSlotViewModel : ViewModelBase
             {
                 _itemDataId = value;
                 OnPropertyChanged(nameof(ItemDataId));
+            }
+        }
+    }
+
+    private string _name;
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+    }
+
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (_description != value)
+            {
+                _description = value;
+                OnPropertyChanged(nameof(Description));
             }
         }
     }
@@ -76,6 +107,20 @@ public class ShopSlotViewModel : ViewModelBase
             {
                 _costAmount = value;
                 OnPropertyChanged(nameof(CostAmount));
+            }
+        }
+    }
+
+    private Sprite _iconSprite;
+    public Sprite IconSprite
+    {
+        get => _iconSprite;
+        set
+        {
+            if (_iconSprite != value)
+            {
+                _iconSprite = value;
+                OnPropertyChanged(nameof(IconSprite));
             }
         }
     }
