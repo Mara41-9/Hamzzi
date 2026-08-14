@@ -29,10 +29,10 @@ public class RoomViewModel : ViewModelBase
 
     public bool IsReady { get; set; } = false;
     public List<DoorData> DoorDataList { get; private set; } = new List<DoorData>();
+    public List<FurnitureViewModel> FurnitureList { get; private set; } = new List<FurnitureViewModel>();
 
     private Dictionary<Vector2Int, FurnitureViewModel> _furnitureGrid = new Dictionary<Vector2Int, FurnitureViewModel>();
-    
-    public List<FurnitureViewModel> FurnitureList { get; private set; } = new List<FurnitureViewModel>();
+
     public Vector2Int SubGridSize
     {
         get
@@ -314,7 +314,28 @@ public class RoomViewModel : ViewModelBase
         return false;
     }
 
-    public bool AddFuniture(FurnitureViewModel furnitureVM)
+    public bool RemoveFurniture(FurnitureViewModel furnitureVM)
+    {
+        for (int x = 0; x < furnitureVM.Size.x; x++)
+        {
+            for (int y = 0; y < furnitureVM.Size.y; y++)
+            {
+                Vector2Int checkPos = furnitureVM.LocalPos + new Vector2Int(x, y);
+
+                if (_furnitureGrid.TryGetValue(checkPos, out var existVM) && existVM == furnitureVM)
+                {
+                    _furnitureGrid.Remove(checkPos);
+                }
+            }
+        }
+
+        FurnitureList.Remove(furnitureVM);
+
+        OnPropertyChanged(nameof(FurnitureList));
+        return true;
+    }
+
+    public bool AddFurniture(FurnitureViewModel furnitureVM)
     {
         if (!IsValidPlace(furnitureVM.LocalPos, furnitureVM.Size))
         {

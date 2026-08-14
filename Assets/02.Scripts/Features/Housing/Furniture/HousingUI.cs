@@ -16,6 +16,7 @@ public class HousingUI : ViewBase
     [SerializeField] private Button Button_Confirm;
     [SerializeField] private Button Button_Cancel;
     [SerializeField] private Button Button_ExitMode;
+    [SerializeField] private Button Button_Remove;
 
     private HousingViewModel _housingVM;
 
@@ -26,6 +27,7 @@ public class HousingUI : ViewBase
         Button_Confirm.onClick.AddListener(OnClickConfirm);
         Button_Cancel.onClick.AddListener(OnClickCancel);
         Button_ExitMode.onClick.AddListener(OnClickExitMode);
+        Button_Remove.onClick.AddListener(OnClickRemove);
     }
 
     private void Start()
@@ -80,6 +82,7 @@ public class HousingUI : ViewBase
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
             Button_ExitMode.gameObject.SetActive(true);
+            Button_Remove.gameObject.SetActive(false);
         }
         else if (_housingVM.FurnitureVM != null)
         {
@@ -92,6 +95,9 @@ public class HousingUI : ViewBase
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
             Button_ExitMode.gameObject.SetActive(false);
+
+            bool isEditing = _housingVM.CurrentState == HousingState.Editing;
+            Button_Remove.gameObject.SetActive(isEditing);
 
             Button_Confirm.interactable = _housingVM.CanConfirm;
         }
@@ -106,6 +112,7 @@ public class HousingUI : ViewBase
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
             Button_ExitMode.gameObject.SetActive(false);
+            Button_Remove.gameObject.SetActive(false);
         }
     }
 
@@ -164,6 +171,14 @@ public class HousingUI : ViewBase
 
         UIManager.Instance.CloseHousingUI();
         UIManager.Instance.OpenTestUI();
+    }
+
+    private void OnClickRemove()
+    {
+        if (_housingVM.RemoveSelectedFurniture())
+        {
+            HousingView.ClearGhostObject();
+        }
     }
 
     // 테스트용

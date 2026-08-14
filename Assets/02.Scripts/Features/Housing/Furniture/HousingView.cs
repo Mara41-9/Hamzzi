@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,12 +19,14 @@ public class HousingView : ViewBase
 
     private Camera _mainCamera;
     private Plane _mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+    private Plane _gardenPlane = new Plane(Vector3.up, Vector3.zero);
 
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
     private GameObject _ghostObject;
 
     private List<GameObject> _activeGridLines = new List<GameObject>();
+    private Dictionary<string, GameObject> _spawnFurniture = new Dictionary<string, GameObject>();
 
     private void Awake()
     {
@@ -84,6 +87,19 @@ public class HousingView : ViewBase
                     ClearGhostObject();
                 }
                 break;
+
+            case nameof(_housingVM.DestroyFurniture):
+                if (_housingVM.DestroyFurniture != null)
+                {
+                    string id = _housingVM.DestroyFurniture.InstanceID;
+
+                    if (_spawnFurniture.TryGetValue(id, out GameObject target))
+                    {
+                        GameObjectManager.Instance.RequestDestroyObject(target);
+                        _spawnFurniture.Remove(id);
+                    }
+                }
+                break;
         }
     }
 
@@ -91,6 +107,57 @@ public class HousingView : ViewBase
     {
         if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
         {
+            return;
+        }
+
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+        {
+            if (_housingVM.FurnitureVM == null)
+            {
+                if (GetInputPosition(out Vector3 inputPosition))
+                {
+                    Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
+
+                    if (Physics.Raycast(ray, out RaycastHit hit))
+                    {
+                        if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
+                        {
+                            if (furnitureView.FurnitureVM != null)
+                            {
+                                string instanceID = furnitureView.FurnitureVM.InstanceID;
+
+                                if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
+                                {
+                                    GameObjectManager.Instance.RequestDestroyObject(obj);
+                                    _spawnFurniture.Remove(instanceID);
+                                }
+
+                                _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (GetInputPosition(out Vector3 inputPosition))
+                {
+                    Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
+
+                    if (_gardenPlane.Raycast(ray, out float hit))
+                    {
+                        Vector3 hitPoint = ray.GetPoint(hit);
+
+                        float subCellSize = 0.25f;
+                        int gridX = Mathf.RoundToInt(hitPoint.x / subCellSize);
+                        int gridY = Mathf.RoundToInt(-hitPoint.z / subCellSize);
+
+                        _housingVM.MovePos(new Vector2Int(gridX, gridY));
+                        UpdateGardenGhostTransform(_housingVM.FurnitureVM);
+                    }
+                }
+            }
+
             return;
         }
 
@@ -118,7 +185,33 @@ public class HousingView : ViewBase
                 }
             }
         }
-        else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM != null)
+        else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM == null)
+        {
+            if (GetInputPosition(out Vector3 inputPosition))
+            {
+                Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
+                    {
+                        if (furnitureView.FurnitureVM != null)
+                        {
+                            string instanceID = furnitureView.FurnitureVM.InstanceID;
+
+                            if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
+                            {
+                                GameObjectManager.Instance.RequestDestroyObject(obj);
+                                _spawnFurniture.Remove(instanceID);
+                            }
+
+                            _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
+                        }
+                    }
+                }
+            }
+        }
+        else if (_housingVM.FurnitureVM != null)
         {
             if (GetInputPosition(out Vector3 inputPosition))
             {
@@ -133,7 +226,6 @@ public class HousingView : ViewBase
                     if (roomFloorPlane.Raycast(ray, out float hit))
                     {
                         Vector3 hitPoint = ray.GetPoint(hit);
-
                         Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
                         _housingVM.MovePos(localPos);
 
@@ -217,6 +309,27 @@ public class HousingView : ViewBase
         }
     }
 
+    private void UpdateGardenGhostTransform(FurnitureViewModel furnitureVM)
+    {
+        float subCellSize = 0.25f;
+        Vector3 pos = new Vector3(furnitureVM.LocalPos.x * subCellSize, 0.01f, -furnitureVM.LocalPos.y * subCellSize);
+        Quaternion rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+
+        if (_ghostObject != null)
+        {
+            _ghostObject.transform.position = pos;
+            _ghostObject.transform.rotation = rot;
+        }
+
+        if (SpriteRenderer_Tile != null)
+        {
+            SpriteRenderer_Tile.transform.position = new Vector3(pos.x, pos.y + 0.01f, pos.z);
+            SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            SpriteRenderer_Tile.transform.localScale = new Vector3(furnitureVM.Size.x * subCellSize, furnitureVM.Size.y * subCellSize, 1f);
+            SpriteRenderer_Tile.color = furnitureVM.IsValid ? Color_Valid : Color_Invalid;
+        }
+    }
+
     public async UniTask SpawnGhostObject(string furnitureID, string prefabPath)
     {
         ClearGhostObject();
@@ -229,6 +342,11 @@ public class HousingView : ViewBase
 
             float subCellSize = _cellSize / _housingVM.TargetRoom.GridFactor;
             Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
+            {
+                calculatedSize = new Vector2Int(calculatedSize.y, calculatedSize.x);
+            }
 
             _housingVM.FurnitureVM.Size = calculatedSize;
         }
@@ -262,6 +380,9 @@ public class HousingView : ViewBase
         
             FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
             furnitureView.ResetMaterial();
+            furnitureView.Bind(furnitureVM);
+
+            _spawnFurniture[furnitureVM.InstanceID] = prefab;
         }
     }
 

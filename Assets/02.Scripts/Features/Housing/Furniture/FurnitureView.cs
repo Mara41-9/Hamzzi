@@ -5,12 +5,19 @@ public class FurnitureView : MonoBehaviour
 {
     [SerializeField] Renderer[] Renderers;
 
+    public FurnitureViewModel FurnitureVM { get; private set; }
+
     private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
     private Vector2Int _furnitureSize;
 
     private void Awake()
     {
         InitRederers();
+    }
+
+    public void Bind(FurnitureViewModel furnitureVM)
+    {
+        FurnitureVM = furnitureVM;
     }
 
     private void InitRederers()
