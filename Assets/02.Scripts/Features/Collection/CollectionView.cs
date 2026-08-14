@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -143,7 +144,7 @@ public class CollectionView : UIBase
             return;
 
         // 아이콘 로드
-
+        LoadHamsterIcon(hamsterData.IconPath).Forget();
         // 햄스터 이름
         HamsterName.text = hamsterData.Name;
         // 햄스터 설명
@@ -151,5 +152,14 @@ public class CollectionView : UIBase
 
         // 햄스터 디테일 정보
         HamsterAbility1.text = $"{hamsterData.CollectSpeed}";
+    }
+
+    private async UniTask LoadHamsterIcon(string path)
+    {
+        Sprite hamsterIcon = await ResourceManager.Instance.LoadAsset<Sprite>(path);
+        if (hamsterIcon == null)
+            return;
+
+        HamsterIcon.sprite = hamsterIcon;
     }
 }
