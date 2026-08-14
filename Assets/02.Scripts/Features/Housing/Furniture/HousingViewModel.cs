@@ -3,7 +3,8 @@
 public enum HousingState
 {
     SelectRoom,
-    Placing
+    Placing,
+    Editing
 }
 
 public enum HousingViewMode
@@ -95,6 +96,34 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private FurnitureViewModel _selectedInstallFurniture;
+    public FurnitureViewModel SelectedInstallFurniture
+    {
+        get => _selectedInstallFurniture;
+        set
+        {
+            if (_selectedInstallFurniture != value)
+            {
+                _selectedInstallFurniture = value;
+                OnPropertyChanged(nameof(SelectedInstallFurniture));
+            }
+        }
+    }
+
+    private FurnitureViewModel _destroyFurniture;
+    public FurnitureViewModel DestroyFurniture
+    {
+        get => _destroyFurniture;
+        set
+        {
+            if (_destroyFurniture != value)
+            {
+                _destroyFurniture = value;
+                OnPropertyChanged(nameof(DestroyFurniture));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(CurrentViewMode));
@@ -110,6 +139,32 @@ public class HousingViewModel : ViewModelBase
         _currentState = HousingState.SelectRoom;
 
         InvokeOnceOnInit();
+    }
+
+    public void SelectInstallFurniture(FurnitureViewModel furnitureVM)
+    {
+        SelectedInstallFurniture = furnitureVM;
+        FurnitureVM = furnitureVM;
+
+        TargetRoom.RemoveFurniture(furnitureVM);
+        CurrentState = HousingState.Editing;
+
+        CheckCurrentPos();
+    }
+
+    public bool RemoveSelectedFurniture()
+    {
+        DestroyFurniture = FurnitureVM;
+
+        TargetRoom.RemoveFurniture(FurnitureVM);
+
+        // 여기에 인벤토리로 돌아가는 로직
+
+        FurnitureVM = null;
+        SelectedInstallFurniture = null;
+        CurrentState = HousingState.Placing;
+
+        return true;
     }
 
     public void SelectFurniture(string furnitureID, Vector2Int subSize, RoomViewModel targetRoom)
@@ -145,9 +200,12 @@ public class HousingViewModel : ViewModelBase
 
         FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
 
-        if (TargetRoom.AddFuniture(FurnitureVM))
+        if (TargetRoom.AddFurniture(FurnitureVM))
         {
             FurnitureVM = null;
+            SelectedInstallFurniture = null;
+            CurrentState = HousingState.Placing;
+
             return true;
         }
 

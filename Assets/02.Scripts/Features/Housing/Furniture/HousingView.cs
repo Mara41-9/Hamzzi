@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,6 +25,7 @@ public class HousingView : ViewBase
     private GameObject _ghostObject;
 
     private List<GameObject> _activeGridLines = new List<GameObject>();
+    private Dictionary<string, GameObject> _spawnFurniture = new Dictionary<string, GameObject>();
 
     private void Awake()
     {
@@ -84,6 +86,19 @@ public class HousingView : ViewBase
                     ClearGhostObject();
                 }
                 break;
+
+            case nameof(_housingVM.DestroyFurniture):
+                if (_housingVM.DestroyFurniture != null)
+                {
+                    string id = _housingVM.DestroyFurniture.InstanceID;
+
+                    if (_spawnFurniture.TryGetValue(id, out GameObject target))
+                    {
+                        GameObjectManager.Instance.RequestDestroyObject(target);
+                        _spawnFurniture.Remove(id);
+                    }
+                }
+                break;
         }
     }
 
@@ -118,7 +133,33 @@ public class HousingView : ViewBase
                 }
             }
         }
-        else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM != null)
+        else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM == null)
+        {
+            if (GetInputPosition(out Vector3 inputPosition))
+            {
+                Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
+                    {
+                        if (furnitureView.FurnitureVM != null)
+                        {
+                            string instanceID = furnitureView.FurnitureVM.InstanceID;
+
+                            if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
+                            {
+                                GameObjectManager.Instance.RequestDestroyObject(obj);
+                                _spawnFurniture.Remove(instanceID);
+                            }
+
+                            _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
+                        }
+                    }
+                }
+            }
+        }
+        else if (_housingVM.FurnitureVM != null)
         {
             if (GetInputPosition(out Vector3 inputPosition))
             {
@@ -133,7 +174,6 @@ public class HousingView : ViewBase
                     if (roomFloorPlane.Raycast(ray, out float hit))
                     {
                         Vector3 hitPoint = ray.GetPoint(hit);
-
                         Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
                         _housingVM.MovePos(localPos);
 
@@ -230,6 +270,11 @@ public class HousingView : ViewBase
             float subCellSize = _cellSize / _housingVM.TargetRoom.GridFactor;
             Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
 
+            if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
+            {
+                calculatedSize = new Vector2Int(calculatedSize.y, calculatedSize.x);
+            }
+
             _housingVM.FurnitureVM.Size = calculatedSize;
         }
 
@@ -262,6 +307,9 @@ public class HousingView : ViewBase
         
             FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
             furnitureView.ResetMaterial();
+            furnitureView.Bind(furnitureVM);
+
+            _spawnFurniture[furnitureVM.InstanceID] = prefab;
         }
     }
 
