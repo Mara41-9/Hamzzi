@@ -2,7 +2,7 @@
 using System.Threading;
 using UnityEngine;
 
-public class SampleGameUtil
+public class TestGameUtil
 {
     // 마지막으로 할당된 ID를 전역적으로 기록 (스레드 안전)
     private static long _lastId = 0;

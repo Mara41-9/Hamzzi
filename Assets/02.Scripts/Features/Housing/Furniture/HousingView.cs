@@ -31,6 +31,14 @@ public class HousingView : ViewBase
         SpriteRenderer_Tile.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
+        BindViewModel(housingVM, buildVM);
+    }
+
     public void BindViewModel(HousingViewModel housingVM, BuildViewModel buildVM)
     {
         _housingVM = housingVM;
@@ -81,11 +89,15 @@ public class HousingView : ViewBase
 
     private void Update()
     {
+        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
+        {
+            return;
+        }
+
         if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
             if (GetInputPosition(out Vector3 inputPosition))
             {
-                Debug.Log($"터치 {inputPosition}");
                 Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
 
                 if (_mapPlane.Raycast(ray, out float hit))
@@ -95,8 +107,6 @@ public class HousingView : ViewBase
                     int gridX = Mathf.FloorToInt(hitPoint.x / _cellSize);
                     int gridY = Mathf.FloorToInt((hitPoint.y - _yOffset) / _cellSize);
                     Vector2Int gridPos = new Vector2Int(gridX, gridY);
-
-                    Debug.Log($"{gridPos}, 방 존재: {_buildVM.Builds.ContainsKey(gridPos)}");
 
                     if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
                     {
@@ -124,7 +134,7 @@ public class HousingView : ViewBase
                     {
                         Vector3 hitPoint = ray.GetPoint(hit);
 
-                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _cellSize);
+                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
                         _housingVM.MovePos(localPos);
 
                         UpdateGhostTransform(roomVM, _housingVM.FurnitureVM);
@@ -216,6 +226,11 @@ public class HousingView : ViewBase
         if (_ghostObject.TryGetComponent<FurnitureView>(out var furnitureView))
         {
             furnitureView.SetGhostMode(Material_Ghost);
+
+            float subCellSize = _cellSize / _housingVM.TargetRoom.GridFactor;
+            Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            _housingVM.FurnitureVM.Size = calculatedSize;
         }
 
         UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);
@@ -244,6 +259,9 @@ public class HousingView : ViewBase
         if (prefab != null)
         {
             prefab.transform.rotation = spawnRot;
+        
+            FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
+            furnitureView.ResetMaterial();
         }
     }
 

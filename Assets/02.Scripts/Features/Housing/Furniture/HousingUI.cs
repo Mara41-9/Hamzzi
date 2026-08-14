@@ -11,17 +11,27 @@ public class HousingUI : ViewBase
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
 
+    [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Rotation;
     [SerializeField] private Button Button_Confirm;
     [SerializeField] private Button Button_Cancel;
+    [SerializeField] private Button Button_ExitMode;
 
     private HousingViewModel _housingVM;
 
     private void Awake()
     {
+        Button_Exit.onClick.AddListener(OnClickExit);
         Button_Rotation.onClick.AddListener(OnClickRotation);
         Button_Confirm.onClick.AddListener(OnClickConfirm);
         Button_Cancel.onClick.AddListener(OnClickCancel);
+        Button_ExitMode.onClick.AddListener(OnClickExitMode);
+    }
+
+    private void Start()
+    {
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+        BindViewModel(housingVM);
     }
 
     public void BindViewModel(HousingViewModel housingVM)
@@ -44,6 +54,7 @@ public class HousingUI : ViewBase
     {
         switch (e.PropertyName)
         {
+            case nameof(_housingVM.CurrentViewMode):
             case nameof(_housingVM.CurrentState):
             case nameof(_housingVM.FurnitureVM):
             case nameof(_housingVM.CanConfirm):
@@ -63,30 +74,38 @@ public class HousingUI : ViewBase
             Panel_Info.SetActive(true);
 
             Panel_FurnitureBar.SetActive(false);
+            Button_Exit.gameObject.SetActive(false);
 
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(true);
         }
         else if (_housingVM.FurnitureVM != null)
         {
             Panel_Info.SetActive(false);
 
             Panel_FurnitureBar.SetActive(false);
+            Button_Exit.gameObject.SetActive(false);
 
             Button_Rotation.gameObject.SetActive(true);
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
+            Button_ExitMode.gameObject.SetActive(false);
+
+            Button_Confirm.interactable = _housingVM.CanConfirm;
         }
         else
         {
             Panel_Info.SetActive(false);
 
             Panel_FurnitureBar.SetActive(true);
+            Button_Exit.gameObject.SetActive(true);
 
             Button_Rotation.gameObject.SetActive(false);
             Button_Confirm.gameObject.SetActive(false);
             Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(false);
         }
     }
 
@@ -107,6 +126,11 @@ public class HousingUI : ViewBase
         }
     }
 
+    private void OnClickExit()
+    {
+        _housingVM.ExitRoom();
+    }
+
     private void OnClickRotation()
     {
         _housingVM.RotatePos();
@@ -116,9 +140,10 @@ public class HousingUI : ViewBase
     {
         FurnitureViewModel confirmVM = _housingVM.FurnitureVM;
 
-        _housingVM.ConfirmPos();
-
-        HousingView.SpawnFurniture(confirmVM).Forget();
+        if (_housingVM.ConfirmPos())
+        {
+            HousingView.SpawnFurniture(confirmVM).Forget();
+        }
     }
 
     private void OnClickCancel()
@@ -127,29 +152,23 @@ public class HousingUI : ViewBase
         HousingView.ClearGhostObject();
     }
 
+    private void OnClickExitMode()
+    {
+        if (_housingVM.FurnitureVM != null)
+        {
+            _housingVM.CancelPos();
+            HousingView.ClearGhostObject();
+        }
+
+        _housingVM.EnterOverviewMode();
+
+        UIManager.Instance.CloseHousingUI();
+        UIManager.Instance.OpenTestUI();
+    }
+
     // 테스트용
     private List<ItemData> GetDummyFurnitureList()
     {
-        return new List<ItemData>
-        {
-            new ItemData
-            {
-                Id = "Armchair_01",
-                Name = "기본 의자",
-                IconPath = "Image/Item/Furniture/Armchair_01",
-                PrefabPath = "Prefabs/Furniture/Armchair_01",
-                SizeX = 1,
-                SizeY = 7
-            },
-            new ItemData
-            {
-                Id = "Fireplace_03",
-                Name = "원목 탁자",
-                IconPath = "Image/Item/Furniture/Fireplace_03",
-                PrefabPath = "Prefabs/Furniture/Fireplace_03",
-                SizeX = 2,
-                SizeY = 3
-            }
-        };
+        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
     }
 }

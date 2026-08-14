@@ -8,9 +8,16 @@ public class ShopSubCategoryUI : MonoBehaviour
     [SerializeField] private UIButton Button_SubCategory;
     [SerializeField] private TMP_Text Text_CategoryName;
 
-    private string _subCategory;
+    public string SubCategory { get; private set; }
+
+    private Color _defaultTextColor;
 
     public event Action<string> OnClickSubCategory;
+
+    public void Awake()
+    {
+        _defaultTextColor = Text_CategoryName.color;
+    }
 
     public void OnEnable()
     {
@@ -19,17 +26,29 @@ public class ShopSubCategoryUI : MonoBehaviour
 
     private void OnClick_SubCategory()
     {
-        OnClickSubCategory?.Invoke(_subCategory);
+        OnClickSubCategory?.Invoke(SubCategory);
     }
 
     public void SetSubCategory(string subCategory)
     {
-        _subCategory = subCategory;
+        SubCategory = subCategory;
         Text_CategoryName.text = subCategory;
     }
 
     public void BindSubCategorySelectEvent(Action<string> onClickSubCategory)
     {
         OnClickSubCategory += onClickSubCategory;
+    }
+
+    public void SetSelected(bool isSelected)
+    {
+        if(isSelected == true)
+        {
+            Text_CategoryName.color = Color.black;
+        }
+        else
+        {
+            Text_CategoryName.color = _defaultTextColor;
+        }
     }
 }

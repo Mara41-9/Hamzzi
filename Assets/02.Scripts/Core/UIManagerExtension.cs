@@ -41,7 +41,10 @@ public enum UIType
     CollectionUI,
     GachaUI,
     HousingUI,
-    FeverTimeCutsceneUI
+    FeverTimeCutsceneUI,
+    TestUI,  // 하우징 테스트용 (MainUI 대용)
+    TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
+    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
 
 public static class UIManagerExtension
@@ -64,14 +67,14 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.ContentUI, UIType.BuildUI);
     }
 
-    public static void OpenHousingUI(this UIManager uiManager)
+    public static void OpenShopUI(this UIManager uiManager)
     {
-        uiManager.OpenUI(UIRootType.ContentUI, UIType.HousingUI);
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.ShopUI);
     }
 
-    public static void CloseHousingUI(this UIManager uiManager)
+    public static void CloseShopUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.ContentUI, UIType.HousingUI);
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.ShopUI);
     }
 
     public static void OpenFeverTimeCutsceneUI(this UIManager uiManager)
@@ -83,4 +86,25 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
     }
+
+    public static void OpenTestUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.TestUI);
+    }
+
+    public static void CloseTestUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.TestUI);
+    }
+
+    public static void OpenHousingUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.ContentUI, UIType.HousingUI);
+    }
+
+    public static void CloseHousingUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.HousingUI);
+    }
+
 }

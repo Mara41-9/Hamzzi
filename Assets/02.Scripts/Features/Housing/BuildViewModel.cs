@@ -254,23 +254,28 @@ public class BuildViewModel : ViewModelBase
 
     private void RemoveBuild(RoomViewModel target)
     {
-        List<Vector2Int> removePos = new List<Vector2Int>();
+        target.PropertyChanged -= OnRoomPropertyChanged;
 
-        foreach (var pair in Builds)
-        {
-            if (pair.Value == target)
-            {
-                removePos.Add(pair.Key);
-            }
-        }
-
-        foreach (var key in removePos)
-        {
-            Builds.Remove(key);
-        }
+        UnregisterRoom(target);
 
         UpdateNearConnection(target.OriginPos);
         DestroyBuild = target;
+    }
+
+    private void UnregisterRoom(RoomViewModel target)
+    {
+        for (int x = 0; x < target.Size.x; x++)
+        {
+            for (int y = 0; y < target.Size.y; y++)
+            {
+                Vector2Int checkPos = target.OriginPos + new Vector2Int(x, y);
+
+                if (Builds.TryGetValue(checkPos, out RoomViewModel existVM) && existVM == target)
+                {
+                    Builds.Remove(checkPos);
+                }
+            }
+        }
     }
 
     public void UpdateRoomConnection(RoomViewModel room)
@@ -407,6 +412,8 @@ public class BuildViewModel : ViewModelBase
     {
         switch (direction)
         {
+            case 0: return 1;
+            case 1: return 0;
             case 2: return 3;
             case 3: return 2;
             default: return 0;

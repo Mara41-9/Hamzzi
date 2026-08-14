@@ -4,8 +4,8 @@ using UnityEngine;
 public class SeedClickBonusManager : SingletonBase<SeedClickBonusManager>
 {
     private const string BonusSeedAddress = "BonusSeed";
-    private const float SpawnCheckIntervalSec = 2f;
-    private const float SpawnProbability = 1f;
+    private const float SpawnCheckIntervalSec = 5f;
+    private const float SpawnProbability = 0.5f;
 
     [SerializeField] private Vector3 _spawnRangeMin;
     [SerializeField] private Vector3 _spawnRangeMax;

@@ -1,14 +1,76 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class FurnitureView : ViewBase
+public class FurnitureView : MonoBehaviour
 {
     [SerializeField] Renderer[] Renderers;
 
+    private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
+    private Vector2Int _furnitureSize;
+
+    private void Awake()
+    {
+        InitRederers();
+    }
+
+    private void InitRederers()
+    {
+        if (_originMaterial.Count == 0)
+        {
+            foreach (Renderer renderer in Renderers)
+            {
+                _originMaterial[renderer] = renderer.sharedMaterials;
+            }
+        }
+    }
+
     public void SetGhostMode(Material ghost)
     {
+        InitRederers();
+
+        foreach (Renderer renderer in Renderers)
+        {
+            int count = renderer.sharedMaterials.Length;
+
+            Material[] ghostMat = new Material[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                ghostMat[i] = ghost;
+            }
+
+            renderer.materials = ghostMat;
+        }
+    }
+
+    public void ResetMaterial()
+    {
+        foreach (var pair in _originMaterial)
+        {
+            pair.Key.materials = pair.Value;
+        }
+    }
+
+    public Vector2Int GetFurnitureSize(float subCellSize = 0.25f)
+    {
+        if (_furnitureSize != Vector2Int.zero)
+        {
+            return _furnitureSize;
+        }
+
+        InitRederers();
+
+        Bounds bounds = Renderers[0].bounds;
+
         for (int i = 0; i < Renderers.Length; i++)
         {
-            Renderers[i].sharedMaterial = ghost;
+            bounds.Encapsulate(Renderers[i].bounds);
         }
+
+        int sizeX = Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / subCellSize));
+        int sizeY = Mathf.Max(1, Mathf.RoundToInt(bounds.size.z / subCellSize));
+
+        _furnitureSize = new Vector2Int(sizeX, sizeY);
+        return _furnitureSize;
     }
 }
