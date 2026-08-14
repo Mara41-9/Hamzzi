@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GachaResultSlot : MonoBehaviour
@@ -7,10 +9,15 @@ public class GachaResultSlot : MonoBehaviour
 
     public void UpdateSlotIcon(string hamsterId)
     {
-        // TODO : 아이콘이 올라가면 나머지 구현
+        LoadHamsterIcon(hamsterId).Forget();
+    }
+
+    private async UniTask LoadHamsterIcon(string hamsterId)
+    {
         HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
         string iconPath = hamsterData.IconPath;
 
-        //HamsterIcon.sprite
+        Sprite hamsterIcon = await ResourceManager.Instance.LoadAsset<Sprite>(iconPath);
+        HamsterIcon.sprite = hamsterIcon;
     }
 }
