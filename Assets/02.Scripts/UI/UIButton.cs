@@ -54,4 +54,16 @@ public class UIButton : MonoBehaviour
         Button_Base.onClick.RemoveListener(new UnityEngine.Events.UnityAction(onClickCallback));
     }
 
+    public void SetInteractable(bool isInteractable)
+    {
+        if(isInteractable == true)
+        {
+            Button_Base.interactable = true;
+        }
+        else
+        {
+            Button_Base.interactable = false;
+        }
+    }
+
 }
