@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using UnityEngine;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class ItemData : GameDataBase
 {
     public string Name;
@@ -10,14 +7,4 @@ public class ItemData : GameDataBase
     public string SubCategory;
     public string IconPath;
     public string PrefabPath;
-
-    public int SizeX;
-    public int SizeY;
-    public Vector2Int Size
-    {
-        get
-        {
-            return new Vector2Int(SizeX, SizeY);
-        }
-    }
 }

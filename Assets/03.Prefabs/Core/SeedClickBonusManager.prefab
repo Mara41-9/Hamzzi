@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a1f90f38da58e4c8c862e4d8afcf6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SeedClickBonusManager
-  _spawnRangeMin: {x: 50, y: 50, z: 0}
-  _spawnRangeMax: {x: 50, y: 50, z: 0}
+  _spawnRangeMin: {x: -2, y: -3, z: 0}
+  _spawnRangeMax: {x: 2, y: 3, z: 0}

@@ -252,22 +252,28 @@ public class RoomViewModel : ViewModelBase
     }
 
     // 하우징 관련
-    public Vector2Int ChangeLocalGrid(Vector3 worldPos, float cellSize = 1.0f)
+    public Vector2Int ChangeLocalGrid(Vector3 worldPos, Vector2Int furnitureSize, float cellSize = 1.0f)
     {
         float subCellSize = cellSize / _gridFactor;
 
         float localX = worldPos.x - (OriginPos.x * cellSize);
         float localZ = 9.0f - worldPos.z;
 
-        int subX = Mathf.Clamp(Mathf.FloorToInt(localX / subCellSize), 0, SubGridSize.x - 1);
-        int subZ = Mathf.Clamp(Mathf.FloorToInt(localZ / subCellSize), 0, SubGridSize.y - 1);
+        int gridX = Mathf.FloorToInt(localX / subCellSize);
+        int gridY = Mathf.FloorToInt(localZ / subCellSize);
 
-        return new Vector2Int(subX, subZ);
+        int maxX = Mathf.Max(0, SubGridSize.x - furnitureSize.x);
+        int maxY = Mathf.Max(0, SubGridSize.y - furnitureSize.y);
+
+        gridX = Mathf.Clamp(gridX, 0, maxX);
+        gridY = Mathf.Clamp(gridY, 0, maxY);
+
+        return new Vector2Int(gridX, gridY);
     }
 
     public bool IsValidPlace(Vector2Int localPos, Vector2Int furnitureSize)
     {
-        int wallMargin = 3;
+        int wallMargin = 0;
         
         for (int x = 0; x < furnitureSize.x; x++)
         {
