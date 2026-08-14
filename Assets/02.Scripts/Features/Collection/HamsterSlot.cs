@@ -27,7 +27,7 @@ public class HamsterSlot : MonoBehaviour
     {
         _hamsterId = hamsterData.Id;
         // TODO : 나중에 이미지 넣으면 주석 해체
-        //LoadHamsterIcon(hamsterData.IconPath).Forget();
+        LoadHamsterIcon(hamsterData.IconPath).Forget();
 
         UpdateLockImage(isCollected);
     }
