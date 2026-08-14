@@ -45,7 +45,12 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null)
+        if (_buildVM == null || _housingVM == null)
+        {
+            return;
+        }
+
+        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null || _housingVM.FurnitureVM != null)
         {
             return;
         }
@@ -232,7 +237,7 @@ public class CameraController : MonoBehaviour
         Matrix4x4 startMatrix = Camera_Main.projectionMatrix;
         Matrix4x4 targetMatrix = Matrix4x4.Perspective(Garden_FOV, Camera_Main.aspect, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
 
-        await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, _zoomCancel.Token);
+        await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, Garden_FOV, _zoomCancel.Token);
     }
 
     public async UniTask ShowOverview()
@@ -246,7 +251,7 @@ public class CameraController : MonoBehaviour
         Matrix4x4 startMatrix = Camera_Main.projectionMatrix;
         Matrix4x4 targetMatrix = Matrix4x4.Ortho(-Size_Ortho * Camera_Main.aspect, Size_Ortho * Camera_Main.aspect, -Size_Ortho, Size_Ortho, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
 
-        await TransitionCamera(targetPos, targetRot, startMatrix, targetMatrix, true, _zoomCancel.Token);
+        await TransitionCamera(targetPos, targetRot, startMatrix, targetMatrix, true, 0f, _zoomCancel.Token);
     }
 
     private async UniTask FocusRoom(Vector3 roomCenter)
@@ -260,10 +265,10 @@ public class CameraController : MonoBehaviour
         Matrix4x4 startMatrix = Camera_Main.projectionMatrix;
         Matrix4x4 targetMatrix = Matrix4x4.Perspective(Zoom_FOV, Camera_Main.aspect, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
 
-        await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, _zoomCancel.Token);
+        await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, Zoom_FOV, _zoomCancel.Token);
     }
 
-    private async UniTask TransitionCamera(Vector3 targetPos, Quaternion targetRot, Matrix4x4 startMatrix, Matrix4x4 targetMatrix, bool endIsOrtho, CancellationToken token)
+    private async UniTask TransitionCamera(Vector3 targetPos, Quaternion targetRot, Matrix4x4 startMatrix, Matrix4x4 targetMatrix, bool endIsOrtho, float targetFOV, CancellationToken token)
     {
         _isTransition = true;
 
@@ -300,7 +305,7 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            Camera_Main.fieldOfView = Zoom_FOV;
+            Camera_Main.fieldOfView = targetFOV;
         }
 
         _isTransition = false;
