@@ -37,7 +37,7 @@ public class TestHousingUI : ViewBase
 
     private void FindShopViewModelAndBind()
     {
-        var housingVm = ServiceManager.Instance.HousingService.GetHousingViewModel();
+        var housingVm = ServiceManager.Instance.TestHousingService.GetHousingViewModel();
         _housingVm = housingVm;
 
         _housingVm.PropertyChanged += OnPropChanged_ShopView;

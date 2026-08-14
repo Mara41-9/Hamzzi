@@ -83,7 +83,7 @@ public class NetworkShopService
 
     public void BuyItem()
     {
-        ServiceManager.Instance.HousingService.AddItem(GetShopViewModel().SelectedSlot);
+        ServiceManager.Instance.TestHousingService.AddItem(GetShopViewModel().SelectedSlot);
         Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
     }
 }
