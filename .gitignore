@@ -53,3 +53,4 @@ $RECYCLE.BIN/
 .history/
 Assets/00.RemoteAssets
 Hamzzi.slnx
+Assets/02.Scripts/Core/DBConfig.cs
