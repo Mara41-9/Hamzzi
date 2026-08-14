@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
+using UnityEngine;
 
 public enum HousingState
 {
@@ -16,6 +18,8 @@ public enum HousingViewMode
 
 public class HousingViewModel : ViewModelBase
 {
+    public List<FurnitureViewModel> GardenFurnitureList { get; private set; } = new List<FurnitureViewModel>();
+
     public bool CanConfirm
     {
         get
@@ -136,7 +140,15 @@ public class HousingViewModel : ViewModelBase
     {
         _targetRoom = null;
         _furnitureVM = null;
-        _currentState = HousingState.SelectRoom;
+
+        if (CurrentViewMode == HousingViewMode.Garden)
+        {
+            _currentState = HousingState.Placing;
+        }
+        else
+        {
+            _currentState = HousingState.SelectRoom;
+        }
 
         InvokeOnceOnInit();
     }
@@ -156,8 +168,17 @@ public class HousingViewModel : ViewModelBase
     {
         DestroyFurniture = FurnitureVM;
 
-        TargetRoom.RemoveFurniture(FurnitureVM);
+        if (CurrentViewMode == HousingViewMode.Garden)
+        {
+            GardenFurnitureList.Remove(FurnitureVM);
+            OnPropertyChanged(nameof(GardenFurnitureList));
+        }
+        else if (TargetRoom != null)
+        {
+            TargetRoom.RemoveFurniture(FurnitureVM);
+        }
 
+        string furnitureID = FurnitureVM.FurnitureID;
         // 여기에 인벤토리로 돌아가는 로직
 
         FurnitureVM = null;
@@ -173,6 +194,14 @@ public class HousingViewModel : ViewModelBase
 
         Vector2Int initialPos = new Vector2Int(TargetRoom.SubGridSize.x / 2 - subSize.x / 2, TargetRoom.SubGridSize.y / 2 - subSize.y / 2);
 
+        FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
+        CheckCurrentPos();
+    }
+
+    public void SelectGardenFurniture(string furnitureID, Vector2Int subSize)
+    {
+        Vector2Int initialPos = new Vector2Int(10, 10);
+        
         FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
         CheckCurrentPos();
     }
@@ -198,15 +227,29 @@ public class HousingViewModel : ViewModelBase
             return false;
         }
 
-        FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
-
-        if (TargetRoom.AddFurniture(FurnitureVM))
+        if (CurrentViewMode == HousingViewMode.Garden)
         {
+            GardenFurnitureList.Add(FurnitureVM);
+            OnPropertyChanged(nameof(GardenFurnitureList));
+
             FurnitureVM = null;
             SelectedInstallFurniture = null;
             CurrentState = HousingState.Placing;
 
             return true;
+        }
+        else if (TargetRoom != null)
+        {
+            FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
+
+            if (TargetRoom.AddFurniture(FurnitureVM))
+            {
+                FurnitureVM = null;
+                SelectedInstallFurniture = null;
+                CurrentState = HousingState.Placing;
+
+                return true;
+            }
         }
 
         return false;
@@ -224,7 +267,17 @@ public class HousingViewModel : ViewModelBase
 
     private void CheckCurrentPos()
     {
-        FurnitureVM.IsValid = TargetRoom.IsValidPlace(FurnitureVM.LocalPos, FurnitureVM.Size);
+        if (CurrentViewMode == HousingViewMode.Garden)
+        {
+            bool inBounds = FurnitureVM.LocalPos.x >= -20 && FurnitureVM.LocalPos.x <= 20 && FurnitureVM.LocalPos.y >= -20 && FurnitureVM.LocalPos.y <= 20;
+
+            FurnitureVM.IsValid = inBounds;
+        }
+        else if (TargetRoom != null)
+        {
+            FurnitureVM.IsValid = TargetRoom.IsValidPlace(FurnitureVM.LocalPos, FurnitureVM.Size);
+        }
+
         OnPropertyChanged(nameof(CanConfirm));
     }
 
