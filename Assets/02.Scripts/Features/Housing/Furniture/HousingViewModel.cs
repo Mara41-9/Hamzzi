@@ -196,21 +196,21 @@ public class HousingViewModel : ViewModelBase
         return true;
     }
 
-    public void SelectFurniture(string furnitureID, Vector2Int subSize, RoomViewModel targetRoom)
+    public void SelectFurniture(ItemData data, Vector2Int subSize, RoomViewModel targetRoom)
     {
         TargetRoom = targetRoom;
 
         Vector2Int initialPos = new Vector2Int(TargetRoom.SubGridSize.x / 2 - subSize.x / 2, TargetRoom.SubGridSize.y / 2 - subSize.y / 2);
 
-        FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
+        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 
-    public void SelectGardenFurniture(string furnitureID, Vector2Int subSize)
+    public void SelectGardenFurniture(ItemData data, Vector2Int subSize)
     {
         Vector2Int initialPos = new Vector2Int(10, 10);
-        
-        FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
+
+        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 

@@ -5,6 +5,7 @@ public class FurnitureViewModel : ViewModelBase
 {
     public string InstanceID { get; private set; }
     public string FurnitureID { get; private set; }
+    public string PrefabPath { get; private set; }
 
     private string _roomInstanceID;
     public string RoomInstanceID
@@ -76,9 +77,10 @@ public class FurnitureViewModel : ViewModelBase
         }
     }
 
-    public FurnitureViewModel (string furnitureID, Vector2Int localPos, Vector2Int size)
+    public FurnitureViewModel (string furnitureID, string prefabPath, Vector2Int localPos, Vector2Int size)
     {
         InstanceID = Guid.NewGuid().ToString();
+        PrefabPath = prefabPath;
         FurnitureID = furnitureID;
         LocalPos = localPos;
         Size = size;

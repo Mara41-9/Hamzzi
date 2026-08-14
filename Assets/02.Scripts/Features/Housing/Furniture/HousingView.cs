@@ -103,8 +103,7 @@ public class HousingView : ViewBase
                     }
                     else
                     {
-                        string prefabPath = $"Prefabs/Furniture/{_housingVM.FurnitureVM.FurnitureID}";
-                        SpawnGhostObject(_housingVM.FurnitureVM.FurnitureID, prefabPath).Forget();
+                        SpawnGhostObject(_housingVM.FurnitureVM.FurnitureID, _housingVM.FurnitureVM.PrefabPath).Forget();
                     }
                 }
                 else
@@ -419,7 +418,7 @@ public class HousingView : ViewBase
             GetFurniturePositionAndRotation(_housingVM.TargetRoom, furnitureVM, out spawnPos, out spawnRot);
         }
 
-        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID, $"Prefabs/Furniture/{furnitureVM.FurnitureID}", spawnPos);
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID, furnitureVM.PrefabPath, spawnPos);
         prefab.transform.rotation = spawnRot;
 
         FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
