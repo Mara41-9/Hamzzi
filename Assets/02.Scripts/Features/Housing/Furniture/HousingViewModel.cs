@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum HousingState
@@ -155,11 +154,20 @@ public class HousingViewModel : ViewModelBase
 
     public void SelectInstallFurniture(FurnitureViewModel furnitureVM)
     {
+        CurrentState = HousingState.Editing;
+
         SelectedInstallFurniture = furnitureVM;
         FurnitureVM = furnitureVM;
 
-        TargetRoom.RemoveFurniture(furnitureVM);
-        CurrentState = HousingState.Editing;
+        if (TargetRoom != null)
+        {
+            TargetRoom.RemoveFurniture(furnitureVM);
+        }
+        else if (CurrentViewMode == HousingViewMode.Garden)
+        {
+            GardenFurnitureList.Remove(furnitureVM);
+            OnPropertyChanged(nameof(GardenFurnitureList));
+        }
 
         CheckCurrentPos();
     }
@@ -222,7 +230,7 @@ public class HousingViewModel : ViewModelBase
 
     public bool ConfirmPos()
     {
-        if (FurnitureVM == null || !FurnitureVM.IsValid || TargetRoom == null)
+        if (FurnitureVM == null || !FurnitureVM.IsValid)
         {
             return false;
         }
@@ -257,7 +265,22 @@ public class HousingViewModel : ViewModelBase
 
     public void CancelPos()
     {
+        if (CurrentState == HousingState.Editing && SelectedInstallFurniture != null)
+        {
+            if (CurrentViewMode == HousingViewMode.Garden)
+            {
+                GardenFurnitureList.Add(SelectedInstallFurniture);
+                OnPropertyChanged(nameof(GardenFurnitureList));
+            }
+            else if (TargetRoom != null)
+            {
+                TargetRoom.AddFurniture(SelectedInstallFurniture);
+            }
+        }
+
         FurnitureVM = null;
+        SelectedInstallFurniture = null;
+        CurrentState = HousingState.Placing;
     }
 
     public void ExitRoom()
@@ -269,8 +292,7 @@ public class HousingViewModel : ViewModelBase
     {
         if (CurrentViewMode == HousingViewMode.Garden)
         {
-            bool inBounds = FurnitureVM.LocalPos.x >= -20 && FurnitureVM.LocalPos.x <= 20 && FurnitureVM.LocalPos.y >= -20 && FurnitureVM.LocalPos.y <= 20;
-
+            bool inBounds = FurnitureVM.LocalPos.x >= 0 && FurnitureVM.LocalPos.y >= 0;
             FurnitureVM.IsValid = inBounds;
         }
         else if (TargetRoom != null)

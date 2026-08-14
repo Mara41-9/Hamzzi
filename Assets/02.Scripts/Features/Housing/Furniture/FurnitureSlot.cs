@@ -30,7 +30,7 @@ public class FurnitureSlot : MonoBehaviour
 
     private void OnClickSelect()
     {
-        if (_housingVM.CurrentViewMode ==HousingViewMode.Garden)
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
         {
             _housingVM.SelectGardenFurniture(_data.Id, Vector2Int.one);
         }

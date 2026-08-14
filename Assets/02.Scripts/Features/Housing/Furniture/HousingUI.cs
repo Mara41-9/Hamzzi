@@ -41,6 +41,7 @@ public class HousingUI : ViewBase
         _housingVM = housingVM;
         _housingVM.PropertyChanged += OnPropertyChanged_View;
 
+        RefreshSlots();
         UpdateState();
     }
 
@@ -57,6 +58,10 @@ public class HousingUI : ViewBase
         switch (e.PropertyName)
         {
             case nameof(_housingVM.CurrentViewMode):
+                RefreshSlots();
+                UpdateState();
+                break;
+
             case nameof(_housingVM.CurrentState):
             case nameof(_housingVM.FurnitureVM):
             case nameof(_housingVM.CanConfirm):
@@ -64,8 +69,16 @@ public class HousingUI : ViewBase
                 break;
 
             case nameof(_housingVM.TargetRoom):
-                InitFurnitureSlot(GetDummyFurnitureList()).Forget();
+                RefreshSlots();
                 break;
+        }
+    }
+
+    private void RefreshSlots()
+    {
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden || _housingVM.TargetRoom != null)
+        {
+            InitFurnitureSlot(GetDummyFurnitureList()).Forget();
         }
     }
 
@@ -135,7 +148,16 @@ public class HousingUI : ViewBase
 
     private void OnClickExit()
     {
-        _housingVM.ExitRoom();
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+        {
+            _housingVM.EnterOverviewMode();
+            UIManager.Instance.CloseHousingUI();
+            UIManager.Instance.OpenTestUI();
+        }
+        else
+        {
+            _housingVM.ExitRoom();
+        }
     }
 
     private void OnClickRotation()
