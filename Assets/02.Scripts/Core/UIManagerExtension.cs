@@ -44,7 +44,8 @@ public enum UIType
     FeverTimeCutsceneUI,
     TestUI,  // 하우징 테스트용 (MainUI 대용)
     TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
-    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
+    TestHousingUI,    // [나라] TODO : 테스트용으로 만든 하우징 UI 
+    TitleUI
 }
 
 public static class UIManagerExtension
@@ -105,6 +106,16 @@ public static class UIManagerExtension
     public static void CloseHousingUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.HousingUI);
+    }
+
+    public static void OpenLoginUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.LoginUI);
+    }
+
+    public static void CloseLoginUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.LoginUI);
     }
 
 }
