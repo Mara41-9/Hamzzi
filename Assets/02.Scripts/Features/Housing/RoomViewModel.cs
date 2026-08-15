@@ -27,6 +27,7 @@ public class RoomViewModel : ViewModelBase
     private int _roomWidth = 6;
     private int _roomHeight = 4;
 
+    public bool IsDefault { get; set; } = false;
     public bool IsReady { get; set; } = false;
     public List<DoorData> DoorDataList { get; private set; } = new List<DoorData>();
     public List<FurnitureViewModel> FurnitureList { get; private set; } = new List<FurnitureViewModel>();
@@ -127,13 +128,14 @@ public class RoomViewModel : ViewModelBase
 
         if (type == BuildType.Aisle)
         {
-            IsReady = true;
             DoorDataList.Add(new DoorData { Offset = Vector2Int.zero, DirectionIndex = 0 });
         }
         else if (type == BuildType.Room)
         {
             InitDefaultDoor();
         }
+
+        IsReady = true;
     }
 
     // 건설 관련

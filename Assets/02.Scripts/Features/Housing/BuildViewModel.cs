@@ -26,6 +26,39 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    private RoomViewModel _selectRoom;
+    public RoomViewModel SelectRoom
+    {
+        get => _selectRoom;
+        set
+        {
+            if (_selectRoom != value)
+            {
+                _selectRoom = value;
+                OnPropertyChanged(nameof(SelectRoom));
+                OnPropertyChanged(nameof(CanDestroy));
+                OnPropertyChanged(nameof(CanConnectAisle));
+            }
+        }
+    }
+
+    public bool CanDestroy
+    {
+        get
+        {
+            return SelectRoom != null && SelectRoom.IsReady && SelectType == BuildType.Room && !SelectRoom.IsDefault;
+        }
+    }
+
+    public bool CanConnectAisle
+    {
+        get
+        {
+            return SelectRoom != null && SelectRoom.IsReady && SelectType == BuildType.Room;
+        }
+    }
+
+
     private RoomViewModel _destroyBuild;
     public RoomViewModel DestroyBuild
     {
@@ -50,6 +83,8 @@ public class BuildViewModel : ViewModelBase
             {
                 _selectType = value;
                 OnPropertyChanged(nameof(SelectType));
+                OnPropertyChanged(nameof(CanDestroy));
+                OnPropertyChanged(nameof(CanConnectAisle));
             }
         }
     }
@@ -68,14 +103,130 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    public void ChooseRoom(RoomViewModel room)
+    {
+        if (room == null || room.BuildType != BuildType.Room)
+        {
+            return;
+        }
+
+        SelectRoom = room;
+    }
+
+    public void DeselectRoom()
+    {
+        SelectRoom = null;
+    }
+
+    public void StartConnectingAisle()
+    {
+        if (SelectRoom == null)
+        {
+            return;
+        }
+
+        _startRoom = SelectRoom;
+        _hasStartPos = true;
+
+        DeselectRoom();
+        SelectType = BuildType.Aisle;
+    }
+
+    public void DestroyRoom()
+    {
+        if (SelectRoom == null)
+        {
+            return;
+        }
+
+        RoomViewModel target = SelectRoom;
+        DeselectRoom();
+
+        RemoveBuild(target);
+        ClearAisle();
+    }
+
+    public void ClearAisle()
+    {
+        while (true)
+        {
+            List<RoomViewModel> deadEndAisles = new List<RoomViewModel>();
+
+            foreach (var pair in Builds)
+            {
+                Vector2Int pos = pair.Key;
+                RoomViewModel vm = pair.Value;
+
+                if (vm.BuildType == BuildType.Aisle && !vm.IsDefault)
+                {
+                    if (CountAisle(pos, vm) <= 1)
+                    {
+                        if (!deadEndAisles.Contains(vm))
+                        {
+                            deadEndAisles.Add(vm);
+                        }
+                    }
+                }
+            }
+
+            if (deadEndAisles.Count == 0)
+            {
+                break;
+            }
+
+            foreach (var aisle in deadEndAisles)
+            {
+                RemoveBuild(aisle);
+            }
+        }
+    }
+
+    private int CountAisle(Vector2Int pos, RoomViewModel aisleVM)
+    {
+        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        int count = 0;
+
+        for (int i = 0; i < directions.Length; i++)
+        {
+            Vector2Int targetPos = pos + directions[i];
+
+            if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            {
+                if (targetVM == aisleVM)
+                {
+                    continue;
+                }
+
+                if (targetVM.BuildType == BuildType.Aisle)
+                {
+                    count++;
+                }
+                else if (targetVM.BuildType == BuildType.Room)
+                {
+                    Vector2Int doorPos = targetVM.GetNearDoor(pos);
+
+                    if (targetPos == doorPos)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
     public void EnterBuildMode()
     {
         CancelBuildMode();
+        DeselectRoom();
         SelectType = BuildType.Room;
     }
 
     public void ConfirmBuild()
     {
+        DeselectRoom();
+
         if (_pendingRoom != null)
         {
             _pendingRoom.IsReady = true;
@@ -94,6 +245,8 @@ public class BuildViewModel : ViewModelBase
 
     public void CancelBuildMode()
     {
+        DeselectRoom();
+
         if (_pendingRoom != null)
         {
             RemoveBuild(_pendingRoom);
@@ -165,6 +318,7 @@ public class BuildViewModel : ViewModelBase
     {
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
         newRoom.IsReady = true;
+        newRoom.IsDefault = true;
 
         RegisterRoom(newRoom, pos);
 
@@ -182,6 +336,7 @@ public class BuildViewModel : ViewModelBase
         }
 
         RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
+        newAisle.IsDefault = true;
         Builds[pos] = newAisle;
 
         UpdateConnection(pos);
@@ -258,7 +413,14 @@ public class BuildViewModel : ViewModelBase
 
         UnregisterRoom(target);
 
-        UpdateNearConnection(target.OriginPos);
+        for (int x = 0; x < target.Size.x; x++)
+        {
+            for (int y = 0; y < target.Size.y; y++)
+            {
+                UpdateNearConnection(target.OriginPos + new Vector2Int(x, y));
+            }
+        }
+
         DestroyBuild = target;
     }
 

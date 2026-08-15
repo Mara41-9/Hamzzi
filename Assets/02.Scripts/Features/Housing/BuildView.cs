@@ -29,8 +29,6 @@ public class BuildView : ViewBase
             BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
             BindViewModel(buildVM);
         }
-
-        //_buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
 
     public void BindViewModel(BuildViewModel buildVM)
@@ -61,18 +59,33 @@ public class BuildView : ViewBase
             if (_gridPlane.Raycast(ray, out var hit))
             {
                 Vector3 hitPoint = ray.GetPoint(hit);
-                Vector2Int gridPos = ChangeGridPosition(hitPoint);
 
-                if (_buildVM.SelectType == BuildType.Room)
+                Vector3 adjustedHitPoint = new Vector3(hitPoint.x, hitPoint.y - 2.0f, hitPoint.z);
+                Vector2Int gridPos = ChangeGridPosition(adjustedHitPoint);
+
+                if (_buildVM.SelectType == BuildType.Aisle)
                 {
-                    _buildVM.TryBuildRoom(gridPos);
+                    _buildVM.TryBuildAisle(gridPos);
                 }
-                else if (_buildVM.SelectType == BuildType.Aisle)
+                else if (_buildVM.SelectType == BuildType.Room)
                 {
-                    Vector3 adjustedHitPoint = new Vector3(hitPoint.x, hitPoint.y - 2.0f, hitPoint.z);
-                    Vector2Int pos = ChangeGridPosition(adjustedHitPoint);
-
-                    _buildVM.TryBuildAisle(pos);
+                    if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel clickedRoom) &&
+                        clickedRoom.BuildType == BuildType.Room &&
+                        clickedRoom.IsReady)
+                    {
+                        _buildVM.ChooseRoom(clickedRoom);
+                    }
+                    else
+                    {
+                        if (_buildVM.SelectRoom != null)
+                        {
+                            _buildVM.DeselectRoom();
+                        }
+                        else
+                        {
+                            _buildVM.TryBuildRoom(gridPos);
+                        }
+                    }
                 }
             }
         }
