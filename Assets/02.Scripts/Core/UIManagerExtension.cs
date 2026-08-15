@@ -14,6 +14,7 @@ public enum UIRootType
 public enum UIType
 {
     TitleUI,
+    TitleSettingsUI,
     InGameUI,
     ShopUI,
     BuildUI,
@@ -40,6 +41,7 @@ public static class UIManagerExtension
         path = $"UI/{uiRootType}/{uiType}";
         return path;
     }
+
     public static void OpenTitleUI(this UIManager uiManager)
     {
         uiManager.OpenUI(UIRootType.MainUI, UIType.TitleUI);
@@ -49,6 +51,17 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.MainUI, UIType.TitleUI);
     }
+
+    public static void OpenTitleSettingsUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.TitleSettingsUI);
+    }
+
+    public static void CloseTitleSettingsUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.TitleSettingsUI);
+    }
+
     public static void OpenInGameUI(this UIManager uiManager)
     {
         uiManager.OpenUI(UIRootType.MainUI, UIType.InGameUI);
