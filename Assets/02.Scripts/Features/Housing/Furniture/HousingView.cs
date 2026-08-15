@@ -379,6 +379,12 @@ public class HousingView : ViewBase
             }
 
             _housingVM.FurnitureVM.Size = calculatedSize;
+
+            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            {
+                Vector2Int centerPos = GetGardenCenterPosition(calculatedSize);
+                _housingVM.MovePos(centerPos);
+            }
         }
 
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
@@ -555,5 +561,32 @@ public class HousingView : ViewBase
         }
 
         _activeGridLines.Clear();
+    }
+
+    private Vector2Int GetGardenCenterPosition(Vector2Int furnitureSize)
+    {
+        Ray centerRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Plane gardenPlane = new Plane(Vector3.up, new Vector3(0f, _gardenOrigin.y, 0f));
+
+        if (gardenPlane.Raycast(centerRay, out float hitDistance))
+        {
+            Vector3 hitPoint = centerRay.GetPoint(hitDistance);
+
+            float halfWidth = furnitureSize.x * 0.5f * _gardenSubCellSize;
+            float halfDepth = furnitureSize.y * 0.5f * _gardenSubCellSize;
+
+            float localX = (hitPoint.x - halfWidth) - _gardenOrigin.x;
+            float localZ = (hitPoint.z - halfDepth) - _gardenOrigin.z;
+
+            int gridX = Mathf.RoundToInt(localX / _gardenSubCellSize);
+            int gridZ = Mathf.RoundToInt(localZ / _gardenSubCellSize);
+
+            gridX = Mathf.Clamp(gridX, 0, _gardenGridSize.x - furnitureSize.x);
+            gridZ = Mathf.Clamp(gridZ, 0, _gardenGridSize.y - furnitureSize.y);
+
+            return new Vector2Int(gridX, gridZ);
+        }
+
+        return new Vector2Int(10, 10);
     }
 }
