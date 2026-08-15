@@ -2,7 +2,7 @@
 using UnityEngine;
 using TMPro;
 
-public class LoginView : UIBase
+public class LoginView : ViewBase
 {
     [SerializeField] private TMP_InputField InputField_Id;
     [SerializeField] private TMP_InputField InputField_Password;
@@ -103,6 +103,10 @@ public class LoginView : UIBase
             Debug.Log("bb");
             _vm.RequestLogin();
         }
+
+        UIManager.Instance.CloseLoginUI();
+        UIManager.Instance.CloseTitleUI();
+        UIManager.Instance.OpenInGameUI();
     }
 
     private void OnClickCreateAccount()

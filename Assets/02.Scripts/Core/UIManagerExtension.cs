@@ -13,23 +13,8 @@ public enum UIRootType
 
 public enum UIType
 {
-    LobbyUI,
-    LoadGameUI,
-    MainTest,
-    PopupTest,
-    HudMainUI,
-    InventoryUI,
-    FarmingUI,
-    StorageUI,
-    NpcUI,
-    MainUI,
-    FarmSeedSelectUI,
-    CraftUI,
-    SettingUI,
-    LoadingUI,
-    FarmPlotStatusUI,
-    GeneratorUI,
-    LobbyBackgroundUI,
+    TitleUI,
+    InGameUI,
     ShopUI,
     BuildUI,
     LoginUI,
@@ -43,9 +28,7 @@ public enum UIType
     HousingUI,
     FeverTimeCutsceneUI,
     TestUI,  // 하우징 테스트용 (MainUI 대용)
-    TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
-    TestHousingUI,    // [나라] TODO : 테스트용으로 만든 하우징 UI 
-    TitleUI
+    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
 
 public static class UIManagerExtension
@@ -56,6 +39,24 @@ public static class UIManagerExtension
 
         path = $"UI/{uiRootType}/{uiType}";
         return path;
+    }
+    public static void OpenTitleUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.TitleUI);
+    }
+
+    public static void CloseTitleUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.TitleUI);
+    }
+    public static void OpenInGameUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.InGameUI);
+    }
+
+    public static void CloseInGameUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.InGameUI);
     }
 
     public static void OpenBuildUI(this UIManager uiManager)
