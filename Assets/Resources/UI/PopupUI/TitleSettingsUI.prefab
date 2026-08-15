@@ -1521,8 +1521,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2848220090567262989}
+  - component: {fileID: 7942376317027104377}
   m_Layer: 5
-  m_Name: Btn_BackClose
+  m_Name: Btn_BackgroundClose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1548,6 +1549,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7942376317027104377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252621748966325894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2527204ab2836534897bb271b9343f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 2928031088188993628}
+  Image_Base: {fileID: 0}
+  Text_Base: {fileID: 0}
 --- !u!1 &3605385892121279421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,6 +1573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3341105449577584484}
+  - component: {fileID: 92839781466716500}
   m_Layer: 5
   m_Name: Btn_Close
   m_TagString: Untagged
@@ -1584,6 +1601,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &92839781466716500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605385892121279421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2527204ab2836534897bb271b9343f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 1559890788278253843}
+  Image_Base: {fileID: 0}
+  Text_Base: {fileID: 4897102362796265152}
 --- !u!1 &3647143985691076195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,8 +2620,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6716171424707178422}
+  - component: {fileID: -6467558573823752268}
   m_Layer: 5
-  m_Name: SettingsUI
+  m_Name: TitleSettingsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2616,6 +2649,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-6467558573823752268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5177949543669414093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aeb7956ae175e84790969a5dad9cab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleSettingsUI
+  Button_BackgroundClose: {fileID: 7942376317027104377}
+  Button_Close: {fileID: 92839781466716500}
 --- !u!1 &5254274168934777098
 GameObject:
   m_ObjectHideFlags: 0

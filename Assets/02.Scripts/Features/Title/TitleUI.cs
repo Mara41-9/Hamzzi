@@ -16,7 +16,7 @@ public class TitleUI : ViewBase
 
     private void OnClick_Settings()
     {
-
+        UIManager.Instance.OpenTitleSettingsUI();
     }
 
     private void OnClick_Quit()
