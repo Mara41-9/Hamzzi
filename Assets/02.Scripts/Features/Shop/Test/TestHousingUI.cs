@@ -32,7 +32,7 @@ public class TestHousingUI : ViewBase
     private void OnClick_Close()
     {
         UIManager.Instance.CloseUI(UIRootType.ContentUI, UIType.TestHousingUI);
-        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.TestMainUI);
+        UIManager.Instance.OpenInGameUI();
     }
 
     private void FindShopViewModelAndBind()
