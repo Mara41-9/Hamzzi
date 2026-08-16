@@ -150,7 +150,7 @@ public class CollectionView : UIBase
         int aHamsterTier = GetHamsterTier(aHamsterId);
         int bHamsterTier = GetHamsterTier(bHamsterId);
 
-        int tierComparison = bHamsterTier.CompareTo(aHamsterTier);
+        int tierComparison = aHamsterTier.CompareTo(bHamsterTier);
 
         if(tierComparison == 0)
         {
