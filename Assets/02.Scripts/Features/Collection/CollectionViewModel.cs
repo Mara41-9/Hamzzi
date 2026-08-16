@@ -56,21 +56,24 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
         OnPropertyChanged(nameof(_currentSelectHamsterId));
     }
 
-    public void AddCollectedHamsterIdList(string hamsterId)
+    public void InvokeContainerPropertyChanged(string containerName, ContainerEventType type, string hamsterId )
     {
-        if (CollectedHamsterIdList.Contains(hamsterId) == true)
-            return;
-
-        CollectedHamsterIdList.Add(hamsterId);
-        ContainerPropertyChanged?.Invoke(nameof(CollectedHamsterIdList), ContainerEventType.Add, hamsterId);
-        Debug.Log("햄스터 추가");
+        ContainerPropertyChanged?.Invoke(containerName, type, hamsterId);
     }
 }
 
-
 public static class HamsterViewModelExtention 
 {
+    public static void AddCollectedHamsterIdList(this CollectionViewModel collectionViewModelm, string hamsterId)
+    {
+        if (collectionViewModelm.CollectedHamsterIdList.Contains(hamsterId) == true)
+            return;
 
+        collectionViewModelm.CollectedHamsterIdList.Add(hamsterId);
+        collectionViewModelm.InvokeContainerPropertyChanged(nameof(collectionViewModelm.CollectedHamsterIdList), ContainerEventType.Add, hamsterId);
+
+        Debug.Log("햄스터 추가");
+    }
 
     public static void RequestSelectedHamsterId(this CollectionViewModel collectionViewModel, string selectedHamsterId)
     {

@@ -23,7 +23,7 @@ public class NetworkCollectionService
         LoadHamsterId(vm);
     }
 
-    public void LoadHamsterId(CollectionViewModel vm)
+    private void LoadHamsterId(CollectionViewModel vm)
     {
         var allHamsterIds = GameDataManager.Instance.GetAllDataId<HamsterData>();
         vm.AllHamsterIdList = allHamsterIds.ToHashSet<string>();
