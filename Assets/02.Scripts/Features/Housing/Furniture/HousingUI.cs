@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class HousingUI : ViewBase
 {
-    [SerializeField] private HousingView HousingView;
-
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
 
@@ -41,6 +39,7 @@ public class HousingUI : ViewBase
         _housingVM = housingVM;
         _housingVM.PropertyChanged += OnPropertyChanged_View;
 
+        RefreshSlots();
         UpdateState();
     }
 
@@ -57,6 +56,10 @@ public class HousingUI : ViewBase
         switch (e.PropertyName)
         {
             case nameof(_housingVM.CurrentViewMode):
+                RefreshSlots();
+                UpdateState();
+                break;
+
             case nameof(_housingVM.CurrentState):
             case nameof(_housingVM.FurnitureVM):
             case nameof(_housingVM.CanConfirm):
@@ -64,8 +67,16 @@ public class HousingUI : ViewBase
                 break;
 
             case nameof(_housingVM.TargetRoom):
-                InitFurnitureSlot(GetDummyFurnitureList()).Forget();
+                RefreshSlots();
                 break;
+        }
+    }
+
+    private void RefreshSlots()
+    {
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden || _housingVM.TargetRoom != null)
+        {
+            InitFurnitureSlot(_housingVM.GetOwnedFurnitureList()).Forget();
         }
     }
 
@@ -135,7 +146,16 @@ public class HousingUI : ViewBase
 
     private void OnClickExit()
     {
-        _housingVM.ExitRoom();
+        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+        {
+            _housingVM.EnterOverviewMode();
+            UIManager.Instance.CloseHousingUI();
+            UIManager.Instance.OpenTestUI();
+        }
+        else
+        {
+            _housingVM.ExitRoom();
+        }
     }
 
     private void OnClickRotation()
@@ -145,18 +165,12 @@ public class HousingUI : ViewBase
 
     private void OnClickConfirm()
     {
-        FurnitureViewModel confirmVM = _housingVM.FurnitureVM;
-
-        if (_housingVM.ConfirmPos())
-        {
-            HousingView.SpawnFurniture(confirmVM).Forget();
-        }
+        _housingVM.ConfirmPos();
     }
 
     private void OnClickCancel()
     {
         _housingVM.CancelPos();
-        HousingView.ClearGhostObject();
     }
 
     private void OnClickExitMode()
@@ -164,7 +178,6 @@ public class HousingUI : ViewBase
         if (_housingVM.FurnitureVM != null)
         {
             _housingVM.CancelPos();
-            HousingView.ClearGhostObject();
         }
 
         _housingVM.EnterOverviewMode();
@@ -175,15 +188,6 @@ public class HousingUI : ViewBase
 
     private void OnClickRemove()
     {
-        if (_housingVM.RemoveSelectedFurniture())
-        {
-            HousingView.ClearGhostObject();
-        }
-    }
-
-    // 테스트용
-    private List<ItemData> GetDummyFurnitureList()
-    {
-        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
+        _housingVM.RemoveSelectedFurniture();
     }
 }

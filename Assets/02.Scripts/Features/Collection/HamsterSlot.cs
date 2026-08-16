@@ -5,9 +5,17 @@ using UnityEngine.UI;
 
 public class HamsterSlot : MonoBehaviour
 {
+    [Header("UI Component")]
     [SerializeField] private Button SlotButton;
     [SerializeField] private GameObject LockImage;
     [SerializeField] private Image HamsterIcon;
+    [SerializeField] private Image TierImage;
+
+    [Header("Tier Color")]
+    [SerializeField] private Color SSTierColor;
+    [SerializeField] private Color STierColor;
+    [SerializeField] private Color ATierColor;
+
 
     private string _hamsterId;
 
@@ -26,10 +34,10 @@ public class HamsterSlot : MonoBehaviour
     public void InitSlot(HamsterData hamsterData, bool isCollected)
     {
         _hamsterId = hamsterData.Id;
-        // TODO : 나중에 이미지 넣으면 주석 해체
-        LoadHamsterIcon(hamsterData.IconPath).Forget();
 
+        LoadHamsterIcon(hamsterData.IconPath).Forget();
         UpdateLockImage(isCollected);
+        SetTierColor(hamsterData.HamsterTier);
     }
 
     public void UpdateLockImage(bool isCollected)
@@ -46,9 +54,26 @@ public class HamsterSlot : MonoBehaviour
         HamsterIcon.sprite = hamsterIcon;
     }
 
+
+    private void SetTierColor(HamsterTier tier)
+    {
+        switch (tier)
+        {
+            case HamsterTier.SS:
+                TierImage.color = SSTierColor;
+                break;
+            case HamsterTier.S:
+                TierImage.color = STierColor;
+                break;
+            case HamsterTier.A:
+                TierImage.color = ATierColor;
+                break;
+        }
+    }
+
     private void OnClickSlot()
     {
         OnSlotClicked?.Invoke(_hamsterId);
-
     }
+
 }

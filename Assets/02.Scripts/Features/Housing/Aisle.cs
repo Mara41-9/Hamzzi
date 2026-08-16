@@ -36,7 +36,7 @@ public class Aisle : MonoBehaviour
         }
     }
 
-    public void ApplyConnection(AisleConnection connection)
+    private void ApplyConnection(AisleConnection connection)
     {
         Object_Up.SetActive(!connection.Up);
         Object_Down.SetActive(!connection.Down);
