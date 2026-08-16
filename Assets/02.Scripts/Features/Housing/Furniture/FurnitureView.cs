@@ -8,7 +8,6 @@ public class FurnitureView : MonoBehaviour
     public FurnitureViewModel FurnitureVM { get; private set; }
 
     private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
-    private Vector2Int _furnitureSize;
 
     private void Awake()
     {
@@ -60,24 +59,26 @@ public class FurnitureView : MonoBehaviour
 
     public Vector2Int GetFurnitureSize(float subCellSize = 0.25f)
     {
-        if (_furnitureSize != Vector2Int.zero)
-        {
-            return _furnitureSize;
-        }
-
         InitRederers();
+
+        if (Renderers == null || Renderers.Length == 0)
+        {
+            return Vector2Int.one;
+        }
 
         Bounds bounds = Renderers[0].bounds;
 
-        for (int i = 0; i < Renderers.Length; i++)
+        for (int i = 1; i < Renderers.Length; i++)
         {
-            bounds.Encapsulate(Renderers[i].bounds);
+            if (Renderers[i] != null)
+            {
+                bounds.Encapsulate(Renderers[i].bounds);
+            }
         }
 
         int sizeX = Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / subCellSize));
         int sizeY = Mathf.Max(1, Mathf.RoundToInt(bounds.size.z / subCellSize));
 
-        _furnitureSize = new Vector2Int(sizeX, sizeY);
-        return _furnitureSize;
+        return new Vector2Int(sizeX, sizeY);
     }
 }
