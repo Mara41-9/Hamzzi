@@ -42,7 +42,7 @@ public class GachaResultView : MonoBehaviour
             GachaResultSlot slot = _createdSlotList[i];
 
             slot.gameObject.SetActive(true);
-            slot.UpdateSlotIcon(hamsterId);
+            slot.UpdateSlot(hamsterId);
         }
     }
 
