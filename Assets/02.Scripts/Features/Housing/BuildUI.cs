@@ -38,7 +38,7 @@ public class BuildUI : ViewBase
         Panel_InfoText.SetActive(true);
         Text_Info.text = "땅을 터치해 새로운 보금자리를 만들거나, 기존 굴을 터치해 관리하세요!";
 
-        _buildVM.SelectType = BuildType.Room;
+        _buildVM.EnterBuildMode();
     }
 
     public void BindViewModel(BuildViewModel buildVM)
@@ -73,9 +73,7 @@ public class BuildUI : ViewBase
                 Button_Confirm.gameObject.SetActive(_buildVM.CanConfirm);
                 break;
 
-            case nameof(_buildVM.CanDestroy):
             case nameof(_buildVM.SelectRoom):
-            case nameof(_buildVM.CanConnectAisle):
                 UpdateSelectionUI();
                 break;
         }

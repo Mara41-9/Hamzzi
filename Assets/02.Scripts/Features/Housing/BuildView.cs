@@ -69,9 +69,7 @@ public class BuildView : ViewBase
                 }
                 else if (_buildVM.SelectType == BuildType.Room)
                 {
-                    if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel clickedRoom) &&
-                        clickedRoom.BuildType == BuildType.Room &&
-                        clickedRoom.IsReady)
+                    if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel clickedRoom) && clickedRoom.BuildType == BuildType.Room && clickedRoom.IsReady)
                     {
                         _buildVM.ChooseRoom(clickedRoom);
                     }
@@ -148,19 +146,8 @@ public class BuildView : ViewBase
 
     private async UniTaskVoid SpawnBuildPrefab(RoomViewModel roomVM)
     {
-        float worldX;
-        float worldY;
-
-        if (roomVM.BuildType == BuildType.Room)
-        {
-            worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = roomVM.OriginPos.y + 2.0f;
-        }
-        else
-        {
-            worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = roomVM.OriginPos.y;
-        }
+        float worldX = roomVM.OriginPos.x + (roomVM.Size.x * (1f * 0.5f));
+        float worldY = roomVM.OriginPos.y + (roomVM.BuildType == BuildType.Room ? 2f : 0f);
 
         worldX = Mathf.Round(worldX * 100f) / 100f;
         worldY = Mathf.Round(worldY * 100f) / 100f;

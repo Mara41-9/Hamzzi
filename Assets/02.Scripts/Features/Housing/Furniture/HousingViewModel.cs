@@ -26,12 +26,7 @@ public class HousingViewModel : ViewModelBase
     {
         get
         {
-            if (FurnitureVM.IsValid)
-            {
-                return true;
-            }
-
-            return false;
+            return FurnitureVM != null && FurnitureVM.IsValid;
         }
     }
 
@@ -130,6 +125,20 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private FurnitureViewModel _confirmFurniture;
+    public FurnitureViewModel ConfirmFurniture
+    {
+        get => _confirmFurniture;
+        set
+        {
+            if (_confirmFurniture != value)
+            {
+                _confirmFurniture = value;
+                OnPropertyChanged(nameof(ConfirmFurniture));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(CurrentViewMode));
@@ -190,9 +199,7 @@ public class HousingViewModel : ViewModelBase
         string furnitureID = FurnitureVM.FurnitureID;
         // 여기에 인벤토리로 돌아가는 로직
 
-        FurnitureVM = null;
-        SelectedInstallFurniture = null;
-        CurrentState = HousingState.Placing;
+        ResetPlacingState();
 
         return true;
     }
@@ -236,29 +243,24 @@ public class HousingViewModel : ViewModelBase
             return false;
         }
 
+        FurnitureViewModel furnitureVM = FurnitureVM;
+        bool success = false;
+
         if (CurrentViewMode == HousingViewMode.Garden)
         {
-            if (AddGardenFurniture(FurnitureVM))
-            {
-                FurnitureVM = null;
-                SelectedInstallFurniture = null;
-                CurrentState = HousingState.Placing;
-
-                return true;
-            }
+            success = AddGardenFurniture(FurnitureVM);
         }
         else if (TargetRoom != null)
         {
-            FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
+            furnitureVM.RoomInstanceID = TargetRoom.InstanceID;
+            success = TargetRoom.AddFurniture(FurnitureVM);
+        }
 
-            if (TargetRoom.AddFurniture(FurnitureVM))
-            {
-                FurnitureVM = null;
-                SelectedInstallFurniture = null;
-                CurrentState = HousingState.Placing;
-
-                return true;
-            }
+        if (success)
+        {
+            ConfirmFurniture = furnitureVM;
+            ResetPlacingState();
+            return true;
         }
 
         return false;
@@ -278,9 +280,7 @@ public class HousingViewModel : ViewModelBase
             }
         }
 
-        FurnitureVM = null;
-        SelectedInstallFurniture = null;
-        CurrentState = HousingState.Placing;
+        ResetPlacingState();
     }
 
     public void ExitRoom()
@@ -376,5 +376,17 @@ public class HousingViewModel : ViewModelBase
         OnPropertyChanged(nameof(GardenFurnitureList));
 
         return true;
+    }
+
+    private void ResetPlacingState()
+    {
+        FurnitureVM = null;
+        SelectedInstallFurniture = null;
+        CurrentState = HousingState.Placing;
+    }
+
+    public List<ItemData> GetOwnedFurnitureList()
+    {
+        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
     }
 }

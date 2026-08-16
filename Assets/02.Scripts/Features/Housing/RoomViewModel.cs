@@ -24,8 +24,10 @@ public struct DoorData
 
 public class RoomViewModel : ViewModelBase
 {
-    private int _roomWidth = 6;
-    private int _roomHeight = 4;
+    private const int ROOM_WIDTH = 6;
+    private const int ROOM_HEIGHT = 4;
+    private const float DEPTH_Z = 9.0f;
+    private const int DOOR_Y = 2;
 
     public bool IsDefault { get; set; } = false;
     public bool IsReady { get; set; } = false;
@@ -45,7 +47,10 @@ public class RoomViewModel : ViewModelBase
     private int _gridFactor = 4;
     public int GridFactor
     {
-        get => _gridFactor;
+        get
+        {
+            return _gridFactor;
+        }
     }
 
     private string _instanceID;
@@ -110,8 +115,7 @@ public class RoomViewModel : ViewModelBase
         get => _aisleConnection;
         set
         {
-            if (_aisleConnection.Up != value.Up || _aisleConnection.Down != value.Down ||
-                _aisleConnection.Left != value.Left || _aisleConnection.Right != value.Right)
+            if (_aisleConnection.Up != value.Up || _aisleConnection.Down != value.Down || _aisleConnection.Left != value.Left || _aisleConnection.Right != value.Right)
             {
                 _aisleConnection = value;
                 OnPropertyChanged(nameof(AisleConnection));
@@ -124,7 +128,7 @@ public class RoomViewModel : ViewModelBase
         InstanceID = Guid.NewGuid().ToString();
         BuildType = type;
         OriginPos = pos;
-        Size = (type == BuildType.Room) ? new Vector2Int(_roomWidth, _roomHeight) : Vector2Int.one;
+        Size = (type == BuildType.Room) ? new Vector2Int(ROOM_WIDTH, ROOM_HEIGHT) : Vector2Int.one;
 
         if (type == BuildType.Aisle)
         {
@@ -141,12 +145,10 @@ public class RoomViewModel : ViewModelBase
     // 건설 관련
     private void InitDefaultDoor()
     { 
-        int centerY = 0;
-
         List<DoorData> defaultDoors = new List<DoorData>
         {
-            new DoorData { Offset = new Vector2Int(0, centerY), DirectionIndex = 2 },
-            new DoorData { Offset = new Vector2Int(Size.x - 1, centerY), DirectionIndex = 3 }
+            new DoorData { Offset = new Vector2Int(0, DOOR_Y), DirectionIndex = 2 },
+            new DoorData { Offset = new Vector2Int(Size.x - 1, DOOR_Y), DirectionIndex = 3 }
         };
 
         SetDoorData(defaultDoors);
@@ -224,7 +226,7 @@ public class RoomViewModel : ViewModelBase
         {
             foreach (DoorData data in DoorDataList)
             {
-                if (data.Offset == doorOffset && data.DirectionIndex >= 0 && data.DirectionIndex <= 3)
+                if (data.Offset == doorOffset)
                 {
                     dirIndex = data.DirectionIndex;
                     break;
@@ -235,21 +237,6 @@ public class RoomViewModel : ViewModelBase
         Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         Vector2Int outside = inside + dirs[dirIndex];
 
-        if (outside.x >= OriginPos.x && outside.x < OriginPos.x + Size.x &&
-            outside.y >= OriginPos.y && outside.y < OriginPos.y + Size.y)
-        {
-            switch (dirIndex)
-            {
-                case 2:
-                    outside = new Vector2Int(OriginPos.x - 1, inside.y);
-                    break;
-
-                case 3:
-                    outside = new Vector2Int(OriginPos.x + Size.x, inside.y);
-                    break;
-            }
-        }
-
         return new DoorInfo { InsidePos = inside, OutsidePos = outside, DirectionIndex = dirIndex };
     }
 
@@ -259,7 +246,7 @@ public class RoomViewModel : ViewModelBase
         float subCellSize = cellSize / _gridFactor;
 
         float localX = worldPos.x - (OriginPos.x * cellSize);
-        float localZ = 9.0f - worldPos.z;
+        float localZ = DEPTH_Z - worldPos.z;
 
         int gridX = Mathf.FloorToInt(localX / subCellSize);
         int gridY = Mathf.FloorToInt(localZ / subCellSize);
@@ -275,15 +262,13 @@ public class RoomViewModel : ViewModelBase
 
     public bool IsValidPlace(Vector2Int localPos, Vector2Int furnitureSize)
     {
-        int wallMargin = 0;
-        
         for (int x = 0; x < furnitureSize.x; x++)
         {
             for (int y = 0; y < furnitureSize.y; y++)
             {
                 Vector2Int checkPos = localPos + new Vector2Int(x, y);
 
-                if (checkPos.x < wallMargin || checkPos.x >= SubGridSize.x - wallMargin || checkPos.y < wallMargin || checkPos.y >= SubGridSize.y - wallMargin)
+                if (checkPos.x < 0 || checkPos.x >= SubGridSize.x || checkPos.y < 0 || checkPos.y >= SubGridSize.y)
                 {
                     return false;
                 }

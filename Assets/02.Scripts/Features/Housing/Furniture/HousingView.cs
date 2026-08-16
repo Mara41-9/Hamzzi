@@ -8,13 +8,12 @@ public class HousingView : ViewBase
 {
     [SerializeField] private Material Material_Ghost;
     [SerializeField] private SpriteRenderer SpriteRenderer_Tile;
-    [SerializeField] private GameObject Prefab_Grid;
 
     [SerializeField] private Color Color_Valid = new Color(0f, 1f, 0f, 0.4f);
     [SerializeField] private Color Color_Invalid = new Color(1f, 0f, 0f, 0.4f);
 
-    private Vector3 _gardenOrigin = new Vector3(-20f, 12f, 12f);
-    private Vector2Int _gardenGridSize = new Vector2Int(150, 60);
+    private Vector3 _gardenOrigin = new Vector3(-25f, 12f, 12f);
+    private Vector2Int _gardenGridSize = new Vector2Int(100, 60);
     private float _gardenSubCellSize = 0.5f;
 
     private float _cellSize = 1.0f;
@@ -92,14 +91,7 @@ public class HousingView : ViewBase
                 {
                     if (_ghostObject != null)
                     {
-                        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
-                        {
-                            UpdateGardenGhostTransform(_housingVM.FurnitureVM);
-                        }
-                        else if (_housingVM.TargetRoom != null)
-                        {
-                            UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);
-                        }
+                        UpdateGhostTransform();
                     }
                     else
                     {
@@ -109,6 +101,13 @@ public class HousingView : ViewBase
                 else
                 {
                     ClearGhostObject();
+                }
+                break;
+
+            case nameof(_housingVM.ConfirmFurniture):
+                if (_housingVM.ConfirmFurniture != null)
+                {
+                    SpawnFurniture(_housingVM.ConfirmFurniture).Forget();
                 }
                 break;
 
@@ -129,142 +128,119 @@ public class HousingView : ViewBase
 
     private void Update()
     {
-        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
+        if (_buildVM == null || _buildVM.SelectType != BuildType.None || _buildVM.CanConfirm)
         {
             return;
         }
+
+        if (!GetInputPosition(out Vector3 inputPosition))
+        {
+            return;
+        }
+
+        Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
 
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
         {
             if (_housingVM.FurnitureVM == null)
             {
-                if (GetInputPosition(out Vector3 inputPosition))
-                {
-                    Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
-
-                    if (Physics.Raycast(ray, out RaycastHit hit))
-                    {
-                        if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
-                        {
-                            if (furnitureView.FurnitureVM != null)
-                            {
-                                string instanceID = furnitureView.FurnitureVM.InstanceID;
-
-                                if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
-                                {
-                                    GameObjectManager.Instance.RequestDestroyObject(obj);
-                                    _spawnFurniture.Remove(instanceID);
-                                }
-
-                                _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
-                            }
-                        }
-                    }
-                }
+                SelectInstallFurniture(ray);
             }
             else
             {
-                if (GetInputPosition(out Vector3 inputPosition))
-                {
-                    Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
-                    Plane gardenPlane = new Plane(Vector3.up, new Vector3(0f, _gardenOrigin.y, 0f));
-
-                    if (gardenPlane.Raycast(ray, out float hit))
-                    {
-                        Vector3 hitPoint = ray.GetPoint(hit);
-
-                        float halfWidth = _housingVM.FurnitureVM.Size.x * 0.5f * _gardenSubCellSize;
-                        float halfDepth = _housingVM.FurnitureVM.Size.y * 0.5f * _gardenSubCellSize;
-
-                        float localX = (hitPoint.x - halfWidth) - _gardenOrigin.x;
-                        float localZ = (hitPoint.z - halfDepth) - _gardenOrigin.z;
-
-                        int gridX = Mathf.RoundToInt(localX / _gardenSubCellSize);
-                        int gridZ = Mathf.RoundToInt(localZ / _gardenSubCellSize);
-
-                        gridX = Mathf.Clamp(gridX, 0, _gardenGridSize.x - _housingVM.FurnitureVM.Size.x);
-                        gridZ = Mathf.Clamp(gridZ, 0, _gardenGridSize.y - _housingVM.FurnitureVM.Size.y);
-
-                        _housingVM.MovePos(new Vector2Int(gridX, gridZ));
-                        UpdateGardenGhostTransform(_housingVM.FurnitureVM);
-                    }
-                }
+                DragGarden(ray);
             }
             return;
         }
 
         if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
-            if (GetInputPosition(out Vector3 inputPosition))
-            {
-                Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
-
-                if (_mapPlane.Raycast(ray, out float hit))
-                {
-                    Vector3 hitPoint = ray.GetPoint(hit);
-
-                    int gridX = Mathf.FloorToInt(hitPoint.x / _cellSize);
-                    int gridY = Mathf.FloorToInt((hitPoint.y - _yOffset) / _cellSize);
-                    Vector2Int gridPos = new Vector2Int(gridX, gridY);
-
-                    if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
-                    {
-                        if (roomVM.BuildType == BuildType.Room)
-                        {
-                            _housingVM.TargetRoom = roomVM;
-                        }
-                    }
-                }
-            }
+            RoomSelect(ray);
         }
         else if (_housingVM.CurrentState == HousingState.Placing && _housingVM.FurnitureVM == null)
         {
-            if (GetInputPosition(out Vector3 inputPosition))
-            {
-                Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
-
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
-                    {
-                        if (furnitureView.FurnitureVM != null)
-                        {
-                            string instanceID = furnitureView.FurnitureVM.InstanceID;
-
-                            if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
-                            {
-                                GameObjectManager.Instance.RequestDestroyObject(obj);
-                                _spawnFurniture.Remove(instanceID);
-                            }
-
-                            _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
-                        }
-                    }
-                }
-            }
+            SelectInstallFurniture(ray);
         }
         else if (_housingVM.FurnitureVM != null)
         {
-            if (GetInputPosition(out Vector3 inputPosition))
+            RoomDrag(ray);
+        }
+    }
+
+    private bool SelectInstallFurniture(Ray ray)
+    {
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if (hit.collider.TryGetComponent<FurnitureView>(out var furnitureView))
             {
-                Ray ray = _mainCamera.ScreenPointToRay(inputPosition);
-                RoomViewModel roomVM = _housingVM.TargetRoom;
-
-                if (roomVM != null)
+                if (furnitureView.FurnitureVM != null)
                 {
-                    float floorY = (roomVM.OriginPos.y + _yOffset) * _cellSize;
-                    Plane roomFloorPlane = new Plane(Vector3.up, new Vector3(0f, floorY, 0f));
+                    string instanceID = furnitureView.FurnitureVM.InstanceID;
 
-                    if (roomFloorPlane.Raycast(ray, out float hit))
+                    if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
                     {
-                        Vector3 hitPoint = ray.GetPoint(hit);
-                        Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
-                        _housingVM.MovePos(localPos);
-
-                        UpdateGhostTransform(roomVM, _housingVM.FurnitureVM);
+                        GameObjectManager.Instance.RequestDestroyObject(obj);
+                        _spawnFurniture.Remove(instanceID);
                     }
+
+                    _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
+
+                    return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    private void DragGarden(Ray ray)
+    {
+        Plane gardenPlane = new Plane(Vector3.up, new Vector3(0f, _gardenOrigin.y, 0f));
+
+        if (gardenPlane.Raycast(ray, out float hit))
+        {
+            Vector3 hitPoint = ray.GetPoint(hit);
+            Vector2Int gridPos = WorldToGardenGrid(hitPoint, _housingVM.FurnitureVM.Size);
+
+            _housingVM.MovePos(gridPos);
+            UpdateGhostTransform();
+        }
+    }
+
+    private void RoomSelect(Ray ray)
+    {
+        if (_mapPlane.Raycast(ray, out float hit))
+        {
+            Vector3 hitPoint = ray.GetPoint(hit);
+
+            int gridX = Mathf.FloorToInt(hitPoint.x / _cellSize);
+            int gridY = Mathf.FloorToInt((hitPoint.y - _yOffset) / _cellSize);
+            Vector2Int gridPos = new Vector2Int(gridX, gridY);
+
+            if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
+            {
+                if (roomVM.BuildType == BuildType.Room)
+                {
+                    _housingVM.TargetRoom = roomVM;
+                }
+            }
+        }
+    }
+
+    private void RoomDrag(Ray ray)
+    {
+        RoomViewModel roomVM = _housingVM.TargetRoom;
+
+        float floorY = (roomVM.OriginPos.y + _yOffset) * _cellSize;
+        Plane roomFloorPlane = new Plane(Vector3.up, new Vector3(0f, floorY, 0f));
+
+        if (roomFloorPlane.Raycast(ray, out float hit))
+        {
+            Vector3 hitPoint = ray.GetPoint(hit);
+            Vector2Int localPos = roomVM.ChangeLocalGrid(hitPoint, _housingVM.FurnitureVM.Size, _cellSize);
+            _housingVM.MovePos(localPos);
+
+            UpdateGhostTransform();
         }
     }
 
@@ -272,7 +248,7 @@ public class HousingView : ViewBase
     {
         inputPosition = Vector3.zero;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButton(0))
         {
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
@@ -283,22 +259,7 @@ public class HousingView : ViewBase
             inputPosition = Input.mousePosition;
             return true;
         }
-        else if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-            {
-                return false;
-            }
-
-            if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
-            {
-                inputPosition = touch.position;
-                return true;
-            }
-        }
-#else
+#endif
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -314,36 +275,55 @@ public class HousingView : ViewBase
                 return true;
             }
         }
-#endif
 
         return false;
     }
 
-    private void UpdateGhostTransform(RoomViewModel roomVM, FurnitureViewModel furnitureVM)
+    private float GetCurrentSubCellSize()
     {
-        GetFurniturePositionAndRotation(roomVM, furnitureVM, out Vector3 pos, out Quaternion rot);
+        return (_housingVM.TargetRoom != null) ? (_cellSize / _housingVM.TargetRoom.GridFactor) : _gardenSubCellSize;
+    }
 
-        if (_ghostObject != null)
+    private void GetFurnitureWorldTransform(FurnitureViewModel furnitureVM, out Vector3 pos, out Quaternion rot, out float tileYOffset)
+    {
+        float subCellSize = GetCurrentSubCellSize();
+        rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+
+        if (_housingVM.TargetRoom != null)
         {
-            _ghostObject.transform.position = pos;
-            _ghostObject.transform.rotation = rot;
+            float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
+            float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
+
+            float worldX = (_housingVM.TargetRoom.OriginPos.x * _cellSize) + localX;
+            float worldY = (_housingVM.TargetRoom.OriginPos.y + _yOffset) * _cellSize + 0.2f;
+            float worldZ = 9f - localZ;
+
+            pos = new Vector3(worldX, worldY, worldZ);
+            tileYOffset = pos.y + 0.01f;
         }
-
-        if (SpriteRenderer_Tile != null)
+        else
         {
-            float subCellSize = _cellSize / roomVM.GridFactor;
+            float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
+            float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
 
-            SpriteRenderer_Tile.transform.position = new Vector3(pos.x, pos.y + 0.01f, pos.z);
-            SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            SpriteRenderer_Tile.transform.localScale = new Vector3(furnitureVM.Size.x * subCellSize, furnitureVM.Size.y * subCellSize, 1f);
+            float worldX = _gardenOrigin.x + localX;
+            float worldY = _gardenOrigin.y;
+            float worldZ = _gardenOrigin.z + localZ;
 
-            SpriteRenderer_Tile.color = furnitureVM.IsValid ? Color_Valid : Color_Invalid;
+            pos = new Vector3(worldX, worldY, worldZ);
+            tileYOffset = _gardenOrigin.y + 0.02f;
         }
     }
 
-    private void UpdateGardenGhostTransform(FurnitureViewModel furnitureVM)
+    private void UpdateGhostTransform()
     {
-        GetGardenFurniturePositionAndRotation(furnitureVM, out Vector3 pos, out Quaternion rot);
+        if (_housingVM.FurnitureVM == null)
+        {
+            return;
+        }
+
+        GetFurnitureWorldTransform(_housingVM.FurnitureVM, out Vector3 pos, out Quaternion rot, out float tileYOffset);
+        float subCellSize = GetCurrentSubCellSize();
 
         if (_ghostObject != null)
         {
@@ -353,10 +333,14 @@ public class HousingView : ViewBase
 
         if (SpriteRenderer_Tile != null)
         {
-            SpriteRenderer_Tile.transform.position = new Vector3(pos.x, _gardenOrigin.y + 0.02f, pos.z);
+            SpriteRenderer_Tile.transform.position = new Vector3(pos.x, tileYOffset, pos.z);
             SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            SpriteRenderer_Tile.transform.localScale = new Vector3(furnitureVM.Size.x * _gardenSubCellSize, furnitureVM.Size.y * _gardenSubCellSize, 1f);
-            SpriteRenderer_Tile.color = furnitureVM.IsValid ? Color_Valid : Color_Invalid;
+
+            float tileWidth = _housingVM.FurnitureVM.Size.x * subCellSize;
+            float tileHeight = _housingVM.FurnitureVM.Size.y * subCellSize;
+            SpriteRenderer_Tile.transform.localScale = new Vector3(tileWidth, tileHeight, 1f);
+
+            SpriteRenderer_Tile.color = _housingVM.FurnitureVM.IsValid ? Color_Valid : Color_Invalid;
         }
     }
 
@@ -366,11 +350,19 @@ public class HousingView : ViewBase
 
         _ghostObject = await GameObjectManager.Instance.CreateObjectAsync(furnitureID, prefabPath, Vector3.zero);
 
+        if (_ghostObject == null || _housingVM.FurnitureVM == null)
+        {
+            return;
+        }
+
+        _ghostObject.transform.rotation = Quaternion.identity;
+        _ghostObject.transform.localScale = Vector3.one;
+
         if (_ghostObject.TryGetComponent<FurnitureView>(out var furnitureView))
         {
             furnitureView.SetGhostMode(Material_Ghost);
 
-            float subCellSize = (_housingVM.CurrentViewMode == HousingViewMode.Garden) ? _gardenSubCellSize : (_cellSize / _housingVM.TargetRoom.GridFactor);
+            float subCellSize = GetCurrentSubCellSize();
             Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
 
             if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
@@ -380,23 +372,24 @@ public class HousingView : ViewBase
 
             _housingVM.FurnitureVM.Size = calculatedSize;
 
-            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            if (_housingVM.TargetRoom != null)
+            {
+                Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);
+                _housingVM.MovePos(roomCenterPos);
+            }
+            else
             {
                 Vector2Int centerPos = GetGardenCenterPosition(calculatedSize);
                 _housingVM.MovePos(centerPos);
             }
         }
 
-        if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
-        {
-            UpdateGardenGhostTransform(_housingVM.FurnitureVM);
-        }
-        else if (_housingVM.TargetRoom != null)
-        {
-            UpdateGhostTransform(_housingVM.TargetRoom, _housingVM.FurnitureVM);
-        }
+        UpdateGhostTransform();
 
-        SpriteRenderer_Tile.gameObject.SetActive(true);
+        if (SpriteRenderer_Tile != null)
+        {
+            SpriteRenderer_Tile.gameObject.SetActive(true);
+        }
     }
 
     public void ClearGhostObject()
@@ -443,7 +436,7 @@ public class HousingView : ViewBase
 
         float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
         float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.2f;
-        float worldZ = 9.0f - localZ;
+        float worldZ = 9f - localZ;
 
         pos = new Vector3(worldX, worldY, worldZ);
         rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
@@ -460,6 +453,19 @@ public class HousingView : ViewBase
 
         pos = new Vector3(worldX, worldY, worldZ);
         rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+    }
+
+    private async UniTask CreateGridLineAsync(Vector3 pos, Vector3 scale)
+    {
+        GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
+
+        if (line != null)
+        {
+            line.transform.SetParent(transform);
+            line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            line.transform.localScale = scale;
+            _activeGridLines.Add(line);
+        }
     }
 
     public async UniTask ShowRoomGrid(RoomViewModel roomVM)
@@ -479,33 +485,15 @@ public class HousingView : ViewBase
         for (int x = 0; x <= subX; x++)
         {
             float currentX = roomX + (x * subCellSize);
-            Vector3 pos = new Vector3(currentX, roomY, 9.0f - (totalHeight * 0.5f));
-
-            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
-
-            if (line != null)
-            {
-                line.transform.SetParent(transform);
-                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                line.transform.localScale = new Vector3(0.02f, totalHeight, 1f);
-                _activeGridLines.Add(line);
-            }
+            Vector3 pos = new Vector3(currentX, roomY, 9f - (totalHeight * 0.5f));
+            await CreateGridLineAsync(pos, new Vector3(0.02f, totalHeight, 1f));
         }
 
         for (int y = 0; y <= subY; y++)
         {
-            float currentZ = 9.0f - (y * subCellSize);
+            float currentZ = 9f - (y * subCellSize);
             Vector3 pos = new Vector3(roomX + (totalWidth * 0.5f), roomY, currentZ);
-
-            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
-
-            if (line != null)
-            {
-                line.transform.SetParent(transform);
-                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                line.transform.localScale = new Vector3(totalWidth, 0.02f, 1f);
-                _activeGridLines.Add(line);
-            }
+            await CreateGridLineAsync(pos, new Vector3(totalWidth, 0.02f, 1f));
         }
     }
 
@@ -521,32 +509,14 @@ public class HousingView : ViewBase
         {
             float currentZ = _gardenOrigin.z + (y * _gardenSubCellSize);
             Vector3 pos = new Vector3(_gardenOrigin.x + (totalWidth * 0.5f), gridY, currentZ);
-
-            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
-
-            if (line != null)
-            {
-                line.transform.SetParent(transform);
-                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                line.transform.localScale = new Vector3(totalWidth, 0.02f, 1f);
-                _activeGridLines.Add(line);
-            }
+            await CreateGridLineAsync(pos, new Vector3(totalWidth, 0.02f, 1f));
         }
 
         for (int x = 0; x <= _gardenGridSize.x; x++)
         {
             float currentX = _gardenOrigin.x + (x * _gardenSubCellSize);
             Vector3 pos = new Vector3(currentX, gridY, _gardenOrigin.z + (totalDepth * 0.5f));
-
-            GameObject line = await GameObjectManager.Instance.CreateObjectAsync("GridLine", "Prefabs/UI/GridLine", pos);
-
-            if (line != null)
-            {
-                line.transform.SetParent(transform);
-                line.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                line.transform.localScale = new Vector3(0.02f, totalDepth, 1f);
-                _activeGridLines.Add(line);
-            }
+            await CreateGridLineAsync(pos, new Vector3(0.02f, totalDepth, 1f));
         }
     }
 
@@ -563,6 +533,23 @@ public class HousingView : ViewBase
         _activeGridLines.Clear();
     }
 
+    private Vector2Int WorldToGardenGrid(Vector3 hitPoint, Vector2Int furnitureSize)
+    {
+        float halfWidth = furnitureSize.x * 0.5f * _gardenSubCellSize;
+        float halfDepth = furnitureSize.y * 0.5f * _gardenSubCellSize;
+
+        float localX = (hitPoint.x - halfWidth) - _gardenOrigin.x;
+        float localZ = (hitPoint.z - halfDepth) - _gardenOrigin.z;
+
+        int gridX = Mathf.RoundToInt(localX / _gardenSubCellSize);
+        int gridZ = Mathf.RoundToInt(localZ / _gardenSubCellSize);
+
+        gridX = Mathf.Clamp(gridX, 0, _gardenGridSize.x - furnitureSize.x);
+        gridZ = Mathf.Clamp(gridZ, 0, _gardenGridSize.y - furnitureSize.y);
+
+        return new Vector2Int(gridX, gridZ);
+    }
+
     private Vector2Int GetGardenCenterPosition(Vector2Int furnitureSize)
     {
         Ray centerRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -570,21 +557,7 @@ public class HousingView : ViewBase
 
         if (gardenPlane.Raycast(centerRay, out float hitDistance))
         {
-            Vector3 hitPoint = centerRay.GetPoint(hitDistance);
-
-            float halfWidth = furnitureSize.x * 0.5f * _gardenSubCellSize;
-            float halfDepth = furnitureSize.y * 0.5f * _gardenSubCellSize;
-
-            float localX = (hitPoint.x - halfWidth) - _gardenOrigin.x;
-            float localZ = (hitPoint.z - halfDepth) - _gardenOrigin.z;
-
-            int gridX = Mathf.RoundToInt(localX / _gardenSubCellSize);
-            int gridZ = Mathf.RoundToInt(localZ / _gardenSubCellSize);
-
-            gridX = Mathf.Clamp(gridX, 0, _gardenGridSize.x - furnitureSize.x);
-            gridZ = Mathf.Clamp(gridZ, 0, _gardenGridSize.y - furnitureSize.y);
-
-            return new Vector2Int(gridX, gridZ);
+            return WorldToGardenGrid(centerRay.GetPoint(hitDistance), furnitureSize);
         }
 
         return new Vector2Int(10, 10);
