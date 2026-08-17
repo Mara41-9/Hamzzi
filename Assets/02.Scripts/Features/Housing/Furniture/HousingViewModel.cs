@@ -258,6 +258,12 @@ public class HousingViewModel : ViewModelBase
         OnPropertyChanged(nameof(FurnitureVM));
     }
 
+    public void SetConfirmFurniture(FurnitureViewModel furnitureVM)
+    {
+        _confirmFurniture = furnitureVM;
+        OnPropertyChanged(nameof(ConfirmFurniture));
+    }
+
     public bool ConfirmPos()
     {
         if (FurnitureVM == null || !FurnitureVM.IsValid)
@@ -280,9 +286,9 @@ public class HousingViewModel : ViewModelBase
 
         if (success)
         {
-            ConfirmFurniture = furnitureVM;
+            SetConfirmFurniture(furnitureVM);
 
-            if (furnitureVM.CanAssignHamster)
+            if (CurrentState != HousingState.Editing && furnitureVM.CanAssignHamster)
             {
                 RequestAssignHamster = furnitureVM;
             }
@@ -306,6 +312,8 @@ public class HousingViewModel : ViewModelBase
             {
                 TargetRoom.AddFurniture(SelectedInstallFurniture);
             }
+
+            SetConfirmFurniture(SelectedInstallFurniture);
         }
 
         ResetPlacingState();
@@ -426,6 +434,11 @@ public class HousingViewModel : ViewModelBase
     public void CloseAssignUI()
     {
         RequestAssignHamster = null;
+
+        if (CurrentState == HousingState.Editing && FurnitureVM != null)
+        {
+            ConfirmPos();
+        }
     }
 
     public List<ItemData> GetOwnedFurnitureList()

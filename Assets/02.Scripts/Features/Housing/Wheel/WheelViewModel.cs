@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public class WheelSlotData
 {
@@ -33,9 +31,15 @@ public class WheelViewModel : ViewModelBase
 
         CollectionViewModel collectionVM = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
         HashSet<string> collectHamsters = collectionVM.CollectedHamsterIdList;
+        HashSet<string> otherAssignID = GetAssignHamster();
 
         foreach (string hamsterID in collectHamsters)
         {
+            if (otherAssignID.Contains(hamsterID))
+            {
+                continue;
+            }
+
             HamsterData data = GameDataManager.Instance.GetData<HamsterData>(hamsterID);
 
             bool isCurrent = (hamsterID == TargetFurniture.AssignHamsterID);
@@ -45,6 +49,44 @@ public class WheelViewModel : ViewModelBase
 
         OnPropertyChanged(nameof(TargetFurniture));
         OnPropertyChanged(nameof(CurrentHamsterID));
+    }
+
+    private HashSet<string> GetAssignHamster()
+    {
+        HashSet<string> assignID = new HashSet<string>();
+
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+
+        if (buildVM != null && buildVM.Builds != null)
+        {
+            HashSet<RoomViewModel> uniqueRoom = new HashSet<RoomViewModel>(buildVM.Builds.Values);
+
+            foreach (RoomViewModel room in uniqueRoom)
+            {
+                foreach (FurnitureViewModel furniture in room.FurnitureList)
+                {
+                    if (furniture.InstanceID != TargetFurniture.InstanceID && !string.IsNullOrEmpty(furniture.AssignHamsterID))
+                    {
+                        assignID.Add(furniture.AssignHamsterID);
+                    }
+                }
+            }
+        }
+
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
+        if (housingVM != null && housingVM.GardenFurnitureList != null)
+        {
+            foreach (FurnitureViewModel furniture in housingVM.GardenFurnitureList)
+            {
+                if (furniture.InstanceID != TargetFurniture.InstanceID && !string.IsNullOrEmpty(furniture.AssignHamsterID))
+                {
+                    assignID.Add(furniture.AssignHamsterID);
+                }
+            }
+        }
+
+        return assignID;
     }
 
     public void AssignHamster(string hamsterID)

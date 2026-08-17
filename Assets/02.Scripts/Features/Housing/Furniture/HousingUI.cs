@@ -101,7 +101,6 @@ public class HousingUI : ViewBase
             Button_ExitMode.gameObject.SetActive(false);
             Button_Remove.gameObject.SetActive(false);
             Button_Assign.gameObject.SetActive(false);
-            return;
         }
         else if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
