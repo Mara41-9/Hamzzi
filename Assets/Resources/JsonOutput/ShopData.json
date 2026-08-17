@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "Id": "Shop_Fur_001",
     "ItemId": "Furniture_Bed_01",
@@ -641,132 +641,132 @@
   },
   {
     "Id": "Shop_Play_019",
+    "ItemId": "Play_Wheel",
+    "CostAmount": 2000
+  },
+  {
+    "Id": "Shop_Play_020",
     "ItemId": "Play_Ball_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_020",
+    "Id": "Shop_Play_021",
     "ItemId": "Play_Darts_01",
     "CostAmount": 250
   },
   {
-    "Id": "Shop_Play_021",
+    "Id": "Shop_Play_022",
     "ItemId": "Play_Toy_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_022",
+    "Id": "Shop_Play_023",
     "ItemId": "Play_Toy_02",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_023",
+    "Id": "Shop_Play_024",
     "ItemId": "Play_Toy_03",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_024",
+    "Id": "Shop_Play_025",
     "ItemId": "Play_Toy_04",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_025",
+    "Id": "Shop_Play_026",
     "ItemId": "Play_Toy_05",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_026",
+    "Id": "Shop_Play_027",
     "ItemId": "Play_Toy_06",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_027",
+    "Id": "Shop_Play_028",
+    "ItemId": "Play_Carousel",
+    "CostAmount": 5000
+  },
+  {
+    "Id": "Shop_Play_029",
+    "ItemId": "Play_Minihome",
+    "CostAmount": 1800
+  },
+  {
+    "Id": "Shop_Play_030",
+    "ItemId": "Play_Slide",
+    "CostAmount": 3000
+  },
+  {
+    "Id": "Shop_Play_031",
+    "ItemId": "Play_Tower",
+    "CostAmount": 2400
+  },
+  {
+    "Id": "Shop_Play_032",
     "ItemId": "Play_Computer_01",
     "CostAmount": 400
   },
   {
-    "Id": "Shop_Play_028",
+    "Id": "Shop_Play_033",
     "ItemId": "Play_GameConsole_01",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_029",
+    "Id": "Shop_Play_034",
     "ItemId": "Play_GameConsole_02",
     "CostAmount": 250
   },
   {
-    "Id": "Shop_Play_030",
+    "Id": "Shop_Play_035",
     "ItemId": "Play_GameConsole_03",
     "CostAmount": 350
   },
   {
-    "Id": "Shop_Play_031",
+    "Id": "Shop_Play_036",
     "ItemId": "Play_Keyboard_01",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_032",
+    "Id": "Shop_Play_037",
     "ItemId": "Play_Mouse_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_033",
+    "Id": "Shop_Play_038",
     "ItemId": "Play_TV_01",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Play_034",
+    "Id": "Shop_Play_039",
     "ItemId": "Play_TV_02",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Play_035",
+    "Id": "Shop_Play_040",
     "ItemId": "Play_TV_03",
     "CostAmount": 550
   },
   {
-    "Id": "Shop_Play_036",
+    "Id": "Shop_Play_041",
     "ItemId": "Play_TV_04",
     "CostAmount": 400
   },
   {
-    "Id": "Shop_Play_037",
+    "Id": "Shop_Play_042",
     "ItemId": "Play_TV_05",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Play_038",
+    "Id": "Shop_Play_043",
     "ItemId": "Play_TV_06",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Play_039",
-    "ItemId": "Play_TV_07",
-    "CostAmount": 600
-  },
-  {
-    "Id": "Shop_Play_040",
-    "ItemId": "Play_Carousel",
-    "CostAmount": 600
-  },
-  {
-    "Id": "Shop_Play_041",
-    "ItemId": "Play_Minihome",
-    "CostAmount": 600
-  },
-  {
-    "Id": "Shop_Play_042",
-    "ItemId": "Play_Slide",
-    "CostAmount": 600
-  },
-  {
-    "Id": "Shop_Play_043",
-    "ItemId": "Play_Tower",
-    "CostAmount": 600
-  },
-  {
     "Id": "Shop_Play_044",
-    "ItemId": "Play_Wheel",
+    "ItemId": "Play_TV_07",
     "CostAmount": 600
   }
 ]
