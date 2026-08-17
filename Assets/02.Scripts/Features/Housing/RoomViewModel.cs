@@ -303,22 +303,24 @@ public class RoomViewModel : ViewModelBase
 
     public bool RemoveFurniture(FurnitureViewModel furnitureVM)
     {
-        for (int x = 0; x < furnitureVM.Size.x; x++)
-        {
-            for (int y = 0; y < furnitureVM.Size.y; y++)
-            {
-                Vector2Int checkPos = furnitureVM.LocalPos + new Vector2Int(x, y);
+        List<Vector2Int> removeKeys = new List<Vector2Int>();
 
-                if (_furnitureGrid.TryGetValue(checkPos, out var existVM) && existVM == furnitureVM)
-                {
-                    _furnitureGrid.Remove(checkPos);
-                }
+        foreach (var pair in _furnitureGrid)
+        {
+            if (pair.Value == furnitureVM || pair.Value.InstanceID == furnitureVM.InstanceID)
+            {
+                removeKeys.Add(pair.Key);
             }
         }
 
-        FurnitureList.Remove(furnitureVM);
+        foreach (var key in removeKeys)
+        {
+            _furnitureGrid.Remove(key);
+        }
 
+        FurnitureList.Remove(furnitureVM);
         OnPropertyChanged(nameof(FurnitureList));
+
         return true;
     }
 

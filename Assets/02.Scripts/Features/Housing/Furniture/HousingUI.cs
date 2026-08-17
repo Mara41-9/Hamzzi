@@ -15,6 +15,7 @@ public class HousingUI : ViewBase
     [SerializeField] private Button Button_Cancel;
     [SerializeField] private Button Button_ExitMode;
     [SerializeField] private Button Button_Remove;
+    [SerializeField] private Button Button_Assign;
 
     private HousingViewModel _housingVM;
 
@@ -26,6 +27,7 @@ public class HousingUI : ViewBase
         Button_Cancel.onClick.AddListener(OnClickCancel);
         Button_ExitMode.onClick.AddListener(OnClickExitMode);
         Button_Remove.onClick.AddListener(OnClickRemove);
+        Button_Assign.onClick.AddListener(OnClickAssign);
     }
 
     private void Start()
@@ -70,6 +72,11 @@ public class HousingUI : ViewBase
             case nameof(_housingVM.ItemList):
                 RefreshSlots();
                 break;
+
+            case nameof(_housingVM.RequestAssignHamster):
+                UIManager.Instance.OpenWheelUI();
+                UpdateState();
+                break;
         }
     }
 
@@ -83,7 +90,20 @@ public class HousingUI : ViewBase
 
     private void UpdateState()
     {
-        if (_housingVM.CurrentState == HousingState.SelectRoom)
+        if (_housingVM.RequestAssignHamster != null)
+        {
+            Panel_Info.SetActive(false);
+            Panel_FurnitureBar.SetActive(false);
+
+            Button_Exit.gameObject.SetActive(false);
+            Button_Rotation.gameObject.SetActive(false);
+            Button_Confirm.gameObject.SetActive(false);
+            Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(false);
+            Button_Remove.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(false);
+        }
+        else if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
             Panel_Info.SetActive(true);
 
@@ -107,6 +127,7 @@ public class HousingUI : ViewBase
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
             Button_ExitMode.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(_housingVM.CanAssignCurrentFurniture);
 
             bool isEditing = _housingVM.CurrentState == HousingState.Editing;
             Button_Remove.gameObject.SetActive(isEditing);
@@ -125,6 +146,7 @@ public class HousingUI : ViewBase
             Button_Cancel.gameObject.SetActive(false);
             Button_ExitMode.gameObject.SetActive(false);
             Button_Remove.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(false);
         }
     }
 
@@ -192,5 +214,10 @@ public class HousingUI : ViewBase
     private void OnClickRemove()
     {
         _housingVM.RemoveSelectedFurniture();
+    }
+
+    private void OnClickAssign()
+    {
+        _housingVM.OpenAssignUI();
     }
 }

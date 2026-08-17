@@ -1339,5 +1339,50 @@
     "SubCategory": "Electronics",
     "IconPath": "Image/Item/Play/TV_07",
     "PrefabPath": "Prefabs/Furniture/Play_TV_07"
+  },
+  {
+    "Id": "Play_Carousel",
+    "Name": "회전목마",
+    "Description": "대부분의 햄스터들이 좋아하는 회전목마",
+    "Category": "Play",
+    "SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Carousel",
+    "PrefabPath": "Prefabs/Furniture/Play_Carousel"
+  },
+  {
+    "Id": "Play_Minihome",
+    "Name": "빨간 작은 방",
+    "Description": "햄스터들의 사생활을 존중하는 작은 방",
+    "Category": "Play",
+    "SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Minihome",
+    "PrefabPath": "Prefabs/Furniture/Play_Minihome"
+  },
+  {
+    "Id": "Play_Slide",
+    "Name": "미끄럼틀",
+    "Description": "스트레스를 해소시켜주는 미끄럼틀",
+    "Category": "Play",
+    "SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Slide",
+    "PrefabPath": "Prefabs/Furniture/Play_Slide"
+  },
+  {
+    "Id": "Play_Tower",
+    "Name": "햄스터 타워",
+    "Description": "매달려 놀기 딱 좋은 햄스터 타워",
+    "Category": "Play",
+    "SubCategory": "Toy",
+    "IconPath": "Image/Item/Play/Tower",
+    "PrefabPath": "Prefabs/Furniture/Play_Tower"
+  },
+  {
+    "Id": "Play_Wheel",
+    "Name": "달려라 쳇바퀴",
+    "Description": "매달려 놀기 딱 좋은 햄스터 타워",
+    "Category": "Play",
+    "SubCategory": "Exercise",
+    "IconPath": "Image/Item/Play/Wheel",
+    "PrefabPath": "Prefabs/Furniture/Play_Wheel"
   }
 ]
