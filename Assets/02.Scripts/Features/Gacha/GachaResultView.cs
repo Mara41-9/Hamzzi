@@ -82,7 +82,7 @@ public class GachaResultView : MonoBehaviour
     {
         iconRect.gameObject.SetActive(true);
 
-        iconRect.localScale = Vector3.one * 2.5f;
+        iconRect.localScale = Vector3.one * 1.5f;
 
         Sequence singleSeq = DOTween.Sequence();
         singleSeq.Join(iconRect.DOScale(Vector3.one, duration).SetEase(OutBackCustom()));
