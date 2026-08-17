@@ -1021,6 +1021,7 @@ MonoBehaviour:
   Text_NextInfo: {fileID: 8688628475621432945}
   Text_PrevDescription: {fileID: 938622083158551602}
   Text_NextDescription: {fileID: 1368554176858647426}
+  Prefab_Slot: {fileID: 3531889357708306709, guid: d0701dad4a61db84fbd2f65606c8065a, type: 3}
   Parent_Hamsters: {fileID: 1779503877828879545}
 --- !u!1 &3177918782109365770
 GameObject:
@@ -1273,8 +1274,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_AnchoredPosition: {x: 54.52649, y: -54.52649}
+  m_SizeDelta: {x: -109.0531, y: -107.8775}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4528552553805615478
 CanvasRenderer:
@@ -1887,7 +1888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
   m_Content: {fileID: 1779503877828879545}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -1975,8 +1976,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_CellSize: {x: 200, y: 200}
+  m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &7238602720156279926

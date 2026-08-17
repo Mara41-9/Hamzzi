@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "Id": "Shop_Fur_001",
     "ItemId": "Furniture_Bed_01",
@@ -747,6 +747,31 @@
   {
     "Id": "Shop_Play_039",
     "ItemId": "Play_TV_07",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_040",
+    "ItemId": "Play_Carousel",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_041",
+    "ItemId": "Play_Minihome",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_042",
+    "ItemId": "Play_Slide",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_043",
+    "ItemId": "Play_Tower",
+    "CostAmount": 600
+  },
+  {
+    "Id": "Shop_Play_044",
+    "ItemId": "Play_Wheel",
     "CostAmount": 600
   }
 ]

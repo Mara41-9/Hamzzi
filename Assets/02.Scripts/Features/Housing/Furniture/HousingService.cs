@@ -43,6 +43,13 @@ public class HousingService
                 Name = "기본 벽난로",
                 IconPath = "Image/Item/Furniture/Fireplace_03",
                 PrefabPath = "Prefabs/Furniture/Fireplace_03"
+            },
+            new ItemData
+            {
+                Id = "Play_Wheel",
+                Name = "달려라 쳇바퀴",
+                IconPath = "Image/Item/Play/Wheel",
+                PrefabPath = "Prefabs/Furniture/Play_Wheel"
             }
         };
     }

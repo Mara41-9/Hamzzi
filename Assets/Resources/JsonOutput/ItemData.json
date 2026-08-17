@@ -1369,8 +1369,8 @@
   },
   {
     "Id": "Play_Slide",
-    "Name": "미끌럼틀",
-    "Description": "스트레스를 해소시켜주는 미끌럼틀",
+    "Name": "미끄럼틀",
+    "Description": "스트레스를 해소시켜주는 미끄럼틀",
     "Category": "Play",
     "SubCategory": "Toy",
     "IconPath": "Image/Item/Play/Slide",

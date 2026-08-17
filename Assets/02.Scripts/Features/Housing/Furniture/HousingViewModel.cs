@@ -139,6 +139,28 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private FurnitureViewModel _requestAssignHamster;
+    public FurnitureViewModel RequestAssignHamster
+    {
+        get => _requestAssignHamster;
+        set
+        {
+            if (_requestAssignHamster != value)
+            {
+                _requestAssignHamster = value;
+                OnPropertyChanged(nameof(RequestAssignHamster));
+            }
+        }
+    }
+
+    public bool CanAssignCurrentFurniture
+    {
+        get
+        {
+            return CurrentState == HousingState.Editing && FurnitureVM.CanAssignHamster;
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(CurrentViewMode));
@@ -259,6 +281,12 @@ public class HousingViewModel : ViewModelBase
         if (success)
         {
             ConfirmFurniture = furnitureVM;
+
+            if (furnitureVM.CanAssignHamster)
+            {
+                RequestAssignHamster = furnitureVM;
+            }
+
             ResetPlacingState();
             return true;
         }
@@ -359,17 +387,19 @@ public class HousingViewModel : ViewModelBase
 
     public bool RemoveGardenFurniture(FurnitureViewModel furnitureVM)
     {
-        for (int x = 0; x < furnitureVM.Size.x; x++)
-        {
-            for (int y = 0; y < furnitureVM.Size.y; y++)
-            {
-                Vector2Int checkPos = furnitureVM.LocalPos + new Vector2Int(x, y);
+        List<Vector2Int> removeKeys = new List<Vector2Int>();
 
-                if (_gardenFurnitureGrid.TryGetValue(checkPos, out var existVM) && existVM == furnitureVM)
-                {
-                    _gardenFurnitureGrid.Remove(checkPos);
-                }
+        foreach (var pair in _gardenFurnitureGrid)
+        {
+            if (pair.Value == furnitureVM || pair.Value.InstanceID == furnitureVM.InstanceID)
+            {
+                removeKeys.Add(pair.Key);
             }
+        }
+
+        foreach (var key in removeKeys)
+        {
+            _gardenFurnitureGrid.Remove(key);
         }
 
         GardenFurnitureList.Remove(furnitureVM);
@@ -383,6 +413,19 @@ public class HousingViewModel : ViewModelBase
         FurnitureVM = null;
         SelectedInstallFurniture = null;
         CurrentState = HousingState.Placing;
+    }
+
+    public void OpenAssignUI()
+    {
+        if (FurnitureVM.CanAssignHamster)
+        {
+            RequestAssignHamster = FurnitureVM;
+        }
+    }
+
+    public void CloseAssignUI()
+    {
+        RequestAssignHamster = null;
     }
 
     public List<ItemData> GetOwnedFurnitureList()
