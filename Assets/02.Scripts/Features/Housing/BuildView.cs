@@ -29,8 +29,6 @@ public class BuildView : ViewBase
             BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
             BindViewModel(buildVM);
         }
-
-        //_buildVM.InitDefaultRoom(Transform_DefaultRoom, Transform_DefaultAisle);
     }
 
     public void BindViewModel(BuildViewModel buildVM)
@@ -61,18 +59,31 @@ public class BuildView : ViewBase
             if (_gridPlane.Raycast(ray, out var hit))
             {
                 Vector3 hitPoint = ray.GetPoint(hit);
-                Vector2Int gridPos = ChangeGridPosition(hitPoint);
 
-                if (_buildVM.SelectType == BuildType.Room)
+                Vector3 adjustedHitPoint = new Vector3(hitPoint.x, hitPoint.y - 2.0f, hitPoint.z);
+                Vector2Int gridPos = ChangeGridPosition(adjustedHitPoint);
+
+                if (_buildVM.SelectType == BuildType.Aisle)
                 {
-                    _buildVM.TryBuildRoom(gridPos);
+                    _buildVM.TryBuildAisle(gridPos);
                 }
-                else if (_buildVM.SelectType == BuildType.Aisle)
+                else if (_buildVM.SelectType == BuildType.Room)
                 {
-                    Vector3 adjustedHitPoint = new Vector3(hitPoint.x, hitPoint.y - 2.0f, hitPoint.z);
-                    Vector2Int pos = ChangeGridPosition(adjustedHitPoint);
-
-                    _buildVM.TryBuildAisle(pos);
+                    if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel clickedRoom) && clickedRoom.BuildType == BuildType.Room && clickedRoom.IsReady)
+                    {
+                        _buildVM.ChooseRoom(clickedRoom);
+                    }
+                    else
+                    {
+                        if (_buildVM.SelectRoom != null)
+                        {
+                            _buildVM.DeselectRoom();
+                        }
+                        else
+                        {
+                            _buildVM.TryBuildRoom(gridPos);
+                        }
+                    }
                 }
             }
         }
@@ -135,19 +146,8 @@ public class BuildView : ViewBase
 
     private async UniTaskVoid SpawnBuildPrefab(RoomViewModel roomVM)
     {
-        float worldX;
-        float worldY;
-
-        if (roomVM.BuildType == BuildType.Room)
-        {
-            worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = roomVM.OriginPos.y + 2.0f;
-        }
-        else
-        {
-            worldX = (roomVM.OriginPos.x + roomVM.Size.x * (_cellSize / 2));
-            worldY = roomVM.OriginPos.y;
-        }
+        float worldX = roomVM.OriginPos.x + (roomVM.Size.x * (1f * 0.5f));
+        float worldY = roomVM.OriginPos.y + (roomVM.BuildType == BuildType.Room ? 2f : 0f);
 
         worldX = Mathf.Round(worldX * 100f) / 100f;
         worldY = Mathf.Round(worldY * 100f) / 100f;

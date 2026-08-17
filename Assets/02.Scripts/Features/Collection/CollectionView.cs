@@ -84,6 +84,7 @@ public class CollectionView : UIBase
                 UpdateCollectedSlot();
                 break;
             case ContainerEventType.Remove:
+                UpdateCollectedSlot();
                 break;
             case ContainerEventType.Update:
                 break;
@@ -118,6 +119,51 @@ public class CollectionView : UIBase
 
             _spawnSlotList.Add(hamsterId, hamsterSlot);
         }
+
+        // 티어 기준으로 정렬
+        SortSlotsByTier();
+    }
+
+    private void SortSlotsByTier()
+    {
+        if (_spawnSlotList.Count() <= 0)
+            return;
+
+        var slotList = _spawnSlotList.Keys.ToList();
+        slotList.Sort(CompareSlots);
+
+        int index = 0;
+        foreach(string hamsterId in slotList)
+        {
+            var slotComponent = _spawnSlotList[hamsterId];
+            if (slotComponent == null)
+                continue;
+
+            slotComponent.transform.SetSiblingIndex(index);
+            index++;
+            Debug.Log("정렬 중");
+        }
+    }
+
+    private int CompareSlots(string aHamsterId, string bHamsterId)
+    {
+        int aHamsterTier = GetHamsterTier(aHamsterId);
+        int bHamsterTier = GetHamsterTier(bHamsterId);
+
+        int tierComparison = aHamsterTier.CompareTo(bHamsterTier);
+
+        if(tierComparison == 0)
+        {
+            return aHamsterId.CompareTo(bHamsterId);
+        }
+        return tierComparison;
+    }
+
+    private int GetHamsterTier(string hamsterId)
+    {
+        var hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
+
+        return (int)hamsterData.HamsterTier;
     }
 
     private void UpdateCollectedSlot()

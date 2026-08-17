@@ -1,16 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class BuildViewModel : ViewModelBase
 {
+    private static readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
     public Dictionary<Vector2Int, RoomViewModel> Builds { get; private set; } = new Dictionary<Vector2Int, RoomViewModel>();
 
     private bool _hasStartPos = false;
     private RoomViewModel _startRoom;
 
-    private RoomViewModel _pendingRoom;
-    private List<RoomViewModel> _pendingAisle = new List<RoomViewModel>();
+    private RoomViewModel _waitingRoom;
+    private List<RoomViewModel> _waitingAisle = new List<RoomViewModel>();
+
+    public bool CanDestroy
+    {
+        get
+        {
+            return SelectRoom != null && SelectRoom.IsReady && SelectType == BuildType.Room && !SelectRoom.IsDefault;
+        }
+    }
+
+    public bool CanConnectAisle
+    {
+        get
+        {
+            return SelectRoom != null && SelectRoom.IsReady && SelectType == BuildType.Room;
+        }
+    }
 
     private bool _canConfirm = false;
     public bool CanConfirm
@@ -25,6 +42,23 @@ public class BuildViewModel : ViewModelBase
             }
         }
     }
+
+    private RoomViewModel _selectRoom;
+    public RoomViewModel SelectRoom
+    {
+        get => _selectRoom;
+        set
+        {
+            if (_selectRoom != value)
+            {
+                _selectRoom = value;
+                OnPropertyChanged(nameof(SelectRoom));
+                OnPropertyChanged(nameof(CanDestroy));
+                OnPropertyChanged(nameof(CanConnectAisle));
+            }
+        }
+    }
+
 
     private RoomViewModel _destroyBuild;
     public RoomViewModel DestroyBuild
@@ -50,6 +84,8 @@ public class BuildViewModel : ViewModelBase
             {
                 _selectType = value;
                 OnPropertyChanged(nameof(SelectType));
+                OnPropertyChanged(nameof(CanDestroy));
+                OnPropertyChanged(nameof(CanConnectAisle));
             }
         }
     }
@@ -68,39 +104,153 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    public void ChooseRoom(RoomViewModel room)
+    {
+        if (room == null || room.BuildType != BuildType.Room)
+        {
+            return;
+        }
+
+        SelectRoom = room;
+    }
+
+    public void DeselectRoom()
+    {
+        SelectRoom = null;
+    }
+
+    public void StartConnectingAisle()
+    {
+        if (SelectRoom == null)
+        {
+            return;
+        }
+
+        _startRoom = SelectRoom;
+        _hasStartPos = true;
+
+        DeselectRoom();
+        SelectType = BuildType.Aisle;
+    }
+
+    public void DestroyRoom()
+    {
+        if (SelectRoom == null)
+        {
+            return;
+        }
+
+        RoomViewModel target = SelectRoom;
+        DeselectRoom();
+
+        RemoveBuild(target);
+        ClearAisle();
+    }
+
+    public void ClearAisle()
+    {
+        while (true)
+        {
+            HashSet<RoomViewModel> deadEndAisles = new HashSet<RoomViewModel>();
+
+            foreach (var pair in Builds)
+            {
+                Vector2Int pos = pair.Key;
+                RoomViewModel vm = pair.Value;
+
+                if (vm.BuildType == BuildType.Aisle && !vm.IsDefault)
+                {
+                    if (CountAisle(pos, vm) <= 1)
+                    {
+                        deadEndAisles.Add(vm);
+                    }
+                }
+            }
+
+            if (deadEndAisles.Count == 0)
+            {
+                break;
+            }
+
+            foreach (var aisle in deadEndAisles)
+            {
+                RemoveBuild(aisle);
+            }
+        }
+    }
+
+    private int CountAisle(Vector2Int pos, RoomViewModel aisleVM)
+    {
+        int count = 0;
+
+        for (int i = 0; i < _directions.Length; i++)
+        {
+            Vector2Int targetPos = pos + _directions[i];
+
+            if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            {
+                if (targetVM == aisleVM)
+                {
+                    continue;
+                }
+
+                if (targetVM.BuildType == BuildType.Aisle)
+                {
+                    count++;
+                }
+                else if (targetVM.BuildType == BuildType.Room)
+                {
+                    Vector2Int doorPos = targetVM.GetNearDoor(pos);
+
+                    if (targetPos == doorPos && !targetVM.IsDefault)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
     public void EnterBuildMode()
     {
         CancelBuildMode();
+        DeselectRoom();
         SelectType = BuildType.Room;
     }
 
     public void ConfirmBuild()
     {
-        if (_pendingRoom != null)
+        DeselectRoom();
+
+        if (_waitingRoom != null)
         {
-            _pendingRoom.IsReady = true;
-            _pendingRoom = null;
+            _waitingRoom.IsReady = true;
+            _waitingRoom = null;
         }
 
-        foreach (RoomViewModel aisle in _pendingAisle)
+        foreach (RoomViewModel aisle in _waitingAisle)
         {
             aisle.IsReady = true;
         }
 
-        _pendingAisle.Clear();
+        _waitingAisle.Clear();
         CanConfirm = false;
         SelectType = BuildType.None;
     }
 
     public void CancelBuildMode()
     {
-        if (_pendingRoom != null)
+        DeselectRoom();
+
+        if (_waitingRoom != null)
         {
-            RemoveBuild(_pendingRoom);
-            _pendingRoom = null;
+            RemoveBuild(_waitingRoom);
+            _waitingRoom = null;
         }
 
-        ClearPendingAisle();
+        ClearWaitingAisle();
 
         ResetAisle();
         CanConfirm = false;
@@ -138,11 +288,9 @@ public class BuildViewModel : ViewModelBase
         }
 
         RegisterRoom(newRoom, pos);
-
-        newRoom.PropertyChanged += OnRoomPropertyChanged;
         UpdateRoomConnection(newRoom);
 
-        _pendingRoom = newRoom;
+        _waitingRoom = newRoom;
         LastBuild = newRoom;
 
         _startRoom = newRoom;
@@ -152,23 +300,13 @@ public class BuildViewModel : ViewModelBase
         return true;
     }
 
-    private void OnRoomPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(RoomViewModel.DoorDataList) && sender is RoomViewModel room)
-        {
-            UpdateRoomConnection(room);
-            room.PropertyChanged -= OnRoomPropertyChanged;
-        }
-    }
-
     private void BuildDefaultRoom(Vector2Int pos)
     {
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
         newRoom.IsReady = true;
+        newRoom.IsDefault = true;
 
         RegisterRoom(newRoom, pos);
-
-        newRoom.PropertyChanged += OnRoomPropertyChanged;
         UpdateRoomConnection(newRoom);
 
         LastBuild = newRoom;
@@ -182,6 +320,7 @@ public class BuildViewModel : ViewModelBase
         }
 
         RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
+        newAisle.IsDefault = true;
         Builds[pos] = newAisle;
 
         UpdateConnection(pos);
@@ -221,7 +360,7 @@ public class BuildViewModel : ViewModelBase
                 RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
                 Builds[aislePos] = newAisle;
 
-                _pendingAisle.Add(newAisle);
+                _waitingAisle.Add(newAisle);
                 LastBuild = newAisle;
             }
 
@@ -241,41 +380,35 @@ public class BuildViewModel : ViewModelBase
         _startRoom = null;
     }
 
-    private void ClearPendingAisle()
+    private void ClearWaitingAisle()
     {
-        foreach (RoomViewModel aisle in _pendingAisle)
+        foreach (RoomViewModel aisle in _waitingAisle)
         {
             RemoveBuild(aisle);
         }
 
-        _pendingAisle.Clear();
+        _waitingAisle.Clear();
         CanConfirm = false;
     }
 
     private void RemoveBuild(RoomViewModel target)
     {
-        target.PropertyChanged -= OnRoomPropertyChanged;
-
-        UnregisterRoom(target);
-
-        UpdateNearConnection(target.OriginPos);
-        DestroyBuild = target;
-    }
-
-    private void UnregisterRoom(RoomViewModel target)
-    {
         for (int x = 0; x < target.Size.x; x++)
         {
             for (int y = 0; y < target.Size.y; y++)
             {
-                Vector2Int checkPos = target.OriginPos + new Vector2Int(x, y);
+                Vector2Int tilePos = target.OriginPos + new Vector2Int(x, y);
 
-                if (Builds.TryGetValue(checkPos, out RoomViewModel existVM) && existVM == target)
+                if (Builds.TryGetValue(tilePos, out RoomViewModel existVM) && existVM == target)
                 {
-                    Builds.Remove(checkPos);
+                    Builds.Remove(tilePos);
                 }
+
+                UpdateNearConnection(tilePos);
             }
         }
+
+        DestroyBuild = target;
     }
 
     public void UpdateRoomConnection(RoomViewModel room)
@@ -343,11 +476,9 @@ public class BuildViewModel : ViewModelBase
             return;
         }
 
-        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-
-        for (int i = 0; i < directions.Length; i++)
+        for (int i = 0; i < _directions.Length; i++)
         {
-            Vector2Int targetPos = current + directions[i];
+            Vector2Int targetPos = current + _directions[i];
             int oppDir = GetOppositeDirection(i);
 
             if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
@@ -388,9 +519,7 @@ public class BuildViewModel : ViewModelBase
 
     public void UpdateNearConnection(Vector2Int pos)
     {
-        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-
-        foreach (Vector2Int dir in dirs)
+        foreach (Vector2Int dir in _directions)
         {
             Vector2Int target = pos + dir;
 
@@ -432,6 +561,7 @@ public class BuildViewModel : ViewModelBase
                 }
             }
         }
+
         return true;
     }
 

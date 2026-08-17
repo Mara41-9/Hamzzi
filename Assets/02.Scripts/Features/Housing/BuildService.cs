@@ -12,6 +12,7 @@ public struct AisleConnection
 public class BuildService
 {
     private static readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+    private static readonly Vector2Int[] _diagonalDirs = { new Vector2Int(-1, -1), new Vector2Int(-1, 1), new Vector2Int(1, -1), new Vector2Int(1, 1) };
 
     private const int MAX_SEARCH = 500;
 
@@ -36,8 +37,8 @@ public class BuildService
 
     public List<Vector2Int> SearchBestPath(RoomViewModel startRoom, RoomViewModel endRoom, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        var startDoors = startRoom.DoorDataList;
-        var endDoors = endRoom.DoorDataList;
+        List<DoorData> startDoors = startRoom.DoorDataList;
+        List<DoorData> endDoors = endRoom.DoorDataList;
 
         List<Vector2Int> bestPath = null;
         int minPathLength = int.MaxValue;
@@ -187,7 +188,6 @@ public class BuildService
         }
 
         path.Add(start);
-        path.Reverse();
 
         return path;
     }
@@ -223,9 +223,7 @@ public class BuildService
 
     private bool IsNearRoomCorner(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        Vector2Int[] diagonalDirs = { new Vector2Int(-1, -1), new Vector2Int(-1, 1), new Vector2Int(1, -1), new Vector2Int(1, 1) };
-
-        foreach (Vector2Int dir in diagonalDirs)
+        foreach (Vector2Int dir in _diagonalDirs)
         {
             Vector2Int checkPos = pos + dir;
 

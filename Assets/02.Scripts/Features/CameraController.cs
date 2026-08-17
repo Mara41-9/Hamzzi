@@ -93,7 +93,10 @@ public class CameraController : MonoBehaviour
                 }
                 else
                 {
-                    ShowOverview().Forget();
+                    if (_housingVM.CurrentViewMode != HousingViewMode.Garden)
+                    {
+                        ShowOverview().Forget();
+                    }
                 }
                 break;
 

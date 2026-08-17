@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum HousingState
@@ -20,16 +19,14 @@ public class HousingViewModel : ViewModelBase
 {
     public List<FurnitureViewModel> GardenFurnitureList { get; private set; } = new List<FurnitureViewModel>();
 
+    public Vector2Int GardenGridSize { get; } = new Vector2Int(150, 60);
+    private Dictionary<Vector2Int, FurnitureViewModel> _gardenFurnitureGrid = new Dictionary<Vector2Int, FurnitureViewModel>();
+
     public bool CanConfirm
     {
         get
         {
-            if (FurnitureVM.IsValid)
-            {
-                return true;
-            }
-
-            return false;
+            return FurnitureVM != null && FurnitureVM.IsValid;
         }
     }
 
@@ -128,6 +125,20 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private FurnitureViewModel _confirmFurniture;
+    public FurnitureViewModel ConfirmFurniture
+    {
+        get => _confirmFurniture;
+        set
+        {
+            if (_confirmFurniture != value)
+            {
+                _confirmFurniture = value;
+                OnPropertyChanged(nameof(ConfirmFurniture));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(CurrentViewMode));
@@ -155,11 +166,19 @@ public class HousingViewModel : ViewModelBase
 
     public void SelectInstallFurniture(FurnitureViewModel furnitureVM)
     {
+        CurrentState = HousingState.Editing;
+
         SelectedInstallFurniture = furnitureVM;
         FurnitureVM = furnitureVM;
 
-        TargetRoom.RemoveFurniture(furnitureVM);
-        CurrentState = HousingState.Editing;
+        if (TargetRoom != null)
+        {
+            TargetRoom.RemoveFurniture(furnitureVM);
+        }
+        else if (CurrentViewMode == HousingViewMode.Garden)
+        {
+            RemoveGardenFurniture(furnitureVM);
+        }
 
         CheckCurrentPos();
     }
@@ -170,8 +189,7 @@ public class HousingViewModel : ViewModelBase
 
         if (CurrentViewMode == HousingViewMode.Garden)
         {
-            GardenFurnitureList.Remove(FurnitureVM);
-            OnPropertyChanged(nameof(GardenFurnitureList));
+            RemoveGardenFurniture(FurnitureVM);
         }
         else if (TargetRoom != null)
         {
@@ -181,28 +199,26 @@ public class HousingViewModel : ViewModelBase
         string furnitureID = FurnitureVM.FurnitureID;
         // 여기에 인벤토리로 돌아가는 로직
 
-        FurnitureVM = null;
-        SelectedInstallFurniture = null;
-        CurrentState = HousingState.Placing;
+        ResetPlacingState();
 
         return true;
     }
 
-    public void SelectFurniture(string furnitureID, Vector2Int subSize, RoomViewModel targetRoom)
+    public void SelectFurniture(ItemData data, Vector2Int subSize, RoomViewModel targetRoom)
     {
         TargetRoom = targetRoom;
 
         Vector2Int initialPos = new Vector2Int(TargetRoom.SubGridSize.x / 2 - subSize.x / 2, TargetRoom.SubGridSize.y / 2 - subSize.y / 2);
 
-        FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
+        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 
-    public void SelectGardenFurniture(string furnitureID, Vector2Int subSize)
+    public void SelectGardenFurniture(ItemData data, Vector2Int subSize)
     {
         Vector2Int initialPos = new Vector2Int(10, 10);
-        
-        FurnitureVM = new FurnitureViewModel(furnitureID, initialPos, subSize);
+
+        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 
@@ -222,34 +238,29 @@ public class HousingViewModel : ViewModelBase
 
     public bool ConfirmPos()
     {
-        if (FurnitureVM == null || !FurnitureVM.IsValid || TargetRoom == null)
+        if (FurnitureVM == null || !FurnitureVM.IsValid)
         {
             return false;
         }
 
+        FurnitureViewModel furnitureVM = FurnitureVM;
+        bool success = false;
+
         if (CurrentViewMode == HousingViewMode.Garden)
         {
-            GardenFurnitureList.Add(FurnitureVM);
-            OnPropertyChanged(nameof(GardenFurnitureList));
-
-            FurnitureVM = null;
-            SelectedInstallFurniture = null;
-            CurrentState = HousingState.Placing;
-
-            return true;
+            success = AddGardenFurniture(FurnitureVM);
         }
         else if (TargetRoom != null)
         {
-            FurnitureVM.RoomInstanceID = TargetRoom.InstanceID;
+            furnitureVM.RoomInstanceID = TargetRoom.InstanceID;
+            success = TargetRoom.AddFurniture(FurnitureVM);
+        }
 
-            if (TargetRoom.AddFurniture(FurnitureVM))
-            {
-                FurnitureVM = null;
-                SelectedInstallFurniture = null;
-                CurrentState = HousingState.Placing;
-
-                return true;
-            }
+        if (success)
+        {
+            ConfirmFurniture = furnitureVM;
+            ResetPlacingState();
+            return true;
         }
 
         return false;
@@ -257,7 +268,19 @@ public class HousingViewModel : ViewModelBase
 
     public void CancelPos()
     {
-        FurnitureVM = null;
+        if (CurrentState == HousingState.Editing && SelectedInstallFurniture != null)
+        {
+            if (CurrentViewMode == HousingViewMode.Garden)
+            {
+                AddGardenFurniture(SelectedInstallFurniture);
+            }
+            else if (TargetRoom != null)
+            {
+                TargetRoom.AddFurniture(SelectedInstallFurniture);
+            }
+        }
+
+        ResetPlacingState();
     }
 
     public void ExitRoom()
@@ -269,9 +292,7 @@ public class HousingViewModel : ViewModelBase
     {
         if (CurrentViewMode == HousingViewMode.Garden)
         {
-            bool inBounds = FurnitureVM.LocalPos.x >= -20 && FurnitureVM.LocalPos.x <= 20 && FurnitureVM.LocalPos.y >= -20 && FurnitureVM.LocalPos.y <= 20;
-
-            FurnitureVM.IsValid = inBounds;
+            FurnitureVM.IsValid = IsValidGardenPlace(FurnitureVM.LocalPos, FurnitureVM.Size);
         }
         else if (TargetRoom != null)
         {
@@ -290,5 +311,82 @@ public class HousingViewModel : ViewModelBase
     {
         TargetRoom = null;
         CurrentViewMode = HousingViewMode.OverView;
+    }
+
+    public bool IsValidGardenPlace(Vector2Int localPos, Vector2Int furnitureSize)
+    {
+        for (int x = 0; x < furnitureSize.x; x++)
+        {
+            for (int y = 0; y < furnitureSize.y; y++)
+            {
+                Vector2Int checkPos = localPos + new Vector2Int(x, y);
+
+                if (checkPos.x < 0 || checkPos.x >= GardenGridSize.x || checkPos.y < 0 || checkPos.y >= GardenGridSize.y)
+                {
+                    return false;
+                }
+
+                if (_gardenFurnitureGrid.ContainsKey(checkPos))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public bool AddGardenFurniture(FurnitureViewModel furnitureVM)
+    {
+        if (!IsValidGardenPlace(furnitureVM.LocalPos, furnitureVM.Size))
+        {
+            return false;
+        }
+
+        for (int x = 0; x < furnitureVM.Size.x; x++)
+        {
+            for (int y = 0; y < furnitureVM.Size.y; y++)
+            {
+                _gardenFurnitureGrid[furnitureVM.LocalPos + new Vector2Int(x, y)] = furnitureVM;
+            }
+        }
+
+        GardenFurnitureList.Add(furnitureVM);
+        OnPropertyChanged(nameof(GardenFurnitureList));
+
+        return true;
+    }
+
+    public bool RemoveGardenFurniture(FurnitureViewModel furnitureVM)
+    {
+        for (int x = 0; x < furnitureVM.Size.x; x++)
+        {
+            for (int y = 0; y < furnitureVM.Size.y; y++)
+            {
+                Vector2Int checkPos = furnitureVM.LocalPos + new Vector2Int(x, y);
+
+                if (_gardenFurnitureGrid.TryGetValue(checkPos, out var existVM) && existVM == furnitureVM)
+                {
+                    _gardenFurnitureGrid.Remove(checkPos);
+                }
+            }
+        }
+
+        GardenFurnitureList.Remove(furnitureVM);
+        OnPropertyChanged(nameof(GardenFurnitureList));
+
+        return true;
+    }
+
+    private void ResetPlacingState()
+    {
+        FurnitureVM = null;
+        SelectedInstallFurniture = null;
+        CurrentState = HousingState.Placing;
+    }
+
+    public List<ItemData> GetOwnedFurnitureList()
+    {
+        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
     }
 }
