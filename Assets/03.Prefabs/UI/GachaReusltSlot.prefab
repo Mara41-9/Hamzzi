@@ -166,7 +166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5599485543628639591
 RectTransform:
   m_ObjectHideFlags: 0
@@ -201,3 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GachaResultSlot
   HamsterIcon: {fileID: 8913484496731091997}
+  TierImage: {fileID: 1644695192709111456}
+  SSTierColor: {r: 1, g: 0, b: 0, a: 1}
+  STierColor: {r: 1, g: 1, b: 0, a: 1}
+  ATierColor: {r: 0.627451, g: 0, b: 0.627451, a: 1}
