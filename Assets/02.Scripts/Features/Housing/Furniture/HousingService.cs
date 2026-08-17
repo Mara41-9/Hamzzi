@@ -23,6 +23,33 @@ public class HousingService
         return housingVm;
     }
 
+    public List<FurnitureViewModel> GetAllPlacedFurniture()
+    {
+        List<FurnitureViewModel> allList = new List<FurnitureViewModel>();
+
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+
+        if (buildVM?.Builds != null)
+        {
+            var uniqueRooms = new HashSet<RoomViewModel>(buildVM.Builds.Values);
+
+            foreach (var room in uniqueRooms)
+            {
+                if (room.FurnitureList != null)
+                {
+                    allList.AddRange(room.FurnitureList);
+                }
+            }
+        }
+
+        if (_housingVM?.GardenFurnitureList != null)
+        {
+            allList.AddRange(_housingVM.GardenFurnitureList);
+        }
+
+        return allList;
+    }
+
     public List<ItemData> GetOwnedFurnitureList()
     {
         // TODO: 유저가 가진 가구 DB 연결 (Shop이랑)

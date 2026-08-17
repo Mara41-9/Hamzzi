@@ -20,6 +20,7 @@ public class WheelUI : ViewBase
 
     [SerializeField] private GameObject Prefab_Slot;
     [SerializeField] private Transform Parent_Hamsters;
+    [SerializeField] private GameObject Text_InfoText;
 
     private Dictionary<string, HamsterSlot> _spawnSlotList = new Dictionary<string, HamsterSlot>();
     private WheelViewModel _wheelVM;
@@ -85,12 +86,24 @@ public class WheelUI : ViewBase
                 _spawnSlotList.Add(hamsterId, hamsterSlot);
             }
         }
+
+        if (_spawnSlotList.Count == 0)
+        {
+            Text_InfoText.SetActive(true);
+        }
+        else
+        {
+            Text_InfoText.SetActive(false);
+        }
     }
 
     private void RefreshInfoUI()
     {
         UpdatePrevHamsterInfo();
         UpdateNextHamsterInfo();
+
+        bool hasHamster = !string.IsNullOrEmpty(_wheelVM.CurrentHamsterID);
+        Button_Skip.interactable = hasHamster;
     }
 
     private void UpdatePrevHamsterInfo()

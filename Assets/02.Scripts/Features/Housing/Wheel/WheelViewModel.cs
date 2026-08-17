@@ -54,35 +54,13 @@ public class WheelViewModel : ViewModelBase
     private HashSet<string> GetAssignHamster()
     {
         HashSet<string> assignID = new HashSet<string>();
+        List<FurnitureViewModel> allFurniture = ServiceManager.Instance.HousingService.GetAllPlacedFurniture();
 
-        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
-
-        if (buildVM != null && buildVM.Builds != null)
+        foreach (var furniture in allFurniture)
         {
-            HashSet<RoomViewModel> uniqueRoom = new HashSet<RoomViewModel>(buildVM.Builds.Values);
-
-            foreach (RoomViewModel room in uniqueRoom)
+            if (!string.IsNullOrEmpty(furniture.AssignHamsterID))
             {
-                foreach (FurnitureViewModel furniture in room.FurnitureList)
-                {
-                    if (furniture.InstanceID != TargetFurniture.InstanceID && !string.IsNullOrEmpty(furniture.AssignHamsterID))
-                    {
-                        assignID.Add(furniture.AssignHamsterID);
-                    }
-                }
-            }
-        }
-
-        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
-
-        if (housingVM != null && housingVM.GardenFurnitureList != null)
-        {
-            foreach (FurnitureViewModel furniture in housingVM.GardenFurnitureList)
-            {
-                if (furniture.InstanceID != TargetFurniture.InstanceID && !string.IsNullOrEmpty(furniture.AssignHamsterID))
-                {
-                    assignID.Add(furniture.AssignHamsterID);
-                }
+                assignID.Add(furniture.AssignHamsterID);
             }
         }
 
