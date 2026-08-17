@@ -13,23 +13,9 @@ public enum UIRootType
 
 public enum UIType
 {
-    LobbyUI,
-    LoadGameUI,
-    MainTest,
-    PopupTest,
-    HudMainUI,
-    InventoryUI,
-    FarmingUI,
-    StorageUI,
-    NpcUI,
-    MainUI,
-    FarmSeedSelectUI,
-    CraftUI,
-    SettingUI,
-    LoadingUI,
-    FarmPlotStatusUI,
-    GeneratorUI,
-    LobbyBackgroundUI,
+    TitleUI,
+    TitleSettingsUI,
+    InGameUI,
     ShopUI,
     BuildUI,
     LoginUI,
@@ -44,7 +30,6 @@ public enum UIType
     FeverTimeCutsceneUI,
     WheelUI,    // 쳇바퀴 담당 햄스터 할당 UI
     TestUI,  // 하우징 테스트용 (MainUI 대용)
-    TestMainUI,      // [나라] TODO : 테스트용으로 만든 메인 UI 
     TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
 
@@ -56,6 +41,36 @@ public static class UIManagerExtension
 
         path = $"UI/{uiRootType}/{uiType}";
         return path;
+    }
+
+    public static void OpenTitleUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.TitleUI);
+    }
+
+    public static void CloseTitleUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.TitleUI);
+    }
+
+    public static void OpenTitleSettingsUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.TitleSettingsUI);
+    }
+
+    public static void CloseTitleSettingsUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.TitleSettingsUI);
+    }
+
+    public static void OpenInGameUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.MainUI, UIType.InGameUI);
+    }
+
+    public static void CloseInGameUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.InGameUI);
     }
 
     public static void OpenBuildUI(this UIManager uiManager)
@@ -106,6 +121,16 @@ public static class UIManagerExtension
     public static void CloseHousingUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.ContentUI, UIType.HousingUI);
+    }
+
+    public static void OpenLoginUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.LoginUI);
+    }
+
+    public static void CloseLoginUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.LoginUI);
     }
 
     public static void OpenWheelUI(this UIManager uiManager)

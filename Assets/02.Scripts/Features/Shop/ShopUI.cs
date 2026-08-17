@@ -13,7 +13,7 @@ public enum ShopCategory
     Decor
 }
 
-public class ShopUI : UIBase
+public class ShopUI : ViewBase
 {
     [Header("아이템 슬롯 정보")]
     [SerializeField] private GameObject Prefab_ItemSlot;
@@ -112,7 +112,7 @@ public class ShopUI : UIBase
     private void OnClick_CloseShopUI()
     {
         UIManager.Instance.CloseShopUI();
-        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.TestMainUI);
+        UIManager.Instance.OpenInGameUI();
     }
 
     private void OnClick_BuyItem()

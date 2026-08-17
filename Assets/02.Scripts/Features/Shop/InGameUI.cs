@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TestMainUI : UIBase
+public class InGameUI : ViewBase
 {
     [SerializeField] private UIButton Button_OpenShopUI;
     [SerializeField] private UIButton Button_OpenHousingUI;
@@ -14,12 +14,12 @@ public class TestMainUI : UIBase
     private void OnClick_OpenShop()
     {
         UIManager.Instance.OpenShopUI();
-        UIManager.Instance.CloseUI(UIRootType.MainUI, UIType.TestMainUI);
+        UIManager.Instance.CloseInGameUI();
     }
 
     private void OnClick_OpenHousing()
     {
         UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.TestHousingUI);
-        UIManager.Instance.CloseUI(UIRootType.MainUI, UIType.TestMainUI);
+        UIManager.Instance.CloseInGameUI();
     }
 }
