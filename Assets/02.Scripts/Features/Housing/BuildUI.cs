@@ -36,7 +36,7 @@ public class BuildUI : ViewBase
         Button_Exit.gameObject.SetActive(true);
 
         Panel_InfoText.SetActive(true);
-        Text_Info.text = "땅을 터치해 새로운 보금자리를 만들거나, 기존 굴을 터치해 관리하세요!";
+        Text_Info.text = "땅을 터치해 새로운 굴을 만들거나 기존 굴을 터치해 관리하세요!";
 
         _buildVM.EnterBuildMode();
     }
@@ -136,7 +136,7 @@ public class BuildUI : ViewBase
         }
         else if (_buildVM.SelectType == BuildType.Room)
         {
-            Text_Info.text = "땅을 터치해 새로운 굴을 만들거나, 기존 굴을 터치해 관리하세요!";
+            Text_Info.text = "땅을 터치해 새로운 굴을 만들거나 기존 굴을 터치해 관리하세요!";
         }
     }
 
