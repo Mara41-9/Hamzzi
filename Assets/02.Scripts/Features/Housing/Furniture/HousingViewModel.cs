@@ -58,6 +58,20 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private Dictionary<long, FurnitureSlotViewModel> _itemList = new Dictionary<long, FurnitureSlotViewModel>();
+    public Dictionary<long, FurnitureSlotViewModel> ItemList
+    {
+        get => _itemList;
+        set
+        {
+            if (_itemList != value)
+            {
+                _itemList = value;
+                OnPropertyChanged(nameof(ItemList));
+            }
+        }
+    }
+
     private FurnitureViewModel _furnitureVM;
     public FurnitureViewModel FurnitureVM
     {
@@ -145,6 +159,7 @@ public class HousingViewModel : ViewModelBase
         OnPropertyChanged(nameof(CurrentState));
         OnPropertyChanged(nameof(FurnitureVM));
         OnPropertyChanged(nameof(TargetRoom));
+        OnPropertyChanged(nameof(ItemList));
     }
 
     public void EnterHousingMode()
@@ -258,12 +273,35 @@ public class HousingViewModel : ViewModelBase
 
         if (success)
         {
+            DecreaseFurnitureStack(furnitureVM.FurnitureID);
+
             ConfirmFurniture = furnitureVM;
             ResetPlacingState();
             return true;
         }
 
         return false;
+    }
+
+    private void DecreaseFurnitureStack(string furnitureId)
+    {
+        foreach(var itemKv in ItemList)
+        {
+            var furnitureSlotVm = itemKv.Value;
+
+            if(furnitureSlotVm.ItemDataId == furnitureId)
+            {
+                furnitureSlotVm.StackCount--;
+
+                if(furnitureSlotVm.StackCount <= 0)
+                {
+                    ItemList.Remove(itemKv.Key);
+                }
+
+                OnPropertyChanged(nameof(ItemList));
+                return;
+            }
+        }
     }
 
     public void CancelPos()
@@ -385,8 +423,14 @@ public class HousingViewModel : ViewModelBase
         CurrentState = HousingState.Placing;
     }
 
-    public List<ItemData> GetOwnedFurnitureList()
+    public Dictionary<long, FurnitureSlotViewModel> GetOwnedFurnitureList()
     {
-        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
+        return ItemList;
+    }
+
+    public void AddItemSlotViewModel(FurnitureSlotViewModel furnitureSlotVm)
+    {
+        _itemList.Add(furnitureSlotVm.ItemUniqueId, furnitureSlotVm);
+        OnPropertyChanged(nameof(ItemList));
     }
 }

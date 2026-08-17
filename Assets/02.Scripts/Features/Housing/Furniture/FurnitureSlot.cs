@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,21 +12,39 @@ public class FurnitureSlot : MonoBehaviour
 
     private ItemData _data;
     private HousingViewModel _housingVM;
+    private FurnitureSlotViewModel _furnitureSlotVm;
 
     private void Awake()
     {
         Button_Select.onClick.AddListener(OnClickSelect);
     }
 
-    public async UniTask Bind(ItemData data, HousingViewModel housingVM)
+    public void Bind(FurnitureSlotViewModel furnitureSlotVm, HousingViewModel housingVM)
     {
-        _data = data;
-        _housingVM = housingVM;
+        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureSlotVm.ItemDataId);
+        if(itemData == null)
+        {
+            return;
+        }
 
-        Image_Icon.sprite = await ResourceManager.Instance.LoadAsset<Sprite>(_data.IconPath);
-        
-        //인벤토리 이후에 추가
-        //Text_Count.text = $"{}";
+        _data = itemData;
+        _housingVM = housingVM;
+        _furnitureSlotVm = furnitureSlotVm;
+
+        _furnitureSlotVm.PropertyChanged += OnPropertyChanged_View;
+
+        Image_Icon.sprite = furnitureSlotVm.IconSprite;
+        Text_Count.text = furnitureSlotVm.StackCount.ToString();
+    }
+
+    private void OnPropertyChanged_View(object sender,PropertyChangedEventArgs e)
+    {
+        switch(e.PropertyName)
+        {
+            case nameof(FurnitureSlotViewModel.StackCount):
+                Text_Count.text = _furnitureSlotVm.StackCount.ToString();
+                break;
+        }
     }
 
     private void OnClickSelect()

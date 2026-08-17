@@ -19,7 +19,7 @@ public class InGameUI : ViewBase
 
     private void OnClick_OpenHousing()
     {
-        UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.TestHousingUI);
+        UIManager.Instance.OpenTestUI();
         UIManager.Instance.CloseInGameUI();
     }
 }

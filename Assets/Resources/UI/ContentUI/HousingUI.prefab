@@ -1201,7 +1201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4979a0485e72db44abbb730c36354d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HousingUI
-  HousingView: {fileID: 5363811663259471456}
   Panel_FurnitureBar: {fileID: 2616293222190542174}
   Panel_Info: {fileID: 2325620758637732243}
   Button_Exit: {fileID: 3179597719233509043}
@@ -1210,6 +1209,7 @@ MonoBehaviour:
   Button_Cancel: {fileID: 1854064886148657538}
   Button_ExitMode: {fileID: 4836439736896333790}
   Button_Remove: {fileID: 4453297292228001096}
+  Button_GoToInGame: {fileID: 0}
 --- !u!114 &5363811663259471456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1224,7 +1224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HousingView
   Material_Ghost: {fileID: 2100000, guid: 9c1142a03ccc7b542aab915d2277bd0b, type: 2}
   SpriteRenderer_Tile: {fileID: 836306110293100085}
-  Prefab_Grid: {fileID: 1271177434866186640, guid: a99a269249d413648980512d3d89b99b, type: 3}
   Color_Valid: {r: 0, g: 1, b: 0, a: 0.4}
   Color_Invalid: {r: 1, g: 0, b: 0, a: 0.4}
 --- !u!1 &5750974966206330788

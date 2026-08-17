@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ServiceManager : SingletonBase<ServiceManager>
 {
-    public NetworkShopService ShopService { get; private set; }
+    public ShopService ShopService { get; private set; }
     public BuildService BuildService { get; private set; }
     public HousingService HousingService { get; private set; }
     public TestHousingService TestHousingService { get; private set; }
@@ -20,7 +20,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
 
     private void InitShopService()
     {
-        ShopService = new NetworkShopService();
+        ShopService = new ShopService();
     }
 
     private void InitBuildService()
