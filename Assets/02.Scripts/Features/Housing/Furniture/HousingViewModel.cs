@@ -480,7 +480,6 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
-    public List<ItemData> GetOwnedFurnitureList()
     public Dictionary<long, FurnitureSlotViewModel> GetOwnedFurnitureList()
     {
         return ItemList;
