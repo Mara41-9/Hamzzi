@@ -24,7 +24,7 @@ public class FriendListService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"SELECT f.friendId, u.userName FROM friend_table f JOIN {DBConfig.GameUserTable} u ON f.friendId = u.userId WHERE f.userId = @userId ORDER BY f.createdAt DESC;";
+                    string query = $"SELECT f.friendId, u.userName FROM {DBConfig.FriendTable} f JOIN {DBConfig.GameUserTable} u ON f.friendId = u.userId WHERE f.userId = @userId ORDER BY u.userName ASC;";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
