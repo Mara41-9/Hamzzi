@@ -174,11 +174,11 @@ public class BuildView : ViewBase
         {
             if (roomVM.BuildType == BuildType.Room)
             {
-                PlayBuildSound("Build_Room");
+                SoundManager.Instance.PlaySFX("Build_Room");
             }
             else
             {
-                PlayBuildSound("Build_Aisle");
+                SoundManager.Instance.PlaySFX("Build_Aisle", 0.1f);
             }
 
             prefab.transform.DOPunchScale(Vector3.one * 0.15f, 0.25f, 8, 1f);
@@ -191,10 +191,5 @@ public class BuildView : ViewBase
         int y = Mathf.FloorToInt(worldPos.y / _cellSize);
 
         return new Vector2Int(x, y);
-    }
-
-    private void PlayBuildSound(string soundID)
-    {
-        SoundManager.Instance.PlaySFX(soundID);
     }
 }

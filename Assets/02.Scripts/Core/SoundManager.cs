@@ -6,7 +6,7 @@ public class SoundManager : SingletonBase<SoundManager>
     [SerializeField] private AudioSource AudioSource_BGM;
     [SerializeField] private AudioSource AudioSource_SFX;
 
-    private async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string path, bool isLoop = false)
+    private async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string path, bool isLoop = false, float volume = 1.0f)
     {
         AudioClip clip = await ResourceManager.Instance.LoadAsset<AudioClip>(path);
 
@@ -14,11 +14,12 @@ public class SoundManager : SingletonBase<SoundManager>
         {
             audioSource.clip = clip;
             audioSource.loop = true;
+            audioSource.volume = volume;
             audioSource.Play();
         }
         else
         {
-            audioSource.PlayOneShot(clip);
+            audioSource.PlayOneShot(clip, volume);
         }
     }
 
@@ -32,14 +33,14 @@ public class SoundManager : SingletonBase<SoundManager>
         return $"Audio/BGM/{soundID}";
     }
 
-    public void PlaySFX(string soundID)
+    public void PlaySFX(string soundID, float volume = 1.0f)
     {
-        LoadAndPlayAudioClip(AudioSource_SFX, GetPathSFX(soundID)).Forget();
+        LoadAndPlayAudioClip(AudioSource_SFX, GetPathSFX(soundID), false, volume).Forget();
     }
 
-    public void PlayBGM(string soundID)
+    public void PlayBGM(string soundID, float volume = 1.0f)
     {
-        LoadAndPlayAudioClip(AudioSource_BGM, GetPathBGM(soundID), true).Forget();
+        LoadAndPlayAudioClip(AudioSource_BGM, GetPathBGM(soundID), true, volume).Forget();
     }
 
     public void StopSFX()
