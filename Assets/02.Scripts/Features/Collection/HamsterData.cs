@@ -11,6 +11,14 @@ public class HamsterData : GameDataBase
 }
 
 [System.Serializable]
+public class FaceData : GameDataBase
+{
+    public string Name;
+    public string Description;
+    public string FacePath;
+}
+
+[System.Serializable]
 public class HamsterSave
 {
     public int HamsterUID;
