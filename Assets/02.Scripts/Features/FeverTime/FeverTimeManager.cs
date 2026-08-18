@@ -21,6 +21,9 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
     private int _tapCount;
     private float _tapInputElapsedTime;
 
+    private HamsterData _currentHamsterData;
+    private FeverTimeData _currentFeverTimeData;
+
     private void Start()
     {
         GameDataManager.Instance.LoadData<FeverTimeData>();
@@ -28,17 +31,14 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
     private void Update()
     {
-        if (_currentState != FeverTimeState.TapInput)
+        if (_currentState != FeverTimeState.TapInput || _currentFeverTimeData == null)
         {
             return;
         }
 
         _tapInputElapsedTime += Time.deltaTime;
 
-        // TODO: 주현님(?) 쳇바퀴 배치 시스템 데이터 받아서 교체 예정
-        FeverTimeData feverTimeData = GameDataManager.Instance.GetData<FeverTimeData>("A");
-
-        if (_tapInputElapsedTime >= feverTimeData.TapDurationSec)
+        if (_tapInputElapsedTime >= _currentFeverTimeData.TapDurationSec)
         {
             SetState(FeverTimeState.Result);
         }
@@ -93,6 +93,10 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
         Debug.Log("FeverTimeState: Idle");
 #endif
         UIManager.Instance.CloseFeverTimeCutsceneUI();
+
+        _currentHamsterData = null;
+        _currentFeverTimeData = null;
+
         OnFeverTimeEnded?.Invoke();
     }
 
@@ -125,14 +129,34 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
 
     private void HandleResultState()
     {
-        FeverTimeData feverTimeData = GameDataManager.Instance.GetData<FeverTimeData>("A");
-        int rewardAmount = _tapCount * feverTimeData.SeedPerTap;
+        int rewardAmount = _tapCount * _currentFeverTimeData.SeedPerTap;
         GameManager.Instance.AddSeedCount(rewardAmount);
 
 #if UNITY_EDITOR
-        Debug.Log($"FeverTimeState: Result, 보상 {rewardAmount} 지급 (연타 {_tapCount}회 x {feverTimeData.SeedPerTap})");
+        Debug.Log($"FeverTimeState: Result, 보상 {rewardAmount} 지급 (연타 {_tapCount}회 x {_currentFeverTimeData.SeedPerTap})");
 #endif
 
         SetState(FeverTimeState.Idle);
+    }
+
+    // 피버타임 시작 메서드
+    public void StartFeverTime(HamsterData hamsterData = null)
+    {
+        if (hamsterData == null)
+        {
+#if UNITY_EDITOR
+            Debug.Log($"{hamsterData} / 할당된 햄스터 없음 / 피버타임 불가");
+#endif
+            return;
+        }
+
+        _currentHamsterData = hamsterData;
+        _currentFeverTimeData = GameDataManager.Instance.GetData<FeverTimeData>(hamsterData.HamsterTier.ToString());
+
+        SetState(FeverTimeState.CutscenePlaying);
+
+#if UNITY_EDITOR
+        Debug.Log($"HamsterData: {hamsterData.Name} / {_currentFeverTimeData})");
+#endif
     }
 }

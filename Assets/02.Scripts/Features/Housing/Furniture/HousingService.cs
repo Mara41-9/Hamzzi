@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class HousingService
 {
@@ -23,28 +24,31 @@ public class HousingService
         return housingVm;
     }
 
-    public List<ItemData> GetOwnedFurnitureList()
+    public List<FurnitureViewModel> GetAllPlacedFurniture()
     {
-        // TODO: 유저가 가진 가구 DB 연결 (Shop이랑)
+        List<FurnitureViewModel> allList = new List<FurnitureViewModel>();
 
-        // 테스트용
-        return new List<ItemData>
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+
+        if (buildVM?.Builds != null)
         {
-            new ItemData
+            var uniqueRooms = new HashSet<RoomViewModel>(buildVM.Builds.Values);
+
+            foreach (var room in uniqueRooms)
             {
-                Id = "Armchair_01",
-                Name = "기본 의자",
-                IconPath = "Image/Item/Furniture/Armchair_01",
-                PrefabPath = "Prefabs/Furniture/Armchair_01"
-            },
-            new ItemData
-            {
-                Id = "Fireplace_03",
-                Name = "기본 벽난로",
-                IconPath = "Image/Item/Furniture/Fireplace_03",
-                PrefabPath = "Prefabs/Furniture/Fireplace_03"
+                if (room.FurnitureList != null)
+                {
+                    allList.AddRange(room.FurnitureList);
+                }
             }
-        };
+        }
+
+        if (_housingVM?.GardenFurnitureList != null)
+        {
+            allList.AddRange(_housingVM.GardenFurnitureList);
+        }
+
+        return allList;
     }
 
     // 저장 관련
@@ -69,5 +73,30 @@ public class HousingService
     {
         ServiceManager.Instance.BuildService.LoadBuildData();
         LoadHousingData();
+    }
+
+    public void AddItem(ShopSlotViewModel shopSlotVm)
+    {
+        var housingVm = GetHousingViewModel();
+
+        foreach(var itemKv in housingVm.ItemList)
+        {
+            var furnitureVm = itemKv.Value;
+            if(furnitureVm.ItemDataId == shopSlotVm.ItemDataId)
+            {
+                furnitureVm.StackCount++;
+                return;
+            }
+        }
+
+        var newFurnitureSlotVm = new FurnitureSlotViewModel();
+        long uniqueId = TestGameUtil.GenerateUniqueId();
+
+        newFurnitureSlotVm.ItemUniqueId = uniqueId;
+        newFurnitureSlotVm.ItemDataId = shopSlotVm.ItemDataId;
+        newFurnitureSlotVm.IconSprite = shopSlotVm.IconSprite;
+        newFurnitureSlotVm.StackCount = 1;
+
+        housingVm.AddItemSlotViewModel(newFurnitureSlotVm);
     }
 }

@@ -6,18 +6,40 @@ using UnityEngine.UI;
 public class GachaResultSlot : MonoBehaviour
 {
     [SerializeField] private Image HamsterIcon;
+    [SerializeField] private Image TierImage;
 
-    public void UpdateSlotIcon(string hamsterId)
-    {
-        LoadHamsterIcon(hamsterId).Forget();
-    }
+    [Header("Tier Color")]
+    [SerializeField] private Color SSTierColor;
+    [SerializeField] private Color STierColor;
+    [SerializeField] private Color ATierColor;
 
-    private async UniTask LoadHamsterIcon(string hamsterId)
+    public void UpdateSlot(string hamsterId)
     {
         HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
-        string iconPath = hamsterData.IconPath;
 
+        LoadHamsterIcon(hamsterData.IconPath).Forget();
+        SetTierColor(hamsterData.HamsterTier);
+    }
+
+    private async UniTask LoadHamsterIcon(string iconPath)
+    {
         Sprite hamsterIcon = await ResourceManager.Instance.LoadAsset<Sprite>(iconPath);
         HamsterIcon.sprite = hamsterIcon;
+    }
+
+    private void SetTierColor(HamsterTier tier)
+    {
+        switch (tier)
+        {
+            case HamsterTier.SS:
+                TierImage.color = SSTierColor;
+                break;
+            case HamsterTier.S:
+                TierImage.color = STierColor;
+                break;
+            case HamsterTier.A:
+                TierImage.color = ATierColor;
+                break;
+        }
     }
 }
