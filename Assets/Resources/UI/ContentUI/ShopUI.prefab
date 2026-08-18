@@ -2435,6 +2435,7 @@ MonoBehaviour:
   Image_Icon: {fileID: 3579794966116187477}
   Text_ItemName: {fileID: 7433060535030725799}
   Text_ItemDescription: {fileID: 6764342170829948283}
+  Text_ItemEffect: {fileID: 8167164392530239421}
   Text_ItemPrice: {fileID: 96930068846511115}
   Button_AllCategory: {fileID: 2513344224841648574}
   Button_FurnitureCategory: {fileID: 1487970623612266502}

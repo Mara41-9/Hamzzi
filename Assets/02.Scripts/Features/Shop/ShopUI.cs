@@ -21,6 +21,7 @@ public class ShopUI : ViewBase
     [SerializeField] private Image Image_Icon;
     [SerializeField] private TMP_Text Text_ItemName;
     [SerializeField] private TMP_Text Text_ItemDescription;
+    [SerializeField] private TMP_Text Text_ItemEffect;
     [SerializeField] private TMP_Text Text_ItemPrice;
 
     [Header("상위 카테고리")]
@@ -326,6 +327,7 @@ public class ShopUI : ViewBase
 
         Image_Icon.sprite = slotVm.IconSprite;
         Text_ItemName.text = slotVm.Name;
+        Text_ItemEffect.text = $"씨앗 생산 +{slotVm.ItemEffect * 100}%";
         Text_ItemDescription.text = slotVm.Description;
         Text_ItemPrice.text = slotVm.CostAmount.ToString();
     }

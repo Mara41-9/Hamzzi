@@ -27,6 +27,7 @@ public class ShopService
     {
         GameDataManager.Instance.LoadData<ShopData>();
         GameDataManager.Instance.LoadData<ItemData>();
+        GameDataManager.Instance.LoadData<SubCategoryEffectData>();
 
         var shopDataList = GameDataManager.Instance.GetAllData<ShopData>();
         if(shopDataList == null)
@@ -47,7 +48,31 @@ public class ShopService
                 return;
             }
 
-            tasks.Add(CreateItem(shopData, itemData));
+            var effectDataList = GameDataManager.Instance.GetAllData<SubCategoryEffectData>();
+            if(effectDataList == null)
+            {
+                Debug.LogWarning("버프 데이터가 없습니다.");
+                return;
+            }
+
+            SubCategoryEffectData matchedEffectData = null;
+
+            foreach(var effectData in effectDataList)
+            {
+                if(effectData.SubCategory == itemData.SubCategory)
+                {
+                    matchedEffectData = effectData;
+                    break;
+                }
+            }
+
+            if(matchedEffectData == null)
+            {
+                Debug.LogWarning($"{itemData.SubCategory} 버프 데이터를 찾을 수 없습니다.");
+                continue;
+            }
+
+            tasks.Add(CreateItem(shopData, itemData, matchedEffectData));
         }
 
         // 모든 아이템의 리소스 로드가 끝날 때까지 병렬로 동시 대기 -> 리소스는 병렬로 로드
@@ -64,7 +89,7 @@ public class ShopService
         shopVm.NotifyItemListChanged();
     }
 
-    public async UniTask<ShopSlotViewModel> CreateItem(ShopData shopData, ItemData itemData)
+    public async UniTask<ShopSlotViewModel> CreateItem(ShopData shopData, ItemData itemData, SubCategoryEffectData effectData)
     {
         long uniqueId = TestGameUtil.GenerateUniqueId();
 
@@ -81,6 +106,7 @@ public class ShopService
         shopSlotVm.Description = itemData.Description;
         shopSlotVm.Category = itemData.Category;
         shopSlotVm.SubCategory = itemData.SubCategory;
+        shopSlotVm.ItemEffect = effectData.SeedCollectionBonus;
         shopSlotVm.CostAmount = shopData.CostAmount;
         shopSlotVm.IconSprite = loadedSprite;
 
