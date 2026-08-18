@@ -20,8 +20,23 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
         }
     }
 
-    // 테스트용 아이디 넣음
-    private HashSet<string> _collectedHamsterIdList = new HashSet<string>() { "Hamster_01", "Hamster_03" };
+    // 보유 중인 햄스터의 상세 데이터 저장
+    private Dictionary<int, HamsterSave> _collectedHamsterList = new Dictionary<int, HamsterSave>();
+    public Dictionary<int, HamsterSave> CollectedHamsterList
+    {
+        get { return _collectedHamsterList; }
+        set
+        {
+            if(_collectedHamsterList != value)
+            {
+                _collectedHamsterList = value;
+                OnPropertyChanged(nameof(CollectedHamsterList));
+            }
+        }
+    }
+
+    // 보유 중인 햄스터ID만 저장
+    private HashSet<string> _collectedHamsterIdList = new HashSet<string>();
     public HashSet<string> CollectedHamsterIdList
     {
         get { return _collectedHamsterIdList; }
