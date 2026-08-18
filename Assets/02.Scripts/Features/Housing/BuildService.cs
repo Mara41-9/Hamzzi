@@ -256,8 +256,12 @@ public class BuildService
 
     public void LoadBuildData()
     {
+        _buildVM.IsLoading = true;
+
         // TODO : 방, 복도 배치 로드
         // 저장된 데이터를 BuildViewModel.Builds에 추가 & SpawnBuildPrefab으로 맵 생성
         // 문 연결 계산 (UpdateRoomConnection & UpdateConnection)
+
+        _buildVM.IsLoading = true;
     }
 }
