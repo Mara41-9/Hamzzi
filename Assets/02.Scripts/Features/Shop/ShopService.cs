@@ -36,7 +36,7 @@ public class ShopService
         }
 
         // 여러 비동기 작업들을 하나로 묶어서 관리하기 위한 리스트
-        var tasks = new List<UniTask>();
+        var tasks = new List<UniTask<ShopSlotViewModel>>();
 
         foreach (var shopData in shopDataList)
         {
@@ -47,17 +47,24 @@ public class ShopService
                 return;
             }
 
-            tasks.Add(AddItem(shopData, itemData));
+            tasks.Add(CreateItem(shopData, itemData));
         }
 
-        // 모든 아이템의 리소스 로드가 끝날 때까지 병렬로 동시 대기
-        await UniTask.WhenAll(tasks);
+        // 모든 아이템의 리소스 로드가 끝날 때까지 병렬로 동시 대기 -> 리소스는 병렬로 로드
+        var shopSlotVmList = await UniTask.WhenAll(tasks);
+        var shopVm = GetShopViewModel();
 
-        // 로드가 완벽히 끝난 후 1번만 UI에 알림
-        GetShopViewModel().NotifyItemListChanged();
+        // 로드가 끝난 후 원래 tasks 순서대로 추가
+        foreach(var shopSlotVm in shopSlotVmList)
+        {
+            shopVm.AddItemSlotViewModel(shopSlotVm);
+        }
+
+        // 로드가 완벽히 끝난 후 한번만 UI에 알림
+        shopVm.NotifyItemListChanged();
     }
 
-    public async UniTask AddItem(ShopData shopData, ItemData itemData)
+    public async UniTask<ShopSlotViewModel> CreateItem(ShopData shopData, ItemData itemData)
     {
         long uniqueId = TestGameUtil.GenerateUniqueId();
 
@@ -77,8 +84,7 @@ public class ShopService
         shopSlotVm.CostAmount = shopData.CostAmount;
         shopSlotVm.IconSprite = loadedSprite;
 
-        var shopVm = GetShopViewModel();
-        shopVm.AddItemSlotViewModel(shopSlotVm);
+        return shopSlotVm;
     }
 
     public void BuyItem()
