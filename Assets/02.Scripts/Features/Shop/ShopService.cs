@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkShopService
+public class ShopService
 {
     private ShopViewModel _shopViewModel;
 
@@ -83,7 +83,7 @@ public class NetworkShopService
 
     public void BuyItem()
     {
-        ServiceManager.Instance.TestHousingService.AddItem(GetShopViewModel().SelectedSlot);
+        ServiceManager.Instance.HousingService.AddItem(GetShopViewModel().SelectedSlot);
         Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
     }
 }
