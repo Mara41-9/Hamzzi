@@ -9,3 +9,12 @@ public class HamsterData : GameDataBase
     public float CollectSpeed;
     public string IconPath;
 }
+
+[System.Serializable]
+public class HamsterSave
+{
+    public int HamsterUID;
+    public int UserUID;
+    public string HamsterId;
+    public string FaceId;
+}
