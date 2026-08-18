@@ -15,7 +15,7 @@ public class ShopViewModel : ViewModelBase
         get => _itemList;
         set
         {
-            if(ItemList != value)
+            if(_itemList != value)
             {
                 _itemList = value;
                 OnPropertyChanged(nameof(ItemList));

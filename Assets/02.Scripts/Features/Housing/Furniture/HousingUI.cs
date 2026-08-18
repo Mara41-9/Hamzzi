@@ -72,6 +72,10 @@ public class HousingUI : ViewBase
                 RefreshSlots();
                 break;
 
+            case nameof(_housingVM.ItemList):
+                RefreshSlots();
+                break;
+
             case nameof(_housingVM.RequestAssignHamster):
                 UIManager.Instance.OpenWheelUI();
                 UpdateState();
@@ -149,20 +153,28 @@ public class HousingUI : ViewBase
         }
     }
 
-    public async UniTask InitFurnitureSlot(List<ItemData> itemList)
+    public async UniTask InitFurnitureSlot(Dictionary<long, FurnitureSlotViewModel> itemList)
     {
         foreach (Transform child in Panel_FurnitureBar.transform)
         {
+            // 이미 비활성화된 슬롯은 풀에 반환된 상태이므로 건너뜀
+            if (child.gameObject.activeSelf == false)
+            {
+                continue;
+            }
+
             GameObjectManager.Instance.RequestDestroyObject(child.gameObject);
         }
 
-        foreach (ItemData item in itemList)
+        foreach (var itemKv in itemList)
         {
+            var furnitureSlotVm = itemKv.Value;
+
             GameObject slot = await GameObjectManager.Instance.CreateObjectAsync("FurnitureSlot", $"Prefabs/UI/FurnitureSlot", Vector3.zero);
             slot.transform.SetParent(Panel_FurnitureBar.transform, false);
 
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
-            furnitureSlot.Bind(item, _housingVM).Forget();
+            furnitureSlot.Bind(furnitureSlotVm, _housingVM);
         }
     }
 
