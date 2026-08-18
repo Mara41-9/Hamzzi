@@ -69,6 +69,9 @@ public class HousingUI : ViewBase
                 break;
 
             case nameof(_housingVM.TargetRoom):
+                RefreshSlots();
+                break;
+
             case nameof(_housingVM.ItemList):
                 RefreshSlots();
                 break;
@@ -154,6 +157,12 @@ public class HousingUI : ViewBase
     {
         foreach (Transform child in Panel_FurnitureBar.transform)
         {
+            // 이미 비활성화된 슬롯은 풀에 반환된 상태이므로 건너뜀
+            if (child.gameObject.activeSelf == false)
+            {
+                continue;
+            }
+
             GameObjectManager.Instance.RequestDestroyObject(child.gameObject);
         }
 

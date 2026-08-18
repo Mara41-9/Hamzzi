@@ -7,6 +7,7 @@ public class TestUI : ViewBase
     [SerializeField] private Button Button_ExitGarden;
     [SerializeField] private Button Button_EnterBuild;
     [SerializeField] private Button Button_EnterHousing;
+    [SerializeField] private UIButton Button_GoToInGame;
 
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
@@ -19,6 +20,11 @@ public class TestUI : ViewBase
         Button_EnterHousing.onClick.AddListener(OnClickEnterHousing);
 
         Button_ExitGarden.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        Button_GoToInGame.BindOnClickButtonEvent(OnClickGoToInGame);
     }
 
     private void Start()
@@ -65,5 +71,11 @@ public class TestUI : ViewBase
 
         UIManager.Instance.OpenHousingUI();
         UIManager.Instance.CloseTestUI();
+    }
+
+    private void OnClickGoToInGame()
+    {
+        UIManager.Instance.CloseTestUI();
+        UIManager.Instance.OpenInGameUI();
     }
 }
