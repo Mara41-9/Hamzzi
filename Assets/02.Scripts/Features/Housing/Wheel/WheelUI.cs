@@ -35,6 +35,8 @@ public class WheelUI : ViewBase
 
     private void OnEnable()
     {
+        GameDataManager.Instance.LoadData<HamsterData>();
+
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
         BindViewModel(new WheelViewModel(housingVM.RequestAssignHamster));
     }
