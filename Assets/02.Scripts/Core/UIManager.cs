@@ -16,7 +16,6 @@ public class UIManager : SingletonBase<UIManager>
     private void Start()
     {
         OpenUI(UIRootType.MainUI, UIType.TitleUI);
-        OpenUI(UIRootType.MainUI, UIType.TestUI);
     }
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
