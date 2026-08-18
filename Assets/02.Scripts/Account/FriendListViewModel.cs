@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class FriendListViewModel : ViewModelBase
 {
@@ -7,7 +8,7 @@ public class FriendListViewModel : ViewModelBase
 
     public event Action OnCompleteLoadFriendList;
 
-    private string _myUserId = "";
+    private string _myUserId = "Asdf";
     public string MyUserId
     {
         get
