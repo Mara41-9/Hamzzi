@@ -74,6 +74,9 @@ public class LoginViewModel : ViewModelBase
             if (isSuccess == true)
             {
                 FeedbackMessage = "로그인 성공!";
+                UIManager.Instance.CloseLoginUI();
+                UIManager.Instance.CloseTitleUI();
+                UIManager.Instance.OpenInGameUI();
                 InvokeCompleteLogin();
             }
             else

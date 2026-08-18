@@ -106,10 +106,6 @@ public class LoginView : ViewBase
             Debug.Log("bb");
             _vm.RequestLogin();
         }
-
-        UIManager.Instance.CloseLoginUI();
-        UIManager.Instance.CloseTitleUI();
-        UIManager.Instance.OpenInGameUI();
     }
 
     private void OnClickCreateAccount()
