@@ -13,6 +13,8 @@ public class BuildViewModel : ViewModelBase
     private RoomViewModel _waitingRoom;
     private List<RoomViewModel> _waitingAisle = new List<RoomViewModel>();
 
+    public bool IsLoading { get; set; } = false;
+
     public bool CanDestroy
     {
         get

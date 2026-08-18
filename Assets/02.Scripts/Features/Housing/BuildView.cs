@@ -1,6 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -167,6 +169,20 @@ public class BuildView : ViewBase
         {
             aisle.Bind(roomVM);
         }
+
+        if (!_buildVM.IsLoading && !roomVM.IsDefault)
+        {
+            if (roomVM.BuildType == BuildType.Room)
+            {
+                PlayBuildSound("Build_Room");
+            }
+            else
+            {
+                PlayBuildSound("Build_Aisle");
+            }
+
+            prefab.transform.DOPunchScale(Vector3.one * 0.15f, 0.25f, 8, 1f);
+        }
     }
 
     private Vector2Int ChangeGridPosition(Vector3 worldPos)
@@ -177,39 +193,8 @@ public class BuildView : ViewBase
         return new Vector2Int(x, y);
     }
 
-    private void OnDrawGizmos()
+    private void PlayBuildSound(string soundID)
     {
-        float z = 9.0f;
-
-        float left = -39 * _cellSize;
-        float right = 39 * _cellSize;
-        float bottom = -24 * _cellSize;
-        float top = 12 * _cellSize;
-
-        float width = right - left;
-        float height = top - bottom;
-        Vector3 center = new Vector3(left + (width * 0.5f), bottom + (height * 0.5f), z);
-        Vector3 size = new Vector3(width, height, 0.1f);
-
-        Gizmos.color = new Color(0f, 1f, 0.4f, 0.15f);
-        Gizmos.DrawCube(center, size);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(center, size);
-
-        Gizmos.color = Color.red;
-        Vector3 surfaceStart = new Vector3(left - 3f, top, z);
-        Vector3 surfaceEnd = new Vector3(right + 3f, top, z);
-        Gizmos.DrawLine(surfaceStart, surfaceEnd);
-
-        Gizmos.color = new Color(1f, 1f, 1f, 0.1f);
-        for (int y = -24; y <= 12; y++)
-        {
-            Gizmos.DrawLine(new Vector3(left, y * _cellSize, z), new Vector3(right, y * _cellSize, z));
-        }
-        for (int x = -39; x <= 39; x++)
-        {
-            Gizmos.DrawLine(new Vector3(x * _cellSize, bottom, z), new Vector3(x * _cellSize, top, z));
-        }
+        SoundManager.Instance.PlaySFX(soundID);
     }
 }
