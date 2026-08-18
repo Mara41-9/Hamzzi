@@ -2,7 +2,7 @@
 using UnityEngine;
 using TMPro;
 
-public class LoginView : ViewBase
+public class LoginView : UIBase
 {
     [SerializeField] private TMP_InputField InputField_Id;
     [SerializeField] private TMP_InputField InputField_Password;
