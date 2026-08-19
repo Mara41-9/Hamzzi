@@ -5,11 +5,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum HousingCategory
+{
+    All,
+    Furniture,
+    Toy,
+    Decor
+}
+
 public class HousingUI : ViewBase
 {
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
+    [SerializeField] private Transform Parent_Slot;
     [SerializeField] private TextMeshProUGUI Text_EmptyInfo;
+
+    [SerializeField] private Button Button_All;
+    [SerializeField] private Button Button_Furniture;
+    [SerializeField] private Button Button_Toy;
+    [SerializeField] private Button Button_Decor;
+
+    [SerializeField] private Sprite Sprite_Select;
+    [SerializeField] private Sprite Sprite_Unselect;
 
     [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Rotation;
@@ -30,6 +47,11 @@ public class HousingUI : ViewBase
         Button_ExitMode.onClick.AddListener(OnClickExitMode);
         Button_Remove.onClick.AddListener(OnClickRemove);
         Button_Assign.onClick.AddListener(OnClickAssign);
+
+        Button_All.onClick.AddListener(OnClickAll);
+        Button_Furniture.onClick.AddListener(OnClickFurniture);
+        Button_Toy.onClick.AddListener(OnClickToy);
+        Button_Decor.onClick.AddListener(OnClickDecor);
     }
 
     private void Start()
@@ -45,6 +67,7 @@ public class HousingUI : ViewBase
 
         RefreshSlots();
         UpdateState();
+        UpdateCategory(_housingVM.HousingCategory);
     }
 
     private void OnDestroy()
@@ -62,6 +85,11 @@ public class HousingUI : ViewBase
             case nameof(_housingVM.CurrentViewMode):
                 RefreshSlots();
                 UpdateState();
+                break;
+
+            case nameof(_housingVM.HousingCategory):
+                RefreshSlots();
+                UpdateCategory(_housingVM.HousingCategory);
                 break;
 
             case nameof(_housingVM.CurrentState):
@@ -89,7 +117,7 @@ public class HousingUI : ViewBase
     {
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden || _housingVM.TargetRoom != null)
         {
-            InitFurnitureSlot(_housingVM.GetOwnedFurnitureList()).Forget();
+            InitFurnitureSlot(_housingVM.GetHousingCategory()).Forget();
         }
     }
 
@@ -160,7 +188,7 @@ public class HousingUI : ViewBase
         bool isEmpty = itemList.Count <= 0;
         Text_EmptyInfo.gameObject.SetActive(isEmpty);
 
-        foreach (Transform child in Panel_FurnitureBar.transform)
+        foreach (Transform child in Parent_Slot.transform)
         {
             if (child.gameObject.activeSelf == false)
             {
@@ -182,6 +210,48 @@ public class HousingUI : ViewBase
         }
     }
 
+    private void SetButtonImage(Button button, bool isSelect)
+    {
+        if (button.TryGetComponent<Image>(out Image image))
+        {
+            image.sprite = isSelect ? Sprite_Select : Sprite_Unselect;
+        }
+    }
+
+    private void UpdateCategory(HousingCategory category)
+    {
+        SetButtonImage(Button_All, category == HousingCategory.All);
+        SetButtonImage(Button_Furniture, category == HousingCategory.Furniture);
+        SetButtonImage(Button_Toy, category == HousingCategory.Toy);
+        SetButtonImage(Button_Decor, category == HousingCategory.Decor);
+    }
+
+    private void OnClickCategory(HousingCategory category)
+    {
+        _housingVM.HousingCategory = category;
+        UpdateCategory(category);
+    }
+
+    private void OnClickAll()
+    {
+        OnClickCategory(HousingCategory.All);
+    }
+
+    private void OnClickFurniture()
+    {
+        OnClickCategory(HousingCategory.Furniture);
+    }
+
+    private void OnClickToy()
+    {
+        OnClickCategory(HousingCategory.Toy);
+    }
+
+    private void OnClickDecor()
+    {
+        OnClickCategory(HousingCategory.Decor);
+    }
+
     private void OnClickExit()
     {
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
@@ -199,8 +269,6 @@ public class HousingUI : ViewBase
     private void OnClickRotation()
     {
         _housingVM.RotatePos();
-
-
     }
 
     private void OnClickConfirm()

@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public enum HousingState
 {
@@ -169,6 +168,20 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private HousingCategory _housingCategory;
+    public HousingCategory HousingCategory
+    {
+        get => _housingCategory;
+        set
+        {
+            if (_housingCategory != value)
+            {
+                _housingCategory = value;
+                OnPropertyChanged(nameof(HousingCategory));
+            }
+        }
+    }
+
     public bool CanAssignCurrentFurniture
     {
         get
@@ -184,6 +197,30 @@ public class HousingViewModel : ViewModelBase
         OnPropertyChanged(nameof(FurnitureVM));
         OnPropertyChanged(nameof(TargetRoom));
         OnPropertyChanged(nameof(ItemList));
+        OnPropertyChanged(nameof(HousingCategory));
+    }
+
+    public Dictionary<long, FurnitureSlotViewModel> GetHousingCategory()
+    {
+        if (_housingCategory == HousingCategory.All)
+        {
+            return ItemList;
+        }
+
+        Dictionary<long, FurnitureSlotViewModel> categoryList = new Dictionary<long, FurnitureSlotViewModel>();
+
+        foreach (var item in ItemList)
+        {
+            FurnitureSlotViewModel slotVM = item.Value;
+            ItemData itemData = GameDataManager.Instance.GetData<ItemData>(slotVM.ItemDataId);
+
+            if (itemData != null && itemData.Category.ToString() == _housingCategory.ToString())
+            {
+                categoryList.Add(item.Key, slotVM);
+            }
+        }
+
+        return categoryList;
     }
 
     public void EnterHousingMode()
