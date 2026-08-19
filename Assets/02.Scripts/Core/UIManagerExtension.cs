@@ -68,6 +68,11 @@ public static class UIManagerExtension
         uiManager.OpenUI(UIRootType.MainUI, UIType.InGameUI);
     }
 
+    public static void CloseInGameUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.InGameUI);
+    }
+
     public static void OpenBuildUI(this UIManager uiManager)
     {
         uiManager.OpenUI(UIRootType.ContentUI, UIType.BuildUI);

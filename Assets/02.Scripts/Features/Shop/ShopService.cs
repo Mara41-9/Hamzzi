@@ -115,7 +115,20 @@ public class ShopService
 
     public void BuyItem()
     {
-        ServiceManager.Instance.HousingService.AddItem(GetShopViewModel().SelectedSlot);
+        var selectedSlot = GetShopViewModel().SelectedSlot;
+        if(selectedSlot == null)
+        {
+            return;
+        }
+
+        bool Success = ServiceManager.Instance.CurrencyService.TryUseSeed(selectedSlot.CostAmount);
+        if(Success == false)
+        {
+            Debug.Log("씨앗이 부족합니다.");
+            return;
+        }
+
+        ServiceManager.Instance.HousingService.AddItem(selectedSlot);
         Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
     }
 }

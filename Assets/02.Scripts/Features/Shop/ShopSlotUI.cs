@@ -9,6 +9,7 @@ public class ShopSlotUI : MonoBehaviour
     [SerializeField] private Image Image_Icon;
     [SerializeField] private Image Image_Frame;
     [SerializeField] private UIButton Button_Slot;
+    [SerializeField] private Image Image_Selected;
 
     public event Action<ShopSlotViewModel> OnClickItemSlot;
 
@@ -63,5 +64,17 @@ public class ShopSlotUI : MonoBehaviour
     public void BindSlotSelectEvent(Action<ShopSlotViewModel> onClickItemSlot)
     {
         OnClickItemSlot += onClickItemSlot;
+    }
+
+    public void SetSelectedSlot(bool isSelected)
+    { 
+        if(isSelected == true)
+        {
+            Image_Selected.gameObject.SetActive(true);
+        }
+        else
+        {
+            Image_Selected.gameObject.SetActive(false);
+        }
     }
 }

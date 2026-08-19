@@ -20,9 +20,4 @@ public class CurrencyViewModel : ViewModelBase
             }
         }
     }
-
-    public void AddSeed(int amount)
-    {
-        SeedCount += amount;
-    }
 }
