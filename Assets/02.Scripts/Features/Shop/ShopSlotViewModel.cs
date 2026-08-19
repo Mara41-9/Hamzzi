@@ -9,6 +9,7 @@ public class ShopSlotViewModel : ViewModelBase
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Description));
         OnPropertyChanged(nameof(Category));
+        OnPropertyChanged(nameof(ItemEffect));
         OnPropertyChanged(nameof(CostAmount));
         OnPropertyChanged(nameof(IconSprite));
     }
@@ -93,6 +94,20 @@ public class ShopSlotViewModel : ViewModelBase
             {
                 _subCategory = value;
                 OnPropertyChanged(nameof(SubCategory));
+            }
+        }
+    }
+
+    private float _itemEffect;
+    public float ItemEffect
+    {
+        get => _itemEffect;
+        set
+        {
+            if (_itemEffect != value)
+            {
+                _itemEffect = value;
+                OnPropertyChanged(nameof(ItemEffect));
             }
         }
     }
