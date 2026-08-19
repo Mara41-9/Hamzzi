@@ -351,6 +351,8 @@ public class HousingViewModel : ViewModelBase
             DecreaseFurnitureStack(furnitureVM.FurnitureID);
 
             ConfirmFurniture = furnitureVM;
+            ApplyFurnitureEffect(furnitureVM);
+
             ResetPlacingState();
             return true;
         }
@@ -376,6 +378,22 @@ public class HousingViewModel : ViewModelBase
                 OnPropertyChanged(nameof(ItemList));
                 return;
             }
+        }
+    }
+
+    private void ApplyFurnitureEffect(FurnitureViewModel furnitureVM)
+    {
+        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
+        if (itemData == null)
+        {
+            return;
+        }
+
+        var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
+        if (subCategoryEffectData != null)
+        {
+            float itemEffect = subCategoryEffectData.SeedCollectionBonus;
+            ServiceManager.Instance.CurrencyService.AddSeedBuff(itemEffect);
         }
     }
 

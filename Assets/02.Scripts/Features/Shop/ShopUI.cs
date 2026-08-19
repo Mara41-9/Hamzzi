@@ -351,6 +351,13 @@ public class ShopUI : ViewBase
 
         _shopVm.SelectedSlot = slotVm;
         Button_BuyItem.SetInteractable(true);
+        
+        foreach(var itemKv in _itemSlotList)
+        {
+            var slotView = itemKv.Value;
+            bool isSelected = (itemKv.Key == slotVm.ItemUniqueId);
+            slotView.SetSelectedSlot(isSelected);
+        }
     }
 
     private void UpdateItemDetailInfo(ShopSlotViewModel slotVm)
