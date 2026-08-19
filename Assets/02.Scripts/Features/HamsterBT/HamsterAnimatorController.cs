@@ -1,4 +1,4 @@
-﻿//햄스터 애니메이션 상태를 Animator 파라미터로 변환해 재생을 제어하는 컴포넌트
+﻿//햄스터 애니메이션 상태를 Animator State 재생으로 제어하는 컴포넌트
 using UnityEngine;
 
 public class HamsterAnimatorController : MonoBehaviour
@@ -10,8 +10,9 @@ public class HamsterAnimatorController : MonoBehaviour
         Farm
     }
 
-    private const string ParamIsIdle = "IsIdle";
-    private const string ParamIsFarming = "IsFarming";
+    private const string StateIdle = "Run";
+    private const string StateFarm = "Making";
+    private const float CrossFadeDuration = 0.2f;
 
     [SerializeField] private Animator Animator_Hamster;
 
@@ -25,22 +26,15 @@ public class HamsterAnimatorController : MonoBehaviour
         }
 
         _currentState = state;
-        ResetAllAnimParameters();
 
         switch (state)
         {
             case HamsterAnimState.Idle:
-                Animator_Hamster.SetBool(ParamIsIdle, true);
+                Animator_Hamster.CrossFade(StateIdle, CrossFadeDuration);
                 break;
             case HamsterAnimState.Farm:
-                Animator_Hamster.SetBool(ParamIsFarming, true);
+                Animator_Hamster.CrossFade(StateFarm, CrossFadeDuration);
                 break;
         }
-    }
-
-    private void ResetAllAnimParameters()
-    {
-        Animator_Hamster.SetBool(ParamIsIdle, false);
-        Animator_Hamster.SetBool(ParamIsFarming, false);
     }
 }
