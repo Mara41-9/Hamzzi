@@ -6,12 +6,14 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public ShopService ShopService { get; private set; }
     public BuildService BuildService { get; private set; }
     public HousingService HousingService { get; private set; }
-    public TestHousingService TestHousingService { get; private set; }
+    public CurrencyService CurrencyService { get; private set; }
     public NetworkCollectionService CollectionService { get; private set; }
     public NetworkGachaService GachaService { get; private set; }
 
     public void Start()
     {
+        Debug.Log($"[ServiceManager Start] {GetHashCode()}");
+
         InitShopService();
         ShopService.InitShop().Forget();
 
@@ -19,6 +21,9 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitHousingService();
         InitCollectionService();
         InitGachaService();
+        InitCurrenyService();
+
+        CurrencyService.SeedCollection().Forget();
     }
 
     private void InitShopService()
