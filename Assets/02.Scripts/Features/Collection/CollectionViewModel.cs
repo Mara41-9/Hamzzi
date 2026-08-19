@@ -147,4 +147,9 @@ public static class HamsterViewModelExtention
     {
         collectionViewModel.CurrentSelectHamsterId = selectedHamsterId;
     }
+
+    public static void RequestSelectedFaceId(this CollectionViewModel collectionViewModel, string selectedFaceId)
+    {
+        collectionViewModel.CurrentSelectedHamsterFaceId = selectedFaceId;
+    }
 }
