@@ -21,7 +21,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitHousingService();
         InitCollectionService();
         InitGachaService();
-        InitCurrenyService();
+        InitCurrencyService();
 
         CurrencyService.SeedCollection().Forget();
     }
@@ -51,5 +51,10 @@ public class ServiceManager : SingletonBase<ServiceManager>
     {
         GachaService = new NetworkGachaService();
         GachaService.GetGachaViewModel();
+    }
+
+    private void InitCurrencyService()
+    {
+        CurrencyService = new CurrencyService();
     }
 }
