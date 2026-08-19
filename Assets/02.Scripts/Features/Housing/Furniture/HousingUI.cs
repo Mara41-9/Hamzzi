@@ -203,7 +203,7 @@ public class HousingUI : ViewBase
             var furnitureSlotVm = itemKv.Value;
 
             GameObject slot = await GameObjectManager.Instance.CreateObjectAsync("FurnitureSlot", $"Prefabs/UI/FurnitureSlot", Vector3.zero);
-            slot.transform.SetParent(Panel_FurnitureBar.transform, false);
+            slot.transform.SetParent(Parent_Slot.transform, false);
 
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
             furnitureSlot.Bind(furnitureSlotVm, _housingVM);
