@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class HousingUI : ViewBase
 {
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
+    [SerializeField] private TextMeshProUGUI Text_EmptyInfo;
 
     [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Rotation;
@@ -15,6 +17,7 @@ public class HousingUI : ViewBase
     [SerializeField] private Button Button_Cancel;
     [SerializeField] private Button Button_ExitMode;
     [SerializeField] private Button Button_Remove;
+    [SerializeField] private Button Button_Assign;
 
     private HousingViewModel _housingVM;
 
@@ -26,6 +29,7 @@ public class HousingUI : ViewBase
         Button_Cancel.onClick.AddListener(OnClickCancel);
         Button_ExitMode.onClick.AddListener(OnClickExitMode);
         Button_Remove.onClick.AddListener(OnClickRemove);
+        Button_Assign.onClick.AddListener(OnClickAssign);
     }
 
     private void Start()
@@ -69,6 +73,15 @@ public class HousingUI : ViewBase
             case nameof(_housingVM.TargetRoom):
                 RefreshSlots();
                 break;
+
+            case nameof(_housingVM.ItemList):
+                RefreshSlots();
+                break;
+
+            case nameof(_housingVM.RequestAssignHamster):
+                UIManager.Instance.OpenWheelUI();
+                UpdateState();
+                break;
         }
     }
 
@@ -82,7 +95,20 @@ public class HousingUI : ViewBase
 
     private void UpdateState()
     {
-        if (_housingVM.CurrentState == HousingState.SelectRoom)
+        if (_housingVM.RequestAssignHamster != null)
+        {
+            Panel_Info.SetActive(false);
+            Panel_FurnitureBar.SetActive(false);
+
+            Button_Exit.gameObject.SetActive(false);
+            Button_Rotation.gameObject.SetActive(false);
+            Button_Confirm.gameObject.SetActive(false);
+            Button_Cancel.gameObject.SetActive(false);
+            Button_ExitMode.gameObject.SetActive(false);
+            Button_Remove.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(false);
+        }
+        else if (_housingVM.CurrentState == HousingState.SelectRoom)
         {
             Panel_Info.SetActive(true);
 
@@ -106,6 +132,7 @@ public class HousingUI : ViewBase
             Button_Confirm.gameObject.SetActive(true);
             Button_Cancel.gameObject.SetActive(true);
             Button_ExitMode.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(_housingVM.CanAssignCurrentFurniture);
 
             bool isEditing = _housingVM.CurrentState == HousingState.Editing;
             Button_Remove.gameObject.SetActive(isEditing);
@@ -124,23 +151,34 @@ public class HousingUI : ViewBase
             Button_Cancel.gameObject.SetActive(false);
             Button_ExitMode.gameObject.SetActive(false);
             Button_Remove.gameObject.SetActive(false);
+            Button_Assign.gameObject.SetActive(false);
         }
     }
 
-    public async UniTask InitFurnitureSlot(List<ItemData> itemList)
+    public async UniTask InitFurnitureSlot(Dictionary<long, FurnitureSlotViewModel> itemList)
     {
+        bool isEmpty = itemList.Count <= 0;
+        Text_EmptyInfo.gameObject.SetActive(isEmpty);
+
         foreach (Transform child in Panel_FurnitureBar.transform)
         {
+            if (child.gameObject.activeSelf == false)
+            {
+                continue;
+            }
+
             GameObjectManager.Instance.RequestDestroyObject(child.gameObject);
         }
 
-        foreach (ItemData item in itemList)
+        foreach (var itemKv in itemList)
         {
+            var furnitureSlotVm = itemKv.Value;
+
             GameObject slot = await GameObjectManager.Instance.CreateObjectAsync("FurnitureSlot", $"Prefabs/UI/FurnitureSlot", Vector3.zero);
             slot.transform.SetParent(Panel_FurnitureBar.transform, false);
 
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
-            furnitureSlot.Bind(item, _housingVM).Forget();
+            furnitureSlot.Bind(furnitureSlotVm, _housingVM);
         }
     }
 
@@ -161,6 +199,8 @@ public class HousingUI : ViewBase
     private void OnClickRotation()
     {
         _housingVM.RotatePos();
+
+
     }
 
     private void OnClickConfirm()
@@ -189,5 +229,10 @@ public class HousingUI : ViewBase
     private void OnClickRemove()
     {
         _housingVM.RemoveSelectedFurniture();
+    }
+
+    private void OnClickAssign()
+    {
+        _housingVM.OpenAssignUI();
     }
 }

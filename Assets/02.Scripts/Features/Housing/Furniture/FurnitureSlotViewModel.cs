@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TestHousingSlotViewModel : ViewModelBase
+public class FurnitureSlotViewModel : ViewModelBase
 {
     public void InvokeOnceOnInit()
     {
@@ -16,7 +16,7 @@ public class TestHousingSlotViewModel : ViewModelBase
         get => _itemUniqueId;
         set
         {
-            if(_itemUniqueId != value)
+            if (_itemUniqueId != value)
             {
                 _itemUniqueId = value;
                 OnPropertyChanged(nameof(ItemUniqueId));

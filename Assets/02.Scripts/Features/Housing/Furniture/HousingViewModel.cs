@@ -58,6 +58,20 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private Dictionary<long, FurnitureSlotViewModel> _itemList = new Dictionary<long, FurnitureSlotViewModel>();
+    public Dictionary<long, FurnitureSlotViewModel> ItemList
+    {
+        get => _itemList;
+        set
+        {
+            if (_itemList != value)
+            {
+                _itemList = value;
+                OnPropertyChanged(nameof(ItemList));
+            }
+        }
+    }
+
     private FurnitureViewModel _furnitureVM;
     public FurnitureViewModel FurnitureVM
     {
@@ -139,12 +153,35 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
+    private FurnitureViewModel _requestAssignHamster;
+    public FurnitureViewModel RequestAssignHamster
+    {
+        get => _requestAssignHamster;
+        set
+        {
+            if (_requestAssignHamster != value)
+            {
+                _requestAssignHamster = value;
+                OnPropertyChanged(nameof(RequestAssignHamster));
+            }
+        }
+    }
+
+    public bool CanAssignCurrentFurniture
+    {
+        get
+        {
+            return CurrentState == HousingState.Editing && FurnitureVM.CanAssignHamster;
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(CurrentViewMode));
         OnPropertyChanged(nameof(CurrentState));
         OnPropertyChanged(nameof(FurnitureVM));
         OnPropertyChanged(nameof(TargetRoom));
+        OnPropertyChanged(nameof(ItemList));
     }
 
     public void EnterHousingMode()
@@ -236,6 +273,12 @@ public class HousingViewModel : ViewModelBase
         OnPropertyChanged(nameof(FurnitureVM));
     }
 
+    public void SetConfirmFurniture(FurnitureViewModel furnitureVM)
+    {
+        _confirmFurniture = furnitureVM;
+        OnPropertyChanged(nameof(ConfirmFurniture));
+    }
+
     public bool ConfirmPos()
     {
         if (FurnitureVM == null || !FurnitureVM.IsValid)
@@ -258,12 +301,42 @@ public class HousingViewModel : ViewModelBase
 
         if (success)
         {
+            SetConfirmFurniture(furnitureVM);
+
+            if (CurrentState != HousingState.Editing && furnitureVM.CanAssignHamster)
+            {
+                RequestAssignHamster = furnitureVM;
+            }
+
+            DecreaseFurnitureStack(furnitureVM.FurnitureID);
+
             ConfirmFurniture = furnitureVM;
             ResetPlacingState();
             return true;
         }
 
         return false;
+    }
+
+    private void DecreaseFurnitureStack(string furnitureId)
+    {
+        foreach(var itemKv in ItemList)
+        {
+            var furnitureSlotVm = itemKv.Value;
+
+            if(furnitureSlotVm.ItemDataId == furnitureId)
+            {
+                furnitureSlotVm.StackCount--;
+
+                if(furnitureSlotVm.StackCount <= 0)
+                {
+                    ItemList.Remove(itemKv.Key);
+                }
+
+                OnPropertyChanged(nameof(ItemList));
+                return;
+            }
+        }
     }
 
     public void CancelPos()
@@ -278,6 +351,8 @@ public class HousingViewModel : ViewModelBase
             {
                 TargetRoom.AddFurniture(SelectedInstallFurniture);
             }
+
+            SetConfirmFurniture(SelectedInstallFurniture);
         }
 
         ResetPlacingState();
@@ -359,17 +434,19 @@ public class HousingViewModel : ViewModelBase
 
     public bool RemoveGardenFurniture(FurnitureViewModel furnitureVM)
     {
-        for (int x = 0; x < furnitureVM.Size.x; x++)
-        {
-            for (int y = 0; y < furnitureVM.Size.y; y++)
-            {
-                Vector2Int checkPos = furnitureVM.LocalPos + new Vector2Int(x, y);
+        List<Vector2Int> removeKeys = new List<Vector2Int>();
 
-                if (_gardenFurnitureGrid.TryGetValue(checkPos, out var existVM) && existVM == furnitureVM)
-                {
-                    _gardenFurnitureGrid.Remove(checkPos);
-                }
+        foreach (var pair in _gardenFurnitureGrid)
+        {
+            if (pair.Value == furnitureVM || pair.Value.InstanceID == furnitureVM.InstanceID)
+            {
+                removeKeys.Add(pair.Key);
             }
+        }
+
+        foreach (var key in removeKeys)
+        {
+            _gardenFurnitureGrid.Remove(key);
         }
 
         GardenFurnitureList.Remove(furnitureVM);
@@ -385,8 +462,32 @@ public class HousingViewModel : ViewModelBase
         CurrentState = HousingState.Placing;
     }
 
-    public List<ItemData> GetOwnedFurnitureList()
+    public void OpenAssignUI()
     {
-        return ServiceManager.Instance.HousingService.GetOwnedFurnitureList();
+        if (FurnitureVM.CanAssignHamster)
+        {
+            RequestAssignHamster = FurnitureVM;
+        }
+    }
+
+    public void CloseAssignUI()
+    {
+        RequestAssignHamster = null;
+
+        if (CurrentState == HousingState.Editing && FurnitureVM != null)
+        {
+            ConfirmPos();
+        }
+    }
+
+    public Dictionary<long, FurnitureSlotViewModel> GetOwnedFurnitureList()
+    {
+        return ItemList;
+    }
+
+    public void AddItemSlotViewModel(FurnitureSlotViewModel furnitureSlotVm)
+    {
+        _itemList.Add(furnitureSlotVm.ItemUniqueId, furnitureSlotVm);
+        OnPropertyChanged(nameof(ItemList));
     }
 }

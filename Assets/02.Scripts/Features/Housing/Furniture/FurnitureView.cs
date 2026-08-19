@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class FurnitureView : MonoBehaviour
@@ -8,15 +10,85 @@ public class FurnitureView : MonoBehaviour
     public FurnitureViewModel FurnitureVM { get; private set; }
 
     private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
+    private FeverTimeWheel _feverTimeWheel;
+    private Vector3 _originScale = Vector3.one;
 
     private void Awake()
     {
         InitRederers();
+        _feverTimeWheel = GetComponent<FeverTimeWheel>();
     }
 
     public void Bind(FurnitureViewModel furnitureVM)
     {
+        if (FurnitureVM != null)
+        {
+            FurnitureVM.PropertyChanged -= OnPropertyChanged_VM;
+        }
+
         FurnitureVM = furnitureVM;
+
+        if (FurnitureVM != null)
+        {
+            FurnitureVM.PropertyChanged += OnPropertyChanged_VM;
+            UpdateAssignHamster();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        transform.DOKill();
+
+        if (FurnitureVM != null)
+        {
+            FurnitureVM.PropertyChanged -= OnPropertyChanged_VM;
+        }
+    }
+
+    private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(FurnitureVM.AssignHamsterID):
+                UpdateAssignHamster();
+                break;
+        }
+    }
+
+    public void PlayPlaceAnimation()
+    {
+        transform.DOKill();
+        transform.localScale = _originScale;
+
+        transform.DOPunchScale(new Vector3(0.15f, -0.15f, 0.15f), 0.25f, 7, 1f);
+
+        SoundManager.Instance.PlaySFX("Place_Furniture");
+    }
+
+    public void PlayRotationAnimation(float targetAngleY)
+    {
+        transform.DOKill();
+        transform.DORotate(new Vector3(0f, targetAngleY, 0f), 0.2f).SetEase(Ease.OutBack);
+
+        SoundManager.Instance.PlaySFX("Rotate_Furniture");
+    }
+
+    private void UpdateAssignHamster()
+    {
+        if (_feverTimeWheel == null || FurnitureVM == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(FurnitureVM.AssignHamsterID))
+        {
+            _feverTimeWheel.SetHamster(null);
+        }
+        else
+        {
+            HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(FurnitureVM.AssignHamsterID);
+            _feverTimeWheel.SetHamster(hamsterData);
+        }
     }
 
     private void InitRederers()

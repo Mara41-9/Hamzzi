@@ -1,6 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -166,6 +168,20 @@ public class BuildView : ViewBase
         else if (prefab.TryGetComponent(out Aisle aisle))
         {
             aisle.Bind(roomVM);
+        }
+
+        if (!_buildVM.IsLoading && !roomVM.IsDefault)
+        {
+            if (roomVM.BuildType == BuildType.Room)
+            {
+                SoundManager.Instance.PlaySFX("Build_Room");
+            }
+            else
+            {
+                SoundManager.Instance.PlaySFX("Build_Aisle", 0.1f);
+            }
+
+            prefab.transform.DOPunchScale(Vector3.one * 0.15f, 0.25f, 8, 1f);
         }
     }
 

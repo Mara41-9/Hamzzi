@@ -4,11 +4,14 @@ using UnityEngine.EventSystems;
 
 public class FeverTimeWheel : MonoBehaviour
 {
-    private const float TEMP_TRIGGER_INTERVAL_SEC = 20f; // TODO: HAM-68 데이터테이블 완성되면 등급별 값으로 교체
+    //private const float TEMP_TRIGGER_INTERVAL_SEC = 20f; // TODO: HAM-68 데이터테이블 완성되면 등급별 값으로 교체
 
     private float _elapsedTime; //쳇바퀴가 마지막으로 리셋된 뒤부터 지금까지 흐른 시간을 초단위로 저장
     private bool _isReady;
     private bool _isFeverInProgress;
+
+    private HamsterData _currentHamsterData;
+    private float _triggerIntervalSec;
 
     private void Start()
     {
@@ -22,6 +25,11 @@ public class FeverTimeWheel : MonoBehaviour
 
     private void Update()
     {
+        if (_currentHamsterData == null)
+        {
+            return;
+        }
+
         if (_isReady)
         {
             CheckTouchInput();
@@ -38,7 +46,7 @@ public class FeverTimeWheel : MonoBehaviour
     {
         _elapsedTime += Time.deltaTime;
 
-        if (_elapsedTime >= TEMP_TRIGGER_INTERVAL_SEC)
+        if (_elapsedTime >= _triggerIntervalSec)
         {
             SetReadyState();
         }
@@ -85,12 +93,25 @@ public class FeverTimeWheel : MonoBehaviour
         _isReady = false;
         _isFeverInProgress = true;
 
-        FeverTimeManager.Instance.SetState(FeverTimeState.CutscenePlaying);
+        FeverTimeManager.Instance.StartFeverTime(_currentHamsterData);
     }
 
     private void ResetTimerForNextFever()
     {
         _isFeverInProgress = false;
         _elapsedTime = 0f;
+    }
+
+    public void SetHamster(HamsterData hamsterData)
+    {
+        _currentHamsterData = hamsterData;
+        _isReady = false;
+        _elapsedTime = 0f;
+
+        if (_currentHamsterData != null)
+        {
+            FeverTimeData feverData = GameDataManager.Instance.GetData<FeverTimeData>(_currentHamsterData.HamsterTier.ToString());
+            _triggerIntervalSec = feverData.TriggerIntervalSec;
+        }
     }
 }
