@@ -24,7 +24,7 @@ public class NetworkGachaService
     private void SetGachaViewModel(GachaViewModel vm)
     {
         // 뷰모데 초기화
-        CollectionViewModel collectionVM = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
+        CollectionViewModel collectionVM = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
         List<string> allHamsterList = collectionVM.AllHamsterIdList;
 
         foreach(string hamsterId in allHamsterList)

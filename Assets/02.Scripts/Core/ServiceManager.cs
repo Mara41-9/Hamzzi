@@ -7,6 +7,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public BuildService BuildService { get; private set; }
     public HousingService HousingService { get; private set; }
     public TestHousingService TestHousingService { get; private set; }
+    public NetworkCollectionService CollectionService { get; private set; }
+    public NetworkGachaService GachaService { get; private set; }
 
     public void Start()
     {
@@ -16,6 +18,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitBuildService();
         InitTestHousingService();
         InitHousingService();
+        InitCollectionService();
+        InitGachaService();
     }
 
     private void InitShopService()
@@ -36,5 +40,17 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitHousingService()
     {
         HousingService = new HousingService();
+    }
+
+    private void InitCollectionService()
+    {
+        CollectionService = new NetworkCollectionService();
+        CollectionService.GetCollectionViewModel();
+    }
+
+    private void InitGachaService()
+    {
+        GachaService = new NetworkGachaService();
+        GachaService.GetGachaViewModel();
     }
 }
