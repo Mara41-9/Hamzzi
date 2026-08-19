@@ -59,7 +59,7 @@ public class InGameUI : ViewBase
 
     private void OnClick_OpenHousing()
     {
-        UIManager.Instance.OpenTestUI();
+        UIManager.Instance.OpenDecorUI();
     }
 
     private void OnClick_OpenFriend()

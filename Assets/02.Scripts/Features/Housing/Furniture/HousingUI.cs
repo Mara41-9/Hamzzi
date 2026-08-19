@@ -9,7 +9,7 @@ public enum HousingCategory
 {
     All,
     Furniture,
-    Toy,
+    Play,
     Decor
 }
 
@@ -222,7 +222,7 @@ public class HousingUI : ViewBase
     {
         SetButtonImage(Button_All, category == HousingCategory.All);
         SetButtonImage(Button_Furniture, category == HousingCategory.Furniture);
-        SetButtonImage(Button_Toy, category == HousingCategory.Toy);
+        SetButtonImage(Button_Toy, category == HousingCategory.Play);
         SetButtonImage(Button_Decor, category == HousingCategory.Decor);
     }
 
@@ -244,7 +244,7 @@ public class HousingUI : ViewBase
 
     private void OnClickToy()
     {
-        OnClickCategory(HousingCategory.Toy);
+        OnClickCategory(HousingCategory.Play);
     }
 
     private void OnClickDecor()
