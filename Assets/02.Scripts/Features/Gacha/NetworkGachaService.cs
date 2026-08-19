@@ -68,7 +68,7 @@ public class NetworkGachaService
         string drawHamsterId = hamsterList[randomIndex];
 
         // 햄스터 얼굴 랜덤 뽑기
-        var faceList = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel().AllFaceIdList;
+        var faceList = ServiceManager.Instance.CollectionService.GetCollectionViewModel().AllFaceIdList;
         int faceCount = faceList.Count;
         randomIndex = Random.Range(0, faceCount);
         string drawFaceId = faceList[randomIndex];
