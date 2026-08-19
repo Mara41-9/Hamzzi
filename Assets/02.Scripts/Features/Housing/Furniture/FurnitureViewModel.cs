@@ -77,6 +77,28 @@ public class FurnitureViewModel : ViewModelBase
         }
     }
 
+    private string _assignHamsterID;
+    public string AssignHamsterID
+    {
+        get => _assignHamsterID;
+        set
+        {
+            if (_assignHamsterID != value)
+            {
+                _assignHamsterID = value;
+                OnPropertyChanged(nameof(AssignHamsterID));
+            }
+        }
+    }
+
+    public bool CanAssignHamster
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(FurnitureID) && FurnitureID.Contains("Wheel");
+        }
+    }
+
     public FurnitureViewModel (string furnitureID, string prefabPath, Vector2Int localPos, Vector2Int size)
     {
         InstanceID = Guid.NewGuid().ToString();

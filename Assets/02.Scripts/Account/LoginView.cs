@@ -9,6 +9,7 @@ public class LoginView : UIBase
 
     [SerializeField] private UIButton Button_Login;
     [SerializeField] private UIButton Button_CreateAccount;
+    [SerializeField] private UIButton Button_BackgroundClose;
 
     [SerializeField] private TextMeshProUGUI TextMesh_Feedback;
 
@@ -29,6 +30,8 @@ public class LoginView : UIBase
     {
         Button_Login.BindOnClickButtonEvent(OnClickLogin);
         Button_CreateAccount.BindOnClickButtonEvent(OnClickCreateAccount);
+
+        Button_BackgroundClose.BindOnClickButtonEvent(OnClick_Close);
 
         InputField_Id.onValueChanged.AddListener(OnChangeId);
         InputField_Password.onValueChanged.AddListener(OnChangePassword);
@@ -111,6 +114,11 @@ public class LoginView : UIBase
         {
             _vm.RequestCreateAccount();
         }
+    }
+
+    private void OnClick_Close()
+    {
+        UIManager.Instance.CloseLoginUI();
     }
 
     private void OnCompleteLogin_View()

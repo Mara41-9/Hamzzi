@@ -22,6 +22,11 @@ public class FriendListView : UIBase
         testVm.SetService(testService);
 
         BindViewModel(testVm);
+
+        if (_vm != null)
+        {
+            _vm.RequestLoadFriendList();
+        }
     }
 
     private void OnEnable()

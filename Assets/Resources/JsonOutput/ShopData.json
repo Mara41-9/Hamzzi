@@ -382,105 +382,100 @@
   {
     "Id": "Shop_Fur_077",
     "ItemId": "Furniture_Pouf_06",
-    "CostAmount": 130
+    "CostAmount": 250
   },
   {
     "Id": "Shop_Fur_078",
     "ItemId": "Furniture_Pouf_07",
-    "CostAmount": 250
+    "CostAmount": 200
   },
   {
     "Id": "Shop_Fur_079",
-    "ItemId": "Furniture_Pouf_08",
-    "CostAmount": 180
-  },
-  {
-    "Id": "Shop_Fur_080",
     "ItemId": "Furniture_Fireplace_01",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Fur_081",
+    "Id": "Shop_Fur_080",
     "ItemId": "Furniture_Fireplace_02",
     "CostAmount": 600
   },
   {
-    "Id": "Shop_Fur_082",
+    "Id": "Shop_Fur_081",
     "ItemId": "Furniture_Fireplace_03",
     "CostAmount": 480
   },
   {
-    "Id": "Shop_Fur_083",
+    "Id": "Shop_Fur_082",
     "ItemId": "Furniture_Fireplace_04",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Fur_084",
+    "Id": "Shop_Fur_083",
     "ItemId": "Furniture_Fireplace_05",
     "CostAmount": 700
   },
   {
-    "Id": "Shop_Fur_085",
+    "Id": "Shop_Fur_084",
     "ItemId": "Furniture_Fireplace_06",
     "CostAmount": 620
   },
   {
-    "Id": "Shop_Fur_086",
+    "Id": "Shop_Fur_085",
     "ItemId": "Furniture_Fireplace_07",
     "CostAmount": 580
   },
   {
-    "Id": "Shop_Fur_087",
+    "Id": "Shop_Fur_086",
     "ItemId": "Furniture_Fireplace_08",
     "CostAmount": 400
   },
   {
-    "Id": "Shop_Fur_088",
+    "Id": "Shop_Fur_087",
     "ItemId": "Furniture_Fireplace_09",
     "CostAmount": 550
   },
   {
-    "Id": "Shop_Fur_089",
+    "Id": "Shop_Fur_088",
     "ItemId": "Furniture_Fireplace_10",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Fur_090",
+    "Id": "Shop_Fur_089",
     "ItemId": "Furniture_Fireplace_11",
     "CostAmount": 420
   },
   {
-    "Id": "Shop_Fur_091",
+    "Id": "Shop_Fur_090",
     "ItemId": "Furniture_Fireplace_12",
     "CostAmount": 600
   },
   {
-    "Id": "Shop_Fur_092",
+    "Id": "Shop_Fur_091",
     "ItemId": "Furniture_Fireplace_13",
     "CostAmount": 650
   },
   {
-    "Id": "Shop_Fur_093",
+    "Id": "Shop_Fur_092",
     "ItemId": "Furniture_Fireplace_14",
     "CostAmount": 380
   },
   {
-    "Id": "Shop_Fur_094",
+    "Id": "Shop_Fur_093",
     "ItemId": "Furniture_Toilet_01",
     "CostAmount": 250
   },
   {
-    "Id": "Shop_Fur_095",
+    "Id": "Shop_Fur_094",
     "ItemId": "Furniture_Toilet_02",
     "CostAmount": 300
   },
   {
-    "Id": "Shop_Fur_096",
+    "Id": "Shop_Fur_095",
     "ItemId": "Furniture_Toilet_03",
     "CostAmount": 350
   },
   {
-    "Id": "Shop_Fur_097",
+    "Id": "Shop_Fur_096",
     "ItemId": "Furniture_Toilet_04",
     "CostAmount": 500
   },
@@ -646,106 +641,131 @@
   },
   {
     "Id": "Shop_Play_019",
+    "ItemId": "Play_Wheel",
+    "CostAmount": 2000
+  },
+  {
+    "Id": "Shop_Play_020",
     "ItemId": "Play_Ball_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_020",
+    "Id": "Shop_Play_021",
     "ItemId": "Play_Darts_01",
     "CostAmount": 250
   },
   {
-    "Id": "Shop_Play_021",
+    "Id": "Shop_Play_022",
     "ItemId": "Play_Toy_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_022",
+    "Id": "Shop_Play_023",
     "ItemId": "Play_Toy_02",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_023",
+    "Id": "Shop_Play_024",
     "ItemId": "Play_Toy_03",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_024",
+    "Id": "Shop_Play_025",
     "ItemId": "Play_Toy_04",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_025",
+    "Id": "Shop_Play_026",
     "ItemId": "Play_Toy_05",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_026",
+    "Id": "Shop_Play_027",
     "ItemId": "Play_Toy_06",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_027",
+    "Id": "Shop_Play_028",
+    "ItemId": "Play_Carousel",
+    "CostAmount": 5000
+  },
+  {
+    "Id": "Shop_Play_029",
+    "ItemId": "Play_Minihome",
+    "CostAmount": 1800
+  },
+  {
+    "Id": "Shop_Play_030",
+    "ItemId": "Play_Slide",
+    "CostAmount": 3000
+  },
+  {
+    "Id": "Shop_Play_031",
+    "ItemId": "Play_Tower",
+    "CostAmount": 2400
+  },
+  {
+    "Id": "Shop_Play_032",
     "ItemId": "Play_Computer_01",
     "CostAmount": 400
   },
   {
-    "Id": "Shop_Play_028",
+    "Id": "Shop_Play_033",
     "ItemId": "Play_GameConsole_01",
     "CostAmount": 200
   },
   {
-    "Id": "Shop_Play_029",
+    "Id": "Shop_Play_034",
     "ItemId": "Play_GameConsole_02",
     "CostAmount": 250
   },
   {
-    "Id": "Shop_Play_030",
+    "Id": "Shop_Play_035",
     "ItemId": "Play_GameConsole_03",
     "CostAmount": 350
   },
   {
-    "Id": "Shop_Play_031",
+    "Id": "Shop_Play_036",
     "ItemId": "Play_Keyboard_01",
     "CostAmount": 150
   },
   {
-    "Id": "Shop_Play_032",
+    "Id": "Shop_Play_037",
     "ItemId": "Play_Mouse_01",
     "CostAmount": 100
   },
   {
-    "Id": "Shop_Play_033",
+    "Id": "Shop_Play_038",
     "ItemId": "Play_TV_01",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Play_034",
+    "Id": "Shop_Play_039",
     "ItemId": "Play_TV_02",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Play_035",
+    "Id": "Shop_Play_040",
     "ItemId": "Play_TV_03",
     "CostAmount": 550
   },
   {
-    "Id": "Shop_Play_036",
+    "Id": "Shop_Play_041",
     "ItemId": "Play_TV_04",
     "CostAmount": 400
   },
   {
-    "Id": "Shop_Play_037",
+    "Id": "Shop_Play_042",
     "ItemId": "Play_TV_05",
     "CostAmount": 450
   },
   {
-    "Id": "Shop_Play_038",
+    "Id": "Shop_Play_043",
     "ItemId": "Play_TV_06",
     "CostAmount": 500
   },
   {
-    "Id": "Shop_Play_039",
+    "Id": "Shop_Play_044",
     "ItemId": "Play_TV_07",
     "CostAmount": 600
   }

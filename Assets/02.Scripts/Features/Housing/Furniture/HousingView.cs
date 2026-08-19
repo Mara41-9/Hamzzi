@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class HousingView : ViewBase
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
     private GameObject _ghostObject;
+    private float _lastGhostAngle = 0f;
 
     private List<GameObject> _activeGridLines = new List<GameObject>();
     private Dictionary<string, GameObject> _spawnFurniture = new Dictionary<string, GameObject>();
@@ -183,6 +185,8 @@ public class HousingView : ViewBase
                         _spawnFurniture.Remove(instanceID);
                     }
 
+                    SoundManager.Instance.PlaySFX("Select_Furniture");
+
                     _housingVM.SelectInstallFurniture(furnitureView.FurnitureVM);
 
                     return true;
@@ -325,10 +329,22 @@ public class HousingView : ViewBase
         GetFurnitureWorldTransform(_housingVM.FurnitureVM, out Vector3 pos, out Quaternion rot, out float tileYOffset);
         float subCellSize = GetCurrentSubCellSize();
 
-        if (_ghostObject != null)
+        _ghostObject.transform.position = pos;
+
+        float currentAngle = _housingVM.FurnitureVM.RotationAngle;
+
+        if (!Mathf.Approximately(_lastGhostAngle, currentAngle))
         {
-            _ghostObject.transform.position = pos;
-            _ghostObject.transform.rotation = rot;
+            _lastGhostAngle = currentAngle;
+
+            if (_ghostObject.TryGetComponent<FurnitureView>(out var furnitureView))
+            {
+                furnitureView.PlayRotationAnimation(currentAngle);
+            }
+            else
+            {
+                _ghostObject.transform.rotation = rot;
+            }
         }
 
         if (SpriteRenderer_Tile != null)
@@ -357,6 +373,10 @@ public class HousingView : ViewBase
 
         _ghostObject.transform.rotation = Quaternion.identity;
         _ghostObject.transform.localScale = Vector3.one;
+
+        _lastGhostAngle = _housingVM.FurnitureVM.RotationAngle;
+
+        SoundManager.Instance.PlaySFX("Select_Furniture", 0.6f);
 
         if (_ghostObject.TryGetComponent<FurnitureView>(out var furnitureView))
         {
@@ -423,6 +443,8 @@ public class HousingView : ViewBase
         FurnitureView furnitureView = prefab.GetComponent<FurnitureView>();
         furnitureView.ResetMaterial();
         furnitureView.Bind(furnitureVM);
+
+        furnitureView.PlayPlaceAnimation();
 
         _spawnFurniture[furnitureVM.InstanceID] = prefab;
     }
