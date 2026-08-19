@@ -89,7 +89,7 @@ public class ShopService
         shopVm.NotifyItemListChanged();
     }
 
-    public async UniTask<ShopSlotViewModel> CreateItem(ShopData shopData, ItemData itemData, SubCategoryEffectData effectData)
+    private async UniTask<ShopSlotViewModel> CreateItem(ShopData shopData, ItemData itemData, SubCategoryEffectData effectData)
     {
         long uniqueId = TestGameUtil.GenerateUniqueId();
 

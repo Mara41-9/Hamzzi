@@ -25,6 +25,9 @@ public class ShopUI : ViewBase
     [SerializeField] private TMP_Text Text_ItemEffect;
     [SerializeField] private TMP_Text Text_ItemPrice;
 
+    [Header("보유한 씨앗")]
+    [SerializeField] private TMP_Text Text_SeedCount;
+
     [Header("상위 카테고리")]
     [SerializeField] private UIButton Button_AllCategory;
     [SerializeField] private UIButton Button_FurnitureCategory;
@@ -47,6 +50,7 @@ public class ShopUI : ViewBase
     [SerializeField] private UIButton Button_BuyItem;
 
     private ShopViewModel _shopVm;
+    private CurrencyViewModel _currencyVm;
     private string _selectedSubCategory;
 
     private ShopCategory _selectedCategory = ShopCategory.All;
@@ -73,6 +77,11 @@ public class ShopUI : ViewBase
         if(_shopVm != null)
         {
             _shopVm.PropertyChanged -= OnPropChanged_ShopView;
+        }
+
+        if(_currencyVm != null)
+        {
+            _currencyVm.PropertyChanged -= OnPropChanged_CurrenctView;
         }
 
         ClearSlotList();
@@ -208,6 +217,7 @@ public class ShopUI : ViewBase
         ClearSlotList();
 
         FindShopViewModelAndBind();
+        FindCurrencyViewModelAndBind();
     }
 
     private void FindShopViewModelAndBind()
@@ -225,6 +235,15 @@ public class ShopUI : ViewBase
         _shopVm.InvokeOnceOnInit();
     }
 
+    private void FindCurrencyViewModelAndBind()
+    {
+        var currenctVm = ServiceManager.Instance.CurrencyService.GetCurrencyViewModel();
+        _currencyVm = currenctVm;
+
+        _currencyVm.PropertyChanged += OnPropChanged_CurrenctView;
+        _currencyVm.InvokeOnceOnInit();
+    }
+
     private void OnPropChanged_ShopView(object sender, PropertyChangedEventArgs e)
     {
         switch(e.PropertyName)
@@ -236,6 +255,21 @@ public class ShopUI : ViewBase
                 UpdateItemDetailInfo(_shopVm.SelectedSlot);
                 break;
         }
+    }
+
+    private void OnPropChanged_CurrenctView(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(CurrencyViewModel.SeedCount):
+                UpdateSeedCount();
+                break;
+        }
+    }
+
+    private void UpdateSeedCount()
+    {
+        Text_SeedCount.text = _currencyVm.SeedCount.ToString();
     }
 
     private void OnSubCategorySelected(string subCategory)
