@@ -18,7 +18,7 @@ public class GachaView : ViewBase
 
     private void Start()
     {
-        _collectionViewModel = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
     }
 
     private void OnEnable()
@@ -44,11 +44,11 @@ public class GachaView : ViewBase
 
     private string DrawHamster()
     {
-        string hamsterId = NetworkManager_YMH.Instance.GachaService.DrawGacha();
-        _collectionViewModel.AddCollectedHamsterIdList(hamsterId);
-        Debug.Log(hamsterId);
+        HamsterSave hamsterSave = ServiceManager.Instance.GachaService.DrawGacha();
+        _collectionViewModel.AddCollectedHamsterList(hamsterSave);
+        Debug.Log($"{hamsterSave.HamsterId}, {hamsterSave.FaceId} ");
 
-        return hamsterId;
+        return hamsterSave.HamsterId;
     }
 
     private void DrawOneHamster()
