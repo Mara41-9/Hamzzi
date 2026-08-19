@@ -23,7 +23,6 @@ public class GameManager : SingletonBase<GameManager>
     private void Start()
     {
         InitMap().Forget();
-        //UIManager.Instance.OpenTestUI();
     }
 
     public void AddSeedCount(int amount)
