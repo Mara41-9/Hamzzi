@@ -1,0 +1,52 @@
+[
+  {
+    "Id": "Bed",
+    "SubCategory": "Bed",
+    "SeedCollectionBonus": 0.1
+  },
+  {
+    "Id": "Chair",
+    "SubCategory": "Chair",
+    "SeedCollectionBonus": 0.05
+  },
+  {
+    "Id": "Fireplace",
+    "SubCategory": "Fireplace",
+    "SeedCollectionBonus": 0.15
+  },
+  {
+    "Id": "Toilet",
+    "SubCategory": "Toilet",
+    "SeedCollectionBonus": 0.05
+  },
+  {
+    "Id": "Carpet",
+    "SubCategory": "Carpet",
+    "SeedCollectionBonus": 0.05
+  },
+  {
+    "Id": "Plants",
+    "SubCategory": "Plants",
+    "SeedCollectionBonus": 0.1
+  },
+  {
+    "Id": "Music",
+    "SubCategory": "Music",
+    "SeedCollectionBonus": 0.15
+  },
+  {
+    "Id": "Exercise",
+    "SubCategory": "Exercise",
+    "SeedCollectionBonus": 0.2
+  },
+  {
+    "Id": "Toy",
+    "SubCategory": "Toy",
+    "SeedCollectionBonus": 0.2
+  },
+  {
+    "Id": "Electronics",
+    "SubCategory": "Electronics",
+    "SeedCollectionBonus": 0.25
+  }
+]

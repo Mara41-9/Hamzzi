@@ -447,6 +447,7 @@ GameObject:
   - component: {fileID: 1734832136432270587}
   - component: {fileID: 5399063093743575737}
   - component: {fileID: 4356493248400564502}
+  - component: {fileID: 6435576303536818738}
   m_Layer: 5
   m_Name: Button_CreatAcount
   m_TagString: Untagged
@@ -571,6 +572,18 @@ MonoBehaviour:
   Button_Base: {fileID: 5399063093743575737}
   Image_Base: {fileID: 1734832136432270587}
   Text_Base: {fileID: 8042961977184886957}
+--- !u!114 &6435576303536818738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3306032603761311877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &3875698435842196373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1207,7 @@ GameObject:
   - component: {fileID: 5682028011970131733}
   - component: {fileID: 7454482844173075753}
   - component: {fileID: 3286605135043785612}
+  - component: {fileID: 7910811820706624336}
   m_Layer: 5
   m_Name: Button_Login
   m_TagString: Untagged
@@ -1318,6 +1332,18 @@ MonoBehaviour:
   Button_Base: {fileID: 7454482844173075753}
   Image_Base: {fileID: 5682028011970131733}
   Text_Base: {fileID: 4767439880250892515}
+--- !u!114 &7910811820706624336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7401738190970557549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &7606330655397410148
 GameObject:
   m_ObjectHideFlags: 0

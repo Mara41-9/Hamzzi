@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3087106709881277231}
   - component: {fileID: 231709797676956201}
   - component: {fileID: 4835517586754827615}
+  - component: {fileID: 6633904928805940943}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -121,6 +122,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6633904928805940943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2273477301415012503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &2717867287492819208
 GameObject:
   m_ObjectHideFlags: 0
