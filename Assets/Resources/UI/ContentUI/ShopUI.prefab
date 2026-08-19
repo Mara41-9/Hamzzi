@@ -1219,6 +1219,7 @@ GameObject:
   - component: {fileID: 2476194275509586528}
   - component: {fileID: 832814399686736342}
   - component: {fileID: 8255725684143892284}
+  - component: {fileID: 706222655892844820}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -1330,6 +1331,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &706222655892844820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347694650438524109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &2391439365355525597
 GameObject:
   m_ObjectHideFlags: 0
@@ -3355,6 +3368,7 @@ GameObject:
   - component: {fileID: 7984208688790762194}
   - component: {fileID: 3843005119384929931}
   - component: {fileID: 27545853228932466}
+  - component: {fileID: 2159008922842027972}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -3466,6 +3480,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2159008922842027972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5752103342596448570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &5812891790094546733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4210,6 +4236,7 @@ GameObject:
   - component: {fileID: 5572295970479757016}
   - component: {fileID: 1196582408523282560}
   - component: {fileID: 3967679194087487640}
+  - component: {fileID: 7468361552368292008}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -4318,6 +4345,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7468361552368292008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7289878046139536894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &7405220399941583233
 GameObject:
   m_ObjectHideFlags: 0
@@ -4715,6 +4754,7 @@ GameObject:
   - component: {fileID: 7278869753738934538}
   - component: {fileID: 6901378725870246955}
   - component: {fileID: 3422625606576004822}
+  - component: {fileID: 2019103480977823724}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -4826,6 +4866,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2019103480977823724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7876202252582945433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &7966313761599725393
 GameObject:
   m_ObjectHideFlags: 0
@@ -5351,6 +5403,7 @@ GameObject:
   - component: {fileID: 6251775994077160635}
   - component: {fileID: 7777859609310621608}
   - component: {fileID: 6195373996339128491}
+  - component: {fileID: 7707385055561792342}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -5461,6 +5514,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7707385055561792342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8799591928577194446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &8852120001899500646
 GameObject:
   m_ObjectHideFlags: 0
@@ -5539,6 +5604,7 @@ GameObject:
   - component: {fileID: 1344716802173146405}
   - component: {fileID: 8923291798880124605}
   - component: {fileID: 5922624985443495381}
+  - component: {fileID: 7033347632238344311}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -5650,6 +5716,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7033347632238344311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9087474246245870324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
 --- !u!1 &9097977901550044779
 GameObject:
   m_ObjectHideFlags: 0
