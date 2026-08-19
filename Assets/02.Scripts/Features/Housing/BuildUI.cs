@@ -97,7 +97,7 @@ public class BuildUI : ViewBase
         ResetUI();
 
         UIManager.Instance.CloseBuildUI();
-        UIManager.Instance.OpenTestUI();
+        UIManager.Instance.OpenDecorUI();
     }
 
     private void OnClickConfirm()
@@ -106,7 +106,7 @@ public class BuildUI : ViewBase
         ResetUI();
 
         UIManager.Instance.CloseBuildUI();
-        UIManager.Instance.OpenTestUI();
+        UIManager.Instance.OpenDecorUI();
     }
 
     private void OnClickDestroy()

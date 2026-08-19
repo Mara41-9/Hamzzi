@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TestUI : ViewBase
+public class DecorUI : ViewBase
 {
     [SerializeField] private Button Button_EnterGarden;
     [SerializeField] private Button Button_ExitGarden;
@@ -59,7 +59,7 @@ public class TestUI : ViewBase
         Button_EnterGarden.gameObject.SetActive(true);
 
         UIManager.Instance.OpenBuildUI();
-        UIManager.Instance.CloseTestUI();
+        UIManager.Instance.CloseDecorUI();
     }
 
     private void OnClickEnterHousing()
@@ -70,12 +70,12 @@ public class TestUI : ViewBase
         Button_EnterGarden.gameObject.SetActive(true);
 
         UIManager.Instance.OpenHousingUI();
-        UIManager.Instance.CloseTestUI();
+        UIManager.Instance.CloseDecorUI();
     }
 
     private void OnClickGoToInGame()
     {
-        UIManager.Instance.CloseTestUI();
+        UIManager.Instance.CloseDecorUI();
         UIManager.Instance.OpenInGameUI();
     }
 }
