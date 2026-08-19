@@ -23,7 +23,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitGachaService();
         InitCurrencyService();
 
-        CurrencyService.SeedCollection().Forget();
+        CurrencyService.InitCurrency();
     }
 
     private void InitShopService()
