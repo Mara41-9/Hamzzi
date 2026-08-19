@@ -19,6 +19,7 @@ public class ShopUI : ViewBase
     [SerializeField] private GameObject Prefab_ItemSlot;
     [SerializeField] private Transform Transform_SlotRoot;
     [SerializeField] private Image Image_Icon;
+    [SerializeField] private Image Image_DefaultIcon;
     [SerializeField] private TMP_Text Text_ItemName;
     [SerializeField] private TMP_Text Text_ItemDescription;
     [SerializeField] private TMP_Text Text_ItemEffect;
@@ -69,15 +70,15 @@ public class ShopUI : ViewBase
 
     private void OnDisable()
     {
-        ClearSlotList();
-        ClearSubCategoryList();
-        ResetItemInfo();
-        ResetSelectedData();
-
         if(_shopVm != null)
         {
             _shopVm.PropertyChanged -= OnPropChanged_ShopView;
         }
+
+        ClearSlotList();
+        ClearSubCategoryList();
+        ResetItemInfo();
+        ResetSelectedData();
     }
 
     private void InitShopUI()
@@ -322,8 +323,11 @@ public class ShopUI : ViewBase
     {
         if (slotVm == null)
         {
+            ResetItemInfo();
             return;
         }
+
+        Image_DefaultIcon.gameObject.SetActive(false);
 
         Image_Icon.sprite = slotVm.IconSprite;
         Text_ItemName.text = slotVm.Name;
@@ -363,10 +367,12 @@ public class ShopUI : ViewBase
 
     private void ResetItemInfo()
     {
+        Image_DefaultIcon.gameObject.SetActive(true);
         Image_Icon.sprite = null;
         Text_ItemName.text = "";
         Text_ItemDescription.text = "";
         Text_ItemPrice.text = "";
+        Text_ItemEffect.text = "";
     }
 
     private void ResetSelectedData()
