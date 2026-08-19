@@ -133,12 +133,6 @@ public class ShopUI : ViewBase
             return;
         }
 
-        if(_shopVm.SelectedSlot.CostAmount > _currencyVm.SeedCount)
-        {
-            Debug.LogWarning("구매 실패. 보유 씨앗의 개수가 부족합니다.");
-            return;
-        }
-
         ServiceManager.Instance.ShopService.BuyItem();
     }
 
