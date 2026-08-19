@@ -188,7 +188,7 @@ public class HousingUI : ViewBase
         {
             _housingVM.EnterOverviewMode();
             UIManager.Instance.CloseHousingUI();
-            UIManager.Instance.OpenTestUI();
+            UIManager.Instance.OpenDecorUI();
         }
         else
         {
@@ -223,12 +223,12 @@ public class HousingUI : ViewBase
         _housingVM.EnterOverviewMode();
 
         UIManager.Instance.CloseHousingUI();
-        UIManager.Instance.OpenTestUI();
+        UIManager.Instance.OpenDecorUI();
     }
 
     private void OnClickRemove()
     {
-        _housingVM.RemoveSelectedFurniture();
+        _housingVM.RemoveSelectedFurniture().Forget();
     }
 
     private void OnClickAssign()

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class FeverTimeWheel : MonoBehaviour
 {
-    //private const float TEMP_TRIGGER_INTERVAL_SEC = 20f; // TODO: HAM-68 데이터테이블 완성되면 등급별 값으로 교체
+    [SerializeField] private GameObject Prefab_Effect;
 
     private float _elapsedTime; //쳇바퀴가 마지막으로 리셋된 뒤부터 지금까지 흐른 시간을 초단위로 저장
     private bool _isReady;
@@ -16,6 +16,7 @@ public class FeverTimeWheel : MonoBehaviour
     private void Start()
     {
         FeverTimeManager.Instance.OnFeverTimeEnded += ResetTimerForNextFever;
+        UpdateSparkleEffect();
     }
 
     private void OnDisable()
@@ -55,10 +56,7 @@ public class FeverTimeWheel : MonoBehaviour
     private void SetReadyState()
     {
         _isReady = true;
-
-#if UNITY_EDITOR
-        Debug.Log("쳇바퀴 반짝임 트리거 (TODO: 실제 반짝임 이펙트 연결되면 이 로그를 교체)");
-#endif
+        UpdateSparkleEffect();
     }
 
     private void CheckTouchInput()
@@ -92,6 +90,7 @@ public class FeverTimeWheel : MonoBehaviour
     {
         _isReady = false;
         _isFeverInProgress = true;
+        UpdateSparkleEffect();
 
         FeverTimeManager.Instance.StartFeverTime(_currentHamsterData);
     }
@@ -100,6 +99,8 @@ public class FeverTimeWheel : MonoBehaviour
     {
         _isFeverInProgress = false;
         _elapsedTime = 0f;
+        _isReady = false;
+        UpdateSparkleEffect();
     }
 
     public void SetHamster(HamsterData hamsterData)
@@ -107,11 +108,17 @@ public class FeverTimeWheel : MonoBehaviour
         _currentHamsterData = hamsterData;
         _isReady = false;
         _elapsedTime = 0f;
+        UpdateSparkleEffect();
 
         if (_currentHamsterData != null)
         {
             FeverTimeData feverData = GameDataManager.Instance.GetData<FeverTimeData>(_currentHamsterData.HamsterTier.ToString());
             _triggerIntervalSec = feverData.TriggerIntervalSec;
         }
+    }
+
+    private void UpdateSparkleEffect()
+    {
+        Prefab_Effect.SetActive(_isReady);
     }
 }

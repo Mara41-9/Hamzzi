@@ -28,8 +28,8 @@ public enum UIType
     GachaUI,
     HousingUI,
     FeverTimeCutsceneUI,
-    WheelUI,    // 쳇바퀴 담당 햄스터 할당 UI
-    TestUI,  // 하우징 테스트용 (MainUI 대용)
+    WheelUI,
+    DecorUI,
     TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
 }
 
@@ -103,14 +103,14 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
     }
 
-    public static void OpenTestUI(this UIManager uiManager)
+    public static void OpenDecorUI(this UIManager uiManager)
     {
-        uiManager.OpenUI(UIRootType.MainUI, UIType.TestUI);
+        uiManager.OpenUI(UIRootType.MainUI, UIType.DecorUI);
     }
 
-    public static void CloseTestUI(this UIManager uiManager)
+    public static void CloseDecorUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.MainUI, UIType.TestUI);
+        uiManager.CloseUI(UIRootType.MainUI, UIType.DecorUI);
     }
 
     public static void OpenHousingUI(this UIManager uiManager)
