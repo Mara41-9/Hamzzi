@@ -20,11 +20,14 @@ public class CollectionView : UIBase
     [SerializeField] private Transform SlotContent;
 
     [Header("햄스터 정보")]
+    [SerializeField] private GameObject HamsterModelPrefab;
     [SerializeField] private TextMeshProUGUI HamsterName;
     [SerializeField] private TextMeshProUGUI HamsterAbility1;
 
     private Dictionary<string, HamsterSlot> _spawnedHamsterSlotList = new Dictionary<string, HamsterSlot>();
     private Dictionary<string, FaceSlot> _spawnedFaceSlotList = new Dictionary<string, FaceSlot>();
+
+    private HamsterForm _modelForm;
 
     private CollectionViewModel _collectionViewModel;
 
@@ -47,6 +50,12 @@ public class CollectionView : UIBase
 
         UpdateHamsterSlot();
         UpdateFaceSlot();
+
+        if(_modelForm == null)
+        {
+            var modelObject = Instantiate(HamsterModelPrefab);
+            _modelForm = modelObject.GetComponentInChildren<HamsterForm>();
+        }
     }
 
     private void OnDisable()
@@ -99,6 +108,10 @@ public class CollectionView : UIBase
             case nameof(CollectionViewModel.CurrentSelectHamsterId):
                 UpdateHamsterInfo();
                 UpdateFaceSlot();
+                ChangedHamsterModel();
+                break;
+            case nameof(CollectionViewModel.CurrentSelectedHamsterFaceId):
+                ChangedFaceModel();
                 break;
         }
     }
@@ -199,7 +212,7 @@ public class CollectionView : UIBase
             bool isCollected = CheckUnlockFace(faceId);
 
             faceSlot.InitSlot(faceData, isCollected);
-            faceSlot.OnSlotClicked += OnSelectedHamster;
+            faceSlot.OnSlotClicked += OnSelectedFace;
 
             _spawnedFaceSlotList.Add(faceId, faceSlot);
         }
@@ -300,6 +313,23 @@ public class CollectionView : UIBase
     private void OnSelectedHamster(string hamsterId)
     {
         _collectionViewModel.RequestSelectedHamsterId(hamsterId);
+    }
+
+    private void OnSelectedFace(string faceId)
+    {
+        _collectionViewModel.RequestSelectedFaceId(faceId);
+    }
+
+    private void ChangedHamsterModel()
+    {
+        if(_modelForm != null)
+            _modelForm.SetBodyMesh(_collectionViewModel.CurrentSelectHamsterId);
+    }
+
+    private void ChangedFaceModel()
+    {
+        if(_modelForm != null)
+            _modelForm.SetFaceMesh(_collectionViewModel.CurrentSelectedHamsterFaceId);
     }
 
     private void UpdateHamsterInfo()
