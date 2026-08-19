@@ -98,6 +98,7 @@ public class CollectionView : UIBase
                 break;
             case nameof(CollectionViewModel.CurrentSelectHamsterId):
                 UpdateHamsterInfo();
+                UpdateFaceSlot();
                 break;
         }
     }
@@ -124,9 +125,10 @@ public class CollectionView : UIBase
             switch (eventType)
             {
                 case ContainerEventType.Add:
-
+                    UpdateFaceSlot();
                     break;
                 case ContainerEventType.Remove:
+                    UpdateFaceSlot();
                     break;
                 case ContainerEventType.Update:
                     break;
@@ -262,6 +264,10 @@ public class CollectionView : UIBase
         foreach(string hamsterId in collectedHamsterList)
         {
             Debug.Log($"슬롯 업데이트 {hamsterId}");
+
+            if (_spawnedHamsterSlotList.ContainsKey(hamsterId) == false)
+                continue;
+
             HamsterSlot slot = _spawnedHamsterSlotList[hamsterId];
             slot.UpdateLockImage(true);
         }
@@ -271,8 +277,19 @@ public class CollectionView : UIBase
     {
         string currentHamsterId = _collectionViewModel.CurrentSelectHamsterId;
 
-        HashSet<string> collectedFaceList = _collectionViewModel.CollectedFaceByHamsterList[currentHamsterId];
-        foreach (string faceId in collectedFaceList)
+        foreach(var kv in _spawnedFaceSlotList)
+        {
+            var slot = kv.Value;
+            slot.UpdateLockImage(false);
+        }
+
+        var collectedFaceList = _collectionViewModel.CollectedFaceByHamsterList;
+        if (collectedFaceList.ContainsKey(currentHamsterId) == false)
+        {
+            return;
+        }
+
+        foreach (string faceId in collectedFaceList[currentHamsterId])
         {
             Debug.Log($"슬롯 업데이트 {faceId}");
             FaceSlot slot = _spawnedFaceSlotList[faceId];
