@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEngine;
 
 public class HousingService
 {
@@ -75,28 +75,42 @@ public class HousingService
         LoadHousingData();
     }
 
-    public void AddItem(ShopSlotViewModel shopSlotVm)
+    private void AddInventoryItem(string itemDataId, Sprite iconSprite)
     {
-        var housingVm = GetHousingViewModel();
+        HousingViewModel housingVm = GetHousingViewModel();
 
-        foreach(var itemKv in housingVm.ItemList)
+        foreach (var itemKv in housingVm.ItemList)
         {
-            var furnitureVm = itemKv.Value;
-            if(furnitureVm.ItemDataId == shopSlotVm.ItemDataId)
+            var slotVm = itemKv.Value;
+
+            if (slotVm.ItemDataId == itemDataId)
             {
-                furnitureVm.StackCount++;
+                slotVm.StackCount++;
                 return;
             }
         }
 
-        var newFurnitureSlotVm = new FurnitureSlotViewModel();
-        long uniqueId = TestGameUtil.GenerateUniqueId();
+        var newSlotVm = new FurnitureSlotViewModel();
+        newSlotVm.ItemUniqueId = TestGameUtil.GenerateUniqueId();
+        newSlotVm.ItemDataId = itemDataId;
+        newSlotVm.IconSprite = iconSprite;
+        newSlotVm.StackCount = 1;
 
-        newFurnitureSlotVm.ItemUniqueId = uniqueId;
-        newFurnitureSlotVm.ItemDataId = shopSlotVm.ItemDataId;
-        newFurnitureSlotVm.IconSprite = shopSlotVm.IconSprite;
-        newFurnitureSlotVm.StackCount = 1;
+        housingVm.AddItemSlotViewModel(newSlotVm);
+    }
 
-        housingVm.AddItemSlotViewModel(newFurnitureSlotVm);
+    public void AddItem(ShopSlotViewModel shopSlotVm)
+    {
+        if (shopSlotVm == null)
+        {
+            return;
+        }
+
+        AddInventoryItem(shopSlotVm.ItemDataId, shopSlotVm.IconSprite);
+    }
+
+    public void AddItem(string itemDataId, Sprite iconSprite)
+    {
+        AddInventoryItem(itemDataId, iconSprite);
     }
 }

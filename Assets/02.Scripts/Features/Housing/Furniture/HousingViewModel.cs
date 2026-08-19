@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public enum HousingState
 {
@@ -220,9 +222,10 @@ public class HousingViewModel : ViewModelBase
         CheckCurrentPos();
     }
 
-    public bool RemoveSelectedFurniture()
+    public async UniTask<bool> RemoveSelectedFurniture()
     {
         DestroyFurniture = FurnitureVM;
+        string furnitureID = FurnitureVM.FurnitureID;
 
         if (CurrentViewMode == HousingViewMode.Garden)
         {
@@ -233,11 +236,11 @@ public class HousingViewModel : ViewModelBase
             TargetRoom.RemoveFurniture(FurnitureVM);
         }
 
-        string furnitureID = FurnitureVM.FurnitureID;
-        // 여기에 인벤토리로 돌아가는 로직
+        string iconPath = GameDataManager.Instance.GetData<ItemData>(furnitureID).IconPath;
+        Sprite icon = await ResourceManager.Instance.LoadAsset<Sprite>(iconPath);
+        ServiceManager.Instance.HousingService.AddItem(furnitureID, icon);
 
         ResetPlacingState();
-
         return true;
     }
 
