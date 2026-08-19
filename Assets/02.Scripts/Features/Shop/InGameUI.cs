@@ -19,6 +19,7 @@ public class InGameUI : ViewBase
         Button_OpenFriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
 
         FindCurrencyViewModelAndBind();
+        UpdateSeedCount();
     }
 
     private void OnDisable()
