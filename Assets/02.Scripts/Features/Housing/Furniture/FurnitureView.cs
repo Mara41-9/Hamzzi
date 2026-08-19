@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class FurnitureView : MonoBehaviour
 
     private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
     private FeverTimeWheel _feverTimeWheel;
+    private Vector3 _originScale = Vector3.one;
 
     private void Awake()
     {
@@ -35,6 +37,8 @@ public class FurnitureView : MonoBehaviour
 
     private void OnDestroy()
     {
+        transform.DOKill();
+
         if (FurnitureVM != null)
         {
             FurnitureVM.PropertyChanged -= OnPropertyChanged_VM;
@@ -49,6 +53,24 @@ public class FurnitureView : MonoBehaviour
                 UpdateAssignHamster();
                 break;
         }
+    }
+
+    public void PlayPlaceAnimation()
+    {
+        transform.DOKill();
+        transform.localScale = _originScale;
+
+        transform.DOPunchScale(new Vector3(0.15f, -0.15f, 0.15f), 0.25f, 7, 1f);
+
+        SoundManager.Instance.PlaySFX("Place_Furniture");
+    }
+
+    public void PlayRotationAnimation(float targetAngleY)
+    {
+        transform.DOKill();
+        transform.DORotate(new Vector3(0f, targetAngleY, 0f), 0.2f).SetEase(Ease.OutBack);
+
+        SoundManager.Instance.PlaySFX("Rotate_Furniture");
     }
 
     private void UpdateAssignHamster()

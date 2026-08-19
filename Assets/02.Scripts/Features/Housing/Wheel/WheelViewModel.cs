@@ -29,8 +29,7 @@ public class WheelViewModel : ViewModelBase
     {
         Hamsters.Clear();
 
-        CollectionViewModel collectionVM = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
-        HashSet<string> collectHamsters = collectionVM.CollectedHamsterIdList;
+        HashSet<string> collectHamsters = GetCollectHamsterID(); // 임시
         HashSet<string> otherAssignID = GetAssignHamster();
 
         foreach (string hamsterID in collectHamsters)
@@ -58,7 +57,7 @@ public class WheelViewModel : ViewModelBase
 
         foreach (var furniture in allFurniture)
         {
-            if (!string.IsNullOrEmpty(furniture.AssignHamsterID))
+            if (furniture != TargetFurniture && !string.IsNullOrEmpty(furniture.AssignHamsterID))
             {
                 assignID.Add(furniture.AssignHamsterID);
             }
@@ -83,5 +82,16 @@ public class WheelViewModel : ViewModelBase
         ServiceManager.Instance.HousingService.SaveHousingData();
 
         RefreshHamsterList();
+    }
+
+    private HashSet<string> GetCollectHamsterID()
+    {
+        // TODO: 나중에 교체
+        return new HashSet<string>
+        {
+            "Hamster_01",
+            "Hamster_02",
+            "Hamster_03"
+        };
     }
 }

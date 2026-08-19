@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class HousingUI : ViewBase
 {
     [SerializeField] private GameObject Panel_FurnitureBar;
     [SerializeField] private GameObject Panel_Info;
+    [SerializeField] private TextMeshProUGUI Text_EmptyInfo;
 
     [SerializeField] private Button Button_Exit;
     [SerializeField] private Button Button_Rotation;
@@ -155,9 +157,11 @@ public class HousingUI : ViewBase
 
     public async UniTask InitFurnitureSlot(Dictionary<long, FurnitureSlotViewModel> itemList)
     {
+        bool isEmpty = itemList.Count <= 0;
+        Text_EmptyInfo.gameObject.SetActive(isEmpty);
+
         foreach (Transform child in Panel_FurnitureBar.transform)
         {
-            // 이미 비활성화된 슬롯은 풀에 반환된 상태이므로 건너뜀
             if (child.gameObject.activeSelf == false)
             {
                 continue;
@@ -195,6 +199,8 @@ public class HousingUI : ViewBase
     private void OnClickRotation()
     {
         _housingVM.RotatePos();
+
+
     }
 
     private void OnClickConfirm()
