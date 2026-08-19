@@ -977,11 +977,9 @@ MonoBehaviour:
   HamsterSlotPrefab: {fileID: 3531889357708306709, guid: d0701dad4a61db84fbd2f65606c8065a, type: 3}
   FaceSlotPrefab: {fileID: 852566108727002345, guid: f474d07a0c71ffd459de62ba6ab016c4, type: 3}
   SlotContent: {fileID: 2950582603972770614}
-  HamsterIcon: {fileID: 0}
+  HamsterModelPrefab: {fileID: 7012912615587124373, guid: 4221b9c9edd4ca6408e86abe602e4ec6, type: 3}
   HamsterName: {fileID: 8964146436730004238}
-  HamsterDescription: {fileID: 0}
   HamsterAbility1: {fileID: 1913903026321951086}
-  HamsterAbiltiy2: {fileID: 0}
 --- !u!1 &5353079509123553819
 GameObject:
   m_ObjectHideFlags: 0
