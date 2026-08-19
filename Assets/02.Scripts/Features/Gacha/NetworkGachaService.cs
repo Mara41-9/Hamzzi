@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class NetworkGachaService
 {
+    private static int InstanceID = 0;
+
     private GachaViewModel _gachaViewModel;
 
     public GachaViewModel GetGachaViewModel()
@@ -22,8 +24,8 @@ public class NetworkGachaService
     private void SetGachaViewModel(GachaViewModel vm)
     {
         // 뷰모데 초기화
-        CollectionViewModel collectionVM = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel();
-        List<string> allHamsterList = collectionVM.AllHamsterIdList.ToList<string>();
+        CollectionViewModel collectionVM = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+        List<string> allHamsterList = collectionVM.AllHamsterIdList;
 
         foreach(string hamsterId in allHamsterList)
         {
@@ -52,19 +54,31 @@ public class NetworkGachaService
         vm.HamsterIdByTierList[tier].Add(hamsterId);
     }
 
-    public string DrawGacha()
+    public HamsterSave DrawGacha()
     {
         HamsterTier drawTier = DrawTier();
 
         List<string> hamsterList = _gachaViewModel.HamsterIdByTierList[drawTier];
         if (hamsterList == null)
             return null;
-        int hamsterCount = hamsterList.Count;
 
+        // 햄스터 몸 랜덤 뽑기
+        int hamsterCount = hamsterList.Count;
         int randomIndex = Random.Range(0, hamsterCount);
         string drawHamsterId = hamsterList[randomIndex];
 
-        return drawHamsterId;
+        // 햄스터 얼굴 랜덤 뽑기
+        var faceList = NetworkManager_YMH.Instance.CollectionService.GetCollectionViewModel().AllFaceIdList;
+        int faceCount = faceList.Count;
+        randomIndex = Random.Range(0, faceCount);
+        string drawFaceId = faceList[randomIndex];
+
+        HamsterSave hamsterSave = new HamsterSave();
+        hamsterSave.HamsterUID = InstanceID++;
+        hamsterSave.HamsterId = drawHamsterId;
+        hamsterSave.FaceId = drawFaceId;
+
+        return hamsterSave;
     }
 
     private HamsterTier DrawTier()

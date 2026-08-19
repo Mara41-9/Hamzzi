@@ -44,11 +44,13 @@ public class GachaView : ViewBase
 
     private string DrawHamster()
     {
-        string hamsterId = NetworkManager_YMH.Instance.GachaService.DrawGacha();
-        _collectionViewModel.AddCollectedHamsterIdList(hamsterId);
-        Debug.Log(hamsterId);
+        HamsterSave hamsterSave = NetworkManager_YMH.Instance.GachaService.DrawGacha();
+        _collectionViewModel.AddCollectedHamsterIdList(hamsterSave.HamsterId);
+        _collectionViewModel.AddCollectedHamsterList(hamsterSave);
+        Debug.Log($"{hamsterSave.HamsterId}, {hamsterSave.FaceId} ");
 
-        return hamsterId;
+
+        return hamsterSave.HamsterId;
     }
 
     private void DrawOneHamster()
