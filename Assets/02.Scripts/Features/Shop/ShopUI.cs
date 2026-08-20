@@ -19,9 +19,14 @@ public class ShopUI : ViewBase
     [SerializeField] private GameObject Prefab_ItemSlot;
     [SerializeField] private Transform Transform_SlotRoot;
     [SerializeField] private Image Image_Icon;
+    [SerializeField] private Image Image_DefaultIcon;
     [SerializeField] private TMP_Text Text_ItemName;
     [SerializeField] private TMP_Text Text_ItemDescription;
+    [SerializeField] private TMP_Text Text_ItemEffect;
     [SerializeField] private TMP_Text Text_ItemPrice;
+
+    [Header("보유한 씨앗")]
+    [SerializeField] private TMP_Text Text_SeedCount;
 
     [Header("상위 카테고리")]
     [SerializeField] private UIButton Button_AllCategory;
@@ -45,6 +50,7 @@ public class ShopUI : ViewBase
     [SerializeField] private UIButton Button_BuyItem;
 
     private ShopViewModel _shopVm;
+    private CurrencyViewModel _currencyVm;
     private string _selectedSubCategory;
 
     private ShopCategory _selectedCategory = ShopCategory.All;
@@ -68,15 +74,20 @@ public class ShopUI : ViewBase
 
     private void OnDisable()
     {
-        ClearSlotList();
-        ClearSubCategoryList();
-        ResetItemInfo();
-        ResetSelectedData();
-
         if(_shopVm != null)
         {
             _shopVm.PropertyChanged -= OnPropChanged_ShopView;
         }
+
+        if(_currencyVm != null)
+        {
+            _currencyVm.PropertyChanged -= OnPropChanged_CurrenctView;
+        }
+
+        ClearSlotList();
+        ClearSubCategoryList();
+        ResetItemInfo();
+        ResetSelectedData();
     }
 
     private void InitShopUI()
@@ -206,6 +217,7 @@ public class ShopUI : ViewBase
         ClearSlotList();
 
         FindShopViewModelAndBind();
+        FindCurrencyViewModelAndBind();
     }
 
     private void FindShopViewModelAndBind()
@@ -223,6 +235,15 @@ public class ShopUI : ViewBase
         _shopVm.InvokeOnceOnInit();
     }
 
+    private void FindCurrencyViewModelAndBind()
+    {
+        var currenctVm = ServiceManager.Instance.CurrencyService.GetCurrencyViewModel();
+        _currencyVm = currenctVm;
+
+        _currencyVm.PropertyChanged += OnPropChanged_CurrenctView;
+        _currencyVm.InvokeOnceOnInit();
+    }
+
     private void OnPropChanged_ShopView(object sender, PropertyChangedEventArgs e)
     {
         switch(e.PropertyName)
@@ -234,6 +255,21 @@ public class ShopUI : ViewBase
                 UpdateItemDetailInfo(_shopVm.SelectedSlot);
                 break;
         }
+    }
+
+    private void OnPropChanged_CurrenctView(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(CurrencyViewModel.SeedCount):
+                UpdateSeedCount();
+                break;
+        }
+    }
+
+    private void UpdateSeedCount()
+    {
+        Text_SeedCount.text = _currencyVm.SeedCount.ToString();
     }
 
     private void OnSubCategorySelected(string subCategory)
@@ -315,17 +351,28 @@ public class ShopUI : ViewBase
 
         _shopVm.SelectedSlot = slotVm;
         Button_BuyItem.SetInteractable(true);
+        
+        foreach(var itemKv in _itemSlotList)
+        {
+            var slotView = itemKv.Value;
+            bool isSelected = (itemKv.Key == slotVm.ItemUniqueId);
+            slotView.SetSelectedSlot(isSelected);
+        }
     }
 
     private void UpdateItemDetailInfo(ShopSlotViewModel slotVm)
     {
         if (slotVm == null)
         {
+            ResetItemInfo();
             return;
         }
 
+        Image_DefaultIcon.gameObject.SetActive(false);
+
         Image_Icon.sprite = slotVm.IconSprite;
         Text_ItemName.text = slotVm.Name;
+        Text_ItemEffect.text = $"씨앗 생산 +{slotVm.ItemEffect * 100}%";
         Text_ItemDescription.text = slotVm.Description;
         Text_ItemPrice.text = slotVm.CostAmount.ToString();
     }
@@ -361,10 +408,12 @@ public class ShopUI : ViewBase
 
     private void ResetItemInfo()
     {
+        Image_DefaultIcon.gameObject.SetActive(true);
         Image_Icon.sprite = null;
         Text_ItemName.text = "";
         Text_ItemDescription.text = "";
         Text_ItemPrice.text = "";
+        Text_ItemEffect.text = "";
     }
 
     private void ResetSelectedData()

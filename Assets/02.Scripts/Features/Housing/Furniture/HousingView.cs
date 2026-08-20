@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -371,8 +370,8 @@ public class HousingView : ViewBase
             return;
         }
 
-        _ghostObject.transform.rotation = Quaternion.identity;
-        _ghostObject.transform.localScale = Vector3.one;
+        GetFurnitureWorldTransform(_housingVM.FurnitureVM, out Vector3 pos, out Quaternion rotation, out float tileYOffset);
+        _ghostObject.transform.rotation = rotation;
 
         _lastGhostAngle = _housingVM.FurnitureVM.RotationAngle;
 
@@ -382,25 +381,28 @@ public class HousingView : ViewBase
         {
             furnitureView.SetGhostMode(Material_Ghost);
 
-            float subCellSize = GetCurrentSubCellSize();
-            Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
-
-            if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
+            if (_housingVM.CurrentState == HousingState.Placing)
             {
-                calculatedSize = new Vector2Int(calculatedSize.y, calculatedSize.x);
-            }
+                float subCellSize = GetCurrentSubCellSize();
+                Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
 
-            _housingVM.FurnitureVM.Size = calculatedSize;
+                if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
+                {
+                    calculatedSize = new Vector2Int(calculatedSize.y, calculatedSize.x);
+                }
 
-            if (_housingVM.TargetRoom != null)
-            {
-                Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);
-                _housingVM.MovePos(roomCenterPos);
-            }
-            else
-            {
-                Vector2Int centerPos = GetGardenCenterPosition(calculatedSize);
-                _housingVM.MovePos(centerPos);
+                _housingVM.FurnitureVM.Size = calculatedSize;
+
+                if (_housingVM.TargetRoom != null)
+                {
+                    Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);
+                    _housingVM.MovePos(roomCenterPos);
+                }
+                else
+                {
+                    Vector2Int centerPos = GetGardenCenterPosition(calculatedSize);
+                    _housingVM.MovePos(centerPos);
+                }
             }
         }
 

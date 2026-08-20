@@ -1170,7 +1170,7 @@ GameObject:
   - component: {fileID: 786427883850356742}
   - component: {fileID: 6577383840885629062}
   m_Layer: 5
-  m_Name: TestUI
+  m_Name: DecorUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
