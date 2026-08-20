@@ -655,12 +655,7 @@ public class BuildViewModel : ViewModelBase
 
     private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
     {
-        if (pos.y + size.y > 12)
-        {
-            return false;
-        }
-
-        if (pos.y < -35 || pos.x < -51 || pos.x + size.x > 53)
+        if (pos.y + size.y > 20 || pos.y < -40 || pos.x < -60 || pos.x + size.x > 60)
         {
             return false;
         }
@@ -669,7 +664,9 @@ public class BuildViewModel : ViewModelBase
         {
             for (int y = 0; y < size.y; y++)
             {
-                if (Builds.ContainsKey(pos + new Vector2Int(x, y)))
+                Vector2Int checkPos = pos + new Vector2Int(x, y);
+
+                if (Builds.ContainsKey(checkPos))
                 {
                     return false;
                 }

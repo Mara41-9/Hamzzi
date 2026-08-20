@@ -2,7 +2,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -191,35 +190,5 @@ public class BuildView : ViewBase
         int y = Mathf.FloorToInt(worldPos.y / _cellSize);
 
         return new Vector2Int(x, y);
-    }
-
-    private void OnDrawGizmos()
-    {
-        int minX = -51;
-        int maxX = 53;
-        int minY = -35;
-        int maxY = 12;
-
-        Gizmos.color = Color.green;
-
-        Vector3 bottomLeft = new Vector3(minX, minY, 9f);
-        Vector3 bottomRight = new Vector3(maxX, minY, 9f);
-        Vector3 topLeft = new Vector3(minX, maxY, 9f);
-        Vector3 topRight = new Vector3(maxX, maxY, 9f);
-
-        Gizmos.DrawLine(bottomLeft, bottomRight);
-        Gizmos.DrawLine(bottomRight, topRight);
-        Gizmos.DrawLine(topRight, topLeft);
-        Gizmos.DrawLine(topLeft, bottomLeft);
-
-        Gizmos.color = new Color(0f, 1f, 0f, 0.15f);
-        for (int x = minX; x <= maxX; x += 2)
-        {
-            Gizmos.DrawLine(new Vector3(x, minY, 9f), new Vector3(x, maxY, 9f));
-        }
-        for (int y = minY; y <= maxY; y += 2)
-        {
-            Gizmos.DrawLine(new Vector3(minX, y, 9f), new Vector3(maxX, y, 9f));
-        }
     }
 }

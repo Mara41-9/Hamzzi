@@ -299,7 +299,7 @@ public class HousingView : ViewBase
 
             float worldX = (_housingVM.TargetRoom.OriginPos.x * _cellSize) + localX;
             float worldY = (_housingVM.TargetRoom.OriginPos.y + _yOffset) * _cellSize + 0.2f;
-            float worldZ = 9f - localZ;
+            float worldZ = 9f - localZ - 0.5f;
 
             pos = new Vector3(worldX, worldY, worldZ);
             tileYOffset = pos.y + 0.01f;
@@ -460,7 +460,7 @@ public class HousingView : ViewBase
 
         float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
         float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.2f;
-        float worldZ = 9f - localZ;
+        float worldZ = 9f - localZ - 0.5F;
 
         pos = new Vector3(worldX, worldY, worldZ);
         rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
