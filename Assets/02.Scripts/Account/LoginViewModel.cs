@@ -73,6 +73,8 @@ public class LoginViewModel : ViewModelBase
 
             if (isSuccess == true)
             {
+                await ServiceManager.Instance.UserService.InitUser(_inputId);
+
                 FeedbackMessage = "로그인 성공!";
                 UIManager.Instance.CloseLoginUI();
                 UIManager.Instance.CloseTitleUI();
