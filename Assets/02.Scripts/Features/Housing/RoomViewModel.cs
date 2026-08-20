@@ -24,8 +24,9 @@ public struct DoorData
 
 public class RoomViewModel : ViewModelBase
 {
-    private const int ROOM_WIDTH = 6;
-    private const int ROOM_HEIGHT = 4;
+    private const int ROOM_WIDTH = 10;
+    private const int ROOM_HEIGHT = 6;
+    private const int AISLE_SIZE = 2;
     private const float DEPTH_Z = 9.0f;
     private const int DOOR_Y = 2;
 
@@ -128,7 +129,7 @@ public class RoomViewModel : ViewModelBase
         InstanceID = Guid.NewGuid().ToString();
         BuildType = type;
         OriginPos = pos;
-        Size = (type == BuildType.Room) ? new Vector2Int(ROOM_WIDTH, ROOM_HEIGHT) : Vector2Int.one;
+        Size = (type == BuildType.Room) ? new Vector2Int(ROOM_WIDTH, ROOM_HEIGHT) : new Vector2Int(AISLE_SIZE, AISLE_SIZE);
 
         if (type == BuildType.Aisle)
         {
@@ -234,8 +235,26 @@ public class RoomViewModel : ViewModelBase
             }
         }
 
-        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-        Vector2Int outside = inside + dirs[dirIndex];
+        Vector2Int outside = inside;
+
+        switch (dirIndex)
+        {
+            case 0:
+                outside = inside + new Vector2Int(0, 1);
+                break;
+
+            case 1:
+                outside = inside + new Vector2Int(0, -AISLE_SIZE);
+                break;
+
+            case 2:
+                outside = inside + new Vector2Int(-AISLE_SIZE, 0);
+                break;
+
+            case 3:
+                outside = inside + new Vector2Int(1, 0);
+                break;
+        }
 
         return new DoorInfo { InsidePos = inside, OutsidePos = outside, DirectionIndex = dirIndex };
     }
