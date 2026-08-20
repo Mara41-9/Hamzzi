@@ -53,7 +53,7 @@ public class CurrencyService
         }
     }
 
-    private void AddSeed(int amount)
+    public void AddSeed(int amount)
     {
         GameManager.Instance.AddSeedCount(amount);
 
