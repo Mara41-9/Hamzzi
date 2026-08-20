@@ -9,6 +9,8 @@ using Unity.Properties;
 [NodeDescription(name: "Collect Seed", story: "[Self] collects Seeds", category: "Action", id: "703319309d47c61b022929dec46e2428")]
 public partial class CollectSeedAction : Action
 {
+    private const int SeedPerCollect = 1;
+
     [SerializeReference] public BlackboardVariable<GameObject> Self;
 
     protected override Status OnStart()
@@ -18,9 +20,12 @@ public partial class CollectSeedAction : Action
 
     protected override Status OnUpdate()
     {
+        GameManager.Instance.AddSeedCount(SeedPerCollect);
+
 #if UNITY_EDITOR
-        Debug.Log("씨앗 채집 (TODO: 실제 재화 시스템 연결되면 이 로그를 교체)");
+        Debug.Log($"씨앗 채집 (+{SeedPerCollect})");
 #endif
+
         return Status.Success;
     }
 
