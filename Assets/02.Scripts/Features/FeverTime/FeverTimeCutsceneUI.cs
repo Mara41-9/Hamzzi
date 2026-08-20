@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class FeverTimeCutsceneUI : UIBase
 {
@@ -9,9 +10,22 @@ public class FeverTimeCutsceneUI : UIBase
     [SerializeField] private TMP_Text Text_TapGuide;
     [SerializeField] private UIButton Button_Tap;
 
+    private VideoPlayer _cutsceneVideoPlayer;
+
+    private void Awake()
+    {
+        _cutsceneVideoPlayer = RawImage_Cutscene.GetComponent<VideoPlayer>();
+    }
+
     private void OnEnable()
     {
         Button_Tap.BindOnClickButtonEvent(OnClickTap);
+        _cutsceneVideoPlayer.Play();
+    }
+
+    private void OnDisable()
+    {
+        _cutsceneVideoPlayer.Stop();
     }
 
     private void OnClickTap()
