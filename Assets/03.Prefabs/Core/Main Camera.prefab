@@ -159,16 +159,16 @@ MonoBehaviour:
   Rotation_Garden: {x: 50, y: 0, z: 0}
   Garden_FOV: 40
   Zoom_Angle: {x: 30, y: 0, z: 0}
-  Zoom_Distance: 7
-  Zoom_FOV: 45
+  Zoom_Distance: 10
+  Zoom_FOV: 40
   Zoom_Sensitive: 0.01
   Size_MinOrtho: 4
-  Size_MaxOrtho: 12
+  Size_MaxOrtho: 20
   FOV_Min: 30
   FOV_Max: 75
   Duration: 0.8
-  Bound_Min: {x: -7, y: -8}
-  Bound_Max: {x: 7, y: 5}
+  Bound_Min: {x: -19, y: -21}
+  Bound_Max: {x: 21, y: 5}
 --- !u!45 &9134805178361732035
 Skybox:
   m_ObjectHideFlags: 0

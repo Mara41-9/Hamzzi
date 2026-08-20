@@ -12,9 +12,9 @@ public class HousingView : ViewBase
     [SerializeField] private Color Color_Valid = new Color(0f, 1f, 0f, 0.4f);
     [SerializeField] private Color Color_Invalid = new Color(1f, 0f, 0f, 0.4f);
 
-    private Vector3 _gardenOrigin = new Vector3(-25f, 12f, 12f);
-    private Vector2Int _gardenGridSize = new Vector2Int(100, 60);
-    private float _gardenSubCellSize = 0.5f;
+    private Vector3 _gardenOrigin = new Vector3(-40f, 12f, 12f);
+    private Vector2Int _gardenGridSize = new Vector2Int(80, 60);
+    private float _gardenSubCellSize = 1f;
 
     private float _cellSize = 1.0f;
     private float _yOffset = 2.0f;
@@ -299,7 +299,7 @@ public class HousingView : ViewBase
 
             float worldX = (_housingVM.TargetRoom.OriginPos.x * _cellSize) + localX;
             float worldY = (_housingVM.TargetRoom.OriginPos.y + _yOffset) * _cellSize + 0.2f;
-            float worldZ = 9f - localZ;
+            float worldZ = 9f - localZ - 0.5f;
 
             pos = new Vector3(worldX, worldY, worldZ);
             tileYOffset = pos.y + 0.01f;
@@ -460,7 +460,7 @@ public class HousingView : ViewBase
 
         float worldX = (roomVM.OriginPos.x * _cellSize) + localX;
         float worldY = (roomVM.OriginPos.y + _yOffset) * _cellSize + 0.2f;
-        float worldZ = 9f - localZ;
+        float worldZ = 9f - localZ - 0.5F;
 
         pos = new Vector3(worldX, worldY, worldZ);
         rot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
