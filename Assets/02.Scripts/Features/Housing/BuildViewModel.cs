@@ -4,6 +4,7 @@ using UnityEngine;
 public class BuildViewModel : ViewModelBase
 {
     private static readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+    private const int AISLE_SIZE = 2;
 
     public Dictionary<Vector2Int, RoomViewModel> Builds { get; private set; } = new Dictionary<Vector2Int, RoomViewModel>();
 
@@ -60,7 +61,6 @@ public class BuildViewModel : ViewModelBase
             }
         }
     }
-
 
     private RoomViewModel _destroyBuild;
     public RoomViewModel DestroyBuild
@@ -154,18 +154,21 @@ public class BuildViewModel : ViewModelBase
         while (true)
         {
             HashSet<RoomViewModel> deadEndAisles = new HashSet<RoomViewModel>();
+            HashSet<RoomViewModel> aisles = new HashSet<RoomViewModel>();
 
             foreach (var pair in Builds)
             {
-                Vector2Int pos = pair.Key;
-                RoomViewModel vm = pair.Value;
-
-                if (vm.BuildType == BuildType.Aisle && !vm.IsDefault)
+                if (pair.Value.BuildType == BuildType.Aisle && !pair.Value.IsDefault)
                 {
-                    if (CountAisle(pos, vm) <= 1)
-                    {
-                        deadEndAisles.Add(vm);
-                    }
+                    aisles.Add(pair.Value);
+                }
+            }
+
+            foreach (var vm in aisles)
+            {
+                if (CountAisle(vm) <= 1)
+                {
+                    deadEndAisles.Add(vm);
                 }
             }
 
@@ -181,32 +184,30 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
-    private int CountAisle(Vector2Int pos, RoomViewModel aisleVM)
+    private int CountAisle(RoomViewModel aisleVM)
     {
         int count = 0;
 
         for (int i = 0; i < _directions.Length; i++)
         {
-            Vector2Int targetPos = pos + _directions[i];
-
-            if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            foreach (Vector2Int tile in GetEdgeTiles(aisleVM.OriginPos, aisleVM.Size, i))
             {
-                if (targetVM == aisleVM)
-                {
-                    continue;
-                }
+                Vector2Int targetPos = tile + _directions[i];
 
-                if (targetVM.BuildType == BuildType.Aisle)
+                if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM) && targetVM != aisleVM)
                 {
-                    count++;
-                }
-                else if (targetVM.BuildType == BuildType.Room)
-                {
-                    Vector2Int doorPos = targetVM.GetNearDoor(pos);
-
-                    if (targetPos == doorPos && !targetVM.IsDefault)
+                    if (targetVM.BuildType == BuildType.Aisle)
                     {
                         count++;
+                    }
+                    else if (targetVM.BuildType == BuildType.Room && !targetVM.IsDefault)
+                    {
+                        Vector2Int doorPos = targetVM.GetNearDoor(tile);
+
+                        if (targetPos == doorPos)
+                        {
+                            count++;
+                        }
                     }
                 }
             }
@@ -282,6 +283,7 @@ public class BuildViewModel : ViewModelBase
 
     public bool TryBuildRoom(Vector2Int pos)
     {
+        pos = SnapAisle(pos);
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
 
         if (!CanPlaceRoom(pos, newRoom.Size))
@@ -304,7 +306,9 @@ public class BuildViewModel : ViewModelBase
 
     private void BuildDefaultRoom(Vector2Int pos)
     {
+        pos = SnapAisle(pos);
         RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+
         newRoom.IsReady = true;
         newRoom.IsDefault = true;
 
@@ -316,17 +320,24 @@ public class BuildViewModel : ViewModelBase
 
     public void BuildDefaultAisle(Vector2Int pos)
     {
-        if (Builds.ContainsKey(pos))
+        if (IsAreaOccupied(pos, new Vector2Int(AISLE_SIZE, AISLE_SIZE)))
         {
             return;
         }
 
         RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
         newAisle.IsDefault = true;
-        Builds[pos] = newAisle;
+        RegisterAisle(newAisle, pos);
 
         UpdateConnection(pos);
-        UpdateNearConnection(pos);
+
+        for (int x = 0; x < AISLE_SIZE; x++)
+        {
+            for (int y = 0; y < AISLE_SIZE; y++)
+            {
+                UpdateNearConnection(pos + new Vector2Int(x, y));
+            }
+        }
 
         LastBuild = newAisle;
     }
@@ -350,30 +361,132 @@ public class BuildViewModel : ViewModelBase
             return false;
         }
 
-        foreach (Vector2Int aislePos in path)
+        foreach (Vector2Int rawPos in path)
         {
-            if (Builds.TryGetValue(aislePos, out RoomViewModel existing) && existing.BuildType == BuildType.Room)
+            Vector2Int aislePos = SnapAisle(rawPos);
+
+            if (IsAreaRoom(aislePos, new Vector2Int(AISLE_SIZE, AISLE_SIZE)))
             {
                 continue;
             }
 
-            if (!Builds.ContainsKey(aislePos))
+            if (!IsAreaOccupied(aislePos, new Vector2Int(AISLE_SIZE, AISLE_SIZE)))
             {
                 RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
-                Builds[aislePos] = newAisle;
+                RegisterAisle(newAisle, aislePos);
 
                 _waitingAisle.Add(newAisle);
                 LastBuild = newAisle;
             }
 
             UpdateConnection(aislePos);
-            UpdateNearConnection(aislePos);
+
+            for (int x = 0; x < AISLE_SIZE; x++)
+            {
+                for (int y = 0; y < AISLE_SIZE; y++)
+                {
+                    UpdateNearConnection(aislePos + new Vector2Int(x, y));
+                }
+            }
         }
 
         SelectType = BuildType.None;
 
         CanConfirm = true;
         return true;
+    }
+
+    private Vector2Int SnapAisle(Vector2Int pos)
+    {
+        int x = Mathf.FloorToInt(pos.x / (float)AISLE_SIZE) * AISLE_SIZE;
+        int y = Mathf.FloorToInt(pos.y / (float)AISLE_SIZE) * AISLE_SIZE;
+
+        return new Vector2Int(x, y);
+    }
+
+    private bool IsAreaOccupied(Vector2Int pos, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                if (Builds.ContainsKey(pos + new Vector2Int(x, y)))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsAreaRoom(Vector2Int pos, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                if (Builds.TryGetValue(pos + new Vector2Int(x, y), out var vm) && vm.BuildType == BuildType.Room)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void RegisterAisle(RoomViewModel aisle, Vector2Int pos)
+    {
+        for (int x = 0; x < aisle.Size.x; x++)
+        {
+            for (int y = 0; y < aisle.Size.y; y++)
+            {
+                Vector2Int tile = pos + new Vector2Int(x, y);
+
+                if (Builds.TryGetValue(tile, out var existing) && existing.BuildType == BuildType.Room)
+                {
+                    continue;
+                }
+
+                Builds[tile] = aisle;
+            }
+        }
+    }
+
+    private List<Vector2Int> GetEdgeTiles(Vector2Int origin, Vector2Int size, int direction)
+    {
+        List<Vector2Int> tiles = new List<Vector2Int>();
+
+        switch (direction)
+        {
+            case 0:
+                for (int x = 0; x < size.x; x++)
+                {
+                    tiles.Add(new Vector2Int(origin.x + x, origin.y + size.y - 1));
+                }
+                break;
+            case 1:
+                for (int x = 0; x < size.x; x++)
+                {
+                    tiles.Add(new Vector2Int(origin.x + x, origin.y));
+                }
+                break;
+            case 2:
+                for (int y = 0; y < size.y; y++)
+                {
+                    tiles.Add(new Vector2Int(origin.x, origin.y + y));
+                }
+                break;
+            case 3:
+                for (int y = 0; y < size.y; y++)
+                {
+                    tiles.Add(new Vector2Int(origin.x + size.x - 1, origin.y + y));
+                }
+                break;
+        }
+
+        return tiles;
     }
 
     private void ResetAisle()
@@ -480,40 +593,29 @@ public class BuildViewModel : ViewModelBase
 
         for (int i = 0; i < _directions.Length; i++)
         {
-            Vector2Int targetPos = current + _directions[i];
             int oppDir = GetOppositeDirection(i);
+            bool isConnected = false;
 
-            if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+            List<Vector2Int> edgeTiles = GetEdgeTiles(currentVM.OriginPos, currentVM.Size, i);
+
+            foreach (Vector2Int tile in edgeTiles)
             {
-                if (currentVM == targetVM)
-                {
-                    continue;
-                }
+                Vector2Int targetPos = tile + _directions[i];
 
-                bool shouldConnect = false;
-
-                if (targetVM.BuildType == BuildType.Aisle)
+                if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM) && targetVM != currentVM)
                 {
-                    shouldConnect = true;
-                }
-                else if (targetVM.BuildType == BuildType.Room)
-                {
-                    Vector2Int doorPos = targetVM.GetNearDoor(current);
-                    shouldConnect = (targetPos == doorPos);
-                }
+                    bool shouldConnect = targetVM.BuildType == BuildType.Aisle || (targetVM.BuildType == BuildType.Room && targetVM.GetNearDoor(tile) == targetPos);
 
-                currentVM.SetWallActive(i, shouldConnect);
-
-                if (shouldConnect)
-                {
-                    targetVM.SetWallActive(oppDir, true);
-                    targetVM.Refresh();
+                    if (shouldConnect)
+                    {
+                        isConnected = true;
+                        targetVM.SetWallActive(oppDir, true);
+                        targetVM.Refresh();
+                    }
                 }
             }
-            else
-            {
-                currentVM.SetWallActive(i, false);
-            }
+
+            currentVM.SetWallActive(i, isConnected);
         }
 
         currentVM.Refresh();
@@ -553,12 +655,7 @@ public class BuildViewModel : ViewModelBase
 
     private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
     {
-        if (pos.y + size.y > 11)
-        {
-            return false;
-        }
-
-        if (pos.y < -24 || pos.x < -39 || pos.x + size.x > 39)
+        if (pos.y + size.y > 20 || pos.y < -40 || pos.x < -60 || pos.x + size.x > 60)
         {
             return false;
         }
@@ -567,7 +664,9 @@ public class BuildViewModel : ViewModelBase
         {
             for (int y = 0; y < size.y; y++)
             {
-                if (Builds.ContainsKey(pos + new Vector2Int(x, y)))
+                Vector2Int checkPos = pos + new Vector2Int(x, y);
+
+                if (Builds.ContainsKey(checkPos))
                 {
                     return false;
                 }
