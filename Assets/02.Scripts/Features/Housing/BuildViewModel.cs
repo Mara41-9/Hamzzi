@@ -655,12 +655,12 @@ public class BuildViewModel : ViewModelBase
 
     private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
     {
-        if (pos.y + size.y > 11)
+        if (pos.y + size.y > 12)
         {
             return false;
         }
 
-        if (pos.y < -24 || pos.x < -39 || pos.x + size.x > 39)
+        if (pos.y < -35 || pos.x < -51 || pos.x + size.x > 53)
         {
             return false;
         }

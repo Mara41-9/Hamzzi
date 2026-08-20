@@ -389,7 +389,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9203648329127457208, guid: 220123a2b3a63ac46a24a63f0f38aab7, type: 3}
       propertyPath: Size_Ortho
-      value: 13
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9203648329127457208, guid: 220123a2b3a63ac46a24a63f0f38aab7, type: 3}
+      propertyPath: Size_MaxOrtho
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9203648329127457208, guid: 220123a2b3a63ac46a24a63f0f38aab7, type: 3}
+      propertyPath: Size_MinOrtho
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

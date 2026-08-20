@@ -45,7 +45,7 @@ public class RoomViewModel : ViewModelBase
         }
     }
 
-    private int _gridFactor = 4;
+    private int _gridFactor = 2;
     public int GridFactor
     {
         get
@@ -308,8 +308,8 @@ public class RoomViewModel : ViewModelBase
         {
             int minX = door.Offset.x * _gridFactor;
             int maxX = minX + _gridFactor;
-            int minY = door.Offset.y * _gridFactor;
-            int maxY = minY + _gridFactor;
+            int minY = door.Offset.y * _gridFactor * 2;
+            int maxY = minY + _gridFactor * 2;
 
             if (checkPos.x >= minX && checkPos.x < maxX && checkPos.y >= minY && checkPos.y < maxY)
             {

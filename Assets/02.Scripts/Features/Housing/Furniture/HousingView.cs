@@ -12,9 +12,9 @@ public class HousingView : ViewBase
     [SerializeField] private Color Color_Valid = new Color(0f, 1f, 0f, 0.4f);
     [SerializeField] private Color Color_Invalid = new Color(1f, 0f, 0f, 0.4f);
 
-    private Vector3 _gardenOrigin = new Vector3(-25f, 12f, 12f);
-    private Vector2Int _gardenGridSize = new Vector2Int(100, 60);
-    private float _gardenSubCellSize = 0.5f;
+    private Vector3 _gardenOrigin = new Vector3(-40f, 12f, 12f);
+    private Vector2Int _gardenGridSize = new Vector2Int(80, 60);
+    private float _gardenSubCellSize = 1f;
 
     private float _cellSize = 1.0f;
     private float _yOffset = 2.0f;
