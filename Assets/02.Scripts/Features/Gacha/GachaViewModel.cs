@@ -26,8 +26,12 @@ public class GachaViewModel : ViewModelBase
 
 public static class GachaViewModelExtention
 { 
-    public static void AddHasterIdByTierList(GachaViewModel gachaViewModel, HamsterTier tier, string hamsterId)
+    public static void AddHasterIdByTierList(this GachaViewModel gachaViewModel, HamsterTier tier, string hamsterId)
     {
-
+        if (gachaViewModel.HamsterIdByTierList.ContainsKey(tier) == false)
+        {
+            gachaViewModel.HamsterIdByTierList.Add(tier, new List<string>());
+        }
+        gachaViewModel.HamsterIdByTierList[tier].Add(hamsterId);
     }
 }
