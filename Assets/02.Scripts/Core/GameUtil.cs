@@ -29,7 +29,7 @@ public static class GameUtil
     }
 
     // UID 생성 기능
-    public static long GenerateUniqueId()
+    public static long GenerateUID()
     {
         long newUID = DateTime.UtcNow.Ticks;
 
@@ -40,10 +40,10 @@ public static class GameUtil
 
             // 만약 현재 시간이 이전 ID보다 작거나 같다면 (루프가 너무 빠른 경우 포함)
             // 이전 ID + 1로 강제 설정하여 중복 방지
-            long UIDToAssign = (newId <= lastUID) ? lastUID + 1 : newId;
+            long UIDToAssign = (newUID <= lastUID) ? lastUID + 1 : newUID;
 
             // _lastId가 내가 읽은 시점과 같다면 idToAssign으로 교체 (성공 시 루프 탈출)
-            if (Interlocked.CompareExchange(ref _lastUID, idToAssign, lastUID) == lastUID)
+            if (Interlocked.CompareExchange(ref _lastUID, UIDToAssign, lastUID) == lastUID)
             {
                 return UIDToAssign;
             }
