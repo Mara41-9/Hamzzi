@@ -23,6 +23,7 @@ public class InGameUI : ViewBase
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
 
         FindCurrencyViewModelAndBind();
+        UpdateSeedCount();
     }
 
     private void OnDisable()
@@ -64,6 +65,7 @@ public class InGameUI : ViewBase
     private void OnClick_OpenHousing()
     {
         UIManager.Instance.OpenDecorUI();
+        UIManager.Instance.CloseInGameUI();
     }
 
     private void OnClick_OpenFriend()

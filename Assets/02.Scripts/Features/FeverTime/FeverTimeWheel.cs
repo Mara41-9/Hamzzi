@@ -61,29 +61,53 @@ public class FeverTimeWheel : MonoBehaviour
 
     private void CheckTouchInput()
     {
-        if (Input.touchCount == 0)
+        if (!TryGetInputPosition(out Vector3 inputPosition))
         {
             return;
         }
 
-        Touch touch = Input.GetTouch(0);
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-        {
-            return;
-        }
-
-        if (touch.phase != TouchPhase.Began)
-        {
-            return;
-        }
-
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        Ray ray = Camera.main.ScreenPointToRay(inputPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
         {
             OnWheelTouched();
         }
+    }
+
+    private bool TryGetInputPosition(out Vector3 inputPosition)
+    {
+        inputPosition = Vector3.zero;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
+            inputPosition = Input.mousePosition;
+            return true;
+        }
+#else
+    if (Input.touchCount > 0)
+    {
+        Touch touch = Input.GetTouch(0);
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        {
+            return false;
+        }
+
+        if (touch.phase == TouchPhase.Began)
+        {
+            inputPosition = touch.position;
+            return true;
+        }
+    }
+#endif
+
+        return false;
     }
 
     private void OnWheelTouched()
