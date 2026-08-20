@@ -21,8 +21,11 @@ public class CollectionView : UIBase
 
     [Header("햄스터 정보")]
     [SerializeField] private GameObject HamsterModelPrefab;
+    [SerializeField] private CollectionHamsterRotate HamsterRotate;
+    [SerializeField] private UIButton KickButton;
+    [SerializeField] private TextMeshProUGUI HamsterCount;
     [SerializeField] private TextMeshProUGUI HamsterName;
-    [SerializeField] private TextMeshProUGUI HamsterAbility1;
+    [SerializeField] private TextMeshProUGUI HamsterAbility;
 
     private Dictionary<string, HamsterSlot> _spawnedHamsterSlotList = new Dictionary<string, HamsterSlot>();
     private Dictionary<string, FaceSlot> _spawnedFaceSlotList = new Dictionary<string, FaceSlot>();
@@ -37,6 +40,8 @@ public class CollectionView : UIBase
 
         BodyListButton.BindOnClickButtonEvent(ShowHamsterList);
         EyeListButton.BindOnClickButtonEvent(ShowFaceList);
+
+        KickButton.BindOnClickButtonEvent(KickHamster);
 
         // 수집 데이터들 View에 표시
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
@@ -55,12 +60,18 @@ public class CollectionView : UIBase
         {
             var modelObject = Instantiate(HamsterModelPrefab);
             _modelForm = modelObject.GetComponentInChildren<HamsterForm>();
+            HamsterRotate.SetHamsterRoot(_modelForm.transform);
         }
     }
 
     private void OnDisable()
     {
         ExitButton.UnBindOnClickButtonEvent(CloseCollectionUI);
+
+        BodyListButton.UnBindOnClickButtonEvent(ShowHamsterList);
+        EyeListButton.UnBindOnClickButtonEvent(ShowFaceList);
+
+        KickButton.UnBindOnClickButtonEvent(KickHamster);
 
         _collectionViewModel.PropertyChanged -= OnPropertyChanged;
         _collectionViewModel.ContainerPropertyChanged -= OnContainerPropChanged;
@@ -127,6 +138,7 @@ public class CollectionView : UIBase
                     break;
                 case ContainerEventType.Remove:
                     UpdateHamsterSlot();
+                    ChangedFaceModel();
                     break;
                 case ContainerEventType.Update:
                     break;
@@ -227,7 +239,7 @@ public class CollectionView : UIBase
         {
             return false;
         }
-        return faceList[currentHamsterId].Contains(faceId);
+        return faceList[currentHamsterId].ContainsKey(faceId);
     }
 
     private void SortSlotsByTier()
@@ -274,15 +286,15 @@ public class CollectionView : UIBase
     private void UpdateHamsterSlot()
     {
         HashSet<string> collectedHamsterList = _collectionViewModel.CollectedHamsterIdList;
-        foreach(string hamsterId in collectedHamsterList)
+        foreach(var kv in _spawnedHamsterSlotList)
         {
+            string hamsterId = kv.Key;
+            HamsterSlot slot = kv.Value;
+
+            bool isCollected = collectedHamsterList.Contains(hamsterId);
+            slot.UpdateLockImage(isCollected);
+
             Debug.Log($"슬롯 업데이트 {hamsterId}");
-
-            if (_spawnedHamsterSlotList.ContainsKey(hamsterId) == false)
-                continue;
-
-            HamsterSlot slot = _spawnedHamsterSlotList[hamsterId];
-            slot.UpdateLockImage(true);
         }
     }
 
@@ -302,11 +314,13 @@ public class CollectionView : UIBase
             return;
         }
 
-        foreach (string faceId in collectedFaceList[currentHamsterId])
+        foreach (var kv in collectedFaceList[currentHamsterId])
         {
-            Debug.Log($"슬롯 업데이트 {faceId}");
+            string faceId = kv.Key;
             FaceSlot slot = _spawnedFaceSlotList[faceId];
             slot.UpdateLockImage(true);
+
+            Debug.Log($"슬롯 업데이트 {faceId}");
         }
     }
 
@@ -328,8 +342,27 @@ public class CollectionView : UIBase
 
     private void ChangedFaceModel()
     {
-        if(_modelForm != null)
-            _modelForm.SetFaceMesh(_collectionViewModel.CurrentSelectedHamsterFaceId);
+        string faceId = _collectionViewModel.CurrentSelectedHamsterFaceId;
+        string hamsterId = _collectionViewModel.CurrentSelectHamsterId;
+
+        if (_modelForm != null)
+            _modelForm.SetFaceMesh(faceId);
+
+        int count = 0;
+        if (_collectionViewModel.CollectedFaceByHamsterList.TryGetValue(hamsterId, out var faceDict))
+        {
+            faceDict.TryGetValue(faceId, out count);
+        }
+
+        HamsterCount.text = $"보유 : {count:D2}";
+    }
+
+    private void KickHamster()
+    {
+        string currentHamsterId = _collectionViewModel.CurrentSelectHamsterId;
+        string currentfaceId = _collectionViewModel.CurrentSelectedHamsterFaceId;
+
+        _collectionViewModel.RemoveCollectedHamsterList(currentHamsterId, currentfaceId);
     }
 
     private void UpdateHamsterInfo()
@@ -343,7 +376,7 @@ public class CollectionView : UIBase
         HamsterName.text = hamsterData.Name;
 
         // 햄스터 디테일 정보
-        HamsterAbility1.text = $"{hamsterData.CollectSpeed}";
+        HamsterAbility.text = $"{hamsterData.CollectSpeed}";
     }
 }
 
