@@ -47,7 +47,7 @@ public class BuildService
         {
             DoorInfo startInfo = startRoom.GetDoorInfo(startData.Offset);
 
-            if (IsRoom(startInfo.OutsidePos, room))
+            if (IsAreaRoom(startInfo.OutsidePos, new Vector2Int(2, 2), room))
             {
                 continue;
             }
@@ -56,7 +56,7 @@ public class BuildService
             {
                 DoorInfo endInfo = endRoom.GetDoorInfo(endData.Offset);
 
-                if (IsRoom(endInfo.OutsidePos, room))
+                if (IsAreaRoom(endInfo.OutsidePos, new Vector2Int(2, 2), room))
                 {
                     continue;
                 }
@@ -81,7 +81,7 @@ public class BuildService
 
     public List<Vector2Int> GetAislePath(Vector2Int start, Vector2Int end, Dictionary<Vector2Int, RoomViewModel> room)
     {
-        if (IsRoom(start, room) || IsRoom(end, room))
+        if (IsAreaRoom(start, new Vector2Int(2, 2), room) || IsAreaRoom(end, new Vector2Int(2, 2), room))
         {
             return null;
         }
@@ -132,7 +132,7 @@ public class BuildService
             {
                 Vector2Int next = current + dir;
 
-                if (IsRoom(next, room) || IsNearRoomCorner(next, room))
+                if (IsAreaRoom(next, new Vector2Int(2, 2), room) || IsNearRoomCorner(next, room))
                 {
                     continue;
                 }
@@ -211,11 +211,17 @@ public class BuildService
         return total;
     }
 
-    private bool IsRoom(Vector2Int pos, Dictionary<Vector2Int, RoomViewModel> roomMap)
+    private bool IsAreaRoom(Vector2Int pos, Vector2Int size, Dictionary<Vector2Int, RoomViewModel> roomMap)
     {
-        if (roomMap.TryGetValue(pos, out RoomViewModel vm))
+        for (int x = 0; x < size.x; x++)
         {
-            return vm.BuildType == BuildType.Room;
+            for (int y = 0; y < size.y; y++)
+            {
+                if (roomMap.TryGetValue(pos + new Vector2Int(x, y), out RoomViewModel vm) && vm.BuildType == BuildType.Room)
+                {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -227,10 +233,10 @@ public class BuildService
         {
             Vector2Int checkPos = pos + dir;
 
-            if (IsRoom(checkPos, room))
+            if (IsAreaRoom(checkPos, Vector2Int.one, room))
             {
-                bool nearRoomX = IsRoom(new Vector2Int(pos.x + dir.x, pos.y), room);
-                bool nearRoomY = IsRoom(new Vector2Int(pos.x, pos.y + dir.y), room);
+                bool nearRoomX = IsAreaRoom(pos + new Vector2Int(dir.x, 0), Vector2Int.one, room);
+                bool nearRoomY = IsAreaRoom(pos + new Vector2Int(0, dir.y), Vector2Int.one, room);
 
                 if (!nearRoomX && !nearRoomY)
                 {
