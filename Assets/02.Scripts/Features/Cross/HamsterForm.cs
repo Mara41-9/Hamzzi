@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class HamsterForm : MonoBehaviour
 {
@@ -32,6 +33,6 @@ public class HamsterForm : MonoBehaviour
         string bodyPath = bodyData.MaterialPath;
 
         var faceMarteiral = await ResourceManager.Instance.LoadAsset<Material>(bodyPath);
-        FaceMesh.material = faceMarteiral;
+        BodyMesh.material = faceMarteiral;
     }
 }

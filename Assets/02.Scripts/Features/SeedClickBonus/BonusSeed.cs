@@ -78,7 +78,7 @@ public class BonusSeed : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
         {
-            GameManager.Instance.AddSeedCount(RewardSeedAmount);
+            ServiceManager.Instance.CurrencyService.AddSeed(RewardSeedAmount);
             Despawn();
             return true;
         }

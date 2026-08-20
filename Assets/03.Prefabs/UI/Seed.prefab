@@ -171,7 +171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25.1, y: 0}
+  m_AnchoredPosition: {x: -25.099945, y: 0}
   m_SizeDelta: {x: 223.7, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &4691864962979247477
@@ -308,7 +308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 28, y: 0}
+  m_AnchoredPosition: {x: 27.99997, y: 0}
   m_SizeDelta: {x: 87, y: -40}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &325615926232837395
@@ -358,8 +358,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 758130976852787728}
+  - component: {fileID: 5224450899460482417}
   m_Layer: 5
-  m_Name: Seed
+  m_Name: CurrencyUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,11 +384,24 @@ RectTransform:
   - {fileID: 2278700638498269449}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -180, y: 0}
-  m_SizeDelta: {x: 546.8, y: 120}
-  m_Pivot: {x: 1, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 550, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5224450899460482417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031495913482893860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2167dd2291bce2e4a9a3b692c104bcbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CurrencyView
+  Text_SeedCount: {fileID: 8382845049699074627}
 --- !u!1 &7882548334702261503
 GameObject:
   m_ObjectHideFlags: 0
