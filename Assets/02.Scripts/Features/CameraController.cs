@@ -49,10 +49,10 @@ public class CameraController : MonoBehaviour
         HousingViewModel housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
         BuildViewModel buildVM = ServiceManager.Instance.BuildService?.GetBuildViewModel();
 
-        if (housingVM != null && buildVM != null)
-        {
-            BindViewModel(housingVM, buildVM);
-        }
+        BindViewModel(housingVM, buildVM);
+
+        _housingVM.CurrentViewMode = HousingViewMode.Garden;
+        ShowGardenView().Forget();
     }
 
     private void Update()
@@ -105,11 +105,14 @@ public class CameraController : MonoBehaviour
             case nameof(_housingVM.TargetRoom):
                 if (_housingVM.TargetRoom != null)
                 {
+                    _isViewRoom = true;
                     Vector3 roomCenterWorld = GetRoomCenterPos(_housingVM.TargetRoom);
                     FocusRoom(roomCenterWorld).Forget();
                 }
                 else
                 {
+                    _isViewRoom = false;
+
                     if (_housingVM.CurrentViewMode != HousingViewMode.Garden)
                     {
                         ShowOverview().Forget();
@@ -263,6 +266,7 @@ public class CameraController : MonoBehaviour
 
     public async UniTask ShowGardenView()
     {
+        _isViewRoom = false;
         CancelZoom();
         _zoomCancel = new CancellationTokenSource();
 
@@ -307,6 +311,8 @@ public class CameraController : MonoBehaviour
     public void FocusRoomInGame(RoomViewModel roomVM)
     {
         _isViewRoom = true;
+        _housingVM.TargetRoom = roomVM;
+
         Vector3 roomCenterWorld = GetRoomCenterPos(roomVM);
         FocusRoom(roomCenterWorld).Forget();
     }
