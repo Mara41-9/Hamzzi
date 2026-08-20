@@ -20,7 +20,7 @@ public partial class CollectSeedAction : Action
 
     protected override Status OnUpdate()
     {
-        GameManager.Instance.AddSeedCount(SeedPerCollect);
+        ServiceManager.Instance.CurrencyService.AddSeed(SeedPerCollect);
 
 #if UNITY_EDITOR
         Debug.Log($"씨앗 채집 (+{SeedPerCollect})");
