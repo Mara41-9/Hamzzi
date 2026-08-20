@@ -10,10 +10,6 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_CollectionUI;
     [SerializeField] private UIButton Button_Gacha;
 
-    [SerializeField] private TMP_Text Text_SeedCount;
-
-    private CurrencyViewModel _currenyVm;
-
     private void OnEnable()
     {
         Button_OpenShopUI.BindOnClickButtonEvent(OnClick_OpenShop);
@@ -21,40 +17,6 @@ public class InGameUI : ViewBase
         Button_OpenFriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
-
-        FindCurrencyViewModelAndBind();
-        UpdateSeedCount();
-    }
-
-    private void OnDisable()
-    {
-        if(_currenyVm != null)
-        {
-            _currenyVm.PropertyChanged -= OnPropChanged_CurrenctView;
-        }
-    }
-
-    private void FindCurrencyViewModelAndBind()
-    {
-        var currenyVm = ServiceManager.Instance.CurrencyService.GetCurrencyViewModel();
-        _currenyVm = currenyVm;
-
-        _currenyVm.PropertyChanged += OnPropChanged_CurrenctView;
-    }
-
-    private void OnPropChanged_CurrenctView(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(CurrencyViewModel.SeedCount):
-                UpdateSeedCount();
-                break;
-        }
-    }
-
-    private void UpdateSeedCount()
-    {
-        Text_SeedCount.text = _currenyVm.SeedCount.ToString();
     }
 
     private void OnClick_OpenShop()
