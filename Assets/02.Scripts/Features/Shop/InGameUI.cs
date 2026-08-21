@@ -23,13 +23,14 @@ public class InGameUI : ViewBase
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
         Button_Garden.onClick.AddListener(OnClick_Garden);
         Button_Exit.onClick.AddListener(OnClick_Exit);
-    }
 
-    private void Start()
-    {
-        _housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
+        if (_housingVM == null)
+        {
+            _housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
+        }
+
         _housingVM.PropertyChanged += OnPropertyChanged_VM;
-        UpdateExitButton();
+        UpdateButton();
     }
 
     private void OnDisable()
@@ -41,7 +42,7 @@ public class InGameUI : ViewBase
     {
         if (e.PropertyName == nameof(_housingVM.CurrentViewMode) || e.PropertyName == nameof(_housingVM.TargetRoom))
         {
-            UpdateExitButton();
+            UpdateButton();
         }
     }
 
@@ -73,21 +74,23 @@ public class InGameUI : ViewBase
 
     private void OnClick_Garden()
     {
-        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
-        housingVM.CurrentViewMode = HousingViewMode.Garden;
+        _housingVM.TargetRoom = null;
+        _housingVM.CurrentViewMode = HousingViewMode.Garden;
+        _housingVM.EnterGardenMode();
     }
 
     private void OnClick_Exit()
     {
-        HousingViewModel housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
-
-        housingVM.TargetRoom = null;
-        housingVM.CurrentViewMode = HousingViewMode.OverView;
+        _housingVM.TargetRoom = null;
+        _housingVM.CurrentViewMode = HousingViewMode.OverView;
+        _housingVM.EnterOverviewMode();
     }
 
-    private void UpdateExitButton()
+    private void UpdateButton()
     {
         bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null);
+
         Button_Exit.gameObject.SetActive(isSubView);
+        Button_Garden.gameObject.SetActive(!isSubView);
     }
 }
