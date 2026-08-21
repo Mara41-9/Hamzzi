@@ -11,7 +11,7 @@ public class HamsterManager : SingletonBase<HamsterManager>
     [SerializeField] private Vector3 _gardenSpawnRangeMax;
 
     private CollectionViewModel _collectionViewModel;
-    private HashSet<int> _spawnedHamsterUidSet = new HashSet<int>();
+    private HashSet<long> _spawnedHamsterUidSet = new HashSet<long>();
 
     private void Start()
     {
