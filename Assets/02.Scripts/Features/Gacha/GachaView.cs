@@ -19,14 +19,14 @@ public class GachaView : ViewBase
     [SerializeField] private GachaResultView GachaResultView;
 
     private CollectionViewModel _collectionViewModel;
-    private CurrencyViewModel _currencyViewModel;
+    private UserViewModel _userViewModel;
 
     private void Start()
     {
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
-        _currencyViewModel = ServiceManager.Instance.CurrencyService.GetCurrencyViewModel();
+        _userViewModel = ServiceManager.Instance.UserService.GetUserViewModel();
 
-        _currencyViewModel.PropertyChanged += OnPropertyChanged;
+        _userViewModel.PropertyChanged += OnPropertyChanged;
 
         SetGachaPriceText();
     }
@@ -51,7 +51,7 @@ public class GachaView : ViewBase
     {
         switch (e.PropertyName)
         {
-            case nameof(CurrencyViewModel.SeedCount):
+            case nameof(UserViewModel.SeedCount):
                 CheckDrawable();
                 break;
         }
@@ -89,7 +89,7 @@ public class GachaView : ViewBase
         GachaResultView.ShowGachaResult(drawHamsterIdList);
 
         int price = GachaViewModel.GachaPrice;
-        _currencyViewModel.SeedCount -= price;
+        _userViewModel.TryUseSeed(price);
     }
 
     private void DrawTenHamster()
@@ -105,12 +105,12 @@ public class GachaView : ViewBase
         GachaResultView.ShowGachaResult(drawHamsterIdList);
 
         int price = GachaViewModel.GachaPrice;
-        _currencyViewModel.SeedCount -= price * 10;
+        _userViewModel.TryUseSeed(price * 10);
     }
 
     private void CheckDrawable()
     {
-        int seedCount = _currencyViewModel.SeedCount;
+        int seedCount = _userViewModel.SeedCount;
         int price = GachaViewModel.GachaPrice;
 
         DrawOneButton.interactable = seedCount >= price;
