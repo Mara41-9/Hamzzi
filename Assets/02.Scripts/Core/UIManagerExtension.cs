@@ -30,7 +30,8 @@ public enum UIType
     HousingUI,
     FeverTimeCutsceneUI,
     WheelUI,
-    DecorUI
+    DecorUI,
+    IdleRewardPopupUI
 }
 
 public static class UIManagerExtension
@@ -151,5 +152,17 @@ public static class UIManagerExtension
     public static void CloseWheelUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.WheelUI);
+    }
+
+    public static void OpenIdleRewardPopupUI(this UIManager uiManager, int rewardAmount)
+    {
+        UIBase openedUI = uiManager.OpenUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);
+        IdleRewardPopupUI popupUI = openedUI as IdleRewardPopupUI;
+        popupUI.SetRewardAmount(rewardAmount);
+    }
+
+    public static void CloseIdleRewardPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);
     }
 }
