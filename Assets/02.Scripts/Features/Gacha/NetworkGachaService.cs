@@ -65,7 +65,8 @@ public class NetworkGachaService
         string drawFaceId = faceList[randomIndex];
 
         HamsterSave hamsterSave = new HamsterSave();
-        hamsterSave.HamsterUID = InstanceID++;
+        hamsterSave.HamsterUID = GameUtil.GenerateUID();
+        hamsterSave.UserUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
         hamsterSave.HamsterId = drawHamsterId;
         hamsterSave.FaceId = drawFaceId;
 

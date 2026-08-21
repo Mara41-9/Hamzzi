@@ -256,7 +256,6 @@ public class HousingUI : ViewBase
     {
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
         {
-            _housingVM.EnterOverviewMode();
             UIManager.Instance.CloseHousingUI();
             UIManager.Instance.OpenDecorUI();
         }

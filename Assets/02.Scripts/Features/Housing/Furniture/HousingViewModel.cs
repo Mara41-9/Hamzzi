@@ -19,6 +19,7 @@ public enum HousingViewMode
 public class HousingViewModel : ViewModelBase
 {
     public List<FurnitureViewModel> GardenFurnitureList { get; private set; } = new List<FurnitureViewModel>();
+    public bool IsInHousingMode { get; private set; } = false;
 
     public Vector2Int GardenGridSize { get; } = new Vector2Int(150, 60);
     private Dictionary<Vector2Int, FurnitureViewModel> _gardenFurnitureGrid = new Dictionary<Vector2Int, FurnitureViewModel>();
@@ -225,6 +226,7 @@ public class HousingViewModel : ViewModelBase
 
     public void EnterHousingMode()
     {
+        IsInHousingMode = true;
         _targetRoom = null;
         _furnitureVM = null;
 
@@ -393,7 +395,12 @@ public class HousingViewModel : ViewModelBase
         if (subCategoryEffectData != null)
         {
             float itemEffect = subCategoryEffectData.SeedCollectionBonus;
-            ServiceManager.Instance.CurrencyService.AddSeedBuff(itemEffect);
+
+            var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+            if(userVm != null)
+            {
+                userVm.AddSeedBuff(itemEffect);
+            }
         }
     }
 
@@ -442,6 +449,7 @@ public class HousingViewModel : ViewModelBase
 
     public void EnterOverviewMode()
     {
+        IsInHousingMode = false;
         TargetRoom = null;
         CurrentViewMode = HousingViewMode.OverView;
     }

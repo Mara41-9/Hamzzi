@@ -23,7 +23,7 @@ public class AccountInfoService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"SELECT userId, userName FROM {DBConfig.GameUserTable} WHERE userId = @userId;";
+                    string query = $"SELECT userId, userName FROM {DBConfig.UserGameTable} WHERE userId = @userId;";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {

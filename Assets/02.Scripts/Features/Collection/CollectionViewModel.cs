@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,8 +37,8 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
     }
 
     // 보유 중인 햄스터의 상세 데이터 저장
-    private Dictionary<int, HamsterSave> _collectedHamsterList = new Dictionary<int, HamsterSave>();
-    public Dictionary<int, HamsterSave> CollectedHamsterList
+    private Dictionary<long, HamsterSave> _collectedHamsterList = new Dictionary<long, HamsterSave>();
+    public Dictionary<long, HamsterSave> CollectedHamsterList
     {
         get { return _collectedHamsterList; }
         set
@@ -125,7 +126,7 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
 
 public static class HamsterViewModelExtention 
 {
-    public static void AddCollectedHamsterList(this CollectionViewModel collectionViewModel, HamsterSave hamsterSave)
+    public static void AddCollectedHamsterList(this CollectionViewModel collectionViewModel, HamsterSave hamsterSave, bool isLoading = false)
     {
         if (collectionViewModel.CollectedHamsterList.ContainsKey(hamsterSave.HamsterUID) == true)
             return;
@@ -150,11 +151,16 @@ public static class HamsterViewModelExtention
 
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedHamsterIdList), ContainerEventType.Add, hamsterSave.HamsterId);
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedFaceByHamsterList), ContainerEventType.Add, hamsterSave.FaceId);
+
+        if(isLoading != true)
+        {
+            ServiceManager.Instance.CollectionService.TrySaveHamsterData(hamsterSave).Forget();
+        }
     }
 
     public static void RemoveCollectedHamsterList(this CollectionViewModel collectionViewModel, string hamsterId, string faceId)
     {
-        int targetUID = -1;
+        long targetUID = -1;
 
         foreach(var kv in collectionViewModel.CollectedHamsterList)
         {
@@ -186,6 +192,8 @@ public static class HamsterViewModelExtention
 
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedHamsterIdList), ContainerEventType.Remove, hamsterId);
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedFaceByHamsterList), ContainerEventType.Remove, faceId);
+
+        ServiceManager.Instance.CollectionService.TryDelectedHamsterData(targetUID).Forget();
     }
 
     public static void RequestSelectedHamsterId(this CollectionViewModel collectionViewModel, string selectedHamsterId)
