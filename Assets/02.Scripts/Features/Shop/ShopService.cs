@@ -121,14 +121,20 @@ public class ShopService
             return;
         }
 
-        bool Success = ServiceManager.Instance.CurrencyService.TryUseSeed(selectedSlot.CostAmount);
-        if(Success == false)
+        var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        if(userVm != null)
         {
-            Debug.Log("씨앗이 부족합니다.");
-            return;
+            bool Success = userVm.TryUseSeed(selectedSlot.CostAmount);
+
+            if (Success == false)
+            {
+                Debug.Log("씨앗이 부족합니다.");
+                return;
+            }
+
+            ServiceManager.Instance.HousingService.AddItem(selectedSlot);
+            Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
         }
 
-        ServiceManager.Instance.HousingService.AddItem(selectedSlot);
-        Debug.Log($"아이템을 구매했다!  Id: {GetShopViewModel().SelectedSlot.ItemDataId}   이름: {GetShopViewModel().SelectedSlot.Name}");
     }
 }

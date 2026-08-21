@@ -130,7 +130,12 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
     private void HandleResultState()
     {
         int rewardAmount = _tapCount * _currentFeverTimeData.SeedPerTap;
-        GameManager.Instance.AddSeedCount(rewardAmount);
+        //GameManager.Instance.AddSeedCount(rewardAmount);
+        var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        if(userVm != null)
+        {
+            userVm.AddSeed(rewardAmount);
+        }
 
 #if UNITY_EDITOR
         Debug.Log($"FeverTimeState: Result, 보상 {rewardAmount} 지급 (연타 {_tapCount}회 x {_currentFeverTimeData.SeedPerTap})");

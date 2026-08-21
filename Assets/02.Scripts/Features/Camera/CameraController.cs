@@ -36,11 +36,27 @@ public class CameraController : MonoBehaviour
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
     private CancellationTokenSource _zoomCancel;
-    private bool _isTransition;
+    private bool _isTransition = false;
+    private bool _isViewRoom = false;
+
+    private Transform _targetHamster;
+    private bool _isFollowing = false;
+    private Vector3 _currentOffset;
 
     private void Awake()
     {
         SetOverview();
+    }
+
+    private void Start()
+    {
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService?.GetBuildViewModel();
+
+        BindViewModel(housingVM, buildVM);
+
+        _housingVM.CurrentViewMode = HousingViewMode.Garden;
+        ShowGardenView().Forget();
     }
 
     private void Update()
@@ -48,6 +64,16 @@ public class CameraController : MonoBehaviour
         if (_buildVM == null || _housingVM == null)
         {
             return;
+        }
+
+        if (_isFollowing)
+        {
+            return;
+        }
+
+        if (_housingVM.CurrentViewMode == HousingViewMode.OverView && _buildVM.SelectType == BuildType.None)
+        {
+            CheckNormalRoom();
         }
 
         if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null || _housingVM.FurnitureVM != null)
@@ -64,6 +90,34 @@ public class CameraController : MonoBehaviour
             else
             {
                 GetMouseInput();
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (_isFollowing && _targetHamster != null)
+        {
+            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            {
+                Quaternion gardenRot = Quaternion.Euler(Rotation_Garden);
+                Vector3 targetPos = _targetHamster.position - (gardenRot * Vector3.forward * 5f) + new Vector3(0f, 2f, -1.5f);
+
+                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, gardenRot, Time.deltaTime * 5f);
+            }
+            else
+            {
+                Vector3 targetPos = new Vector3(_targetHamster.position.x, _targetHamster.position.y, Position_Overview.z);
+                Quaternion overviewRot = Quaternion.Euler(Rotation_Overview);
+
+                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, overviewRot, Time.deltaTime * 5f);
+
+                if (Camera_Main.orthographic)
+                {
+                    Camera_Main.orthographicSize = Mathf.Lerp(Camera_Main.orthographicSize, 3.5f, Time.deltaTime * 5f);
+                }
             }
         }
     }
@@ -88,11 +142,14 @@ public class CameraController : MonoBehaviour
             case nameof(_housingVM.TargetRoom):
                 if (_housingVM.TargetRoom != null)
                 {
+                    _isViewRoom = true;
                     Vector3 roomCenterWorld = GetRoomCenterPos(_housingVM.TargetRoom);
                     FocusRoom(roomCenterWorld).Forget();
                 }
                 else
                 {
+                    _isViewRoom = false;
+
                     if (_housingVM.CurrentViewMode != HousingViewMode.Garden)
                     {
                         ShowOverview().Forget();
@@ -115,6 +172,11 @@ public class CameraController : MonoBehaviour
 
     private void GetTouchInput()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (Input.touchCount == 2)
         {
             Touch touch0 = Input.GetTouch(0);
@@ -131,12 +193,12 @@ public class CameraController : MonoBehaviour
         }
         else if (Input.touchCount == 1)
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (_isViewRoom)
             {
                 return;
             }
+
+            Touch touch = Input.GetTouch(0);
 
             if (touch.phase == TouchPhase.Moved)
             {
@@ -174,6 +236,11 @@ public class CameraController : MonoBehaviour
 
     private void GetMouseInput()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (Mathf.Abs(scroll) > 0.001f)
@@ -183,6 +250,11 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
+            if (_isViewRoom)
+            {
+                return;
+            }
+
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
@@ -231,6 +303,7 @@ public class CameraController : MonoBehaviour
 
     public async UniTask ShowGardenView()
     {
+        _isViewRoom = false;
         CancelZoom();
         _zoomCancel = new CancellationTokenSource();
 
@@ -245,6 +318,7 @@ public class CameraController : MonoBehaviour
 
     public async UniTask ShowOverview()
     {
+        _isViewRoom = false;
         _zoomCancel?.Cancel();
         _zoomCancel = new CancellationTokenSource();
 
@@ -269,6 +343,72 @@ public class CameraController : MonoBehaviour
         Matrix4x4 targetMatrix = Matrix4x4.Perspective(Zoom_FOV, Camera_Main.aspect, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
 
         await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, Zoom_FOV, _zoomCancel.Token);
+    }
+
+    public void FocusRoomInGame(RoomViewModel roomVM)
+    {
+        _isViewRoom = true;
+        _housingVM.TargetRoom = roomVM;
+
+        Vector3 roomCenterWorld = GetRoomCenterPos(roomVM);
+        FocusRoom(roomCenterWorld).Forget();
+    }
+
+    private void CheckNormalRoom()
+    {
+        if (_housingVM == null || _housingVM.IsInHousingMode)
+        {
+            return;
+        }
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        Vector2 inputPosition = Vector2.zero;
+        bool isTriggered = false;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonDown(0))
+        {
+            inputPosition = Input.mousePosition;
+            isTriggered = true;
+        }
+#endif
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                inputPosition = touch.position;
+                isTriggered = true;
+            }
+        }
+
+        if (isTriggered)
+        {
+            Ray ray = Camera_Main.ScreenPointToRay(inputPosition);
+            Plane mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+
+            if (mapPlane.Raycast(ray, out float hit))
+            {
+                Vector3 hitPoint = ray.GetPoint(hit);
+                int gridX = Mathf.FloorToInt(hitPoint.x / 1.0f);
+                int gridY = Mathf.FloorToInt((hitPoint.y - 2.0f) / 1.0f);
+                Vector2Int gridPos = new Vector2Int(gridX, gridY);
+
+                if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
+                {
+                    if (roomVM.BuildType == BuildType.Room)
+                    {
+                        FocusRoomInGame(roomVM);
+                    }
+                }
+            }
+        }
     }
 
     private async UniTask TransitionCamera(Vector3 targetPos, Quaternion targetRot, Matrix4x4 startMatrix, Matrix4x4 targetMatrix, bool endIsOrtho, float targetFOV, CancellationToken token)
@@ -349,6 +489,18 @@ public class CameraController : MonoBehaviour
         float roomZ = 9.0f - (roomVM.SubGridSize.y * subCellSize * 0.5f) + 0.3f;
 
         return new Vector3(roomX, roomY, roomZ);
+    }
+
+    public void StartFollowHamster(Transform target)
+    {
+        _targetHamster = target;
+        _isFollowing = true;
+    }
+
+    public void StopFollowHamster()
+    {
+        _targetHamster = null;
+        _isFollowing = false;
     }
 
     private void CancelZoom()
