@@ -60,6 +60,40 @@ public class LoginViewModel : ViewModelBase
         }
     }
 
+    private long _userUID = 0;
+    public long UserUID
+    {
+        get
+        {
+            return _userUID;
+        }
+        set
+        {
+            if (_userUID != value)
+            {
+                _userUID = value;
+                OnPropertyChanged(nameof(UserUID));
+            }
+        }
+    }
+
+    private string _loggedUserId = "";
+    public string LoggedUserId
+    {
+        get
+        {
+            return _loggedUserId;
+        }
+        set
+        {
+            if (_loggedUserId != value)
+            {
+                _loggedUserId = value;
+                OnPropertyChanged(nameof(LoggedUserId));
+            }
+        }
+    }
+
     public void SetLoginService(LoginService service)
     {
         _loginService = service;
@@ -69,14 +103,14 @@ public class LoginViewModel : ViewModelBase
     {
         if (_loginService != null)
         {
-            bool isSuccess = await _loginService.TryLoginAsync(_inputId, _inputPassword);
+            long resultUid = await _loginService.TryLoginAsync(_inputId, _inputPassword);
 
-            if (isSuccess == true)
+            if (resultUid != 0)
             {
+                UserUID = resultUid;
+                LoggedUserId = _inputId;
+
                 FeedbackMessage = "로그인 성공!";
-                UIManager.Instance.CloseLoginUI();
-                UIManager.Instance.CloseTitleUI();
-                UIManager.Instance.OpenInGameUI();
                 InvokeCompleteLogin();
             }
             else
@@ -91,10 +125,13 @@ public class LoginViewModel : ViewModelBase
     {
         if (_loginService != null)
         {
-            bool isSuccess = await _loginService.CreateAccountAsync(_inputId, _inputPassword);
+            long resultUid = await _loginService.CreateAccountAsync(_inputId, _inputPassword);
 
-            if (isSuccess == true)
+            if (resultUid != 0)
             {
+                UserUID = resultUid;
+                LoggedUserId = _inputId;
+
                 FeedbackMessage = "계정 생성 성공!";
                 InvokeCompleteCreateAccount();
             }
