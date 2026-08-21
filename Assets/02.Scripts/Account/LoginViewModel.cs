@@ -212,7 +212,7 @@ public class LoginViewModel : ViewModelBase
     {
         if(OnCompleteUpdateLastLogin != null)
         {
-            OnCompleteCreateAccount.Invoke();
+            OnCompleteUpdateLastLogin.Invoke();
         }
     }
 }
