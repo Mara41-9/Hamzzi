@@ -17,7 +17,7 @@ public class SetPlayerNameService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"UPDATE {DBConfig.GameUserTable} SET userName = @userName WHERE userId = @userId;";
+                    string query = $"UPDATE {DBConfig.UserGameTable} SET userName = @userName WHERE userId = @userId;";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {

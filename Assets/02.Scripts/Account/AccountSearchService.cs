@@ -17,7 +17,7 @@ public class AccountSearchService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"SELECT COUNT(*) FROM {DBConfig.GameUserTable} WHERE userId = @userId;";
+                    string query = $"SELECT COUNT(*) FROM {DBConfig.UserGameTable} WHERE userId = @userId;";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
