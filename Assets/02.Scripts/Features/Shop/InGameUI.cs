@@ -61,10 +61,10 @@ public class InGameUI : ViewBase
         if (string.IsNullOrEmpty(_userVm.UserIconId) == false)
         {
             lodedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
-        }
 
-        Text_UserName.text = _userVm.UserName;
-        Image_UserIcon.sprite = lodedSprite;
+            Text_UserName.text = _userVm.UserName;
+            Image_UserIcon.sprite = lodedSprite;
+        }
     }
 
     private void OnClick_OpenShop()

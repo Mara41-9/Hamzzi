@@ -1,9 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using MySqlConnector;
 using System;
-using System.IO;
-using System.Threading.Tasks;
-using Unity.AppUI.Redux;
 using UnityEngine;
 
 public class UserService
@@ -28,11 +25,11 @@ public class UserService
         return userVm;
     }
 
-    public async UniTask<UserData> GetUserAsync(string userId)
+    public async UniTask<UserData> GetUserAsync(long userUid)
     {
         UserData resultUserData = null;
 
-        if(userId != "")
+        if(userUid != 0)
         {
             using(MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
             {
@@ -40,11 +37,11 @@ public class UserService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"SELECT User_Name, User_Icon_Data_ID, Gold_Count FROM User_Account AS account INNER JOIN User_Game_Data AS game ON account.User_UID = game.User_UID WHERE account.User_Id = @userId";
+                    string query = $"SELECT User_Name, User_Icon_Data_ID, Gold_Count FROM User_Game_Data WHERE User_UID = @userUid";
 
                     using(MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@userId", userId);
+                        cmd.Parameters.AddWithValue("@userUid", userUid);
 
                         using(MySqlDataReader reader = await cmd.ExecuteReaderAsync())
                         {
@@ -68,18 +65,18 @@ public class UserService
         return resultUserData;
     }
 
-    public async UniTask InitUser(string userId)
+    public async UniTask InitUser(long userUid)
     {
-        if (string.IsNullOrEmpty(userId))
+        if (userUid == 0)
         {
             Debug.LogError("[InitUser] userId가 비어있음");
             return;
         }
 
-        var userData = await GetUserAsync(userId);
+        var userData = await GetUserAsync(userUid);
         if (userData == null)
         {
-            Debug.LogError($"[InitUser] 유저 데이터 조회 실패 / User_Id: {userId}");
+            Debug.LogError($"[InitUser] 유저 데이터 조회 실패 / User_Uid: {userUid}");
             return;
         }
 

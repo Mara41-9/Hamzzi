@@ -110,7 +110,7 @@ public class LoginViewModel : ViewModelBase
                 UserUID = resultUid;
                 LoggedUserId = _inputId;
 
-                await ServiceManager.Instance.UserService.InitUser(_inputId);
+                await ServiceManager.Instance.UserService.InitUser(UserUID);
 
                 FeedbackMessage = "로그인 성공!";
                 InvokeCompleteLogin();

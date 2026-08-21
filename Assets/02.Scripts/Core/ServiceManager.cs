@@ -23,13 +23,9 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitHousingService();
         InitCollectionService();
         InitGachaService();
-        InitCurrencyService();
         InitLoginService();
         InitFriendListService();
         InitUserService();
-
-        CurrencyService.InitCurrency();
-        
     }
 
     private void InitShopService()

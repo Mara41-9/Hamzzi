@@ -55,11 +55,26 @@ public class UserViewModel : ViewModelBase
 public static class UserViewModelExtension
 {
     private static float _seedBuffRate;
+    private static float _seedBonusRemain;
 
     public static void AddSeed(this UserViewModel userVm, int amount)
     {
-        int resultAmount = Mathf.RoundToInt(amount * (1f + _seedBuffRate));
-        userVm.SeedCount += resultAmount;
+        userVm.SeedCount += amount;
+
+        float addedBonus = amount * _seedBuffRate;
+        _seedBonusRemain += addedBonus;
+
+        int bonusAmount = Mathf.FloorToInt(_seedBonusRemain);
+
+        Debug.Log($"[버프 계산] " + $"이번 보너스: {addedBonus}, " + $"누적 보너스: {_seedBonusRemain}, " + $"지급 가능한 보너스: {bonusAmount}");
+
+        if(bonusAmount > 0)
+        {
+            userVm.SeedCount += bonusAmount;
+            _seedBonusRemain -= bonusAmount;
+
+            Debug.Log($"[보너스 지급] +" + $"{bonusAmount}");
+        }
     }
 
     public static void AddSeedBuff(this UserViewModel userVm, float amount)

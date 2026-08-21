@@ -238,10 +238,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SampleMainUI
   Button_OpenShopUI: {fileID: 1597506480051378887}
-  Button_OpenHousingUI: {fileID: 8739125168188296162}
+  Button_OpenDecorUI: {fileID: 8739125168188296162}
   Button_OpenFriendUI: {fileID: 7344864550380898301}
   Button_CollectionUI: {fileID: 925323501848616766}
   Button_Gacha: {fileID: 2658828250320436903}
+  Image_UserIcon: {fileID: 187072094990481744}
+  Text_UserName: {fileID: 8010814526321658313}
 --- !u!1 &1713171369212261991
 GameObject:
   m_ObjectHideFlags: 0
