@@ -9,6 +9,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public UserService UserService { get; private set; }
     public NetworkCollectionService CollectionService { get; private set; }
     public NetworkGachaService GachaService { get; private set; }
+    public LoginService LoginService { get; private set; }
+    public FriendListService FriendListService { get; private set; }
 
     public void Start()
     {
@@ -21,7 +23,13 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitHousingService();
         InitCollectionService();
         InitGachaService();
+        InitCurrencyService();
+        InitLoginService();
+        InitFriendListService();
         InitUserService();
+
+        CurrencyService.InitCurrency();
+        
     }
 
     private void InitShopService()
@@ -54,5 +62,15 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitUserService()
     {
         UserService = new UserService();
+    }
+
+    private void InitLoginService()
+    {
+        LoginService = new LoginService();
+    }
+
+    private void InitFriendListService()
+    {
+        FriendListService = new FriendListService();
     }
 }

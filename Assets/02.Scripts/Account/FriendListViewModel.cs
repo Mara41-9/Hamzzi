@@ -1,29 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class FriendListViewModel : ViewModelBase
 {
     private FriendListService _service;
 
     public event Action OnCompleteLoadFriendList;
-
-    private string _myUserId = "Asdf";
-    public string MyUserId
-    {
-        get
-        {
-            return _myUserId;
-        }
-        set
-        {
-            if (_myUserId != value)
-            {
-                _myUserId = value;
-                OnPropertyChanged(nameof(MyUserId));
-            }
-        }
-    }
 
     private List<FriendInfoData> _friendList = new List<FriendInfoData>();
     public List<FriendInfoData> FriendList
@@ -49,14 +31,29 @@ public class FriendListViewModel : ViewModelBase
 
     public async void RequestLoadFriendList()
     {
-        if (_service != null && _myUserId != "")
+        if (_service != null)
         {
-            List<FriendInfoData> dataList = await _service.GetFriendListAsync(_myUserId);
+            LoginService loginService = ServiceManager.Instance.LoginService;
 
-            if (dataList != null)
+            if (loginService != null)
             {
-                FriendList = dataList;
-                InvokeCompleteLoadFriendList();
+                LoginViewModel loginVm = loginService.GetViewModel();
+
+                if (loginVm != null)
+                {
+                    long myUid = loginVm.UserUID;
+
+                    if (myUid != 0)
+                    {
+                        List<FriendInfoData> dataList = await _service.GetFriendListAsync(myUid);
+
+                        if (dataList != null)
+                        {
+                            FriendList = dataList;
+                            InvokeCompleteLoadFriendList();
+                        }
+                    }
+                }
             }
         }
     }
