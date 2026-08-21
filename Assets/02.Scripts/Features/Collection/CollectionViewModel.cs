@@ -36,8 +36,8 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
     }
 
     // 보유 중인 햄스터의 상세 데이터 저장
-    private Dictionary<int, HamsterSave> _collectedHamsterList = new Dictionary<int, HamsterSave>();
-    public Dictionary<int, HamsterSave> CollectedHamsterList
+    private Dictionary<long, HamsterSave> _collectedHamsterList = new Dictionary<long, HamsterSave>();
+    public Dictionary<long, HamsterSave> CollectedHamsterList
     {
         get { return _collectedHamsterList; }
         set
@@ -154,7 +154,7 @@ public static class HamsterViewModelExtention
 
     public static void RemoveCollectedHamsterList(this CollectionViewModel collectionViewModel, string hamsterId, string faceId)
     {
-        int targetUID = -1;
+        long targetUID = -1;
 
         foreach(var kv in collectionViewModel.CollectedHamsterList)
         {
