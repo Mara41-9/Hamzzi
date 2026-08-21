@@ -4,7 +4,7 @@ using UnityEngine;
 public class InGameManager : SingletonBase<InGameManager>
 {
     private const float IdleRewardCapSeconds = 12f * 60f * 60f;
-    private const float TempProductionPerSec = 1f; // TODO: HamsterManager 실제값으로 교체
+    private const float IdleRewardRateMultiplier = 0.7f;
 
     private void Start()
     {
@@ -25,7 +25,8 @@ public class InGameManager : SingletonBase<InGameManager>
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
-        int idleReward = GameUtil.CalculateIdleReward(loginVm.LastLoginTime.Ticks, TempProductionPerSec, IdleRewardCapSeconds);
+        float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
+        int idleReward = GameUtil.CalculateIdleReward(loginVm.LastLoginTime.Ticks, productionPerSec, IdleRewardCapSeconds);
 
         if (idleReward > 0)
         {
