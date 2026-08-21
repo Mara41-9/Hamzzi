@@ -101,7 +101,7 @@ public class CameraController : MonoBehaviour
             if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
             {
                 Quaternion gardenRot = Quaternion.Euler(Rotation_Garden);
-                Vector3 targetPos = _targetHamster.position - (gardenRot * Vector3.forward * 5f) + new Vector3(0f, 2f, 0f);
+                Vector3 targetPos = _targetHamster.position - (gardenRot * Vector3.forward * 5f) + new Vector3(0f, 2f, -1.5f);
 
                 transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
                 transform.rotation = Quaternion.Lerp(transform.rotation, gardenRot, Time.deltaTime * 5f);
