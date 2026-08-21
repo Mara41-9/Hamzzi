@@ -22,6 +22,12 @@ public class InGameUI : ViewBase
     private UserViewModel _userVm;
 
     private HousingViewModel _housingVM;
+    private CameraController _cameraController;
+
+    private void Awake()
+    {
+        _cameraController = Camera.main.GetComponent<CameraController>();
+    }
 
     private void OnEnable()
     {
@@ -128,6 +134,8 @@ public class InGameUI : ViewBase
         _housingVM.TargetRoom = null;
         _housingVM.CurrentViewMode = HousingViewMode.OverView;
         _housingVM.EnterOverviewMode();
+
+        _cameraController.StopFollowHamster();
     }
 
     private void UpdateButton()
