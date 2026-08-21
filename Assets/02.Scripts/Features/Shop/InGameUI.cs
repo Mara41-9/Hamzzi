@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.ComponentModel;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +11,16 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_OpenFriendUI;
     [SerializeField] private UIButton Button_CollectionUI;
     [SerializeField] private UIButton Button_Gacha;
+    [SerializeField] private Button Button_Garden;
+    [SerializeField] private Button Button_Exit;
 
     [Header("DB 연동")]
     [SerializeField] private Image Image_UserIcon;
     [SerializeField] private TMP_Text Text_UserName;
 
     private UserViewModel _userVm;
+
+    private HousingViewModel _housingVM;
 
     private void OnEnable()
     {
@@ -26,6 +29,16 @@ public class InGameUI : ViewBase
         Button_OpenFriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
+        Button_Garden.onClick.AddListener(OnClick_Garden);
+        Button_Exit.onClick.AddListener(OnClick_Exit);
+
+        if (_housingVM == null)
+        {
+            _housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
+        }
+
+        _housingVM.PropertyChanged += OnPropertyChanged_VM;
+        UpdateButton();
 
         FindUserViewModelAndBind();
     }
@@ -33,6 +46,7 @@ public class InGameUI : ViewBase
     private void OnDisable()
     {
         _userVm.PropertyChanged -= OnPropChanged_UserInfoView;
+        _housingVM.PropertyChanged -= OnPropertyChanged_VM;
     }
 
     private void FindUserViewModelAndBind()
@@ -51,6 +65,14 @@ public class InGameUI : ViewBase
             case nameof(UserViewModel.SeedCount):
                 UpdateUserInfo().Forget();
                 break;
+        }
+    }
+
+    private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(_housingVM.CurrentViewMode) || e.PropertyName == nameof(_housingVM.TargetRoom))
+        {
+            UpdateButton();
         }
     }
 
@@ -91,5 +113,27 @@ public class InGameUI : ViewBase
     private void OnClick_OpenGachaUI()
     {
         UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.GachaUI);
+    }
+
+    private void OnClick_Garden()
+    {
+        _housingVM.TargetRoom = null;
+        _housingVM.CurrentViewMode = HousingViewMode.Garden;
+        _housingVM.EnterGardenMode();
+    }
+
+    private void OnClick_Exit()
+    {
+        _housingVM.TargetRoom = null;
+        _housingVM.CurrentViewMode = HousingViewMode.OverView;
+        _housingVM.EnterOverviewMode();
+    }
+
+    private void UpdateButton()
+    {
+        bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null);
+
+        Button_Exit.gameObject.SetActive(isSubView);
+        Button_Garden.gameObject.SetActive(!isSubView);
     }
 }
