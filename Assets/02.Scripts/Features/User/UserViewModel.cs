@@ -82,6 +82,12 @@ public static class UserViewModelExtension
         _seedBuffRate += amount;
     }
 
+    public static void RemoveSeedBuff(this UserViewModel userVm, float amount)
+    {
+        _seedBuffRate -= amount;
+    }
+
+
     public static bool TryUseSeed(this UserViewModel userVm, int amount)
     {
         if(userVm.SeedCount < amount)
