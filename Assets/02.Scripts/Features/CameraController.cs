@@ -36,11 +36,23 @@ public class CameraController : MonoBehaviour
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
     private CancellationTokenSource _zoomCancel;
-    private bool _isTransition;
+    private bool _isTransition = false;
+    private bool _isViewRoom = false;
 
     private void Awake()
     {
         SetOverview();
+    }
+
+    private void Start()
+    {
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService?.GetHousingViewModel();
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService?.GetBuildViewModel();
+
+        BindViewModel(housingVM, buildVM);
+
+        _housingVM.CurrentViewMode = HousingViewMode.Garden;
+        ShowGardenView().Forget();
     }
 
     private void Update()
@@ -48,6 +60,11 @@ public class CameraController : MonoBehaviour
         if (_buildVM == null || _housingVM == null)
         {
             return;
+        }
+
+        if (_housingVM.CurrentViewMode == HousingViewMode.OverView && _buildVM.SelectType == BuildType.None)
+        {
+            CheckNormalRoom();
         }
 
         if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null || _housingVM.FurnitureVM != null)
@@ -88,11 +105,14 @@ public class CameraController : MonoBehaviour
             case nameof(_housingVM.TargetRoom):
                 if (_housingVM.TargetRoom != null)
                 {
+                    _isViewRoom = true;
                     Vector3 roomCenterWorld = GetRoomCenterPos(_housingVM.TargetRoom);
                     FocusRoom(roomCenterWorld).Forget();
                 }
                 else
                 {
+                    _isViewRoom = false;
+
                     if (_housingVM.CurrentViewMode != HousingViewMode.Garden)
                     {
                         ShowOverview().Forget();
@@ -115,6 +135,11 @@ public class CameraController : MonoBehaviour
 
     private void GetTouchInput()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (Input.touchCount == 2)
         {
             Touch touch0 = Input.GetTouch(0);
@@ -131,12 +156,12 @@ public class CameraController : MonoBehaviour
         }
         else if (Input.touchCount == 1)
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (_isViewRoom)
             {
                 return;
             }
+
+            Touch touch = Input.GetTouch(0);
 
             if (touch.phase == TouchPhase.Moved)
             {
@@ -174,6 +199,11 @@ public class CameraController : MonoBehaviour
 
     private void GetMouseInput()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (Mathf.Abs(scroll) > 0.001f)
@@ -183,6 +213,11 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
+            if (_isViewRoom)
+            {
+                return;
+            }
+
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
@@ -231,6 +266,7 @@ public class CameraController : MonoBehaviour
 
     public async UniTask ShowGardenView()
     {
+        _isViewRoom = false;
         CancelZoom();
         _zoomCancel = new CancellationTokenSource();
 
@@ -245,6 +281,7 @@ public class CameraController : MonoBehaviour
 
     public async UniTask ShowOverview()
     {
+        _isViewRoom = false;
         _zoomCancel?.Cancel();
         _zoomCancel = new CancellationTokenSource();
 
@@ -269,6 +306,72 @@ public class CameraController : MonoBehaviour
         Matrix4x4 targetMatrix = Matrix4x4.Perspective(Zoom_FOV, Camera_Main.aspect, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
 
         await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, Zoom_FOV, _zoomCancel.Token);
+    }
+
+    public void FocusRoomInGame(RoomViewModel roomVM)
+    {
+        _isViewRoom = true;
+        _housingVM.TargetRoom = roomVM;
+
+        Vector3 roomCenterWorld = GetRoomCenterPos(roomVM);
+        FocusRoom(roomCenterWorld).Forget();
+    }
+
+    private void CheckNormalRoom()
+    {
+        if (_housingVM == null || _housingVM.IsInHousingMode)
+        {
+            return;
+        }
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        Vector2 inputPosition = Vector2.zero;
+        bool isTriggered = false;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonDown(0))
+        {
+            inputPosition = Input.mousePosition;
+            isTriggered = true;
+        }
+#endif
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                inputPosition = touch.position;
+                isTriggered = true;
+            }
+        }
+
+        if (isTriggered)
+        {
+            Ray ray = Camera_Main.ScreenPointToRay(inputPosition);
+            Plane mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+
+            if (mapPlane.Raycast(ray, out float hit))
+            {
+                Vector3 hitPoint = ray.GetPoint(hit);
+                int gridX = Mathf.FloorToInt(hitPoint.x / 1.0f);
+                int gridY = Mathf.FloorToInt((hitPoint.y - 2.0f) / 1.0f);
+                Vector2Int gridPos = new Vector2Int(gridX, gridY);
+
+                if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
+                {
+                    if (roomVM.BuildType == BuildType.Room)
+                    {
+                        FocusRoomInGame(roomVM);
+                    }
+                }
+            }
+        }
     }
 
     private async UniTask TransitionCamera(Vector3 targetPos, Quaternion targetRot, Matrix4x4 startMatrix, Matrix4x4 targetMatrix, bool endIsOrtho, float targetFOV, CancellationToken token)

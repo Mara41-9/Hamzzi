@@ -19,7 +19,6 @@ public class HousingService
     {
         HousingViewModel housingVm = new HousingViewModel();
         _housingVM = housingVm;
-        _housingVM.EnterHousingMode();
 
         return housingVm;
     }
