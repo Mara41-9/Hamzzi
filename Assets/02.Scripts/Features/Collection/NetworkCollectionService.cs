@@ -103,11 +103,43 @@ public class NetworkCollectionService
                     if(rowsAffected < 0)
                     {
                         Debug.Log("햄스터 데이터 저장 성공");
-                        return true;
                     }
                 }
             }
             catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+        }
+    }
+
+    public async UniTask TryDelectedHamsterData(long hamsterUID)
+    {
+        using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
+        {
+            try
+            {
+                await conn.OpenAsync();
+
+                string query = $"DELETE FROM {DBConfig.HamsterTable} WHERE Hamster_UID = @hamsterUID";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("hamsterUID", hamsterUID);
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        Debug.Log($"햄스터 삭제 성공 (삭제된 UID: {hamsterUID})");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"삭제할 햄스터를 찾지 못했습니다. (UID: {hamsterUID})");
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
             }

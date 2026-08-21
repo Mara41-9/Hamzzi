@@ -189,6 +189,8 @@ public static class HamsterViewModelExtention
 
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedHamsterIdList), ContainerEventType.Remove, hamsterId);
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedFaceByHamsterList), ContainerEventType.Remove, faceId);
+
+        ServiceManager.Instance.CollectionService.TryDelectedHamsterData(targetUID).Forget();
     }
 
     public static void RequestSelectedHamsterId(this CollectionViewModel collectionViewModel, string selectedHamsterId)
