@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
