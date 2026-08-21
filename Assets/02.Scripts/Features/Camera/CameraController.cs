@@ -39,6 +39,10 @@ public class CameraController : MonoBehaviour
     private bool _isTransition = false;
     private bool _isViewRoom = false;
 
+    private Transform _targetHamster;
+    private bool _isFollowing = false;
+    private Vector3 _currentOffset;
+
     private void Awake()
     {
         SetOverview();
@@ -62,6 +66,11 @@ public class CameraController : MonoBehaviour
             return;
         }
 
+        if (_isFollowing)
+        {
+            return;
+        }
+
         if (_housingVM.CurrentViewMode == HousingViewMode.OverView && _buildVM.SelectType == BuildType.None)
         {
             CheckNormalRoom();
@@ -81,6 +90,34 @@ public class CameraController : MonoBehaviour
             else
             {
                 GetMouseInput();
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (_isFollowing && _targetHamster != null)
+        {
+            if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+            {
+                Quaternion gardenRot = Quaternion.Euler(Rotation_Garden);
+                Vector3 targetPos = _targetHamster.position - (gardenRot * Vector3.forward * 5f) + new Vector3(0f, 2f, 0f);
+
+                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, gardenRot, Time.deltaTime * 5f);
+            }
+            else
+            {
+                Vector3 targetPos = new Vector3(_targetHamster.position.x, _targetHamster.position.y, Position_Overview.z);
+                Quaternion overviewRot = Quaternion.Euler(Rotation_Overview);
+
+                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, overviewRot, Time.deltaTime * 5f);
+
+                if (Camera_Main.orthographic)
+                {
+                    Camera_Main.orthographicSize = Mathf.Lerp(Camera_Main.orthographicSize, 3.5f, Time.deltaTime * 5f);
+                }
             }
         }
     }
@@ -452,6 +489,18 @@ public class CameraController : MonoBehaviour
         float roomZ = 9.0f - (roomVM.SubGridSize.y * subCellSize * 0.5f) + 0.3f;
 
         return new Vector3(roomX, roomY, roomZ);
+    }
+
+    public void StartFollowHamster(Transform target)
+    {
+        _targetHamster = target;
+        _isFollowing = true;
+    }
+
+    public void StopFollowHamster()
+    {
+        _targetHamster = null;
+        _isFollowing = false;
     }
 
     private void CancelZoom()
