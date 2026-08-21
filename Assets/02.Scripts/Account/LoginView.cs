@@ -15,15 +15,14 @@ public class LoginView : UIBase
 
     private LoginViewModel _vm;
 
-    // 임시 테스트용 초기화
     private void Start()
     {
-        LoginService testService = new LoginService();
-        LoginViewModel testVm = new LoginViewModel();
+        LoginService service = ServiceManager.Instance.LoginService;
 
-        testVm.SetLoginService(testService);
-
-        BindViewModel(testVm);
+        if (service != null)
+        {
+            BindViewModel(service.GetViewModel());
+        }
     }
 
     private void OnEnable()
@@ -100,10 +99,8 @@ public class LoginView : UIBase
 
     private void OnClickLogin()
     {
-        Debug.Log("aa");
         if (_vm != null)
         {
-            Debug.Log("bb");
             _vm.RequestLogin();
         }
     }
@@ -123,6 +120,9 @@ public class LoginView : UIBase
 
     private void OnCompleteLogin_View()
     {
+        UIManager.Instance.CloseLoginUI();
+        UIManager.Instance.CloseTitleUI();
+        UIManager.Instance.OpenInGameUI();
         Debug.Log("로그인 성공");
     }
 

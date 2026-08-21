@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class FriendListView : UIBase
 {
-    [SerializeField] private Transform Transform_Content; 
-    [SerializeField] private GameObject Prefab_FriendSlot; 
+    [SerializeField] private Transform Transform_Content;
+    [SerializeField] private GameObject Prefab_FriendSlot;
     [SerializeField] private UIButton Button_Close;
 
     private FriendListViewModel _vm;
-
     private List<GameObject> _spawnedSlots = new List<GameObject>();
 
-
-    // 임시 테스트용 초기화
     private void Start()
     {
-        FriendListService testService = new FriendListService();
-        FriendListViewModel testVm = new FriendListViewModel();
+        FriendListService service = ServiceManager.Instance.FriendListService;
 
-        testVm.SetService(testService);
-
-        BindViewModel(testVm);
-
-        if (_vm != null)
+        if (service != null)
         {
-            _vm.RequestLoadFriendList();
+            BindViewModel(service.GetViewModel());
         }
+    }
+
+    public void BindViewModel(FriendListViewModel vm)
+    {
+        _vm = vm;
+
+        _vm.PropertyChanged += OnPropChanged_View;
+        _vm.OnCompleteLoadFriendList += OnCompleteLoadFriendList_View;
     }
 
     private void OnEnable()
@@ -53,17 +53,8 @@ public class FriendListView : UIBase
         }
     }
 
-    public void BindViewModel(FriendListViewModel vm)
-    {
-        _vm = vm;
-
-        _vm.PropertyChanged += OnPropChanged_View;
-        _vm.OnCompleteLoadFriendList += OnCompleteLoadFriendList_View;
-    }
-
     private void OnPropChanged_View(object sender, PropertyChangedEventArgs e)
     {
-
     }
 
     private void OnClickClose()
