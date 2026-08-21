@@ -395,7 +395,12 @@ public class HousingViewModel : ViewModelBase
         if (subCategoryEffectData != null)
         {
             float itemEffect = subCategoryEffectData.SeedCollectionBonus;
-            ServiceManager.Instance.CurrencyService.AddSeedBuff(itemEffect);
+
+            var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+            if(userVm != null)
+            {
+                userVm.AddSeedBuff(itemEffect);
+            }
         }
     }
 
