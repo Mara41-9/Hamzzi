@@ -28,6 +28,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitFriendListService();
 
         CurrencyService.InitCurrency();
+
+        LoginService.GetViewModel().OnCompleteLogin += LoadDataInDB;
     }
 
     private void InitShopService()
@@ -70,5 +72,14 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitFriendListService()
     {
         FriendListService = new FriendListService();
+    }
+
+    public void LoadDataFromDB()
+    {
+        var loginVM = LoginService.GetViewModel();
+        long userUID = loginVM.UserUID;
+
+        Debug.Log($"User UID : {userUID}");
+        CollectionService.LoadHamsterCollectionData(userUID).Forget();
     }
 }
