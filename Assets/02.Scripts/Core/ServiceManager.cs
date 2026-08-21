@@ -26,7 +26,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitLoginService();
         InitFriendListService();
 
-        LoginService.GetViewModel().OnCompleteLogin += LoadDataInDB;
+        LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
         InitUserService();
     }
 
