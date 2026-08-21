@@ -24,8 +24,8 @@ public class FaceData : GameDataBase
 [System.Serializable]
 public class HamsterSave
 {
-    public int HamsterUID;
-    public int UserUID;
+    public long HamsterUID;
+    public long UserUID;
     public string HamsterId;
     public string FaceId;
 }
