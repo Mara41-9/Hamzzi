@@ -9,6 +9,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public CurrencyService CurrencyService { get; private set; }
     public NetworkCollectionService CollectionService { get; private set; }
     public NetworkGachaService GachaService { get; private set; }
+    public LoginService LoginService { get; private set; }
+    public FriendListService FriendListService { get; private set; }
 
     public void Start()
     {
@@ -22,6 +24,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitCollectionService();
         InitGachaService();
         InitCurrencyService();
+        InitLoginService();
+        InitFriendListService();
 
         CurrencyService.InitCurrency();
     }
@@ -56,5 +60,15 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitCurrencyService()
     {
         CurrencyService = new CurrencyService();
+    }
+
+    private void InitLoginService()
+    {
+        LoginService = new LoginService();
+    }
+
+    private void InitFriendListService()
+    {
+        FriendListService = new FriendListService();
     }
 }
