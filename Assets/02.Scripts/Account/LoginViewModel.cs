@@ -7,7 +7,8 @@ public class LoginViewModel : ViewModelBase
     public event Action OnCompleteLogin;
     public event Action OnFailLogin;
     public event Action OnCompleteCreateAccount;
-    public event Action OnFailCreateAccount;
+    public event Action OnFailCreateAccount; 
+    public event Action OnCompleteUpdateLastLogin;
 
     private string _inputId = "";
     public string InputId
@@ -39,6 +40,23 @@ public class LoginViewModel : ViewModelBase
             {
                 _inputPassword = value;
                 OnPropertyChanged(nameof(InputPassword));
+            }
+        }
+    }
+
+    private DateTime _lastLoginTime;
+    public DateTime LastLoginTime
+    {
+        get
+        {
+            return _lastLoginTime;
+        }
+        set
+        {
+            if (_lastLoginTime != value)
+            {
+                _lastLoginTime = value;
+                OnPropertyChanged(nameof(LastLoginTime));
             }
         }
     }
@@ -109,6 +127,7 @@ public class LoginViewModel : ViewModelBase
             {
                 UserUID = resultUid;
                 LoggedUserId = _inputId;
+                LastLoginTime = await _loginService.GetLastLoginTimeAsync(UserUID);
 
                 await ServiceManager.Instance.UserService.InitUser(UserUID);
 
@@ -145,6 +164,20 @@ public class LoginViewModel : ViewModelBase
         }
     }
 
+    public async void RequestUpdateLastLogin()
+    {
+        if (_loginService == null || UserUID == 0) return;
+
+        DateTime currentTime = DateTime.UtcNow;
+        bool isSuccess = await _loginService.UpdateLastLoginAsync(UserUID, currentTime);
+
+        if (isSuccess)
+        {
+            LastLoginTime = currentTime;
+            InvokeCompleteUpdateLastLogin();
+        }
+    }
+
     private void InvokeCompleteLogin()
     {
         if (OnCompleteLogin != null)
@@ -174,6 +207,14 @@ public class LoginViewModel : ViewModelBase
         if (OnFailCreateAccount != null)
         {
             OnFailCreateAccount.Invoke();
+        }
+    }
+
+    private void InvokeCompleteUpdateLastLogin()
+    {
+        if(OnCompleteUpdateLastLogin != null)
+        {
+            OnCompleteUpdateLastLogin.Invoke();
         }
     }
 }
