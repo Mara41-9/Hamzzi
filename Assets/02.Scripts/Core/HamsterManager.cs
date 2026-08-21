@@ -17,8 +17,6 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     private void Start()
     {
-        GameDataManager.Instance.LoadData<HamsterData>();
-
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
 
