@@ -65,6 +65,7 @@ public class NetworkCollectionService
 
                             // 2. 리스트에 추가
                             hamsterList.Add(hamster);
+                            _collectionViewModel.AddCollectedHamsterList(hamster, true);
 
                             Debug.Log($"Hamster Data Load : {hamster.HamsterId}, {hamster.FaceId}");
                         }

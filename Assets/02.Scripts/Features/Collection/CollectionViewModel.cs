@@ -126,7 +126,7 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
 
 public static class HamsterViewModelExtention 
 {
-    public static void AddCollectedHamsterList(this CollectionViewModel collectionViewModel, HamsterSave hamsterSave)
+    public static void AddCollectedHamsterList(this CollectionViewModel collectionViewModel, HamsterSave hamsterSave, bool isLoading = false)
     {
         if (collectionViewModel.CollectedHamsterList.ContainsKey(hamsterSave.HamsterUID) == true)
             return;
@@ -152,7 +152,10 @@ public static class HamsterViewModelExtention
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedHamsterIdList), ContainerEventType.Add, hamsterSave.HamsterId);
         collectionViewModel.InvokeContainerPropertyChanged(nameof(collectionViewModel.CollectedFaceByHamsterList), ContainerEventType.Add, hamsterSave.FaceId);
 
-        ServiceManager.Instance.CollectionService.TrySaveHamsterData(hamsterSave).Forget();
+        if(isLoading != true)
+        {
+            ServiceManager.Instance.CollectionService.TrySaveHamsterData(hamsterSave).Forget();
+        }
     }
 
     public static void RemoveCollectedHamsterList(this CollectionViewModel collectionViewModel, string hamsterId, string faceId)
