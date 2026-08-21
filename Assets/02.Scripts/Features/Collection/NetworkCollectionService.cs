@@ -80,8 +80,37 @@ public class NetworkCollectionService
         return hamsterList;
     }
 
-    public async UniTask<bool> TrySaveHamsterData()
+    public async UniTask TrySaveHamsterData(HamsterSave hamsterSave)
     {
+        using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
+        {
+            try
+            {
+                await conn.OpenAsync();
 
+                string query = $"INSERT INTO {DBConfig.HamsterTable} (Hamster_UID, Owner_User_UID, Hamster_Data_ID, Face_Data_ID)" +
+                               $"VALUES (@hamsterUID, @userUID, @hamsterId, @faceId)";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@hamsterUID", hamsterSave.HamsterUID);
+                    cmd.Parameters.AddWithValue("@userUID", hamsterSave.UserUID);
+                    cmd.Parameters.AddWithValue("@hamsterId", hamsterSave.HamsterId);
+                    cmd.Parameters.AddWithValue("@faceId", hamsterSave.FaceId);
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                    if(rowsAffected < 0)
+                    {
+                        Debug.Log("햄스터 데이터 저장 성공");
+                        return true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+        }
     }
 }
