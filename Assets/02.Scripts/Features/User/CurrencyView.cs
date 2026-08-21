@@ -10,7 +10,7 @@ public class CurrencyView : ViewBase
 
     private void OnEnable()
     {
-        FindCurrencyViewModelAndBind();
+        FindUserViewModelAndBind();
     }
 
     private void OnDisable()
@@ -18,7 +18,7 @@ public class CurrencyView : ViewBase
         _userVm.PropertyChanged -= OnPropChanged_CurrenctView;
     }
 
-    private void FindCurrencyViewModelAndBind()
+    private void FindUserViewModelAndBind()
     {
         var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
         _userVm = userVm;
