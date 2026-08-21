@@ -13,8 +13,12 @@ public class HamsterManager : SingletonBase<HamsterManager>
     private CollectionViewModel _collectionViewModel;
     private HashSet<long> _spawnedHamsterUidSet = new HashSet<long>();
 
+    public float TotalCollectSpeedPerSec { get; private set; }
+
     private void Start()
     {
+        GameDataManager.Instance.LoadData<HamsterData>();
+
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
 
@@ -56,6 +60,8 @@ public class HamsterManager : SingletonBase<HamsterManager>
             _spawnedHamsterUidSet.Add(hamsterSave.HamsterUID);
             SpawnHamster(hamsterSave);
         }
+
+        RecalculateTotalCollectSpeedPerSec();
     }
 
     private void SpawnHamster(HamsterSave hamsterSave)
@@ -89,5 +95,21 @@ public class HamsterManager : SingletonBase<HamsterManager>
             Random.Range(_gardenSpawnRangeMin.x, _gardenSpawnRangeMax.x),
             Random.Range(_gardenSpawnRangeMin.y, _gardenSpawnRangeMax.y),
             Random.Range(_gardenSpawnRangeMin.z, _gardenSpawnRangeMax.z));
+    }
+
+    private void RecalculateTotalCollectSpeedPerSec()
+    {
+        float total = 0f;
+
+        foreach (HamsterSave hamsterSave in _collectionViewModel.CollectedHamsterList.Values)
+        {
+            HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterSave.HamsterId);
+            if (hamsterData != null)
+            {
+                total += hamsterData.CollectSpeed;
+            }
+        }
+
+        TotalCollectSpeedPerSec = total;
     }
 }
