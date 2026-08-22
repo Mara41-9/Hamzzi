@@ -25,9 +25,9 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitGachaService();
         InitLoginService();
         InitFriendListService();
+        InitUserService();
 
         LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
-        InitUserService();
     }
 
     private void InitShopService()
@@ -79,5 +79,6 @@ public class ServiceManager : SingletonBase<ServiceManager>
 
         Debug.Log($"User UID : {userUID}");
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        UserService.InitUser(userUID).Forget();
     }
 }
