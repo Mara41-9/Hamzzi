@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HamsterManager : SingletonBase<HamsterManager>
 {
@@ -77,6 +78,9 @@ public class HamsterManager : SingletonBase<HamsterManager>
             return;
         }
 
+        NavMeshAgent agent = hamsterObject.GetComponent<NavMeshAgent>();
+        agent.enabled = false;
+
         HamsterForm hamsterForm = hamsterObject.GetComponent<HamsterForm>();
         if (hamsterForm == null)
         {
@@ -85,6 +89,8 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
         hamsterForm.SetBodyMesh(hamsterSave.HamsterId);
         hamsterForm.SetFaceMesh(hamsterSave.FaceId);
+
+        agent.enabled = true;
     }
 
     private Vector3 GetRandomGardenSpawnPosition()
