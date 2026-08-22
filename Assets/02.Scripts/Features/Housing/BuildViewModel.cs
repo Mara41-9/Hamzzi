@@ -143,77 +143,125 @@ public class BuildViewModel : ViewModelBase
         }
 
         RoomViewModel target = SelectRoom;
-        DeselectRoom();
 
-        RemoveBuild(target);
-        ClearAisle();
-    }
+        List<Vector2Int> connectedAislePositions = new List<Vector2Int>();
 
-    public void ClearAisle()
-    {
-        while (true)
+        foreach (DoorData doorData in target.DoorDataList)
         {
-            HashSet<RoomViewModel> deadEndAisles = new HashSet<RoomViewModel>();
-            HashSet<RoomViewModel> aisles = new HashSet<RoomViewModel>();
+            DoorInfo doorInfo = target.GetDoorInfo(doorData.Offset);
 
-            foreach (var pair in Builds)
+            if (Builds.TryGetValue(doorInfo.OutsidePos, out RoomViewModel aisleVM) && aisleVM.BuildType == BuildType.Aisle)
             {
-                if (pair.Value.BuildType == BuildType.Aisle && !pair.Value.IsDefault)
-                {
-                    aisles.Add(pair.Value);
-                }
-            }
-
-            foreach (var vm in aisles)
-            {
-                if (CountAisle(vm) <= 1)
-                {
-                    deadEndAisles.Add(vm);
-                }
-            }
-
-            if (deadEndAisles.Count == 0)
-            {
-                break;
-            }
-
-            foreach (var aisle in deadEndAisles)
-            {
-                RemoveBuild(aisle);
+                connectedAislePositions.Add(doorInfo.OutsidePos);
             }
         }
+
+        DeselectRoom();
+        RemoveBuild(target);
+        ClearAisle(connectedAislePositions);
+
+        ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
     }
 
-    private int CountAisle(RoomViewModel aisleVM)
+    public void ClearAisle(List<Vector2Int> startPositions)
     {
-        int count = 0;
+        HashSet<RoomViewModel> candidates = new HashSet<RoomViewModel>();
+        Queue<RoomViewModel> queue = new Queue<RoomViewModel>();
 
-        for (int i = 0; i < _directions.Length; i++)
+        foreach (Vector2Int pos in startPositions)
         {
-            foreach (Vector2Int tile in GetEdgeTiles(aisleVM.OriginPos, aisleVM.Size, i))
+            if (!Builds.TryGetValue(pos, out RoomViewModel aisleVM))
             {
-                Vector2Int targetPos = tile + _directions[i];
+                continue;
+            }
 
-                if (Builds.TryGetValue(targetPos, out RoomViewModel targetVM) && targetVM != aisleVM)
+            if (aisleVM.BuildType != BuildType.Aisle || aisleVM.IsDefault)
+            {
+                continue;
+            }
+
+            if (candidates.Add(aisleVM))
+            {
+                queue.Enqueue(aisleVM);
+            }
+        }
+
+        HashSet<RoomViewModel> keepAisles = new HashSet<RoomViewModel>();
+
+        while (queue.Count > 0)
+        {
+            RoomViewModel aisle = queue.Dequeue();
+
+            bool hasRoomConnection = false;
+
+            HashSet<RoomViewModel> connectedAisles = new HashSet<RoomViewModel>();
+
+            for (int i = 0; i < _directions.Length; i++)
+            {
+                List<Vector2Int> edgeTiles = GetEdgeTiles(aisle.OriginPos, aisle.Size, i);
+
+                foreach (Vector2Int tile in edgeTiles)
                 {
+                    Vector2Int targetPos = tile + _directions[i];
+
+                    if (!Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+                    {
+                        continue;
+                    }
+
+                    if (targetVM == aisle)
+                    {
+                        continue;
+                    }
+
                     if (targetVM.BuildType == BuildType.Aisle)
                     {
-                        count++;
+                        if (!targetVM.IsDefault && !keepAisles.Contains(targetVM))
+                        {
+                            connectedAisles.Add(targetVM);
+                        }
+
+                        continue;
                     }
-                    else if (targetVM.BuildType == BuildType.Room && !targetVM.IsDefault)
+
+                    if (targetVM.BuildType == BuildType.Room)
                     {
                         Vector2Int doorPos = targetVM.GetNearDoor(tile);
 
-                        if (targetPos == doorPos)
+                        if (doorPos == targetPos)
                         {
-                            count++;
+                            hasRoomConnection = true;
                         }
                     }
                 }
             }
+
+            if (hasRoomConnection)
+            {
+                keepAisles.Add(aisle);
+                continue;
+            }
+
+            foreach (RoomViewModel nextAisle in connectedAisles)
+            {
+                if (!candidates.Contains(nextAisle))
+                {
+                    candidates.Add(nextAisle);
+                    queue.Enqueue(nextAisle);
+                }
+            }
         }
 
-        return count;
+
+        foreach (RoomViewModel aisle in candidates)
+        {
+            if (keepAisles.Contains(aisle) || aisle.IsDefault)
+            {
+                continue;
+            }
+
+            RemoveBuild(aisle);
+        }
     }
 
     public void EnterBuildMode()
