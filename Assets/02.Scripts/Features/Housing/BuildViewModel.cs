@@ -165,36 +165,23 @@ public class BuildViewModel : ViewModelBase
 
     public void ClearAisle(List<Vector2Int> startPositions)
     {
-        HashSet<RoomViewModel> candidates = new HashSet<RoomViewModel>();
+        HashSet<RoomViewModel> removeAisles = new HashSet<RoomViewModel>();
         Queue<RoomViewModel> queue = new Queue<RoomViewModel>();
 
         foreach (Vector2Int pos in startPositions)
         {
-            if (!Builds.TryGetValue(pos, out RoomViewModel aisleVM))
+            if (Builds.TryGetValue(pos, out RoomViewModel aisle))
             {
-                continue;
-            }
-
-            if (aisleVM.BuildType != BuildType.Aisle || aisleVM.IsDefault)
-            {
-                continue;
-            }
-
-            if (candidates.Add(aisleVM))
-            {
-                queue.Enqueue(aisleVM);
+                if (aisle.BuildType == BuildType.Aisle && !aisle.IsDefault && removeAisles.Add(aisle))
+                {
+                    queue.Enqueue(aisle);
+                }
             }
         }
-
-        HashSet<RoomViewModel> keepAisles = new HashSet<RoomViewModel>();
 
         while (queue.Count > 0)
         {
             RoomViewModel aisle = queue.Dequeue();
-
-            bool hasRoomConnection = false;
-
-            HashSet<RoomViewModel> connectedAisles = new HashSet<RoomViewModel>();
 
             for (int i = 0; i < _directions.Length; i++)
             {
@@ -202,64 +189,28 @@ public class BuildViewModel : ViewModelBase
 
                 foreach (Vector2Int tile in edgeTiles)
                 {
-                    Vector2Int targetPos = tile + _directions[i];
+                    Vector2Int nextPos = tile + _directions[i];
 
-                    if (!Builds.TryGetValue(targetPos, out RoomViewModel targetVM))
+                    if (!Builds.TryGetValue(nextPos, out RoomViewModel next))
                     {
                         continue;
                     }
 
-                    if (targetVM == aisle)
+                    if (next.BuildType != BuildType.Aisle || next.IsDefault)
                     {
                         continue;
                     }
 
-                    if (targetVM.BuildType == BuildType.Aisle)
+                    if (removeAisles.Add(next))
                     {
-                        if (!targetVM.IsDefault && !keepAisles.Contains(targetVM))
-                        {
-                            connectedAisles.Add(targetVM);
-                        }
-
-                        continue;
+                        queue.Enqueue(next);
                     }
-
-                    if (targetVM.BuildType == BuildType.Room)
-                    {
-                        Vector2Int doorPos = targetVM.GetNearDoor(tile);
-
-                        if (doorPos == targetPos)
-                        {
-                            hasRoomConnection = true;
-                        }
-                    }
-                }
-            }
-
-            if (hasRoomConnection)
-            {
-                keepAisles.Add(aisle);
-                continue;
-            }
-
-            foreach (RoomViewModel nextAisle in connectedAisles)
-            {
-                if (!candidates.Contains(nextAisle))
-                {
-                    candidates.Add(nextAisle);
-                    queue.Enqueue(nextAisle);
                 }
             }
         }
 
-
-        foreach (RoomViewModel aisle in candidates)
+        foreach (RoomViewModel aisle in removeAisles)
         {
-            if (keepAisles.Contains(aisle) || aisle.IsDefault)
-            {
-                continue;
-            }
-
             RemoveBuild(aisle);
         }
     }
@@ -415,6 +366,12 @@ public class BuildViewModel : ViewModelBase
         {
             Vector2Int aislePos = SnapAisle(rawPos);
 
+            if (Builds.TryGetValue(aislePos, out var existingVM) && existingVM.BuildType == BuildType.Aisle)
+            {
+                UpdateConnection(aislePos);
+                continue;
+            }
+
             if (IsAreaRoom(aislePos, new Vector2Int(AISLE_SIZE, AISLE_SIZE)))
             {
                 continue;
@@ -493,12 +450,6 @@ public class BuildViewModel : ViewModelBase
             for (int y = 0; y < aisle.Size.y; y++)
             {
                 Vector2Int tile = pos + new Vector2Int(x, y);
-
-                if (Builds.TryGetValue(tile, out var existing) && existing.BuildType == BuildType.Room)
-                {
-                    continue;
-                }
-
                 Builds[tile] = aisle;
             }
         }

@@ -158,6 +158,17 @@ public class CameraController : MonoBehaviour
                 break;
 
             case nameof(_housingVM.CurrentViewMode):
+                if (_housingVM.CurrentViewMode == HousingViewMode.OverView)
+                {
+                    StopFollowHamster();
+
+                    if (_housingVM.TargetRoom != null)
+                    {
+                        _housingVM.TargetRoom = null;
+                        return;
+                    }
+                }
+
                 if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
                 {
                     ShowGardenView().Forget();

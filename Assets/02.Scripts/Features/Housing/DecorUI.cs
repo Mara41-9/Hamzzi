@@ -29,7 +29,9 @@ public class DecorUI : ViewBase
 
     private void OnClickEnterBuild()
     {
+        _housingVM.TargetRoom = null;
         _housingVM.EnterOverviewMode();
+
         _buildVM.EnterBuildMode();
         _buildVM.SelectType = BuildType.None;
 
