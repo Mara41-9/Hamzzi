@@ -241,6 +241,8 @@ public class BuildViewModel : ViewModelBase
         _waitingAisle.Clear();
         CanConfirm = false;
         SelectType = BuildType.None;
+
+        ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
     }
 
     public void CancelBuildMode()

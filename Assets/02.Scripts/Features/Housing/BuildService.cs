@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public struct AisleConnection
@@ -17,6 +19,7 @@ public class BuildService
     private const int MAX_SEARCH = 500;
 
     private BuildViewModel _buildVM;
+    private List<AisleNavMeshLink> _aisleLinks = new List<AisleNavMeshLink>();
 
     public BuildViewModel GetBuildViewModel()
     {
@@ -39,8 +42,8 @@ public class BuildService
     {
         List<DoorData> startDoors = startRoom.DoorDataList;
         List<DoorData> endDoors = endRoom.DoorDataList;
-
         List<Vector2Int> bestPath = null;
+
         int minPathLength = int.MaxValue;
 
         foreach (DoorData startData in startDoors)
@@ -106,6 +109,7 @@ public class BuildService
             searchCount++;
 
             int minIdx = 0;
+
             int minScore = dist[open[0]] + CalculateDistance(open[0], end);
 
             for (int i = 1; i < open.Count; i++)
@@ -120,6 +124,7 @@ public class BuildService
             }
 
             Vector2Int current = open[minIdx];
+
             open.RemoveAt(minIdx);
 
             if (current == end)
@@ -165,6 +170,7 @@ public class BuildService
         }
 
         List<Vector2Int> path = new List<Vector2Int>();
+
         Vector2Int curr = end;
 
         int count = 0;
@@ -253,7 +259,139 @@ public class BuildService
         return (Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y)) * 100;
     }
 
-    // 저장 관련
+    public void RefreshAisleNavMesh(Dictionary<Vector2Int, RoomViewModel> room)
+    {
+        List<RoomViewModel> aisleList = new List<RoomViewModel>();
+
+        foreach (var pair in room)
+        {
+            if (pair.Value.BuildType == BuildType.Aisle && !aisleList.Contains(pair.Value))
+            {
+                aisleList.Add(pair.Value);
+            }
+        }
+
+        ClearAisleLink();
+
+        if (aisleList.Count == 0)
+        {
+            return;
+        }
+
+        List<float> aisles = new List<float>();
+
+        foreach (RoomViewModel aisle in aisleList)
+        {
+            if (!aisles.Contains(aisle.OriginPos.x))
+            {
+                aisles.Add(aisle.OriginPos.x);
+            }
+        }
+
+        float endOffsetY = 0.2f;
+        float offsetZ = -0.5f;
+        int linkIndex = 0;
+
+        foreach (float x in aisles)
+        {
+            List<RoomViewModel> sortedGroup = new List<RoomViewModel>();
+
+            foreach (RoomViewModel aisle in aisleList)
+            {
+                if (Mathf.Abs(aisle.OriginPos.x - x) < 0.01f)
+                {
+                    sortedGroup.Add(aisle);
+                }
+            }
+
+            for (int i = 0; i < sortedGroup.Count - 1; i++)
+            {
+                for (int j = i + 1; j < sortedGroup.Count; j++)
+                {
+                    if (sortedGroup[i].OriginPos.y > sortedGroup[j].OriginPos.y)
+                    {
+                        RoomViewModel temp = sortedGroup[i];
+                        sortedGroup[i] = sortedGroup[j];
+                        sortedGroup[j] = temp;
+                    }
+                }
+            }
+
+            if (sortedGroup.Count == 0)
+            {
+                continue;
+            }
+
+            for (int i = 0; i < sortedGroup.Count - 1; i++)
+            {
+                RoomViewModel current = sortedGroup[i];
+                RoomViewModel next = sortedGroup[i + 1];
+
+                float currentTop = current.OriginPos.y + current.Size.y;
+
+                if (Mathf.Abs(currentTop - next.OriginPos.y) > 0.01f)
+                {
+                    continue;
+                }
+
+                float startX = current.OriginPos.x + (current.Size.x * 0.5f);
+                float startY = current.OriginPos.y + (current.Size.y * 0.5f);
+
+                Vector3 startWorldPos = new Vector3(startX, startY, 9f + offsetZ);
+
+                float endX = next.OriginPos.x + (next.Size.x * 0.5f);
+                float endY = next.OriginPos.y + (next.Size.y * 0.5f) + endOffsetY;
+
+                Vector3 endWorldPos = new Vector3(endX, endY, 9f + offsetZ);
+
+                CreateRelayLink(startWorldPos, endWorldPos, linkIndex++);
+            }
+        }
+
+        NavigationManager.Instance.BuildNav();
+    }
+
+    private void ClearAisleLink()
+    {
+        foreach (var link in _aisleLinks)
+        {
+            if (link != null && link.gameObject != null)
+            {
+                Object.Destroy(link.gameObject);
+            }
+        }
+
+        _aisleLinks.Clear();
+    }
+
+    private void CreateRelayLink(Vector3 startWorldPos, Vector3 endWorldPos, int index)
+    {
+        GameObject linkObj = new GameObject($"AisleNavMeshLink{index}");
+
+        NavMeshLink navLinkComp = linkObj.AddComponent<NavMeshLink>();
+        AisleNavMeshLink aisleNavLinkComp = linkObj.AddComponent<AisleNavMeshLink>();
+
+        navLinkComp.costModifier = 3.0f;
+
+        GameObject startObj = new GameObject("Start");
+        GameObject endObj = new GameObject("End");
+
+        startObj.transform.SetParent(linkObj.transform);
+        endObj.transform.SetParent(linkObj.transform);
+
+        Vector3 adjustedStartPos = new Vector3(startWorldPos.x, startWorldPos.y - 1.0f, startWorldPos.z);
+
+        linkObj.transform.position = adjustedStartPos;
+        startObj.transform.localPosition = Vector3.zero;
+
+        Vector3 adjustedEndPos = new Vector3(endWorldPos.x, adjustedStartPos.y + 2.0f, endWorldPos.z);
+        endObj.transform.position = adjustedEndPos;
+
+        aisleNavLinkComp.SetPoint(startObj.transform, endObj.transform);
+
+        _aisleLinks.Add(aisleNavLinkComp);
+    }
+
     public void SaveBuildData()
     {
         // TODO : 방, 복도 배치 저장
@@ -264,10 +402,10 @@ public class BuildService
     {
         _buildVM.IsLoading = true;
 
-        // TODO : 방, 복도 배치 로드
+        // TODO : 저장된 데이터를 로드
         // 저장된 데이터를 BuildViewModel.Builds에 추가 & SpawnBuildPrefab으로 맵 생성
         // 문 연결 계산 (UpdateRoomConnection & UpdateConnection)
 
-        _buildVM.IsLoading = true;
+        _buildVM.IsLoading = false;
     }
 }
