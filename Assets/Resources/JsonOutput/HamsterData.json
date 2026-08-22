@@ -98,5 +98,205 @@
     "IconPath": "Hamster/HasterIcon/Hamster_10_Icon",
     "MaterialPath": "Hamster/Body_10",
     "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_11",
+    "Name": "햄스터 11",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>11 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_11_Icon",
+    "MaterialPath": "Hamster/Body_11",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_12",
+    "Name": "햄스터 12",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>12 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_12_Icon",
+    "MaterialPath": "Hamster/Body_12",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_13",
+    "Name": "햄스터 13",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>13 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_13_Icon",
+    "MaterialPath": "Hamster/Body_13",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_14",
+    "Name": "햄스터 14",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>14 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_14_Icon",
+    "MaterialPath": "Hamster/Body_14",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_15",
+    "Name": "햄스터 15",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>15 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_15_Icon",
+    "MaterialPath": "Hamster/Body_15",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_16",
+    "Name": "햄스터 16",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>16 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_16_Icon",
+    "MaterialPath": "Hamster/Body_16",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_17",
+    "Name": "햄스터 17",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>17 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_17_Icon",
+    "MaterialPath": "Hamster/Body_17",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_18",
+    "Name": "햄스터 18",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>18 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_18_Icon",
+    "MaterialPath": "Hamster/Body_18",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_19",
+    "Name": "햄스터 19",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>19 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_19_Icon",
+    "MaterialPath": "Hamster/Body_19",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_20",
+    "Name": "햄스터 20",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>20 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_20_Icon",
+    "MaterialPath": "Hamster/Body_20",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_21",
+    "Name": "햄스터 21",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>21 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_21_Icon",
+    "MaterialPath": "Hamster/Body_21",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_22",
+    "Name": "햄스터 22",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>22 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_22_Icon",
+    "MaterialPath": "Hamster/Body_22",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_23",
+    "Name": "햄스터 23",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>23 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_23_Icon",
+    "MaterialPath": "Hamster/Body_23",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_24",
+    "Name": "햄스터 24",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>24 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_24_Icon",
+    "MaterialPath": "Hamster/Body_24",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_25",
+    "Name": "햄스터 25",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>25 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_25_Icon",
+    "MaterialPath": "Hamster/Body_25",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_26",
+    "Name": "햄스터 26",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>26 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_26_Icon",
+    "MaterialPath": "Hamster/Body_26",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_27",
+    "Name": "햄스터 27",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>27 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_27_Icon",
+    "MaterialPath": "Hamster/Body_27",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_28",
+    "Name": "햄스터 28",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>28 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_28_Icon",
+    "MaterialPath": "Hamster/Body_28",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_29",
+    "Name": "햄스터 29",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>29 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_29_Icon",
+    "MaterialPath": "Hamster/Body_29",
+    "PrefabPath": "Hamster/Hamster_00"
+  },
+  {
+    "Id": "Hamster_30",
+    "Name": "햄스터 30",
+    "Description": "햄스터 10입니다.<br>햄스터 10에 대한 설명입니다. <br>30 아무 능력이 없습니다.",
+    "HamsterTier": "2",
+    "CollectSpeed": 1.1,
+    "IconPath": "Hamster/HasterIcon/Hamster_30_Icon",
+    "MaterialPath": "Hamster/Body_30",
+    "PrefabPath": "Hamster/Hamster_00"
   }
 ]
