@@ -8,18 +8,10 @@ public class AisleNavMeshLink : MonoBehaviour
     [SerializeField] private Transform Transform_Start;
     [SerializeField] private Transform Transform_End;
 
-    private void Awake()
+    public void SetPosition(Vector3 startWorldPos, Vector3 endWorldPos)
     {
-        if (NavMeshLink == null)
-        {
-            NavMeshLink = GetComponent<NavMeshLink>();
-        }
-    }
-
-    public void SetPoint(Transform start, Transform end)
-    {
-        Transform_Start = start;
-        Transform_End = end;
+        Transform_Start.position = startWorldPos;
+        Transform_End.position = endWorldPos;
 
         Refresh();
     }

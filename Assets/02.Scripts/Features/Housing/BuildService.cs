@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Unity.AI.Navigation;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public struct AisleConnection
@@ -304,18 +303,7 @@ public class BuildService
                 }
             }
 
-            for (int i = 0; i < sortedGroup.Count - 1; i++)
-            {
-                for (int j = i + 1; j < sortedGroup.Count; j++)
-                {
-                    if (sortedGroup[i].OriginPos.y > sortedGroup[j].OriginPos.y)
-                    {
-                        RoomViewModel temp = sortedGroup[i];
-                        sortedGroup[i] = sortedGroup[j];
-                        sortedGroup[j] = temp;
-                    }
-                }
-            }
+            sortedGroup.Sort((a, b) => a.OriginPos.y.CompareTo(b.OriginPos.y));
 
             if (sortedGroup.Count == 0)
             {
@@ -344,7 +332,7 @@ public class BuildService
 
                 Vector3 endWorldPos = new Vector3(endX, endY, 9f + offsetZ);
 
-                CreateRelayLink(startWorldPos, endWorldPos, linkIndex++);
+                CreateLink(startWorldPos, endWorldPos, linkIndex++).Forget();
             }
         }
 
@@ -353,43 +341,26 @@ public class BuildService
 
     private void ClearAisleLink()
     {
-        foreach (var link in _aisleLinks)
+        foreach (AisleNavMeshLink link in _aisleLinks)
         {
-            if (link != null && link.gameObject != null)
-            {
-                Object.Destroy(link.gameObject);
-            }
+            GameObjectManager.Instance.RequestDestroyObject(link.gameObject);
         }
 
         _aisleLinks.Clear();
     }
 
-    private void CreateRelayLink(Vector3 startWorldPos, Vector3 endWorldPos, int index)
+    private async UniTask CreateLink(Vector3 startWorldPos, Vector3 endWorldPos, int index)
     {
-        GameObject linkObj = new GameObject($"AisleNavMeshLink{index}");
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync($"AisleLink{index}", "Prefabs/Housing/AisleLink", Vector3.zero);
+        AisleNavMeshLink aisleNavLink = prefab.GetComponent<AisleNavMeshLink>();
 
-        NavMeshLink navLinkComp = linkObj.AddComponent<NavMeshLink>();
-        AisleNavMeshLink aisleNavLinkComp = linkObj.AddComponent<AisleNavMeshLink>();
+        Vector3 startPos = new Vector3(startWorldPos.x, startWorldPos.y - 1.0f, startWorldPos.z);
+        prefab.transform.position = startPos;
+        Vector3 endPos = new Vector3(endWorldPos.x, startPos.y + 2.0f, endWorldPos.z);
 
-        navLinkComp.costModifier = 3.0f;
+        aisleNavLink.SetPosition(startPos, endPos);
 
-        GameObject startObj = new GameObject("Start");
-        GameObject endObj = new GameObject("End");
-
-        startObj.transform.SetParent(linkObj.transform);
-        endObj.transform.SetParent(linkObj.transform);
-
-        Vector3 adjustedStartPos = new Vector3(startWorldPos.x, startWorldPos.y - 1.0f, startWorldPos.z);
-
-        linkObj.transform.position = adjustedStartPos;
-        startObj.transform.localPosition = Vector3.zero;
-
-        Vector3 adjustedEndPos = new Vector3(endWorldPos.x, adjustedStartPos.y + 2.0f, endWorldPos.z);
-        endObj.transform.position = adjustedEndPos;
-
-        aisleNavLinkComp.SetPoint(startObj.transform, endObj.transform);
-
-        _aisleLinks.Add(aisleNavLinkComp);
+        _aisleLinks.Add(aisleNavLink);
     }
 
     public void SaveBuildData()

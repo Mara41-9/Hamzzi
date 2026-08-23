@@ -60,11 +60,6 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (_buildVM == null || _housingVM == null)
-        {
-            return;
-        }
-
         if (_isFollowing)
         {
             return;
@@ -75,7 +70,7 @@ public class CameraController : MonoBehaviour
             CheckNormalRoom();
         }
 
-        if (_buildVM.SelectType != BuildType.None || _buildVM.CanConfirm || _housingVM.TargetRoom != null || _housingVM.FurnitureVM != null)
+        if (_buildVM.CanConfirm || _housingVM.TargetRoom != null || _housingVM.FurnitureVM != null)
         {
             return;
         }
@@ -95,6 +90,11 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (_buildVM.SelectType != BuildType.None)
+        {
+            StopFollowHamster();
+        }
+
         if (_isFollowing && _targetHamster != null)
         {
             if (_housingVM.CurrentViewMode == HousingViewMode.Garden)

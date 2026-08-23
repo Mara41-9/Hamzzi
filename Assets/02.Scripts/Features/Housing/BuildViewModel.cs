@@ -280,6 +280,8 @@ public class BuildViewModel : ViewModelBase
             aisleVM.SetWallActive(0, true);
             aisleVM.Refresh();
         }
+
+        ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
     }
 
     public bool TryBuildRoom(Vector2Int pos)

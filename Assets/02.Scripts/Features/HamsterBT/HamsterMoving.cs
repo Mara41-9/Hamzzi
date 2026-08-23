@@ -11,20 +11,21 @@ public class HamsterMoving : MonoBehaviour
 
     void Update()
     {
-        CheckNavMesh();
+        if (NavMeshAgent == null || !NavMeshAgent.enabled)
+        {
+            return;
+        }
 
-        if (!_isInitialized && NavMeshAgent.enabled && NavMeshAgent.isOnNavMesh)
+        if (!NavMeshAgent.isOnNavMesh)
+        {
+            CheckNavMesh();
+            return;
+        }
+
+        if (!_isInitialized || (!NavMeshAgent.pathPending && (NavMeshAgent.remainingDistance <= _threshold || !NavMeshAgent.hasPath)))
         {
             _isInitialized = true;
             SetRandomDestination();
-        }
-
-        if (_isInitialized && NavMeshAgent.enabled && NavMeshAgent.isOnNavMesh)
-        {
-            if (!NavMeshAgent.pathPending && (NavMeshAgent.remainingDistance <= _threshold || !NavMeshAgent.hasPath))
-            {
-                SetRandomDestination();
-            }
         }
     }
 
@@ -37,7 +38,7 @@ public class HamsterMoving : MonoBehaviour
 
         if (!NavMeshAgent.isOnNavMesh)
         {
-            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 10.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 50.0f, NavMesh.AllAreas))
             {
                 NavMeshAgent.Warp(hit.position);
                 _isInitialized = true;
