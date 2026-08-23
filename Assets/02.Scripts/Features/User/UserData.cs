@@ -7,3 +7,10 @@ public class UserData : GameDataBase
     public string UserIconId;
     public int GoldCount;
 }
+
+[System.Serializable]
+public class UserSaveData : GameDataBase
+{
+    public long UserUid;
+    public int GoldCount;
+}
