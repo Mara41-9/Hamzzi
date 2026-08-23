@@ -363,6 +363,8 @@ public class HousingViewModel : ViewModelBase
                 
 
             ResetPlacingState();
+            NavigationManager.Instance.BuildNav();
+
             return true;
         }
 

@@ -23,6 +23,7 @@ public class CollectionView : UIBase
     [SerializeField] private GameObject HamsterModelPrefab;
     [SerializeField] private CollectionHamsterRotate HamsterRotate;
     [SerializeField] private UIButton KickButton;
+    [SerializeField] private KickUI KickUI;
     [SerializeField] private TextMeshProUGUI HamsterCount;
     [SerializeField] private TextMeshProUGUI HamsterName;
     [SerializeField] private TextMeshProUGUI HamsterAbility;
@@ -53,15 +54,19 @@ public class CollectionView : UIBase
         InitCollectionList();
         ShowHamsterList();
 
+        // 슬롯 업데이트
         UpdateHamsterSlot();
         UpdateFaceSlot();
 
+        // 햄스터 모델
         if(_modelForm == null)
         {
             var modelObject = Instantiate(HamsterModelPrefab);
             _modelForm = modelObject.GetComponentInChildren<HamsterForm>();
             HamsterRotate.SetHamsterRoot(_modelForm.transform);
         }
+
+        KickUI.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -359,10 +364,7 @@ public class CollectionView : UIBase
 
     private void KickHamster()
     {
-        string currentHamsterId = _collectionViewModel.CurrentSelectHamsterId;
-        string currentfaceId = _collectionViewModel.CurrentSelectedHamsterFaceId;
-
-        _collectionViewModel.RemoveCollectedHamsterList(currentHamsterId, currentfaceId);
+        KickUI.gameObject.SetActive(true);
     }
 
     private void UpdateHamsterInfo()
