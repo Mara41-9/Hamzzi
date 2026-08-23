@@ -356,6 +356,8 @@ public class HousingViewModel : ViewModelBase
             ApplyFurnitureEffect(furnitureVM);
 
             ResetPlacingState();
+            NavigationManager.Instance.BuildNav();
+
             return true;
         }
 
