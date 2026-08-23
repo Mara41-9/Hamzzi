@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class DecorUI : ViewBase
@@ -9,11 +10,14 @@ public class DecorUI : ViewBase
 
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
+    private CameraController _cameraController;
 
     private void Awake()
     {
         Button_EnterBuild.onClick.AddListener(OnClickEnterBuild);
         Button_EnterHousing.onClick.AddListener(OnClickEnterHousing);
+
+        _cameraController = Camera.main.GetComponent<CameraController>();
     }
 
     private void OnEnable()
@@ -29,6 +33,9 @@ public class DecorUI : ViewBase
 
     private void OnClickEnterBuild()
     {
+        _cameraController.StopFollowHamster();
+        _cameraController.ShowOverview().Forget();
+
         _housingVM.TargetRoom = null;
         _housingVM.EnterOverviewMode();
 

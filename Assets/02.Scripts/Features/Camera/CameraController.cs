@@ -41,7 +41,6 @@ public class CameraController : MonoBehaviour
 
     private Transform _targetHamster;
     private bool _isFollowing = false;
-    private Vector3 _currentOffset;
 
     private void Awake()
     {
@@ -158,10 +157,10 @@ public class CameraController : MonoBehaviour
                 break;
 
             case nameof(_housingVM.CurrentViewMode):
+                StopFollowHamster();
+
                 if (_housingVM.CurrentViewMode == HousingViewMode.OverView)
                 {
-                    StopFollowHamster();
-
                     if (_housingVM.TargetRoom != null)
                     {
                         _housingVM.TargetRoom = null;
