@@ -430,6 +430,7 @@ MonoBehaviour:
   Button_OpenFriendUI: {fileID: 7344864550380898301}
   Button_CollectionUI: {fileID: 925323501848616766}
   Button_Gacha: {fileID: 2658828250320436903}
+  Button_Setting: {fileID: 2607077840942350197}
   Button_Garden: {fileID: 3214573903430734242}
   Button_Exit: {fileID: 8326420314195416829}
   Image_UserIcon: {fileID: 187072094990481744}
