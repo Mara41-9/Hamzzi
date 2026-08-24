@@ -11,6 +11,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public NetworkGachaService GachaService { get; private set; }
     public LoginService LoginService { get; private set; }
     public FriendListService FriendListService { get; private set; }
+    public AccountSearchService AccountSearchService { get; private set; }
 
     public void Start()
     {
@@ -68,5 +69,10 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitFriendListService()
     {
         FriendListService = new FriendListService();
+    }
+
+    private void InitAccountSearchService()
+    {
+        AccountSearchService = new AccountSearchService();
     }
 }
