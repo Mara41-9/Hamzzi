@@ -127,13 +127,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1787801575115232923, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5535246593697319480, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2598.0222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5535246593697319480, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1175.8268
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5535246593697319480, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_LocalPosition.z
@@ -166,6 +170,14 @@ PrefabInstance:
     - target: {fileID: 5535246593697319480, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5845076958339183132, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6452391677587316819, guid: 62efbf2b731500641a86add7049bff82, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8584396269111428436, guid: 62efbf2b731500641a86add7049bff82, type: 3}
       propertyPath: m_Name
