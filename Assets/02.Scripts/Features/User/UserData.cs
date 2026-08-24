@@ -11,6 +11,5 @@ public class UserData : GameDataBase
 [System.Serializable]
 public class UserSaveData : GameDataBase
 {
-    public long UserUid;
     public int GoldCount;
 }
