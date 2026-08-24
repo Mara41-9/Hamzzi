@@ -31,7 +31,9 @@ public class InGameManager : SingletonBase<InGameManager>
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
-        int idleReward = GameUtil.CalculateIdleReward(loginVm.LastLoginTime.Ticks, productionPerSec, IdleRewardCapSeconds);
+        long lastLoginTicks = loginVm.LastLoginTime.Ticks;
+        float elapsedSeconds = GameUtil.CalculateElapsedSeconds(lastLoginTicks, IdleRewardCapSeconds);
+        int idleReward = GameUtil.CalculateIdleReward(lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
         loginVm.RequestUpdateLastLogin();
         AutoSaveSeedCount(this.GetCancellationTokenOnDestroy()).Forget();
@@ -42,7 +44,7 @@ public class InGameManager : SingletonBase<InGameManager>
         }
 
         _pendingIdleReward = idleReward;
-        UIManager.Instance.OpenIdleRewardPopupUI(idleReward);
+        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds);
     }
 
     public void ClaimIdleReward()

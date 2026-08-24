@@ -676,6 +676,7 @@ GameObject:
   - component: {fileID: 92839781466716500}
   - component: {fileID: 934870403513121921}
   - component: {fileID: 8895074485526054381}
+  - component: {fileID: 1755862240859735425}
   m_Layer: 5
   m_Name: Btn_GetReward
   m_TagString: Untagged
@@ -775,6 +776,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+--- !u!114 &1755862240859735425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605385892121279421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2527204ab2836534897bb271b9343f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 1559890788278253843}
+  Image_Base: {fileID: 0}
+  Text_Base: {fileID: 30945444875386028}
 --- !u!1 &3848576300334185873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1153,7 @@ GameObject:
   - component: {fileID: 8947274764862711523}
   - component: {fileID: 2737784631901572338}
   - component: {fileID: 3232559680044032736}
+  - component: {fileID: 3456735734412557798}
   m_Layer: 5
   m_Name: Btn_GetReward_Double
   m_TagString: Untagged
@@ -1237,6 +1254,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+--- !u!114 &3456735734412557798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122189017293058746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2527204ab2836534897bb271b9343f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 1969957115084018428}
+  Image_Base: {fileID: 0}
+  Text_Base: {fileID: 6066308598094474961}
 --- !u!1 &4306490538164698946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1660,8 +1692,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4a74a05ad4bd0458cf4f40cadf4e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IdleRewardPopupUI
-  Text_RewardAmount: {fileID: 0}
-  Button_Confirm: {fileID: 0}
+  Text_OfflineTime: {fileID: 5752304217758151030}
+  Text_RewardCount: {fileID: 4569541574020166039}
+  Button_GetReward: {fileID: 92839781466716500}
 --- !u!1 &5688005365545308697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2799,6 +2832,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09d2f4f3d6cc0124eb865180ca5adac9, type: 3}
+--- !u!114 &4569541574020166039 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2977369689326227041, guid: 09d2f4f3d6cc0124eb865180ca5adac9, type: 3}
+  m_PrefabInstance: {fileID: 1602146963687997430}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &6783848341381818927 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5196848525043324377, guid: 09d2f4f3d6cc0124eb865180ca5adac9, type: 3}

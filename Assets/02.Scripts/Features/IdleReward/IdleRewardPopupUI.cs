@@ -1,24 +1,41 @@
-﻿// 방치 보상 획득 시 보상 수량을 보여주는 팝업 UI
+﻿// 방치 보상 수령 팝업 UI. 오프라인 경과 시간과 보상 수량을 표시한다
 using TMPro;
 using UnityEngine;
 
 public class IdleRewardPopupUI : UIBase
 {
-    [SerializeField] private TMP_Text Text_RewardAmount;
-    [SerializeField] private UIButton Button_Confirm;
+    private const int SecondsPerHour = 3600;
+    private const int SecondsPerMinute = 60;
+
+    [SerializeField] private TMP_Text Text_OfflineTime;
+    [SerializeField] private TMP_Text Text_RewardCount;
+    [SerializeField] private UIButton Button_GetReward;
 
     private void OnEnable()
     {
-        Button_Confirm.BindOnClickButtonEvent(OnClickConfirm);
+        Button_GetReward.BindOnClickButtonEvent(OnClickGetReward);
     }
 
-    public void SetRewardAmount(int rewardAmount)
+    public void SetRewardInfo(int rewardAmount, float elapsedSeconds, float capSeconds)
     {
-        Text_RewardAmount.text = $"+{rewardAmount}";
+        Text_RewardCount.text = rewardAmount.ToString();
+
+        int capHours = Mathf.FloorToInt(capSeconds / SecondsPerHour);
+        Text_OfflineTime.text = $"{BuildElapsedTimeText(elapsedSeconds)} (최대 {capHours}시간)";
     }
 
-    private void OnClickConfirm()
+    private string BuildElapsedTimeText(float elapsedSeconds)
     {
-        UIManager.Instance.CloseIdleRewardPopupUI();
+        int totalSeconds = Mathf.FloorToInt(elapsedSeconds);
+        int hours = totalSeconds / SecondsPerHour;
+        int minutes = (totalSeconds % SecondsPerHour) / SecondsPerMinute;
+        int seconds = totalSeconds % SecondsPerMinute;
+
+        return $"{hours}시간 {minutes}분 {seconds}초";
+    }
+
+    private void OnClickGetReward()
+    {
+        InGameManager.Instance.ClaimIdleReward();
     }
 }
