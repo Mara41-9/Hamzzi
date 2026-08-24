@@ -8,6 +8,8 @@ public class NetworkCollectionService
 {
     private CollectionViewModel _collectionViewModel;
 
+    public event Action OnHamsterDataLoaded;
+
     public CollectionViewModel GetCollectionViewModel()
     {
         if(_collectionViewModel == null)
@@ -36,7 +38,7 @@ public class NetworkCollectionService
         vm.AllFaceIdList = allFaceIds;
     }
 
-    public async UniTask<List<HamsterSave>> LoadHamsterCollectionData(long userUID)
+    public async UniTask LoadHamsterCollectionData(long userUID)
     {
         List<HamsterSave> hamsterList = new List<HamsterSave>();
 
@@ -78,7 +80,7 @@ public class NetworkCollectionService
             }
         }
 
-        return hamsterList;
+        OnHamsterDataLoaded?.Invoke();
     }
 
     public async UniTask TrySaveHamsterData(HamsterSave hamsterSave)
