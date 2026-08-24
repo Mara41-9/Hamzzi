@@ -37,7 +37,7 @@ public class InGameManager : SingletonBase<InGameManager>
         int idleReward = GameUtil.CalculateIdleReward(lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
         loginVm.RequestUpdateLastLogin();
-        AutoSaveSeedCount(this.GetCancellationTokenOnDestroy()).Forget();
+        AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
 
         if (idleReward <= 0)
         {
@@ -65,8 +65,6 @@ public class InGameManager : SingletonBase<InGameManager>
         _pendingIdleReward = 0;
 
         UIManager.Instance.CloseIdleRewardPopupUI();
-        loginVm.RequestUpdateLastLogin();
-        AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
     private async UniTask AutoSaveGameData(CancellationToken token)
