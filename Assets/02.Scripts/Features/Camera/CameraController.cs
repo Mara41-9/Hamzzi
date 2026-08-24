@@ -225,7 +225,7 @@ public class CameraController : MonoBehaviour
 
                 if (_housingVM != null && _housingVM.CurrentViewMode == HousingViewMode.Garden)
                 {
-                    Vector3 move = Vector3.right * (-delta.x * factor * 150f);
+                    Vector3 move = Vector3.right * (-delta.x * factor * 5f);
                     targetPos = Camera_Main.transform.position + move;
                     targetPos.y = Position_Garden.y;
                     targetPos.z = Position_Garden.z;
@@ -279,7 +279,7 @@ public class CameraController : MonoBehaviour
 
             if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
             {
-                Vector3 move = Vector3.right * (-mouseX * factor * 150f);
+                Vector3 move = Vector3.right * (-mouseX * factor * 5f);
                 targetPos = Camera_Main.transform.position + move;
                 targetPos.y = Position_Garden.y;
                 targetPos.z = Position_Garden.z;
@@ -326,17 +326,19 @@ public class CameraController : MonoBehaviour
         await TransitionCamera(targetPos, targetRotation, startMatrix, targetMatrix, false, Garden_FOV, _zoomCancel.Token);
     }
 
-    public async UniTask ShowOverview()
+    public async UniTask ShowOverview(bool moveCamera = true)
     {
         _isViewRoom = false;
         _zoomCancel?.Cancel();
         _zoomCancel = new CancellationTokenSource();
 
-        Vector3 targetPos = Position_Overview;
-        Quaternion targetRot = Quaternion.Euler(Rotation_Overview);
+        Vector3 targetPos = moveCamera ? Position_Overview : Camera_Main.transform.position;
+        Quaternion targetRot = moveCamera ? Quaternion.Euler(Rotation_Overview) : Camera_Main.transform.rotation;
 
         Matrix4x4 startMatrix = Camera_Main.projectionMatrix;
         Matrix4x4 targetMatrix = Matrix4x4.Ortho(-Size_Ortho * Camera_Main.aspect, Size_Ortho * Camera_Main.aspect, -Size_Ortho, Size_Ortho, Camera_Main.nearClipPlane, Camera_Main.farClipPlane);
+
+        float currentDuration = moveCamera ? Duration : 0f;
 
         await TransitionCamera(targetPos, targetRot, startMatrix, targetMatrix, true, 0f, _zoomCancel.Token);
     }

@@ -20,13 +20,14 @@ public class WheelViewModel : ViewModelBase
     private string _assignHamsterID;
     public string AssignHamsterID
     {
-        get => _assignHamsterID;
+        get => TargetFurniture.AssignHamsterID;
         set
         {
-            if (_assignHamsterID != value)
+            if (TargetFurniture.AssignHamsterID != value)
             {
-                _assignHamsterID = value;
+                TargetFurniture.AssignHamsterID = value;
                 OnPropertyChanged(nameof(AssignHamsterID));
+                OnPropertyChanged(nameof(CurrentHamsterID));
             }
         }
     }
@@ -34,7 +35,6 @@ public class WheelViewModel : ViewModelBase
     public WheelViewModel(FurnitureViewModel targetFurnitureVM)
     {
         TargetFurniture = targetFurnitureVM;
-        _assignHamsterID = TargetFurniture.AssignHamsterID;
         RefreshHamsterList();
     }
 

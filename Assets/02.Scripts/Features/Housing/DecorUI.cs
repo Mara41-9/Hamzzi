@@ -34,7 +34,7 @@ public class DecorUI : ViewBase
     private void OnClickEnterBuild()
     {
         _cameraController.StopFollowHamster();
-        _cameraController.ShowOverview().Forget();
+        _cameraController.ShowOverview(false).Forget();
 
         _housingVM.TargetRoom = null;
         _housingVM.EnterOverviewMode();

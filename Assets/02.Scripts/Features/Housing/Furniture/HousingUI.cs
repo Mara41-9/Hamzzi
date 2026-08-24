@@ -37,6 +37,7 @@ public class HousingUI : ViewBase
     [SerializeField] private Button Button_Assign;
 
     private HousingViewModel _housingVM;
+    private HousingView _housingView;
 
     private void Awake()
     {
@@ -58,6 +59,16 @@ public class HousingUI : ViewBase
     {
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
         BindViewModel(housingVM);
+
+        CreateGrid().Forget();
+    }
+
+    private void OnEnable()
+    {
+        if (_housingView != null)
+        {
+            _housingView.gameObject.SetActive(true);
+        }
     }
 
     public void BindViewModel(HousingViewModel housingVM)
@@ -172,6 +183,7 @@ public class HousingUI : ViewBase
 
             GameObject slot = await GameObjectManager.Instance.CreateObjectAsync("FurnitureSlot", $"Prefabs/UI/FurnitureSlot", Vector3.zero);
             slot.transform.SetParent(Parent_Slot.transform, false);
+            slot.transform.localScale = Vector3.one;
 
             FurnitureSlot furnitureSlot = slot.GetComponent<FurnitureSlot>();
             furnitureSlot.Bind(furnitureSlotVm, _housingVM);
@@ -257,6 +269,9 @@ public class HousingUI : ViewBase
 
         _housingVM.EnterOverviewMode();
 
+        _housingView.ClearRoomGrid();
+        _housingView.gameObject.SetActive(false);
+
         UIManager.Instance.CloseHousingUI();
         UIManager.Instance.OpenDecorUI();
     }
@@ -269,5 +284,15 @@ public class HousingUI : ViewBase
     private void OnClickAssign()
     {
         _housingVM.OpenAssignUI();
+    }
+
+    private async UniTask CreateGrid()
+    {
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("GridTile", "Prefabs/Housing/GridTile", Vector3.zero);
+
+        if (_housingView == null)
+        {
+            _housingView = prefab.GetComponent<HousingView>();
+        }
     }
 }
