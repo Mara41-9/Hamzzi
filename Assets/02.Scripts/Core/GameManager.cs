@@ -1,4 +1,4 @@
-﻿//게임 전체 진행 상태, 세이브, 로드, 플레이어 데이터 등 관리하는 매니저
+﻿//게임 전체 흐름 제어 매니저 - 게임 종료, 실행, 로그인 넘어가는 과정 처리 등
 using Cysharp.Threading.Tasks;
 using System.IO;
 using UnityEngine;
