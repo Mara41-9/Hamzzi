@@ -127,6 +127,7 @@ public class InGameUI : ViewBase
         _housingVM.TargetRoom = null;
         _housingVM.CurrentViewMode = HousingViewMode.Garden;
         _housingVM.EnterGardenMode();
+        UpdateButton();
     }
 
     private void OnClick_Exit()
@@ -135,6 +136,9 @@ public class InGameUI : ViewBase
         {
             _cameraController.StopFollowHamster();
             _cameraController.ShowOverview().Forget();
+
+            _housingVM.CurrentViewMode = HousingViewMode.OverView;
+
             UpdateButton();
 
             return;
@@ -143,6 +147,7 @@ public class InGameUI : ViewBase
         _housingVM.TargetRoom = null;
         _housingVM.CurrentViewMode = HousingViewMode.OverView;
         _housingVM.EnterOverviewMode();
+        UpdateButton();
     }
 
     public void UpdateButton()

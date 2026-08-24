@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
 using System.ComponentModel;
 using System.Threading;
 using UnityEngine;
@@ -41,12 +40,7 @@ public class CameraController : MonoBehaviour
     private bool _isViewRoom = false;
 
     private Transform _targetHamster;
-
-    private bool _isFollowing = false;
-    public bool IsFollowing
-    {
-        get { return _isFollowing; }
-    }
+    public bool IsFollowing { get; private set; } = false;
 
     private void Awake()
     {
@@ -66,7 +60,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (_isFollowing)
+        if (IsFollowing)
         {
             return;
         }
@@ -101,7 +95,7 @@ public class CameraController : MonoBehaviour
             StopFollowHamster();
         }
 
-        if (_isFollowing && _targetHamster != null)
+        if (IsFollowing && _targetHamster != null)
         {
             if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
             {
@@ -510,13 +504,13 @@ public class CameraController : MonoBehaviour
     public void StartFollowHamster(Transform target)
     {
         _targetHamster = target;
-        _isFollowing = true;
+        IsFollowing = true;
     }
 
     public void StopFollowHamster()
     {
         _targetHamster = null;
-        _isFollowing = false;
+        IsFollowing = false;
     }
 
     private void CancelZoom()

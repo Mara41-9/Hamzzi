@@ -268,6 +268,11 @@ public class HousingViewModel : ViewModelBase
         DestroyFurniture = FurnitureVM;
         string furnitureID = FurnitureVM.FurnitureID;
 
+        if (!string.IsNullOrEmpty(FurnitureVM.AssignHamsterID))
+        {
+            FurnitureVM.AssignHamsterID = null;
+        }
+
         RemoveFurnitureEffect(FurnitureVM);
 
         if (CurrentViewMode == HousingViewMode.Garden)

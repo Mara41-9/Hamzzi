@@ -55,6 +55,10 @@ public class HousingView : ViewBase
         {
             ShowGardenGrid().Forget();
         }
+        else if (_housingVM.TargetRoom != null)
+        {
+            ShowRoomGrid(_housingVM.TargetRoom).Forget();
+        }
     }
 
     private void OnDestroy()
