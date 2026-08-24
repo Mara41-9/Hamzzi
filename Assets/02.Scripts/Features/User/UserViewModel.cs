@@ -74,20 +74,6 @@ public static class UserViewModelExtension
 
             Debug.Log($"[보너스 지급] +" + $"{bonusAmount}");
         }
-
-        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
-        if(loginVm == null)
-        {
-            return;
-        }
-
-        UserSaveData saveData = new UserSaveData
-        {
-            UserUid = loginVm.UserUID,
-            GoldCount = userVm.SeedCount,
-        };
-
-        ServiceManager.Instance.UserService.SaveUserAsync(saveData.UserUid, saveData).Forget();
     }
 
     public static void AddSeedBuff(this UserViewModel userVm, float amount)

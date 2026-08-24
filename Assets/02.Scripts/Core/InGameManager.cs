@@ -1,4 +1,7 @@
 ﻿// 게임 내 데이터 중앙 관리 시스템 - 방치 보상 등 게임 내 데이터를 관리하는 매니저
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using UnityEngine;
 
 public class InGameManager : SingletonBase<InGameManager>
@@ -39,5 +42,34 @@ public class InGameManager : SingletonBase<InGameManager>
         }
 
         loginVm.RequestUpdateLastLogin();
+        AutoSaveSeedCount(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private async UniTask AutoSaveSeedCount(CancellationToken token)
+    {
+        while(true)
+        {
+            await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
+            await SaveSeedCount();
+        }
+    }
+
+    private async UniTask SaveSeedCount()
+    {
+        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+
+        var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+
+        UserSaveData saveData = new UserSaveData
+        {
+            GoldCount = userVm.SeedCount
+        };
+
+        await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID, saveData);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveSeedCount().Forget();
     }
 }
