@@ -129,8 +129,6 @@ public class LoginViewModel : ViewModelBase
                 LoggedUserId = _inputId;
                 LastLoginTime = await _loginService.GetLastLoginTimeAsync(UserUID);
 
-                await ServiceManager.Instance.UserService.InitUser(UserUID);
-
                 FeedbackMessage = "로그인 성공!";
                 InvokeCompleteLogin();
             }

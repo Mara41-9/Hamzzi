@@ -36,5 +36,9 @@ public class GameManager : SingletonBase<GameManager>
         HousingViewModel housing = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
         Camera.main.GetComponent<CameraController>().BindViewModel(housing, build);
+
+        await UniTask.DelayFrame(2);
+
+        NavigationManager.Instance.BuildNav();
     }
 }

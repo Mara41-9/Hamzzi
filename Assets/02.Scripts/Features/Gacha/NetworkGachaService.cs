@@ -33,25 +33,16 @@ public class NetworkGachaService
             switch (hamsterData.HamsterTier)
             {
                 case HamsterTier.SS:
-                    AddHamsterIdByTier(vm, HamsterTier.SS, hamsterId);
+                    vm.AddHasterIdByTierList(HamsterTier.SS, hamsterId);
                     break;
                 case HamsterTier.S:
-                    AddHamsterIdByTier(vm, HamsterTier.S, hamsterId);
+                    vm.AddHasterIdByTierList(HamsterTier.S, hamsterId);
                     break;
                 case HamsterTier.A:
-                    AddHamsterIdByTier(vm, HamsterTier.A, hamsterId);
+                    vm.AddHasterIdByTierList(HamsterTier.A, hamsterId);
                     break;
             }
         }
-    }
-
-    private void AddHamsterIdByTier(GachaViewModel vm, HamsterTier tier, string hamsterId)
-    {
-        if (vm.HamsterIdByTierList.ContainsKey(tier) == false)
-        {
-            vm.HamsterIdByTierList.Add(tier, new List<string>());
-        }
-        vm.HamsterIdByTierList[tier].Add(hamsterId);
     }
 
     public HamsterSave DrawGacha()
@@ -74,7 +65,8 @@ public class NetworkGachaService
         string drawFaceId = faceList[randomIndex];
 
         HamsterSave hamsterSave = new HamsterSave();
-        hamsterSave.HamsterUID = InstanceID++;
+        hamsterSave.HamsterUID = GameUtil.GenerateUID();
+        hamsterSave.UserUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
         hamsterSave.HamsterId = drawHamsterId;
         hamsterSave.FaceId = drawFaceId;
 

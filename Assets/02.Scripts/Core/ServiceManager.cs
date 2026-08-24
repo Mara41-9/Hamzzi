@@ -29,6 +29,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitLoginService();
         InitFriendListService();
         InitUserService();
+
+        LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
         InitAccountSearchService();
         InitFriendService();
         InitAccountInfoService();
@@ -89,5 +91,15 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitAccountInfoService()
     {
         AccountInfoService = new AccountInfoService();
+    }
+
+    public void LoadDataFromDB()
+    {
+        var loginVM = LoginService.GetViewModel();
+        long userUID = loginVM.UserUID;
+
+        Debug.Log($"User UID : {userUID}");
+        CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        UserService.InitUser(userUID).Forget();
     }
 }

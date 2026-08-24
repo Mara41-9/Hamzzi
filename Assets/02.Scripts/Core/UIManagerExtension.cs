@@ -13,6 +13,7 @@ public enum UIRootType
 
 public enum UIType
 {
+    LoadingUI,
     TitleUI,
     TitleSettingsUI,
     InGameUI,
@@ -29,8 +30,7 @@ public enum UIType
     HousingUI,
     FeverTimeCutsceneUI,
     WheelUI,
-    DecorUI,
-    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
+    DecorUI
 }
 
 public static class UIManagerExtension
@@ -41,6 +41,16 @@ public static class UIManagerExtension
 
         path = $"UI/{uiRootType}/{uiType}";
         return path;
+    }
+
+    public static void OpenLoadingUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
+    }
+
+    public static void CloseLoadingUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
     }
 
     public static void OpenTitleUI(this UIManager uiManager)
