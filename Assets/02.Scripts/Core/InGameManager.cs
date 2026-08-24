@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 public class InGameManager : SingletonBase<InGameManager>
@@ -42,15 +43,16 @@ public class InGameManager : SingletonBase<InGameManager>
         }
 
         loginVm.RequestUpdateLastLogin();
-        AutoSaveSeedCount(this.GetCancellationTokenOnDestroy()).Forget();
+        AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
-    private async UniTask AutoSaveSeedCount(CancellationToken token)
+    private async UniTask AutoSaveGameData(CancellationToken token)
     {
         while(true)
         {
             await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
             await SaveSeedCount();
+            await SaveInventory();
         }
     }
 
@@ -68,8 +70,16 @@ public class InGameManager : SingletonBase<InGameManager>
         await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID, saveData);
     }
 
+    private async UniTask SaveInventory()
+    {
+        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+
+        await ServiceManager.Instance.HousingService.SaveAllInventoryData(loginVm.UserUID);
+    }
+
     private void OnApplicationQuit()
     {
         SaveSeedCount().Forget();
+        SaveInventory().Forget();
     }
 }

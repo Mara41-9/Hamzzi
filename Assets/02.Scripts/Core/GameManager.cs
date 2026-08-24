@@ -19,7 +19,7 @@ public class GameManager : SingletonBase<GameManager>
 
         if (hasSaveData)
         {
-            ServiceManager.Instance.HousingService.LoadAllHousingData();
+            //ServiceManager.Instance.HousingService.LoadAllHousingData();
         }
         else
         {
