@@ -2429,6 +2429,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleSettingsUI
   Button_BackgroundClose: {fileID: 7942376317027104377}
   Button_Close: {fileID: 92839781466716500}
+  Slider_BGM: {fileID: 3818356032823894587}
+  Slider_SFX: {fileID: 4345931222049696120}
 --- !u!1 &5254274168934777098
 GameObject:
   m_ObjectHideFlags: 0
