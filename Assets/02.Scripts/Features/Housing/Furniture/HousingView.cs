@@ -174,17 +174,28 @@ public class HousingView : ViewBase
 
     private bool IsTouchUI()
     {
+        if (EventSystem.current == null) return false;
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         return EventSystem.current.IsPointerOverGameObject();
-
 #else
-        if (Input.touchCount > 0)
+    if (Input.touchCount > 0)
+    {
+        Touch touch = Input.GetTouch(0);
+
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
         {
-            Touch touch = Input.GetTouch(0);
-            return EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+            return true;
         }
 
-        return false;
+        PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = touch.position };
+
+        System.Collections.Generic.List<RaycastResult> results = new System.Collections.Generic.List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        
+        return results.Count > 0;
+    }
+    return false;
 #endif
     }
 
