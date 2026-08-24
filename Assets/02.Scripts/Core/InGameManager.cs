@@ -9,6 +9,8 @@ public class InGameManager : SingletonBase<InGameManager>
     private const float IdleRewardCapSeconds = 12f * 60f * 60f;
     private const float IdleRewardRateMultiplier = 0.7f;
 
+    private int _pendingIdleReward;
+
     private void Start()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
@@ -29,20 +31,39 @@ public class InGameManager : SingletonBase<InGameManager>
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
-        int idleReward = GameUtil.CalculateIdleReward(loginVm.LastLoginTime.Ticks, productionPerSec, IdleRewardCapSeconds);
-
-        if (idleReward > 0)
-        {
-            UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-            userVm.AddSeed(idleReward);
-
-#if UNITY_EDITOR
-            Debug.Log($"[방치 보상] +{idleReward}");
-#endif
-        }
+        long lastLoginTicks = loginVm.LastLoginTime.Ticks;
+        float elapsedSeconds = GameUtil.CalculateElapsedSeconds(lastLoginTicks, IdleRewardCapSeconds);
+        int idleReward = GameUtil.CalculateIdleReward(lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
         loginVm.RequestUpdateLastLogin();
         AutoSaveSeedCount(this.GetCancellationTokenOnDestroy()).Forget();
+
+        if (idleReward <= 0)
+        {
+            return;
+        }
+
+        _pendingIdleReward = idleReward;
+        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds);
+    }
+
+    public void ClaimIdleReward()
+    {
+        if (_pendingIdleReward <= 0)
+        {
+            return;
+        }
+
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+
+#if UNITY_EDITOR
+        Debug.Log($"[방치 보상 수령] +{_pendingIdleReward}");
+#endif
+
+        userVm.AddSeed(_pendingIdleReward);
+        _pendingIdleReward = 0;
+
+        UIManager.Instance.CloseIdleRewardPopupUI();
     }
 
     private async UniTask AutoSaveSeedCount(CancellationToken token)
