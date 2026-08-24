@@ -266,6 +266,8 @@ public class HousingViewModel : ViewModelBase
         DestroyFurniture = FurnitureVM;
         string furnitureID = FurnitureVM.FurnitureID;
 
+        RemoveFurnitureEffect(FurnitureVM);
+
         if (CurrentViewMode == HousingViewMode.Garden)
         {
             RemoveGardenFurniture(FurnitureVM);
@@ -353,9 +355,16 @@ public class HousingViewModel : ViewModelBase
             DecreaseFurnitureStack(furnitureVM.FurnitureID);
 
             ConfirmFurniture = furnitureVM;
-            ApplyFurnitureEffect(furnitureVM);
+
+            if (CurrentState != HousingState.Editing)
+            {
+                ApplyFurnitureEffect(furnitureVM);
+            }
+                
 
             ResetPlacingState();
+            NavigationManager.Instance.BuildNav();
+
             return true;
         }
 
@@ -400,6 +409,27 @@ public class HousingViewModel : ViewModelBase
             if(userVm != null)
             {
                 userVm.AddSeedBuff(itemEffect);
+            }
+        }
+    }
+
+    private void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
+    {
+        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
+        if (itemData == null)
+        {
+            return;
+        }
+
+        var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
+        if (subCategoryEffectData != null)
+        {
+            float itemEffect = subCategoryEffectData.SeedCollectionBonus;
+
+            var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+            if (userVm != null)
+            {
+                userVm.RemoveSeedBuff(itemEffect);
             }
         }
     }
