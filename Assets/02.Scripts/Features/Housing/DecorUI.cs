@@ -48,7 +48,8 @@ public class DecorUI : ViewBase
 
     private void OnClickEnterHousing()
     {
-        _housingVM.EnterHousingMode();
+        RoomViewModel currentRoom = _housingVM.TargetRoom;
+        _housingVM.EnterHousingMode(currentRoom);
 
         UIManager.Instance.OpenHousingUI();
         UIManager.Instance.CloseDecorUI();

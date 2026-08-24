@@ -134,7 +134,7 @@ public class HousingView : ViewBase
             return;
         }
 
-        if (!GetInputPosition(out Vector3 inputPosition))
+        if (IsTouchUI() || !GetInputPosition(out Vector3 inputPosition))
         {
             return;
         }
@@ -166,6 +166,22 @@ public class HousingView : ViewBase
         {
             RoomDrag(ray);
         }
+    }
+
+    private bool IsTouchUI()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        return EventSystem.current.IsPointerOverGameObject();
+
+#else
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            return EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+        }
+
+        return false;
+#endif
     }
 
     private bool SelectInstallFurniture(Ray ray)
@@ -365,11 +381,6 @@ public class HousingView : ViewBase
 
         _ghostObject = await GameObjectManager.Instance.CreateObjectAsync(furnitureID, prefabPath, Vector3.zero);
 
-        if (_ghostObject == null || _housingVM.FurnitureVM == null)
-        {
-            return;
-        }
-
         GetFurnitureWorldTransform(_housingVM.FurnitureVM, out Vector3 pos, out Quaternion rotation, out float tileYOffset);
         _ghostObject.transform.rotation = rotation;
 
@@ -384,14 +395,16 @@ public class HousingView : ViewBase
             if (_housingVM.CurrentState == HousingState.Placing)
             {
                 float subCellSize = GetCurrentSubCellSize();
-                Vector2Int calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+                Vector2Int calculatedSize = _housingVM.FurnitureVM.Size;
 
-                if (_housingVM.FurnitureVM.RotationAngle % 180 != 0)
+                if (calculatedSize == Vector2Int.one && furnitureView.GetFurnitureSize(subCellSize) != Vector2Int.one)
                 {
-                    calculatedSize = new Vector2Int(calculatedSize.y, calculatedSize.x);
+                    calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+                    _housingVM.FurnitureVM.Size = calculatedSize;
                 }
 
-                _housingVM.FurnitureVM.Size = calculatedSize;
+                bool isRotated = (_housingVM.FurnitureVM.RotationAngle / 90) % 2 != 0;
+                Vector2Int currentSize = isRotated ? new Vector2Int(calculatedSize.y, calculatedSize.x) : calculatedSize;
 
                 if (_housingVM.TargetRoom != null)
                 {
@@ -407,11 +420,7 @@ public class HousingView : ViewBase
         }
 
         UpdateGhostTransform();
-
-        if (SpriteRenderer_Tile != null)
-        {
-            SpriteRenderer_Tile.gameObject.SetActive(true);
-        }
+        SpriteRenderer_Tile.gameObject.SetActive(true);
     }
 
     public void ClearGhostObject()

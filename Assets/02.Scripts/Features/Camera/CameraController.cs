@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.ComponentModel;
 using System.Threading;
 using UnityEngine;
@@ -40,7 +41,12 @@ public class CameraController : MonoBehaviour
     private bool _isViewRoom = false;
 
     private Transform _targetHamster;
+
     private bool _isFollowing = false;
+    public bool IsFollowing
+    {
+        get { return _isFollowing; }
+    }
 
     private void Awake()
     {
@@ -225,7 +231,7 @@ public class CameraController : MonoBehaviour
 
                 if (_housingVM != null && _housingVM.CurrentViewMode == HousingViewMode.Garden)
                 {
-                    Vector3 move = Vector3.right * (-delta.x * factor);
+                    Vector3 move = Vector3.right * (-delta.x * factor * 150f);
                     targetPos = Camera_Main.transform.position + move;
                     targetPos.y = Position_Garden.y;
                     targetPos.z = Position_Garden.z;
