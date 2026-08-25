@@ -70,7 +70,7 @@ public class WheelViewModel : ViewModelBase
     {
         TargetFurniture.AssignHamsterID = hamsterID;
 
-        ServiceManager.Instance.HousingService.SaveHousingData();
+        //ServiceManager.Instance.HousingService.SaveHousingData();
 
         RefreshHamsterList();
     }
@@ -79,7 +79,7 @@ public class WheelViewModel : ViewModelBase
     {
         TargetFurniture.AssignHamsterID = null;
 
-        ServiceManager.Instance.HousingService.SaveHousingData();
+        //ServiceManager.Instance.HousingService.SaveHousingData();
 
         RefreshHamsterList();
     }
