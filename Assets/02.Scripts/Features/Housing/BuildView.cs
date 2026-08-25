@@ -95,37 +95,46 @@ public class BuildView : ViewBase
         }
     }
 
-    private bool GetInputPosition (out Vector3 inputPosition)
+    private bool GetInputPosition(out Vector3 inputPosition)
     {
         inputPosition = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            {
-                return false;
-            }
-
-            inputPosition = Input.mousePosition;
-            return true;
-        }
-#else
-    if (Input.touchCount > 0)
-    {
-        Touch touch = Input.GetTouch(0);
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        if (EventSystem.current.IsPointerOverGameObject())
         {
             return false;
         }
 
-        if (touch.phase == TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            inputPosition = touch.position;
+            inputPosition = Input.mousePosition;
             return true;
         }
-    }
+#else
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                return false;
+            }
+
+            PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = touch.position };
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            if (results.Count > 0)
+            {
+                return false;
+            }
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                inputPosition = touch.position;
+                return true;
+            }
+        }
 #endif
 
         return false;

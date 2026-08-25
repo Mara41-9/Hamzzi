@@ -164,8 +164,8 @@ MonoBehaviour:
   Zoom_Sensitive: 0.05
   Size_MinOrtho: 4
   Size_MaxOrtho: 20
-  FOV_Min: 30
-  FOV_Max: 75
+  FOV_Min: 15
+  FOV_Max: 45
   Duration: 0.8
   Bound_Min: {x: -19, y: -21}
   Bound_Max: {x: 21, y: 5}

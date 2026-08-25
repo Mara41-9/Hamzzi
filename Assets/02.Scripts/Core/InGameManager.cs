@@ -40,6 +40,11 @@ public class InGameManager : SingletonBase<InGameManager>
     private void HandleCompleteLogin()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        if (loginVm != null && loginVm.UserUID != 0)
+        {
+            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
+        }
+
 
         _lastLoginTicks = loginVm.LastLoginTime.Ticks;
 
@@ -52,12 +57,6 @@ public class InGameManager : SingletonBase<InGameManager>
         if (_lastLoginTicks == 0)
         {
             return;
-        }
-
-        LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
-        if (loginVm != null && loginVm.UserUID != 0)
-        {
-            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
         }
 
         float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;

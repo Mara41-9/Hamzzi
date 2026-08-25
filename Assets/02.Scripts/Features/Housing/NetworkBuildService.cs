@@ -86,6 +86,7 @@ public class NetworkBuildService
                             int posY = reader.GetInt32("Position_Y");
                             int rotateState = reader.GetInt32("Rotate_State");
                             long? hamsterUID = reader.IsDBNull(reader.GetOrdinal("Useing_Hamster_UID")) ? (long?)null : reader.GetInt64("Useing_Hamster_UID");
+                            Debug.Log($"가구 ID: {furnitureDataId} / 할당된 햄스터 UID: {hamsterUID}");
 
                             var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureDataId);
 
@@ -222,20 +223,26 @@ public class NetworkBuildService
                                 }
 
                                 string insertFurniture = $@"INSERT INTO {DBConfig.FurnitureTable} 
-                                                            (Furniture_UID, Room_UID, Furniture_Data_ID, Furniture_Level, Position_X, Position_Y, Rotate_State, Useing_Hamster_UID)
-                                                            VALUES (@furnitureUID, @roomUID, @furnitureDataId, @level, @posX, @posY, @rotate, @hamsterUID)";
+                                                            (Furniture_UID, Room_UID, Furniture_Data_ID, Position_X, Position_Y, Rotate_State, Useing_Hamster_UID)
+                                                            VALUES (@furnitureUID, @roomUID, @furnitureDataId, @posX, @posY, @rotate, @hamsterUID)";
 
                                 using (MySqlCommand fCmd = new MySqlCommand(insertFurniture, conn, transaction))
                                 {
                                     fCmd.Parameters.AddWithValue("@furnitureUID", furnitureUID);
                                     fCmd.Parameters.AddWithValue("@roomUID", uid);
                                     fCmd.Parameters.AddWithValue("@furnitureDataId", furnitureVM.FurnitureID);
-                                    fCmd.Parameters.AddWithValue("@level", 1);
                                     fCmd.Parameters.AddWithValue("@posX", furnitureVM.LocalPos.x);
                                     fCmd.Parameters.AddWithValue("@posY", furnitureVM.LocalPos.y);
                                     fCmd.Parameters.AddWithValue("@rotate", furnitureVM.RotationAngle);
 
-                                    object hamsterVal = string.IsNullOrEmpty(furnitureVM.AssignHamsterID) ? DBNull.Value : (object)long.Parse(furnitureVM.AssignHamsterID);
+                                    long parsedHamsterUID = 0;
+                                    object hamsterVal = DBNull.Value;
+
+                                    if (!string.IsNullOrEmpty(furnitureVM.AssignHamsterID) && long.TryParse(furnitureVM.AssignHamsterID, out parsedHamsterUID))
+                                    {
+                                        hamsterVal = parsedHamsterUID;
+                                    }
+
                                     fCmd.Parameters.AddWithValue("@hamsterUID", hamsterVal);
 
                                     await fCmd.ExecuteNonQueryAsync();
@@ -336,7 +343,6 @@ public class NetworkBuildService
         if (userUID != 0)
         {
             ServiceManager.Instance.NetworkBuildService.SaveAllBuildAndFurnitureData(userUID).Forget();
-            ServiceManager.Instance.HousingService.SaveAllInventoryData(userUID).Forget();
 
             Debug.Log("건설/가구/인벤토리 데이터 저장 요청 완료");
         }

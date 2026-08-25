@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class SetPlayerNameView : UIBase
 {
@@ -27,6 +28,8 @@ public class SetPlayerNameView : UIBase
         _vm.PropertyChanged += OnPropChanged_View;
         _vm.OnCompleteSetName += OnCompleteSetName_View;
         _vm.OnFailSetName += OnFailSetName_View;
+
+        _vm.OnCompleteSetName += OnCompleteEnter;
     }
 
     private void OnEnable()
@@ -48,6 +51,8 @@ public class SetPlayerNameView : UIBase
             _vm.PropertyChanged -= OnPropChanged_View;
             _vm.OnCompleteSetName -= OnCompleteSetName_View;
             _vm.OnFailSetName -= OnFailSetName_View;
+
+            _vm.OnCompleteSetName -= OnCompleteEnter;
         }
     }
 
@@ -88,5 +93,14 @@ public class SetPlayerNameView : UIBase
     private void OnFailSetName_View()
     {
         Debug.Log("닉네임 설정 실패");
+    }
+
+    private void OnCompleteEnter()
+    {
+        LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        if (loginVm != null && loginVm.UserUID != 0)
+        {
+            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
+        }
     }
 }
