@@ -11,10 +11,11 @@ public class FurnitureView : MonoBehaviour
 
     private Dictionary<Renderer, Material[]> _originMaterial = new Dictionary<Renderer, Material[]>();
     private FeverTimeWheel _feverTimeWheel;
-    private Vector3 _originScale = Vector3.one;
+    private Vector3 _originScale;
 
     private void Awake()
     {
+        _originScale = transform.localScale;
         InitRederers();
         _feverTimeWheel = GetComponent<FeverTimeWheel>();
     }

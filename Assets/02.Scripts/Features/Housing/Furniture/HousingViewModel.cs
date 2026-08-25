@@ -224,22 +224,24 @@ public class HousingViewModel : ViewModelBase
         return categoryList;
     }
 
-    public void EnterHousingMode()
+    public void EnterHousingMode(RoomViewModel targetRoom = null)
     {
         IsInHousingMode = true;
-        _targetRoom = null;
         _furnitureVM = null;
 
-        if (CurrentViewMode == HousingViewMode.Garden)
+        if (targetRoom != null)
         {
+            _targetRoom = targetRoom;
             _currentState = HousingState.Placing;
         }
         else
         {
-            _currentState = HousingState.SelectRoom;
+            _targetRoom = null;
+            _currentState = (CurrentViewMode == HousingViewMode.Garden) ? HousingState.Placing : HousingState.SelectRoom;
         }
 
-        InvokeOnceOnInit();
+        OnPropertyChanged(nameof(TargetRoom));
+        OnPropertyChanged(nameof(CurrentState));
     }
 
     public void SelectInstallFurniture(FurnitureViewModel furnitureVM)
@@ -266,6 +268,11 @@ public class HousingViewModel : ViewModelBase
         DestroyFurniture = FurnitureVM;
         string furnitureID = FurnitureVM.FurnitureID;
 
+        if (!string.IsNullOrEmpty(FurnitureVM.AssignHamsterID))
+        {
+            FurnitureVM.AssignHamsterID = null;
+        }
+
         RemoveFurnitureEffect(FurnitureVM);
 
         if (CurrentViewMode == HousingViewMode.Garden)
@@ -282,6 +289,9 @@ public class HousingViewModel : ViewModelBase
         ServiceManager.Instance.HousingService.AddItem(furnitureID, icon);
 
         ResetPlacingState();
+
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
+
         return true;
     }
 
@@ -365,6 +375,8 @@ public class HousingViewModel : ViewModelBase
             ResetPlacingState();
             NavigationManager.Instance.BuildNav();
 
+            ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
+
             return true;
         }
 
@@ -413,7 +425,7 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
-    private void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
+    public void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
     {
         var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
         if (itemData == null)
