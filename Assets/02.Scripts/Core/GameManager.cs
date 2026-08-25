@@ -15,8 +15,6 @@ public class GameManager : SingletonBase<GameManager>
 
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("Map", "Prefabs/Map", Vector3.zero);
 
-        await ServiceManager.Instance.UserService.InitUser(userUID);
-
         bool hasSaveData = await ServiceManager.Instance.NetworkBuildService.HasUserRoomData(userUID);
 
         if (hasSaveData)
