@@ -134,6 +134,8 @@ public class LoginView : UIBase
 
     private void OnCompleteCreateAccount_View()
     {
+        UIManager.Instance.CloseLoginUI();
+        UIManager.Instance.OpenSetNameUI();
         Debug.Log("계정 생성 완료");
     }
 
