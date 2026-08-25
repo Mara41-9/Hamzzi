@@ -154,6 +154,16 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.PopupUI, UIType.WheelUI);
     }
 
+    public static void OpenSetNameUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.SetPlayerNameUI);
+    }
+
+    public static void CloseSetNameUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.SetPlayerNameUI);
+    }
+
     public static void OpenIdleRewardPopupUI(this UIManager uiManager, int rewardAmount, float elapsedSeconds, float capSeconds, float buffRate)
     {
         UIBase openedUI = uiManager.OpenUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);

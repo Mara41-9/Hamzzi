@@ -7,6 +7,9 @@ public class LoginService
 {
     private LoginViewModel _viewModel;
 
+    private string defaultIconAddress = "Hamster/HasterIcon/Hamster_00_Icon";
+    private string defaultName = "기본이름";
+
     public LoginService()
     {
         _viewModel = new LoginViewModel();
@@ -104,8 +107,8 @@ public class LoginService
                                 using (MySqlCommand insertGameDataCmd = new MySqlCommand(insertGameDataQuery, conn))
                                 {
                                     insertGameDataCmd.Parameters.AddWithValue("@uid", generatedUid);
-                                    insertGameDataCmd.Parameters.AddWithValue("@userName", "기본이름");
-                                    insertGameDataCmd.Parameters.AddWithValue("@iconId", "default_icon");
+                                    insertGameDataCmd.Parameters.AddWithValue("@userName", defaultName);
+                                    insertGameDataCmd.Parameters.AddWithValue("@iconId", defaultIconAddress);
                                     insertGameDataCmd.Parameters.AddWithValue("@gold", 0);
 
                                     int gameDataRows = await insertGameDataCmd.ExecuteNonQueryAsync();
