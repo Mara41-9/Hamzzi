@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using MySqlConnector;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HousingService
@@ -50,33 +53,142 @@ public class HousingService
         return allList;
     }
 
-    // 저장 관련
-    public void SaveHousingData()
+    // DB에서 저장된 인벤토리 데이터를 조회해 리스트로 반환
+    public async UniTask<List<InventoryData>> LoadInventoryData(long userUid)
     {
-        ServiceManager.Instance.BuildService.SaveBuildData();
+        List<InventoryData> resultList = new List<InventoryData>();
 
-        // TODO: Builds랑 각 RoomViewModel.FurnitureList 가져와서 저장
-        // RoomInstanceID, FurnitureID, LocalPos, RotationAngle, Size 저장
+        if (userUid != 0)
+        {
+            using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    string query = $"SELECT Furniture_Data_ID, Count FROM Inventory_Data WHERE User_UID = @userUid";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@userUid", userUid);
+
+                        using (MySqlDataReader reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (reader.Read())
+                            {
+                                var inventoryData = new InventoryData();
+
+                                inventoryData.ItemDataId = reader.GetString(0);
+                                inventoryData.StackCount = reader.GetInt32(1);
+
+                                resultList.Add(inventoryData);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError(ex.Message);
+                }
+            }
+        }
+
+        return resultList;
+
     }
 
-    public void LoadHousingData()
+    // 불러온 인벤토리 데이터를 가구 슬롯으로 생성해서 인벤토리 리스트에 추가
+    public async UniTask LoadInventory(long userUid)
     {
-        ServiceManager.Instance.BuildService.LoadBuildData();
+        List<InventoryData> inventoryList = await LoadInventoryData(userUid);
 
-        // TODO: 가구 배치 정보 가져와서 각각 RoomViewModel.AddFuniture()
-        // RoomInstanceID로 RoomViewModel 찾기
-        // RoomViewModel.AddFuniture(furnitureVM)로 가구 배치 및 스폰
+        var housingVm = ServiceManager.Instance.HousingService.GetHousingViewModel();
+        foreach(var inventoryData in inventoryList)
+        {
+            var itemData = GameDataManager.Instance.GetData<ItemData>(inventoryData.ItemDataId);
+            if(itemData == null)
+            {
+                continue;
+            }
+
+            var iconSprite = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
+
+            var slotVm = new FurnitureSlotViewModel();
+
+            slotVm.ItemUniqueId = TestGameUtil.GenerateUniqueId();
+            slotVm.ItemDataId = inventoryData.ItemDataId;
+            slotVm.IconSprite = iconSprite;
+            slotVm.StackCount = inventoryData.StackCount;
+
+            housingVm.AddItemSlotViewModel(slotVm);
+            Debug.Log($"[인벤토리 로드] UID : {userUid} / Item : {slotVm.ItemDataId} / Count : {slotVm.StackCount}");
+        }
     }
 
-    public void LoadAllHousingData()
+    // 기존 인벤토리 데이터 삭제하고 현재 인벤토리 데이터를 DB에 저장
+    public async UniTask SaveAllInventoryData(long userUid)
     {
-        ServiceManager.Instance.BuildService.LoadBuildData();
-        LoadHousingData();
+        if (userUid == 0)
+        {
+            return;
+        }
+
+        using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
+        {
+            try
+            {
+                await conn.OpenAsync();
+
+                using (MySqlTransaction transaction = await conn.BeginTransactionAsync())
+                {
+                    string deleteQuery = $"DELETE FROM Inventory_Data WHERE User_UID = @userUid";
+
+                    using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, conn, transaction))
+                    {
+                        deleteCmd.Parameters.AddWithValue("@userUid", userUid);
+
+                        await deleteCmd.ExecuteNonQueryAsync();
+                    }
+
+                    foreach(var itemKv in _housingVM.ItemList)
+                    {
+                        var slotVm = itemKv.Value;
+
+                        if(slotVm.StackCount <= 0)
+                        {
+                            continue;
+                        }
+
+                        long inventoryUid = TestGameUtil.GenerateUniqueId();
+
+                        string insertQuery = $"INSERT INTO Inventory_Data (InventoryUID, User_UID, Furniture_Data_ID, Count) VALUES (@inventoryUid, @userUid, @furnitureDataId, @count)";
+
+                        using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn, transaction))
+                        {
+                            insertCmd.Parameters.AddWithValue("@inventoryUid", inventoryUid);
+                            insertCmd.Parameters.AddWithValue("@userUid", userUid);
+                            insertCmd.Parameters.AddWithValue("@furnitureDataId", slotVm.ItemDataId);
+                            insertCmd.Parameters.AddWithValue("@count", slotVm.StackCount);
+
+                            await insertCmd.ExecuteNonQueryAsync();
+                            Debug.Log($"[인벤토리 저장] UID : {userUid} / Item : {slotVm.ItemDataId} / Count : {slotVm.StackCount}");
+                        }
+                    }
+
+                    await transaction.CommitAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+        }
     }
 
     private void AddInventoryItem(string itemDataId, Sprite iconSprite)
     {
         HousingViewModel housingVm = GetHousingViewModel();
+        FurnitureSlotViewModel targetSlotVm = null;
 
         foreach (var itemKv in housingVm.ItemList)
         {
@@ -85,17 +197,29 @@ public class HousingService
             if (slotVm.ItemDataId == itemDataId)
             {
                 slotVm.StackCount++;
-                return;
+                targetSlotVm = slotVm;
+                break;
             }
         }
 
-        var newSlotVm = new FurnitureSlotViewModel();
-        newSlotVm.ItemUniqueId = TestGameUtil.GenerateUniqueId();
-        newSlotVm.ItemDataId = itemDataId;
-        newSlotVm.IconSprite = iconSprite;
-        newSlotVm.StackCount = 1;
+        if(targetSlotVm == null)
+        {
+            targetSlotVm = new FurnitureSlotViewModel();
+            targetSlotVm.ItemUniqueId = TestGameUtil.GenerateUniqueId();
+            targetSlotVm.ItemDataId = itemDataId;
+            targetSlotVm.IconSprite = iconSprite;
+            targetSlotVm.StackCount = 1;
 
-        housingVm.AddItemSlotViewModel(newSlotVm);
+            housingVm.AddItemSlotViewModel(targetSlotVm);
+        }
+
+        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+
+        InventoryData inventoryData = new InventoryData
+        {
+            ItemDataId = targetSlotVm.ItemDataId,
+            StackCount = targetSlotVm.StackCount
+        };
     }
 
     public void AddItem(ShopSlotViewModel shopSlotVm)
