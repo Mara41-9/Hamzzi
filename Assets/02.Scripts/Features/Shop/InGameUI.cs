@@ -12,6 +12,7 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_OpenFriendUI;
     [SerializeField] private UIButton Button_CollectionUI;
     [SerializeField] private UIButton Button_Gacha;
+    [SerializeField] private UIButton Button_Setting;
     [SerializeField] private Button Button_Garden;
     [SerializeField] private Button Button_Exit;
 
@@ -36,6 +37,7 @@ public class InGameUI : ViewBase
         Button_OpenFriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
+        Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
         Button_Garden.onClick.AddListener(OnClick_Garden);
         Button_Exit.onClick.AddListener(OnClick_Exit);
 
@@ -120,6 +122,11 @@ public class InGameUI : ViewBase
     private void OnClick_OpenGachaUI()
     {
         UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.GachaUI);
+    }
+
+    private void OnClick_OpenSetting()
+    {
+        UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.InGameSettingsUI);
     }
 
     private void OnClick_Garden()

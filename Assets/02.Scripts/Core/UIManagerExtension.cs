@@ -16,6 +16,7 @@ public enum UIType
     LoadingUI,
     TitleUI,
     TitleSettingsUI,
+    InGameSettingsUI,
     InGameUI,
     ShopUI,
     BuildUI,
