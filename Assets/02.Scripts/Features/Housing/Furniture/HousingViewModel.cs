@@ -289,6 +289,9 @@ public class HousingViewModel : ViewModelBase
         ServiceManager.Instance.HousingService.AddItem(furnitureID, icon);
 
         ResetPlacingState();
+
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
+
         return true;
     }
 
@@ -372,6 +375,8 @@ public class HousingViewModel : ViewModelBase
             ResetPlacingState();
             NavigationManager.Instance.BuildNav();
 
+            ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
+
             return true;
         }
 
@@ -420,7 +425,7 @@ public class HousingViewModel : ViewModelBase
         }
     }
 
-    private void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
+    public void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
     {
         var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
         if (itemData == null)

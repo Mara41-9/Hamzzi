@@ -52,6 +52,12 @@ public class InGameManager : SingletonBase<InGameManager>
             return;
         }
 
+        LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        if (loginVm != null && loginVm.UserUID != 0)
+        {
+            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
+        }
+
         float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
         float elapsedSeconds = GameUtil.CalculateElapsedSeconds(_lastLoginTicks, IdleRewardCapSeconds);
         int idleReward = GameUtil.CalculateIdleReward(_lastLoginTicks, productionPerSec, IdleRewardCapSeconds);

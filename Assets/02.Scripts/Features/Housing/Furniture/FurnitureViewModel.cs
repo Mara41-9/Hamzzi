@@ -3,9 +3,22 @@ using UnityEngine;
 
 public class FurnitureViewModel : ViewModelBase
 {
-    public string InstanceID { get; private set; }
     public string FurnitureID { get; private set; }
     public string PrefabPath { get; private set; }
+
+    private string _instanceID;
+    public string InstanceID
+    {
+        get => _instanceID;
+        set
+        {
+            if (_instanceID != value)
+            {
+                _instanceID = value;
+                OnPropertyChanged(nameof(InstanceID));
+            }
+        }
+    }
 
     private string _roomInstanceID;
     public string RoomInstanceID
