@@ -5,11 +5,10 @@ using UnityEngine.UI;
 
 public class UIButtonPunchEffect : MonoBehaviour
 {
-    private const float PunchScaleMultiplier = 1.15f;
-    private const float ScaleUpDurationSeconds = 0.08f;
-    private const float ScaleDownDurationSeconds = 0.12f;
-
     [SerializeField] private Button Button_Target;
+    [SerializeField] private float _punchScaleMultiplier = 1.25f;
+    [SerializeField] private float _scaleUpDurationSeconds = 0.1f;
+    [SerializeField] private float _scaleDownDurationSeconds = 0.18f;
 
     private RectTransform _rectTransform;
     private Vector3 _originalScale;
@@ -57,6 +56,10 @@ public class UIButtonPunchEffect : MonoBehaviour
 
     private void OnClickButton()
     {
+#if UNITY_EDITOR
+        Debug.Log("[펀치] 클릭 수신");
+#endif
+
         PlayPunchEffect();
     }
 
@@ -71,8 +74,8 @@ public class UIButtonPunchEffect : MonoBehaviour
         _rectTransform.localScale = _originalScale;
 
         _punchSequence = DOTween.Sequence();
-        _punchSequence.Append(_rectTransform.DOScale(_originalScale * PunchScaleMultiplier, ScaleUpDurationSeconds).SetEase(Ease.Linear));
-        _punchSequence.Append(_rectTransform.DOScale(_originalScale, ScaleDownDurationSeconds).SetEase(Ease.Linear));
+        _punchSequence.Append(_rectTransform.DOScale(_originalScale * _punchScaleMultiplier, _scaleUpDurationSeconds).SetEase(Ease.OutQuad));
+        _punchSequence.Append(_rectTransform.DOScale(_originalScale, _scaleDownDurationSeconds).SetEase(Ease.InQuad));
     }
 
     private void KillPunchSequence()

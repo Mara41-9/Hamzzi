@@ -8,6 +8,7 @@ public class InGameManager : SingletonBase<InGameManager>
 {
     private const float IdleRewardCapSeconds = 12f * 60f * 60f;
     private const float IdleRewardRateMultiplier = 0.7f;
+    private const float PopupCloseDelaySeconds = 0.3f;
 
     private int _pendingIdleReward;
     private long _lastLoginTicks;
@@ -96,6 +97,13 @@ public class InGameManager : SingletonBase<InGameManager>
 
         userVm.AddSeed(_pendingIdleReward);
         _pendingIdleReward = 0;
+
+        CloseIdleRewardPopupDelayed(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private async UniTask CloseIdleRewardPopupDelayed(CancellationToken token)
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(PopupCloseDelaySeconds), cancellationToken: token);
 
         UIManager.Instance.CloseIdleRewardPopupUI();
     }
