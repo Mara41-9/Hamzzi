@@ -31,7 +31,8 @@ public enum UIType
     FeverTimeCutsceneUI,
     WheelUI,
     DecorUI,
-    IdleRewardPopupUI
+    IdleRewardPopupUI,
+    CrossUI,
 }
 
 public static class UIManagerExtension
