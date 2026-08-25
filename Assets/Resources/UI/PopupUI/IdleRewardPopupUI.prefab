@@ -731,6 +731,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
   Button_Target: {fileID: 1559890788278253843}
+  _punchScaleMultiplier: 1.1
+  _scaleUpDurationSeconds: 0.1
+  _scaleDownDurationSeconds: 0.2
 --- !u!1 &3848576300334185873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,7 +1566,7 @@ MonoBehaviour:
   Button_GetReward: {fileID: 6231039157475847564}
   Text_Effect: {fileID: 2820459352679867782}
   Object_Loading: {fileID: 6735250752195596806}
-  _buttonUnlockDelaySeconds: 12
+  _buttonUnlockDelaySeconds: 4
 --- !u!1 &5688005365545308697
 GameObject:
   m_ObjectHideFlags: 0
