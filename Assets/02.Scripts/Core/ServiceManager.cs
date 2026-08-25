@@ -14,6 +14,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public AccountSearchService AccountSearchService { get; private set; }
     public FriendService FriendService { get; private set; }
     public AccountInfoService AccountInfoService { get; private set; }
+    public SetPlayerNameService SetPlayerNameService { get; private set; }
 
     public void Start()
     {
@@ -34,6 +35,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitAccountSearchService();
         InitFriendService();
         InitAccountInfoService();
+        InitSetPlayerNameService();
     }
 
     private void InitShopService()
@@ -91,6 +93,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitAccountInfoService()
     {
         AccountInfoService = new AccountInfoService();
+    }
+
+    private void InitSetPlayerNameService()
+    {
+        SetPlayerNameService = new SetPlayerNameService();
     }
 
     public void LoadDataFromDB()
