@@ -12,6 +12,7 @@ public class InGameManager : SingletonBase<InGameManager>
     private int _pendingIdleReward;
     private long _lastLoginTicks;
 
+
     private void Start()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
@@ -66,7 +67,12 @@ public class InGameManager : SingletonBase<InGameManager>
         }
 
         _pendingIdleReward = idleReward;
-        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds);
+
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        int displayReward = userVm.PredictSeedGain(idleReward);
+        float buffRate = userVm.GetSeedBuffRate();
+
+        UIManager.Instance.OpenIdleRewardPopupUI(displayReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);
     }
 
     public void ClaimIdleReward()

@@ -1547,6 +1547,7 @@ MonoBehaviour:
   Text_OfflineTime: {fileID: 5752304217758151030}
   Text_RewardCount: {fileID: 4569541574020166039}
   Button_GetReward: {fileID: 6231039157475847564}
+  Text_Effect: {fileID: 2820459352679867782}
 --- !u!1 &5688005365545308697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,7 +2477,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD68D\uB4DD\uB960 500%"
+  m_text: "\uD68D\uB4DD\uB960 %%%"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 75dfa450487a5cf46bba53a65b2677c5, type: 2}
   m_sharedMaterial: {fileID: 5671220900977671066, guid: 75dfa450487a5cf46bba53a65b2677c5, type: 2}
