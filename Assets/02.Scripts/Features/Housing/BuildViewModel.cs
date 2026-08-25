@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildViewModel : ViewModelBase
@@ -144,6 +145,30 @@ public class BuildViewModel : ViewModelBase
 
         RoomViewModel target = SelectRoom;
 
+        if (target.FurnitureList != null && target.FurnitureList.Count > 0)
+        {
+            var furnituresToReturn = new List<FurnitureViewModel>(target.FurnitureList);
+
+            foreach (var furniture in furnituresToReturn)
+            {
+                if (!string.IsNullOrEmpty(furniture.AssignHamsterID))
+                {
+                    furniture.AssignHamsterID = null;
+                }
+
+                var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+                if (housingVM != null)
+                {
+                    housingVM.RemoveFurnitureEffect(furniture);
+                }
+
+                ServiceManager.Instance.HousingService.GetHousingViewModel().DestroyFurniture = furniture;
+                ReturnFurniture(furniture.FurnitureID).Forget();
+            }
+
+            target.FurnitureList.Clear();
+        }
+
         List<Vector2Int> connectedAislePositions = new List<Vector2Int>();
 
         foreach (DoorData doorData in target.DoorDataList)
@@ -161,6 +186,16 @@ public class BuildViewModel : ViewModelBase
         ClearAisle(connectedAislePositions);
 
         ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
+    }
+
+    private async UniTaskVoid ReturnFurniture(string furnitureId)
+    {
+        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureId);
+
+        Sprite icon = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
+
+        ServiceManager.Instance.HousingService.AddItem(furnitureId, icon);
     }
 
     public void ClearAisle(List<Vector2Int> startPositions)
@@ -242,6 +277,8 @@ public class BuildViewModel : ViewModelBase
         SelectType = BuildType.None;
 
         ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
+
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
     }
 
     public void CancelBuildMode()

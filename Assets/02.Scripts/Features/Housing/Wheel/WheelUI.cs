@@ -22,7 +22,7 @@ public class WheelUI : ViewBase
     [SerializeField] private Transform Parent_Hamsters;
     [SerializeField] private GameObject Text_InfoText;
 
-    private Dictionary<string, HamsterSlot> _spawnSlotList = new Dictionary<string, HamsterSlot>();
+    private Dictionary<int, HamsterSlot> _spawnSlotList = new Dictionary<int, HamsterSlot>();
     private WheelViewModel _wheelVM;
     private string _selectHamsterID;
 
@@ -43,7 +43,10 @@ public class WheelUI : ViewBase
 
     private void OnDisable()
     {
-        _wheelVM.PropertyChanged -= OnPropertyChanged_VM;
+        if (_wheelVM != null)
+        {
+            _wheelVM.PropertyChanged -= OnPropertyChanged_VM;
+        }
     }
 
     public void BindViewModel(WheelViewModel wheelVM)
@@ -51,7 +54,7 @@ public class WheelUI : ViewBase
         _wheelVM = wheelVM;
         _wheelVM.PropertyChanged += OnPropertyChanged_VM;
 
-        _selectHamsterID = _wheelVM.CurrentHamsterID;
+        _selectHamsterID = null;
 
         InitWheelSlotList();
         RefreshInfoUI();
@@ -59,6 +62,7 @@ public class WheelUI : ViewBase
 
     private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)
     {
+        InitWheelSlotList();
         RefreshInfoUI();
     }
 
@@ -74,6 +78,7 @@ public class WheelUI : ViewBase
             _spawnSlotList.Clear();
         }
 
+        int index = 0;
         foreach (WheelSlotData slotData in _wheelVM.Hamsters)
         {
             string hamsterId = slotData.HamsterID;
@@ -85,7 +90,8 @@ public class WheelUI : ViewBase
                 hamsterSlot.InitSlot(slotData.HamsterData, true);
                 hamsterSlot.OnSlotClicked += SelectHamsterSlot;
 
-                _spawnSlotList.Add(hamsterId, hamsterSlot);
+                _spawnSlotList.Add(index, hamsterSlot);
+                index++;
             }
         }
 
@@ -171,17 +177,20 @@ public class WheelUI : ViewBase
 
         UIManager.Instance.CloseWheelUI();
     }
-    
+
     private void OnClickConfirm()
     {
-        _wheelVM.AssignHamster(_selectHamsterID);
+        if (!string.IsNullOrEmpty(_selectHamsterID))
+        {
+            _wheelVM.AssignHamster(_selectHamsterID);
+        }
 
         OnClickClose();
     }
 
     private void OnClickSkip()
     {
-        _wheelVM.UnassignHamster(_selectHamsterID);
+        _wheelVM.UnassignHamster();
 
         OnClickClose();
     }
