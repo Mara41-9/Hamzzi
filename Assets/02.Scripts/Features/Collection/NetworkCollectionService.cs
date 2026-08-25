@@ -6,20 +6,20 @@ using UnityEngine;
 
 public class NetworkCollectionService
 {
-    private CollectionViewModel _collectionViewModel;
+    private Dictionary<long, CollectionViewModel> _collectionViewModelList = new Dictionary<long, CollectionViewModel>();
     private HamsterViewModel _hamsterViewModel;
 
     public event Action OnHamsterDataLoaded;
 
-    public CollectionViewModel GetCollectionViewModel()
+    public CollectionViewModel GetCollectionViewModel(long userUID)
     {
-        if(_collectionViewModel == null)
+        if(_collectionViewModelList.ContainsKey(userUID) == false)
         {
             var collectionViewModel = new CollectionViewModel();
-            _collectionViewModel = collectionViewModel;
+            _collectionViewModelList.Add(userUID, collectionViewModel);
         }
 
-        return _collectionViewModel;
+        return _collectionViewModelList[userUID];
     }
 
     public HamsterViewModel GetHamsterViewModel()
@@ -75,7 +75,7 @@ public class NetworkCollectionService
 
                             // 2. 리스트에 추가
                             hamsterList.Add(hamster);
-                            _collectionViewModel.AddCollectedHamsterList(hamster, true);
+                            _collectionViewModelList[userUID].AddCollectedHamsterList(hamster, true);
 
                             Debug.Log($"Hamster Data Load : {hamster.HamsterId}, {hamster.FaceId}");
                         }

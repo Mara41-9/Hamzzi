@@ -10,7 +10,8 @@ public class KickUI : MonoBehaviour
 
     private void Start()
     {
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
     }
 
     private void OnEnable()

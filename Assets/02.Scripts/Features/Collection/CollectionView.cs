@@ -36,6 +36,13 @@ public class CollectionView : UIBase
     private CollectionViewModel _collectionViewModel;
     private HamsterViewModel _hamsterViewModel;
 
+    private void Awake()
+    {
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
+        _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
+    }
+
     private void OnEnable()
     {
         ExitButton.BindOnClickButtonEvent(CloseCollectionUI);
@@ -46,11 +53,9 @@ public class CollectionView : UIBase
         KickButton.BindOnClickButtonEvent(KickHamster);
 
         // 수집 데이터들 View에 표시
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.PropertyChanged += OnPropertyChanged;
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropChanged;
         _collectionViewModel.InvokeOnceOnInit();
-        _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
 
         // 슬롯이 없다면 초기화
         InitCollectionList();
