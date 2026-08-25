@@ -1,18 +1,30 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class InGameSettingsUI : ViewBase
 {
     [SerializeField] private UIButton Button_BackgroundClose;
     [SerializeField] private UIButton Button_Close;
+    [SerializeField] private Slider Slider_BGM;
+    [SerializeField] private Slider Slider_SFX;
 
     [SerializeField] private UIButton Button_Logout;
+
+    private float _bgmVolume;
+    private float _sfxVolume;
 
     private void OnEnable()
     {
         Button_BackgroundClose.BindOnClickButtonEvent(OnClick_Close);
         Button_Close.BindOnClickButtonEvent(OnClick_Close);
+
+        _bgmVolume = SoundManager.Instance.GetBGMVolume();
+        Slider_BGM.value = _bgmVolume;
+
+        _sfxVolume = SoundManager.Instance.GetSFXVolume();
+        Slider_SFX.value = _sfxVolume;
 
         Button_Logout.BindOnClickButtonEvent(LogoutInGame);
     }
@@ -22,12 +34,27 @@ public class InGameSettingsUI : ViewBase
         Button_BackgroundClose.UnBindOnClickButtonEvent(OnClick_Close);
         Button_Close.UnBindOnClickButtonEvent(OnClick_Close);
 
+        Slider_BGM.onValueChanged.RemoveListener(OnChangedBGMVolume);
+        Slider_SFX.onValueChanged.RemoveListener(OnChangedSFXVolume);
+
         Button_Logout.UnBindOnClickButtonEvent(LogoutInGame);
     }
 
     private void OnClick_Close()
     {
         UIManager.Instance.CloseTitleSettingsUI();
+    }
+
+    private void OnChangedBGMVolume(float volume)
+    {
+        _bgmVolume = volume;
+        SoundManager.Instance.SetBGMVolume(_bgmVolume);
+    }
+
+    private void OnChangedSFXVolume(float volume)
+    {
+        _sfxVolume = volume;
+        SoundManager.Instance.SetSFXVolume(_sfxVolume);
     }
 
     private void LogoutInGame()
