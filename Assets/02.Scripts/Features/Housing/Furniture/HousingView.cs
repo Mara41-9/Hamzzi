@@ -407,20 +407,24 @@ public class HousingView : ViewBase
         {
             furnitureView.SetGhostMode(Material_Ghost);
 
+            float subCellSize = GetCurrentSubCellSize();
+            Vector2Int calculatedSize = _housingVM.FurnitureVM.Size;
+
+            if (calculatedSize == Vector2Int.one && furnitureView.GetFurnitureSize(subCellSize) != Vector2Int.one)
+            {
+                calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
+                _housingVM.FurnitureVM.Size = calculatedSize;
+            }
+
+            if (_housingVM.CurrentState == HousingState.Editing)
+            {
+                UpdateGhostTransform();
+                SpriteRenderer_Tile.gameObject.SetActive(true);
+                return;
+            }
+
             if (_housingVM.CurrentState == HousingState.Placing)
             {
-                float subCellSize = GetCurrentSubCellSize();
-                Vector2Int calculatedSize = _housingVM.FurnitureVM.Size;
-
-                if (calculatedSize == Vector2Int.one && furnitureView.GetFurnitureSize(subCellSize) != Vector2Int.one)
-                {
-                    calculatedSize = furnitureView.GetFurnitureSize(subCellSize);
-                    _housingVM.FurnitureVM.Size = calculatedSize;
-                }
-
-                bool isRotated = (_housingVM.FurnitureVM.RotationAngle / 90) % 2 != 0;
-                Vector2Int currentSize = isRotated ? new Vector2Int(calculatedSize.y, calculatedSize.x) : calculatedSize;
-
                 if (_housingVM.TargetRoom != null)
                 {
                     Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);

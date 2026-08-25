@@ -236,6 +236,9 @@ public class HousingUI : ViewBase
     {
         if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
         {
+            _housingView.ClearRoomGrid();
+            _housingView.gameObject.SetActive(false);
+
             UIManager.Instance.CloseHousingUI();
             UIManager.Instance.OpenDecorUI();
         }
