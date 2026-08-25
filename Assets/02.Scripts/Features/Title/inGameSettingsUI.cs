@@ -42,7 +42,7 @@ public class InGameSettingsUI : ViewBase
 
     private void OnClick_Close()
     {
-        UIManager.Instance.CloseTitleSettingsUI();
+        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.InGameSettingsUI);
     }
 
     private void OnChangedBGMVolume(float volume)
