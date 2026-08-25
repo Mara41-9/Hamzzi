@@ -20,9 +20,11 @@ public class InGameSettingsUI : ViewBase
         Button_BackgroundClose.BindOnClickButtonEvent(OnClick_Close);
         Button_Close.BindOnClickButtonEvent(OnClick_Close);
 
+        Slider_BGM.onValueChanged.AddListener(OnChangedBGMVolume);
         _bgmVolume = SoundManager.Instance.GetBGMVolume();
         Slider_BGM.value = _bgmVolume;
 
+        Slider_SFX.onValueChanged.AddListener(OnChangedSFXVolume);
         _sfxVolume = SoundManager.Instance.GetSFXVolume();
         Slider_SFX.value = _sfxVolume;
 
