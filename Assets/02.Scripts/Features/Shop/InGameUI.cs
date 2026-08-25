@@ -90,16 +90,17 @@ public class InGameUI : ViewBase
 
     private async UniTask UpdateUserInfo()
     {
-        Sprite lodedSprite = null;
-
         if (string.IsNullOrEmpty(_userVm.UserIconId) == false)
         {
-            lodedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
+            Sprite loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
 
-            Image_UserIcon.sprite = lodedSprite;
+            Image_UserIcon.sprite = loadedSprite;
         }
 
-        Text_UserName.text = _userVm.UserName;
+        if (string.IsNullOrEmpty(_userVm.UserName) == false)
+        {
+            Text_UserName.text = _userVm.UserName;
+        }
     }
 
     private void OnClick_OpenShop()
