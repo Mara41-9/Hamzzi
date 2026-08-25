@@ -10,11 +10,14 @@ public class InGameManager : SingletonBase<InGameManager>
     private const float IdleRewardRateMultiplier = 0.7f;
 
     private int _pendingIdleReward;
+    private long _lastLoginTicks;
 
     private void Start()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
         loginVm.OnCompleteLogin += HandleCompleteLogin;
+
+        ServiceManager.Instance.CollectionService.OnHamsterDataLoaded += HandleHamsterDataLoaded;
     }
 
     private void OnDestroy()
@@ -24,19 +27,38 @@ public class InGameManager : SingletonBase<InGameManager>
         {
             loginVm.OnCompleteLogin -= HandleCompleteLogin;
         }
+
+        NetworkCollectionService collectionService = ServiceManager.Instance.CollectionService;
+        if (collectionService != null)
+        {
+            collectionService.OnHamsterDataLoaded -= HandleHamsterDataLoaded;
+        }
     }
 
     private void HandleCompleteLogin()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
-        float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
-        long lastLoginTicks = loginVm.LastLoginTime.Ticks;
-        float elapsedSeconds = GameUtil.CalculateElapsedSeconds(lastLoginTicks, IdleRewardCapSeconds);
-        int idleReward = GameUtil.CalculateIdleReward(lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
+        _lastLoginTicks = loginVm.LastLoginTime.Ticks;
 
         loginVm.RequestUpdateLastLogin();
         AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private void HandleHamsterDataLoaded()
+    {
+        if (_lastLoginTicks == 0)
+        {
+            return;
+        }
+
+        float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
+        float elapsedSeconds = GameUtil.CalculateElapsedSeconds(_lastLoginTicks, IdleRewardCapSeconds);
+        int idleReward = GameUtil.CalculateIdleReward(_lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
+
+#if UNITY_EDITOR
+        Debug.Log($"[방치 보상 계산] 초당 {productionPerSec} / 경과 {elapsedSeconds}초 / 보상 {idleReward}");
+#endif
 
         if (idleReward <= 0)
         {
