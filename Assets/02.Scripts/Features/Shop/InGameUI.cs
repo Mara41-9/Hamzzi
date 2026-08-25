@@ -71,7 +71,10 @@ public class InGameUI : ViewBase
     {
         switch (e.PropertyName)
         {
-            case nameof(UserViewModel.SeedCount):
+            case nameof(UserViewModel.UserName):
+                UpdateUserInfo().Forget();
+                break;
+            case nameof(UserViewModel.UserIconId):
                 UpdateUserInfo().Forget();
                 break;
         }
@@ -93,9 +96,10 @@ public class InGameUI : ViewBase
         {
             lodedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
 
-            Text_UserName.text = _userVm.UserName;
             Image_UserIcon.sprite = lodedSprite;
         }
+
+        Text_UserName.text = _userVm.UserName;
     }
 
     private void OnClick_OpenShop()
