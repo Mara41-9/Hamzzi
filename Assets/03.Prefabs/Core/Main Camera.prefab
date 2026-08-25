@@ -161,7 +161,7 @@ MonoBehaviour:
   Zoom_Angle: {x: 30, y: 0, z: 0}
   Zoom_Distance: 10
   Zoom_FOV: 40
-  Zoom_Sensitive: 0.01
+  Zoom_Sensitive: 0.05
   Size_MinOrtho: 4
   Size_MaxOrtho: 20
   FOV_Min: 30

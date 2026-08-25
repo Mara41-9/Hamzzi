@@ -127,20 +127,33 @@ public class InGameUI : ViewBase
         _housingVM.TargetRoom = null;
         _housingVM.CurrentViewMode = HousingViewMode.Garden;
         _housingVM.EnterGardenMode();
+        UpdateButton();
     }
 
     private void OnClick_Exit()
     {
+        if (_cameraController.IsFollowing)
+        {
+            _cameraController.StopFollowHamster();
+            _cameraController.ShowOverview().Forget();
+
+            _housingVM.CurrentViewMode = HousingViewMode.OverView;
+
+            UpdateButton();
+
+            return;
+        }
+
         _housingVM.TargetRoom = null;
         _housingVM.CurrentViewMode = HousingViewMode.OverView;
         _housingVM.EnterOverviewMode();
-
-        _cameraController.StopFollowHamster();
+        UpdateButton();
     }
 
-    private void UpdateButton()
+    public void UpdateButton()
     {
-        bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null);
+        bool isFollowing = (_cameraController != null && _cameraController.IsFollowing);
+        bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null) || isFollowing;
 
         Button_Exit.gameObject.SetActive(isSubView);
         Button_Garden.gameObject.SetActive(!isSubView);

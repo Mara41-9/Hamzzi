@@ -3,9 +3,22 @@ using UnityEngine;
 
 public class FurnitureViewModel : ViewModelBase
 {
-    public string InstanceID { get; private set; }
     public string FurnitureID { get; private set; }
     public string PrefabPath { get; private set; }
+
+    private string _instanceID;
+    public string InstanceID
+    {
+        get => _instanceID;
+        set
+        {
+            if (_instanceID != value)
+            {
+                _instanceID = value;
+                OnPropertyChanged(nameof(InstanceID));
+            }
+        }
+    }
 
     private string _roomInstanceID;
     public string RoomInstanceID
@@ -30,7 +43,7 @@ public class FurnitureViewModel : ViewModelBase
             if (_localPos != value)
             {
                 _localPos = value;
-                OnPropertyChanged(nameof(_localPos));
+                OnPropertyChanged(nameof(LocalPos));
             }
         }
     }
@@ -44,7 +57,7 @@ public class FurnitureViewModel : ViewModelBase
             if (_size != value)
             {
                 _size = value;
-                OnPropertyChanged(nameof(_size));
+                OnPropertyChanged(nameof(Size));
             }
         }
     }
@@ -58,7 +71,7 @@ public class FurnitureViewModel : ViewModelBase
             if (_rotationAngle != value)
             {
                 _rotationAngle = value;
-                OnPropertyChanged(nameof(_rotationAngle));
+                OnPropertyChanged(nameof(RotationAngle));
             }
         }
     }
@@ -72,7 +85,7 @@ public class FurnitureViewModel : ViewModelBase
             if (_isValid != value)
             {
                 _isValid = value;
-                OnPropertyChanged(nameof(_isValid));
+                OnPropertyChanged(nameof(IsValid));
             }
         }
     }
