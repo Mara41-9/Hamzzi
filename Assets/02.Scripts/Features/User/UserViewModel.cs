@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class UserViewModel : ViewModelBase
 {
@@ -66,8 +67,6 @@ public static class UserViewModelExtension
 
         int bonusAmount = Mathf.FloorToInt(_seedBonusRemain);
 
-        Debug.Log($"[버프 계산] " + $"이번 보너스: {addedBonus}, " + $"누적 보너스: {_seedBonusRemain}, " + $"지급 가능한 보너스: {bonusAmount}");
-
         if(bonusAmount > 0)
         {
             userVm.SeedCount += bonusAmount;
@@ -81,6 +80,12 @@ public static class UserViewModelExtension
     {
         _seedBuffRate += amount;
     }
+
+    public static void RemoveSeedBuff(this UserViewModel userVm, float amount)
+    {
+        _seedBuffRate -= amount;
+    }
+
 
     public static bool TryUseSeed(this UserViewModel userVm, int amount)
     {

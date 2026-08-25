@@ -13,6 +13,7 @@ public enum UIRootType
 
 public enum UIType
 {
+    LoadingUI,
     TitleUI,
     TitleSettingsUI,
     InGameUI,
@@ -30,7 +31,7 @@ public enum UIType
     FeverTimeCutsceneUI,
     WheelUI,
     DecorUI,
-    TestHousingUI    // [나라] TODO : 테스트용으로 만든 하우징 UI 
+    IdleRewardPopupUI
 }
 
 public static class UIManagerExtension
@@ -41,6 +42,16 @@ public static class UIManagerExtension
 
         path = $"UI/{uiRootType}/{uiType}";
         return path;
+    }
+
+    public static void OpenLoadingUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
+    }
+
+    public static void CloseLoadingUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
     }
 
     public static void OpenTitleUI(this UIManager uiManager)
@@ -141,5 +152,17 @@ public static class UIManagerExtension
     public static void CloseWheelUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.WheelUI);
+    }
+
+    public static void OpenIdleRewardPopupUI(this UIManager uiManager, int rewardAmount, float elapsedSeconds, float capSeconds)
+    {
+        UIBase openedUI = uiManager.OpenUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);
+        IdleRewardPopupUI popupUI = openedUI as IdleRewardPopupUI;
+        popupUI.SetRewardInfo(rewardAmount, elapsedSeconds, capSeconds);
+    }
+
+    public static void CloseIdleRewardPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);
     }
 }

@@ -11,6 +11,9 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public NetworkGachaService GachaService { get; private set; }
     public LoginService LoginService { get; private set; }
     public FriendListService FriendListService { get; private set; }
+    public AccountSearchService AccountSearchService { get; private set; }
+    public FriendService FriendService { get; private set; }
+    public AccountInfoService AccountInfoService { get; private set; }
 
     public void Start()
     {
@@ -26,6 +29,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitLoginService();
         InitFriendListService();
         InitUserService();
+
+        LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
+        InitAccountSearchService();
+        InitFriendService();
+        InitAccountInfoService();
     }
 
     private void InitShopService()
@@ -68,5 +76,31 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitFriendListService()
     {
         FriendListService = new FriendListService();
+    }
+
+    private void InitAccountSearchService()
+    {
+        AccountSearchService = new AccountSearchService();
+    }
+
+    private void InitFriendService()
+    {
+        FriendService = new FriendService();
+    }
+
+    private void InitAccountInfoService()
+    {
+        AccountInfoService = new AccountInfoService();
+    }
+
+    public void LoadDataFromDB()
+    {
+        var loginVM = LoginService.GetViewModel();
+        long userUID = loginVM.UserUID;
+
+        Debug.Log($"User UID : {userUID}");
+        CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        UserService.InitUser(userUID).Forget();
+        HousingService.LoadInventory(userUID).Forget();
     }
 }
