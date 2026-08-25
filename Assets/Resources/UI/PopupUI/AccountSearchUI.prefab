@@ -199,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4506210056119579713}
   - component: {fileID: 3281599280518473548}
+  - component: {fileID: 5745731518238813604}
   m_Layer: 5
   m_Name: AccountSearchUI
   m_TagString: Untagged
@@ -235,6 +236,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3930153725928585484}
   m_CullTransparentMesh: 0
+--- !u!114 &5745731518238813604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3930153725928585484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36fb792626b034542889f573cd63e500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AccountSearchView
+  InputField_Id: {fileID: 7051589907273618899}
+  Button_Search: {fileID: 3142485962338520883}
+  Button_Close: {fileID: 0}
 --- !u!1 &4039241947061940469
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +265,7 @@ GameObject:
   - component: {fileID: 3265650331733011921}
   - component: {fileID: 3142485962338520883}
   m_Layer: 5
-  m_Name: Button_CreatAcount
+  m_Name: Button_SearchAcount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +672,6 @@ GameObject:
   - component: {fileID: 1732203809913953577}
   - component: {fileID: 5851915814650779857}
   - component: {fileID: 8337203181639151573}
-  - component: {fileID: 7925962909677729467}
   m_Layer: 5
   m_Name: AccountSearchUI
   m_TagString: Untagged
@@ -724,21 +739,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7925962909677729467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6539625921343512618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36fb792626b034542889f573cd63e500, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AccountSearchView
-  InputField_Id: {fileID: 7051589907273618899}
-  Button_Search: {fileID: 3142485962338520883}
-  Button_Close: {fileID: 8522596573037566913}
 --- !u!1 &7044164840449478855
 GameObject:
   m_ObjectHideFlags: 0
