@@ -7,6 +7,7 @@ using UnityEngine;
 public class NetworkCollectionService
 {
     private CollectionViewModel _collectionViewModel;
+    private HamsterViewModel _hamsterViewModel;
 
     public event Action OnHamsterDataLoaded;
 
@@ -15,22 +16,29 @@ public class NetworkCollectionService
         if(_collectionViewModel == null)
         {
             var collectionViewModel = new CollectionViewModel();
-            SetCollectionViewModel(collectionViewModel);
             _collectionViewModel = collectionViewModel;
         }
 
         return _collectionViewModel;
     }
 
-    private void SetCollectionViewModel(CollectionViewModel vm)
+    public HamsterViewModel GetHamsterViewModel()
+    {
+        if (_hamsterViewModel == null)
+        {
+            var hamsterViewModel = new HamsterViewModel();
+            SetHamsterViewModel(hamsterViewModel);
+            _hamsterViewModel = hamsterViewModel;
+        }
+
+        return _hamsterViewModel;
+    }
+
+    private void SetHamsterViewModel(HamsterViewModel vm)
     {
         GameDataManager.Instance.LoadData<HamsterData>();
         GameDataManager.Instance.LoadData<FaceData>();
-        LoadHamsterId(vm);
-    }
 
-    private void LoadHamsterId(CollectionViewModel vm)
-    {
         var allHamsterIds = GameDataManager.Instance.GetAllDataId<HamsterData>();
         vm.AllHamsterIdList = allHamsterIds;
 
