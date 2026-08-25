@@ -55,6 +55,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     {
         CollectionService = new NetworkCollectionService();
         CollectionService.GetCollectionViewModel();
+        CollectionService.GetHamsterViewModel();
     }
 
     private void InitGachaService()
