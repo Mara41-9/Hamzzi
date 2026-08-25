@@ -34,11 +34,11 @@ public class DecorUI : ViewBase
     private void OnClickEnterBuild()
     {
         _cameraController.StopFollowHamster();
-        _cameraController.ShowOverview().Forget();
+        _cameraController.ShowOverview(false).Forget();
 
         _housingVM.TargetRoom = null;
         _housingVM.EnterOverviewMode();
-
+         
         _buildVM.EnterBuildMode();
         _buildVM.SelectType = BuildType.None;
 
@@ -48,7 +48,10 @@ public class DecorUI : ViewBase
 
     private void OnClickEnterHousing()
     {
-        _housingVM.EnterHousingMode();
+        _cameraController.StopFollowHamster();
+
+        RoomViewModel currentRoom = _housingVM.TargetRoom;
+        _housingVM.EnterHousingMode(currentRoom);
 
         UIManager.Instance.OpenHousingUI();
         UIManager.Instance.CloseDecorUI();

@@ -6,25 +6,33 @@ public class SetPlayerNameView : UIBase
 {
     [SerializeField] private TMP_InputField InputField_Name;
     [SerializeField] private UIButton Button_Confirm;
+    [SerializeField] private UIButton Button_Close;
 
     private SetPlayerNameViewModel _vm;
 
-
-    // 임시 테스트용 초기화
     private void Start()
     {
-        SetPlayerNameService testService = new SetPlayerNameService();
-        SetPlayerNameViewModel testVm = new SetPlayerNameViewModel();
+        SetPlayerNameService service = ServiceManager.Instance.SetPlayerNameService;
 
-        testVm.SetService(testService);
-
-        BindViewModel(testVm);
+        if (service != null)
+        {
+            BindViewModel(service.GetViewModel());
+        }
     }
 
+    public void BindViewModel(SetPlayerNameViewModel vm)
+    {
+        _vm = vm;
+
+        _vm.PropertyChanged += OnPropChanged_View;
+        _vm.OnCompleteSetName += OnCompleteSetName_View;
+        _vm.OnFailSetName += OnFailSetName_View;
+    }
 
     private void OnEnable()
     {
         Button_Confirm.BindOnClickButtonEvent(OnClickConfirm);
+        Button_Close.BindOnClickButtonEvent(OnClickClose);
         InputField_Name.onValueChanged.AddListener(OnChangeName);
     }
 
@@ -43,18 +51,8 @@ public class SetPlayerNameView : UIBase
         }
     }
 
-    public void BindViewModel(SetPlayerNameViewModel vm)
-    {
-        _vm = vm;
-
-        _vm.PropertyChanged += OnPropChanged_View;
-        _vm.OnCompleteSetName += OnCompleteSetName_View;
-        _vm.OnFailSetName += OnFailSetName_View;
-    }
-
     private void OnPropChanged_View(object sender, PropertyChangedEventArgs e)
     {
-
     }
 
     private void OnChangeName(string text)
@@ -73,13 +71,22 @@ public class SetPlayerNameView : UIBase
         }
     }
 
+    private void OnClickClose()
+    {
+        UIManager.Instance.CloseSetNameUI();
+    }
+
     private void OnCompleteSetName_View()
     {
-        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.SetPlayerNameUI);
+        Debug.Log("닉네임 설정 성공");
+        UIManager.Instance.CloseSetNameUI();
+        UIManager.Instance.CloseTitleUI();
+        UIManager.Instance.OpenLoadingUI();
+        UIManager.Instance.OpenInGameUI();
     }
 
     private void OnFailSetName_View()
     {
-        InputField_Name.textComponent.color = Color.red;
+        Debug.Log("닉네임 설정 실패");
     }
 }

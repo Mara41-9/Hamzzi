@@ -34,6 +34,11 @@ public class BuildView : ViewBase
 
     public void BindViewModel(BuildViewModel buildVM)
     {
+        if (_buildVM != null)
+        {
+            _buildVM.PropertyChanged -= OnPropertyChanged_View;
+        }
+
         _buildVM = buildVM;
         _buildVM.PropertyChanged += OnPropertyChanged_View;
     }

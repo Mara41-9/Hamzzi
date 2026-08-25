@@ -34,6 +34,14 @@ public class CollectionView : UIBase
     private HamsterForm _modelForm;
 
     private CollectionViewModel _collectionViewModel;
+    private HamsterViewModel _hamsterViewModel;
+
+    private void Awake()
+    {
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
+        _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
+    }
 
     private void OnEnable()
     {
@@ -45,11 +53,10 @@ public class CollectionView : UIBase
         KickButton.BindOnClickButtonEvent(KickHamster);
 
         // 수집 데이터들 View에 표시
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
         _collectionViewModel.PropertyChanged += OnPropertyChanged;
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropChanged;
         _collectionViewModel.InvokeOnceOnInit();
-        
+
         // 슬롯이 없다면 초기화
         InitCollectionList();
         ShowHamsterList();
@@ -119,8 +126,6 @@ public class CollectionView : UIBase
             case nameof(CollectionViewModel.CollectedHamsterIdList):
                 UpdateHamsterSlot();
                 break;
-            case nameof(CollectionViewModel.AllHamsterIdList):
-                break;
             case nameof(CollectionViewModel.CurrentSelectHamsterId):
                 UpdateHamsterInfo();
                 UpdateFaceSlot();
@@ -174,7 +179,7 @@ public class CollectionView : UIBase
 
     private void InitHamsterList()
     {
-        List<string> allHamsterList = _collectionViewModel.AllHamsterIdList;
+        List<string> allHamsterList = _hamsterViewModel.AllHamsterIdList;
 
         if (_spawnedHamsterSlotList.Count > 0)
             return;
@@ -207,7 +212,7 @@ public class CollectionView : UIBase
 
     private void InitFaceList()
     {
-        List<string> allFaceList = _collectionViewModel.AllFaceIdList;
+        List<string> allFaceList = _hamsterViewModel.AllFaceIdList;
 
         if (_spawnedFaceSlotList.Count > 0)
             return;

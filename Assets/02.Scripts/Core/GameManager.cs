@@ -1,25 +1,25 @@
 ﻿//게임 전체 흐름 제어 매니저 - 게임 종료, 실행, 로그인 넘어가는 과정 처리 등
 using Cysharp.Threading.Tasks;
-using System.IO;
 using UnityEngine;
 
 public class GameManager : SingletonBase<GameManager>
 {
-    private void Start()
-    {
-        InitMap().Forget();
-    }
-
     // 게임 진입점에서 실행
-    private async UniTask InitMap()
+    public async UniTask InitMap(long userUID)
     {
+        if (userUID == 0)
+        {
+            Debug.LogError("아이디 없음");
+            return;
+        }
+
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("Map", "Prefabs/Map", Vector3.zero);
 
-        bool hasSaveData = false;
+        bool hasSaveData = await ServiceManager.Instance.NetworkBuildService.HasUserRoomData(userUID);
 
         if (hasSaveData)
         {
-            //ServiceManager.Instance.HousingService.LoadAllHousingData();
+            await ServiceManager.Instance.NetworkBuildService.LoadBuildAndFurnitureData(userUID);
         }
         else
         {

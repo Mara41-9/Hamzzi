@@ -14,6 +14,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public AccountSearchService AccountSearchService { get; private set; }
     public FriendService FriendService { get; private set; }
     public AccountInfoService AccountInfoService { get; private set; }
+    public SetPlayerNameService SetPlayerNameService { get; private set; }
+    public NetworkBuildService NetworkBuildService { get; private set; }
 
     public void Start()
     {
@@ -34,6 +36,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitAccountSearchService();
         InitFriendService();
         InitAccountInfoService();
+        InitSetPlayerNameService();
+        InitNetworkBuildService();
     }
 
     private void InitShopService()
@@ -46,6 +50,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
         BuildService = new BuildService();
     }
 
+    private void InitNetworkBuildService()
+    {
+        NetworkBuildService = new NetworkBuildService();
+    }
+
     private void InitHousingService()
     {
         HousingService = new HousingService();
@@ -55,6 +64,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     {
         CollectionService = new NetworkCollectionService();
         CollectionService.GetCollectionViewModel();
+        CollectionService.GetHamsterViewModel();
     }
 
     private void InitGachaService()
@@ -91,6 +101,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitAccountInfoService()
     {
         AccountInfoService = new AccountInfoService();
+    }
+
+    private void InitSetPlayerNameService()
+    {
+        SetPlayerNameService = new SetPlayerNameService();
     }
 
     public void LoadDataFromDB()

@@ -86,6 +86,18 @@ public static class UserViewModelExtension
         _seedBuffRate -= amount;
     }
 
+    public static float GetSeedBuffRate(this UserViewModel userVm)
+    {
+        return _seedBuffRate;
+    }
+
+    public static int PredictSeedGain(this UserViewModel userVm, int amount)
+    {
+        float addedBonus = amount * _seedBuffRate;
+        int bonusAmount = Mathf.FloorToInt(_seedBonusRemain + addedBonus);
+
+        return amount + bonusAmount;
+    }
 
     public static bool TryUseSeed(this UserViewModel userVm, int amount)
     {
