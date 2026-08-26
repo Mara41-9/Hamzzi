@@ -14,14 +14,15 @@ public class GameManager : SingletonBase<GameManager>
             return;
         }
 
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+        buildVM.IsLoading = true;
+
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("Map", "Prefabs/Map", Vector3.zero);
         
         if (_buildView == null)
         {
             _buildView = prefab.GetComponent<BuildView>();
         }
-
-        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
 
         _buildView.BindViewModel(buildVM);
 
@@ -82,6 +83,8 @@ public class GameManager : SingletonBase<GameManager>
         await UniTask.DelayFrame(2);
 
         NavigationManager.Instance.BuildNav();
+
+        buildVM.IsLoading = false;
     }
 
     private void ClearMap()
