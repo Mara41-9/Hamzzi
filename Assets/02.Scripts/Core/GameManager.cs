@@ -23,7 +23,6 @@ public class GameManager : SingletonBase<GameManager>
         if (hasSaveData)
         {
             await ServiceManager.Instance.NetworkBuildService.LoadBuildAndFurnitureData(userUID);
-
             buildView.SpawnAllLoadBuilds();
 
             foreach (var pair in buildVM.Builds)
@@ -67,23 +66,6 @@ public class GameManager : SingletonBase<GameManager>
             {
                 buildVM.InitDefaultRoom(buildView.Transform_DefaultRoom, buildView.Transform_DefaultAisle);
             }
-
-            foreach (var pair in buildVM.Builds)
-            {
-                Vector2Int pos = pair.Key;
-                RoomViewModel vm = pair.Value;
-
-                if (vm.BuildType == BuildType.Room)
-                {
-                    buildVM.UpdateRoomConnection(vm);
-                }
-                else
-                {
-                    buildVM.UpdateConnection(pos);
-                }
-            }
-
-            ServiceManager.Instance.BuildService.RefreshAisleNavMesh(buildVM.Builds);
         }
 
         HousingViewModel housing = ServiceManager.Instance.HousingService.GetHousingViewModel();

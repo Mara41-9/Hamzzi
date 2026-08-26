@@ -33,7 +33,7 @@ public class NetworkBuildService
             {
                 await conn.OpenAsync();
 
-                string roomQuery = $"SELECT Room_UID, Room_Index, Position_X, Position_Y FROM {DBConfig.RoomTable} WHERE Owner_User_UID = @userUID AND Room_Index != {GARDEN_ROOM_INDEX} GROUP BY Room_UID";
+                string roomQuery = $"SELECT Room_UID, Room_Index, Position_X, Position_Y FROM {DBConfig.RoomTable} WHERE Owner_User_UID = @userUID AND Room_Index != {GARDEN_ROOM_INDEX}";
                 using (MySqlCommand cmd = new MySqlCommand(roomQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@userUID", userUID);
@@ -50,12 +50,26 @@ public class NetworkBuildService
                             bool isDefault = (roomIndex == 0);
 
                             Vector2Int pos = new Vector2Int(posX, posY);
-                            RoomViewModel roomVM = new RoomViewModel(buildType, pos)
+
+                            RoomViewModel roomVM = null;
+                            foreach (var existing in buildVM.Builds.Values)
                             {
-                                InstanceID = roomUID.ToString(),
-                                IsReady = true,
-                                IsDefault = isDefault
-                            };
+                                if (existing.InstanceID == roomUID.ToString())
+                                {
+                                    roomVM = existing;
+                                    break;
+                                }
+                            }
+
+                            if (roomVM == null)
+                            {
+                                roomVM = new RoomViewModel(roomUID.ToString(), buildType, pos)
+                                {
+                                    InstanceID = roomUID.ToString(),
+                                    IsReady = true,
+                                    IsDefault = isDefault
+                                };
+                            }
 
                             int sizeX = (buildType == BuildType.Room) ? 10 : 2;
                             int sizeY = (buildType == BuildType.Room) ? 6 : 2;
@@ -225,7 +239,7 @@ public class NetworkBuildService
                         }
                     }
 
-                    string insertGardenRoom = $@"INSERT INTO {DBConfig.RoomTable} (Room_UID, Owner_User_UID, Room_Index, Position_X, Position_Y) 
+                    string insertGardenRoom = $@"INSERT IGNORE INTO {DBConfig.RoomTable} (Room_UID, Owner_User_UID, Room_Index, Position_X, Position_Y) 
                         VALUES (@roomUID, @userUID, @roomIndex, @roomPosX, @roomPosY)";
                     using (MySqlCommand gCmd = new MySqlCommand(insertGardenRoom, conn, transaction))
                     {
