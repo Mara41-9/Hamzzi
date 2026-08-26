@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,9 +23,19 @@ public class CrossView : ViewBase
     [SerializeField] private Image MyHamsterImage;
     [SerializeField] private Image FriendHamsterImage;
 
+    private string _userHamsterId;
+    private string _friendHamsterId;
+
+    private HamsterViewModel _hamsterViewModel;
+
     public void OpenUI()
     {
         UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.CrossUI);
+    }
+
+    private void Start()
+    {
+        _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
     }
 
     private void OnEnable()
@@ -63,9 +73,11 @@ public class CrossView : ViewBase
         {
             case HamsterOwnerType.User:
                 iconImage = MyHamsterImage;
+                _userHamsterId = hamsterId;
                 break;
             case HamsterOwnerType.Friend:
                 iconImage = FriendHamsterImage;
+                _friendHamsterId = hamsterId;
                 break;
         }
 
@@ -96,6 +108,19 @@ public class CrossView : ViewBase
 
     private void OnClickCrossButton()
     {
+        List<string> faceDataList = _hamsterViewModel.AllFaceIdList;
+        int faceCount = faceDataList.Count;
 
+        int randomFace = Random.Range(0, faceCount);
+        int randomHamster = Random.Range(0, 2);
+
+        string faceId = faceDataList[randomFace];
+        string hamsterId = randomHamster == 0 ? _userHamsterId : _friendHamsterId;
+
+        HamsterSave hamsterSave = new HamsterSave();
+        hamsterSave.HamsterUID = GameUtil.GenerateUID();
+        hamsterSave.HamsterId = hamsterId;
+        hamsterSave.FaceId = faceId;
+        hamsterSave.UserUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
     }
 }
