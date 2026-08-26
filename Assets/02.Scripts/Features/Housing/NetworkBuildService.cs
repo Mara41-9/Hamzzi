@@ -8,6 +8,9 @@ public class NetworkBuildService
 {
     private BuildViewModel _buildVM;
 
+    private const long GARDEN_ROOM_UID = 999999999;
+    private const int GARDEN_ROOM_INDEX = 99;
+
     public BuildViewModel GetBuildViewModel()
     {
         if (_buildVM == null)
@@ -20,8 +23,9 @@ public class NetworkBuildService
 
     public async UniTask LoadBuildAndFurnitureData(long userUID)
     {
-        var buildVM = GetBuildViewModel();
+        BuildViewModel buildVM = GetBuildViewModel();
         buildVM.IsLoading = true;
+        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
         using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
         {
@@ -29,7 +33,7 @@ public class NetworkBuildService
             {
                 await conn.OpenAsync();
 
-                string roomQuery = $"SELECT Room_UID, Room_Index, Position_X, Position_Y FROM {DBConfig.RoomTable} WHERE Owner_User_UID = @userUID GROUP BY Room_UID";
+                string roomQuery = $"SELECT Room_UID, Room_Index, Position_X, Position_Y FROM {DBConfig.RoomTable} WHERE Owner_User_UID = @userUID AND Room_Index != {GARDEN_ROOM_INDEX} GROUP BY Room_UID";
                 using (MySqlCommand cmd = new MySqlCommand(roomQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@userUID", userUID);
@@ -101,13 +105,24 @@ public class NetworkBuildService
                                 AssignHamsterID = hamsterUID?.ToString()
                             };
 
-                            foreach (var room in buildVM.Builds.Values)
+                            if (roomUID == GARDEN_ROOM_UID)
                             {
-                                if (room.InstanceID == roomUID.ToString())
+                                if (housingVM != null)
                                 {
-                                    room.AddFurniture(furnitureVM);
-                                    SpawnLoadFurniture(room, furnitureVM).Forget();
-                                    break;
+                                    housingVM.LoadGardenFurniture(furnitureVM);
+                                    SpawnLoadGardenFurniture(furnitureVM).Forget();
+                                }
+                            }
+                            else
+                            {
+                                foreach (var room in buildVM.Builds.Values)
+                                {
+                                    if (room.InstanceID == roomUID.ToString())
+                                    {
+                                        room.AddFurniture(furnitureVM);
+                                        SpawnLoadFurniture(room, furnitureVM).Forget();
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -149,10 +164,12 @@ public class NetworkBuildService
         }
 
         var buildVM = GetBuildViewModel();
+        var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
         using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
         {
             await conn.OpenAsync();
+
             using (MySqlTransaction transaction = await conn.BeginTransactionAsync())
             {
                 try
@@ -172,12 +189,10 @@ public class NetworkBuildService
                     }
 
                     HashSet<RoomViewModel> uniqueBuilds = new HashSet<RoomViewModel>(buildVM.Builds.Values);
-
                     foreach (var build in uniqueBuilds)
                     {
                         long uid = 0;
                         long.TryParse(build.InstanceID, out uid);
-
                         if (uid == 0)
                         {
                             uid = GameUtil.GenerateUID();
@@ -185,18 +200,11 @@ public class NetworkBuildService
                         }
 
                         int roomIndexValue = 1;
-
-                        if (build.BuildType == BuildType.Aisle)
-                        {
-                            roomIndexValue = 2;
-                        }
-                        else if (build.IsDefault)
-                        {
-                            roomIndexValue = 0;
-                        }
+                        if (build.BuildType == BuildType.Aisle) roomIndexValue = 2;
+                        else if (build.IsDefault) roomIndexValue = 0;
 
                         string insertQuery = $@"INSERT INTO {DBConfig.RoomTable} (Room_UID, Owner_User_UID, Room_Index, Position_X, Position_Y) 
-                           VALUES (@roomUID, @userUID, @roomIndex, @roomPosX, @roomPosY)";
+                            VALUES (@roomUID, @userUID, @roomIndex, @roomPosX, @roomPosY)";
 
                         using (MySqlCommand cmd = new MySqlCommand(insertQuery, conn, transaction))
                         {
@@ -205,7 +213,6 @@ public class NetworkBuildService
                             cmd.Parameters.AddWithValue("@roomIndex", roomIndexValue);
                             cmd.Parameters.AddWithValue("@roomPosX", build.OriginPos.x);
                             cmd.Parameters.AddWithValue("@roomPosY", build.OriginPos.y);
-
                             await cmd.ExecuteNonQueryAsync();
                         }
 
@@ -213,46 +220,33 @@ public class NetworkBuildService
                         {
                             foreach (var furnitureVM in build.FurnitureList)
                             {
-                                long furnitureUID = 0;
-                                long.TryParse(furnitureVM.InstanceID, out furnitureUID);
-
-                                if (furnitureUID == 0)
-                                {
-                                    furnitureUID = GameUtil.GenerateUID();
-                                    furnitureVM.InstanceID = furnitureUID.ToString();
-                                }
-
-                                string insertFurniture = $@"INSERT INTO {DBConfig.FurnitureTable} 
-                                                            (Furniture_UID, Room_UID, Furniture_Data_ID, Position_X, Position_Y, Rotate_State, Useing_Hamster_UID)
-                                                            VALUES (@furnitureUID, @roomUID, @furnitureDataId, @posX, @posY, @rotate, @hamsterUID)";
-
-                                using (MySqlCommand fCmd = new MySqlCommand(insertFurniture, conn, transaction))
-                                {
-                                    fCmd.Parameters.AddWithValue("@furnitureUID", furnitureUID);
-                                    fCmd.Parameters.AddWithValue("@roomUID", uid);
-                                    fCmd.Parameters.AddWithValue("@furnitureDataId", furnitureVM.FurnitureID);
-                                    fCmd.Parameters.AddWithValue("@posX", furnitureVM.LocalPos.x);
-                                    fCmd.Parameters.AddWithValue("@posY", furnitureVM.LocalPos.y);
-                                    fCmd.Parameters.AddWithValue("@rotate", furnitureVM.RotationAngle);
-
-                                    long parsedHamsterUID = 0;
-                                    object hamsterVal = DBNull.Value;
-
-                                    if (!string.IsNullOrEmpty(furnitureVM.AssignHamsterID) && long.TryParse(furnitureVM.AssignHamsterID, out parsedHamsterUID))
-                                    {
-                                        hamsterVal = parsedHamsterUID;
-                                    }
-
-                                    fCmd.Parameters.AddWithValue("@hamsterUID", hamsterVal);
-
-                                    await fCmd.ExecuteNonQueryAsync();
-                                }
+                                await InsertFurnitureData(conn, transaction, uid, furnitureVM);
                             }
                         }
                     }
 
+                    string insertGardenRoom = $@"INSERT INTO {DBConfig.RoomTable} (Room_UID, Owner_User_UID, Room_Index, Position_X, Position_Y) 
+                        VALUES (@roomUID, @userUID, @roomIndex, @roomPosX, @roomPosY)";
+                    using (MySqlCommand gCmd = new MySqlCommand(insertGardenRoom, conn, transaction))
+                    {
+                        gCmd.Parameters.AddWithValue("@roomUID", GARDEN_ROOM_UID);
+                        gCmd.Parameters.AddWithValue("@userUID", userUID);
+                        gCmd.Parameters.AddWithValue("@roomIndex", GARDEN_ROOM_INDEX);
+                        gCmd.Parameters.AddWithValue("@roomPosX", 0);
+                        gCmd.Parameters.AddWithValue("@roomPosY", 0);
+                        await gCmd.ExecuteNonQueryAsync();
+                    }
+
+                    if (housingVM != null && housingVM.GardenFurnitureList != null)
+                    {
+                        foreach (var furnitureVM in housingVM.GardenFurnitureList)
+                        {
+                            await InsertFurnitureData(conn, transaction, GARDEN_ROOM_UID, furnitureVM);
+                        }
+                    }
+
                     await transaction.CommitAsync();
-                    Debug.Log("건설 및 가구 저장 성공");
+                    Debug.Log("건설 및 가구(정원 포함) 저장 성공");
                 }
                 catch (Exception ex)
                 {
@@ -260,14 +254,47 @@ public class NetworkBuildService
                     {
                         await transaction.RollbackAsync();
                     }
-                    catch (Exception rollbackEx)
-                    {
-                        Debug.LogError($"트랜잭션 롤백 실패 : {rollbackEx.Message}");
-                    }
+                    catch { }
 
                     Debug.LogError($"저장 오류 : {ex.Message}");
                 }
             }
+        }
+    }
+
+    private async UniTask InsertFurnitureData(MySqlConnection conn, MySqlTransaction transaction, long roomUID, FurnitureViewModel furnitureVM)
+    {
+        long furnitureUID = 0;
+        long.TryParse(furnitureVM.InstanceID, out furnitureUID);
+
+        if (furnitureUID == 0)
+        {
+            furnitureUID = GameUtil.GenerateUID();
+            furnitureVM.InstanceID = furnitureUID.ToString();
+        }
+
+        string insertFurniture = $@"INSERT INTO {DBConfig.FurnitureTable} 
+            (Furniture_UID, Room_UID, Furniture_Data_ID, Position_X, Position_Y, Rotate_State, Useing_Hamster_UID)
+            VALUES (@furnitureUID, @roomUID, @furnitureDataId, @posX, @posY, @rotate, @hamsterUID)";
+
+        using (MySqlCommand fCmd = new MySqlCommand(insertFurniture, conn, transaction))
+        {
+            fCmd.Parameters.AddWithValue("@furnitureUID", furnitureUID);
+            fCmd.Parameters.AddWithValue("@roomUID", roomUID);
+            fCmd.Parameters.AddWithValue("@furnitureDataId", furnitureVM.FurnitureID);
+            fCmd.Parameters.AddWithValue("@posX", furnitureVM.LocalPos.x);
+            fCmd.Parameters.AddWithValue("@posY", furnitureVM.LocalPos.y);
+            fCmd.Parameters.AddWithValue("@rotate", furnitureVM.RotationAngle);
+
+            long parsedHamsterUID = 0;
+            object hamsterVal = DBNull.Value;
+            if (!string.IsNullOrEmpty(furnitureVM.AssignHamsterID) && long.TryParse(furnitureVM.AssignHamsterID, out parsedHamsterUID))
+            {
+                hamsterVal = parsedHamsterUID;
+            }
+            fCmd.Parameters.AddWithValue("@hamsterUID", hamsterVal);
+
+            await fCmd.ExecuteNonQueryAsync();
         }
     }
 
@@ -292,6 +319,40 @@ public class NetworkBuildService
 
         Vector3 spawnPos = new Vector3((roomVM.OriginPos.x * 1.0f) + localX, (roomVM.OriginPos.y + 2.0f) * 1.0f + 0.2f, 9f - localZ - 0.5f);
 
+        Quaternion spawnRot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
+
+        prefab.transform.SetPositionAndRotation(spawnPos, spawnRot);
+
+        if (furnitureView != null)
+        {
+            furnitureView.ResetMaterial();
+            furnitureView.Bind(furnitureVM);
+        }
+
+        ServiceManager.Instance.HousingService.RegisterSpawnFurniture(furnitureVM.InstanceID, prefab);
+    }
+
+    private async UniTaskVoid SpawnLoadGardenFurniture(FurnitureViewModel furnitureVM)
+    {
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID.ToString(), furnitureVM.PrefabPath, Vector3.zero);
+        prefab.transform.rotation = Quaternion.identity;
+
+        float subCellSize = 1.0f;
+
+        if (prefab.TryGetComponent(out FurnitureView furnitureView))
+        {
+            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+        }
+
+        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
+        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
+        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+
+        float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
+        float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
+
+        Vector3 gardenOrigin = new Vector3(-40f, 12f, 12f);
+        Vector3 spawnPos = new Vector3(gardenOrigin.x + localX, gardenOrigin.y, gardenOrigin.z + localZ);
         Quaternion spawnRot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
 
         prefab.transform.SetPositionAndRotation(spawnPos, spawnRot);

@@ -198,6 +198,19 @@ public class BuildView : ViewBase
         }
     }
 
+    public void SpawnAllLoadBuilds()
+    {
+        HashSet<RoomViewModel> uniqueBuilds = new HashSet<RoomViewModel>(_buildVM.Builds.Values);
+
+        foreach (var roomVM in uniqueBuilds)
+        {
+            if (roomVM != null && !_spawnRoom.ContainsKey(roomVM.InstanceID))
+            {
+                SpawnBuildPrefab(roomVM).Forget();
+            }
+        }
+    }
+
     private Vector2Int ChangeGridPosition(Vector3 worldPos)
     {
         int x = Mathf.FloorToInt(worldPos.x / _cellSize);

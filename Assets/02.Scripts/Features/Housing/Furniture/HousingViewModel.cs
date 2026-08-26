@@ -528,6 +528,24 @@ public class HousingViewModel : ViewModelBase
         return true;
     }
 
+    public void LoadGardenFurniture(FurnitureViewModel furnitureVM)
+    {
+        for (int x = 0; x < furnitureVM.Size.x; x++)
+        {
+            for (int y = 0; y < furnitureVM.Size.y; y++)
+            {
+                _gardenFurnitureGrid[furnitureVM.LocalPos + new Vector2Int(x, y)] = furnitureVM;
+            }
+        }
+
+        if (!GardenFurnitureList.Contains(furnitureVM))
+        {
+            GardenFurnitureList.Add(furnitureVM);
+        }
+
+        OnPropertyChanged(nameof(GardenFurnitureList));
+    }
+
     public bool AddGardenFurniture(FurnitureViewModel furnitureVM)
     {
         if (!IsValidGardenPlace(furnitureVM.LocalPos, furnitureVM.Size))
