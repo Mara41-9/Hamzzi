@@ -114,7 +114,6 @@ public class InGameManager : SingletonBase<InGameManager>
         {
             await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
             await SaveSeedCount();
-            await SaveInventory();
         }
     }
 
@@ -141,16 +140,8 @@ public class InGameManager : SingletonBase<InGameManager>
         return HamsterManager.Instance.TotalCollectSpeedPerSec * (1f + buffRate);
     }
 
-    private async UniTask SaveInventory()
-    {
-        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
-
-        await ServiceManager.Instance.HousingService.SaveAllInventoryData(loginVm.UserUID);
-    }
-
     private void OnApplicationQuit()
     {
         SaveSeedCount().Forget();
-        SaveInventory().Forget();
     }
 }
