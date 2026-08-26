@@ -18,7 +18,7 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     private void Start()
     {
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(1234);
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
 
         SyncCollectedHamsters();
