@@ -22,24 +22,26 @@ public class HousingView : ViewBase
     private Camera _mainCamera;
     private Plane _mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
 
+    private HousingService _housingService;
     private HousingViewModel _housingVM;
     private BuildViewModel _buildVM;
     private GameObject _ghostObject;
     private float _lastGhostAngle = 0f;
 
     private List<GameObject> _activeGridLines = new List<GameObject>();
-    private Dictionary<string, GameObject> _spawnFurniture = new Dictionary<string, GameObject>();
 
     private void Awake()
     {
         _mainCamera = Camera.main;
+        _housingService = ServiceManager.Instance.HousingService;
+
         SpriteRenderer_Tile.gameObject.SetActive(false);
     }
 
     private void Start()
     {
         BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
-        HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+        HousingViewModel housingVM = _housingService.GetHousingViewModel();
 
         BindViewModel(housingVM, buildVM);
     }
@@ -89,6 +91,10 @@ public class HousingView : ViewBase
                 {
                     ShowRoomGrid(_housingVM.TargetRoom).Forget();
                 }
+                else if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
+                {
+                    ShowGardenGrid().Forget();
+                }
                 break;
 
             case nameof(_housingVM.FurnitureVM):
@@ -120,12 +126,7 @@ public class HousingView : ViewBase
                 if (_housingVM.DestroyFurniture != null)
                 {
                     string id = _housingVM.DestroyFurniture.InstanceID;
-
-                    if (_spawnFurniture.TryGetValue(id, out GameObject target))
-                    {
-                        GameObjectManager.Instance.RequestDestroyObject(target);
-                        _spawnFurniture.Remove(id);
-                    }
+                    _housingService.RemoveSpawnFurniture(id);
                 }
                 break;
         }
@@ -208,12 +209,7 @@ public class HousingView : ViewBase
                 if (furnitureView.FurnitureVM != null)
                 {
                     string instanceID = furnitureView.FurnitureVM.InstanceID;
-
-                    if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
-                    {
-                        GameObjectManager.Instance.RequestDestroyObject(obj);
-                        _spawnFurniture.Remove(instanceID);
-                    }
+                    _housingService.RemoveSpawnFurniture(instanceID);
 
                     SoundManager.Instance.PlaySFX("Select_Furniture");
 
@@ -380,10 +376,22 @@ public class HousingView : ViewBase
         if (SpriteRenderer_Tile != null)
         {
             SpriteRenderer_Tile.transform.position = new Vector3(pos.x, tileYOffset, pos.z);
-            SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, currentAngle);
 
-            float tileWidth = _housingVM.FurnitureVM.Size.x * subCellSize;
-            float tileHeight = _housingVM.FurnitureVM.Size.y * subCellSize;
+            Vector2Int baseSize = _housingVM.FurnitureVM.Size;
+            if (_ghostObject.TryGetComponent<FurnitureView>(out var fView))
+            {
+                baseSize = fView.GetFurnitureSize(subCellSize);
+                _housingVM.FurnitureVM.Size = baseSize;
+            }
+
+            bool isRotated = Mathf.Approximately(currentAngle, 90f) || Mathf.Approximately(currentAngle, 270f) || ((int)currentAngle / 90) % 2 != 0;
+            int sizeX = isRotated ? baseSize.y : baseSize.x;
+            int sizeY = isRotated ? baseSize.x : baseSize.y;
+
+            float tileWidth = sizeX * subCellSize;
+            float tileHeight = sizeY * subCellSize;
+
             SpriteRenderer_Tile.transform.localScale = new Vector3(tileWidth, tileHeight, 1f);
 
             SpriteRenderer_Tile.color = _housingVM.FurnitureVM.IsValid ? Color_Valid : Color_Invalid;
@@ -476,7 +484,7 @@ public class HousingView : ViewBase
 
         furnitureView.PlayPlaceAnimation();
 
-        _spawnFurniture[furnitureVM.InstanceID] = prefab;
+        _housingService.RegisterSpawnFurniture(furnitureVM.InstanceID, prefab);
     }
 
     private void GetFurniturePositionAndRotation(RoomViewModel roomVM, FurnitureViewModel furnitureVM, out Vector3 pos, out Quaternion rot)

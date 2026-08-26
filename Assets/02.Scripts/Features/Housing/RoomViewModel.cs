@@ -45,7 +45,7 @@ public class RoomViewModel : ViewModelBase
         }
     }
 
-    private int _gridFactor = 2;
+    private int _gridFactor = 4;
     public int GridFactor
     {
         get

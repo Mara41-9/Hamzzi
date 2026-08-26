@@ -231,6 +231,11 @@ public class BuildViewModel : ViewModelBase
                         continue;
                     }
 
+                    if (next.BuildType == BuildType.Room)
+                    {
+                        continue;
+                    }
+
                     if (next.BuildType != BuildType.Aisle || next.IsDefault)
                     {
                         continue;
@@ -445,7 +450,7 @@ public class BuildViewModel : ViewModelBase
     private Vector2Int SnapAisle(Vector2Int pos)
     {
         int x = Mathf.FloorToInt(pos.x / (float)AISLE_SIZE) * AISLE_SIZE;
-        int y = Mathf.FloorToInt(pos.y / (float)AISLE_SIZE) * AISLE_SIZE;
+        int y = Mathf.FloorToInt((pos.y + 1) / (float)AISLE_SIZE) * AISLE_SIZE;
 
         return new Vector2Int(x, y);
     }

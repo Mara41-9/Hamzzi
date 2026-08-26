@@ -301,7 +301,8 @@ public class HousingViewModel : ViewModelBase
 
         Vector2Int initialPos = new Vector2Int(TargetRoom.SubGridSize.x / 2 - subSize.x / 2, TargetRoom.SubGridSize.y / 2 - subSize.y / 2);
 
-        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
+        string newInstanceID = GameUtil.GenerateUID().ToString();
+        FurnitureVM = new FurnitureViewModel(newInstanceID, data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 
@@ -309,7 +310,8 @@ public class HousingViewModel : ViewModelBase
     {
         Vector2Int initialPos = new Vector2Int(10, 10);
 
-        FurnitureVM = new FurnitureViewModel(data.Id, data.PrefabPath, initialPos, subSize);
+        string newInstanceID = GameUtil.GenerateUID().ToString();
+        FurnitureVM = new FurnitureViewModel(newInstanceID, data.Id, data.PrefabPath, initialPos, subSize);
         CheckCurrentPos();
     }
 
@@ -324,7 +326,9 @@ public class HousingViewModel : ViewModelBase
         FurnitureVM.Rotate();
         CheckCurrentPos();
 
-        OnPropertyChanged(nameof(FurnitureVM));
+        var temp = FurnitureVM;
+        FurnitureVM = null;
+        FurnitureVM = temp;
     }
 
     public void SetConfirmFurniture(FurnitureViewModel furnitureVM)
@@ -486,7 +490,12 @@ public class HousingViewModel : ViewModelBase
 
     public void EnterGardenMode()
     {
+        TargetRoom = null;
         CurrentViewMode = HousingViewMode.Garden;
+        CurrentState = HousingState.Placing;
+
+        OnPropertyChanged(nameof(CurrentViewMode));
+        OnPropertyChanged(nameof(TargetRoom));
     }
 
     public void EnterOverviewMode()

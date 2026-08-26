@@ -9,7 +9,6 @@ public class GameManager : SingletonBase<GameManager>
     {
         if (userUID == 0)
         {
-            Debug.LogError("아이디 없음");
             return;
         }
 

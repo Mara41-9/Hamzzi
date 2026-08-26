@@ -95,7 +95,7 @@ public class NetworkBuildService
                                 continue;
                             }
 
-                            FurnitureViewModel furnitureVM = new FurnitureViewModel(itemData.Id, itemData.PrefabPath, new Vector2Int(posX, posY), Vector2Int.one)
+                            FurnitureViewModel furnitureVM = new FurnitureViewModel(furnitureUID.ToString(), itemData.Id, itemData.PrefabPath, new Vector2Int(posX, posY), Vector2Int.one)
                             {
                                 RotationAngle = rotateState,
                                 AssignHamsterID = hamsterUID?.ToString()
@@ -273,29 +273,36 @@ public class NetworkBuildService
 
     private async UniTaskVoid SpawnLoadFurniture(RoomViewModel roomVM, FurnitureViewModel furnitureVM)
     {
+        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID.ToString(), furnitureVM.PrefabPath, Vector3.zero);
+        prefab.transform.rotation = Quaternion.identity;
+
         float subCellSize = 1.0f / roomVM.GridFactor;
-        float localX = (furnitureVM.LocalPos.x + furnitureVM.Size.x * 0.5f) * subCellSize;
-        float localZ = (furnitureVM.LocalPos.y + furnitureVM.Size.y * 0.5f) * subCellSize;
 
-        float worldX = (roomVM.OriginPos.x * 1.0f) + localX;
-        float worldY = (roomVM.OriginPos.y + 2.0f) * 1.0f + 0.2f;
-        float worldZ = 9f - localZ - 0.5f;
+        if (prefab.TryGetComponent(out FurnitureView furnitureView))
+        {
+            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+        }
 
-        Vector3 spawnPos = new Vector3(worldX, worldY, worldZ);
+        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
+        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
+        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+
+        float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
+        float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
+
+        Vector3 spawnPos = new Vector3((roomVM.OriginPos.x * 1.0f) + localX, (roomVM.OriginPos.y + 2.0f) * 1.0f + 0.2f, 9f - localZ - 0.5f);
+
         Quaternion spawnRot = Quaternion.Euler(0f, furnitureVM.RotationAngle, 0f);
 
-        GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID.ToString(), furnitureVM.PrefabPath, spawnPos);
+        prefab.transform.SetPositionAndRotation(spawnPos, spawnRot);
 
-        if (prefab != null)
+        if (furnitureView != null)
         {
-            prefab.transform.rotation = spawnRot;
-
-            if (prefab.TryGetComponent(out FurnitureView furnitureView))
-            {
-                furnitureView.ResetMaterial();
-                furnitureView.Bind(furnitureVM);
-            }
+            furnitureView.ResetMaterial();
+            furnitureView.Bind(furnitureVM);
         }
+
+        ServiceManager.Instance.HousingService.RegisterSpawnFurniture(furnitureVM.InstanceID, prefab);
     }
 
     public async UniTask<bool> HasUserRoomData(long userUID)

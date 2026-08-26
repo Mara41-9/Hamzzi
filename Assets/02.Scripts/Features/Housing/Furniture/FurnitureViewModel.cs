@@ -112,9 +112,9 @@ public class FurnitureViewModel : ViewModelBase
         }
     }
 
-    public FurnitureViewModel (string furnitureID, string prefabPath, Vector2Int localPos, Vector2Int size)
+    public FurnitureViewModel (string instanceID, string furnitureID, string prefabPath, Vector2Int localPos, Vector2Int size)
     {
-        InstanceID = Guid.NewGuid().ToString();
+        InstanceID = instanceID;
         PrefabPath = prefabPath;
         FurnitureID = furnitureID;
         LocalPos = localPos;
