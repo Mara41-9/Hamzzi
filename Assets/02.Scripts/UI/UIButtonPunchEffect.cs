@@ -56,10 +56,6 @@ public class UIButtonPunchEffect : MonoBehaviour
 
     private void OnClickButton()
     {
-#if UNITY_EDITOR
-        Debug.Log("[펀치] 클릭 수신");
-#endif
-
         PlayPunchEffect();
     }
 
