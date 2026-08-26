@@ -17,6 +17,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public SetPlayerNameService SetPlayerNameService { get; private set; }
     public NetworkBuildService NetworkBuildService { get; private set; }
     public FriendRequestService FriendRequestService { get; private set; }
+    public VisitedUserService VisitedUserService { get; private set; }
 
     public void Start()
     {
@@ -40,6 +41,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitSetPlayerNameService();
         InitNetworkBuildService();
         InitFriendRequestService();
+        InitVisitedUserService();
     }
 
     private void InitShopService()
@@ -112,6 +114,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitFriendRequestService()
     {
         FriendRequestService = new FriendRequestService();
+    }
+
+    private void InitVisitedUserService()
+    {
+        VisitedUserService = new VisitedUserService();
     }
 
 
