@@ -36,6 +36,8 @@ public class CrossView : ViewBase
         CrossButton.BindOnClickButtonEvent(OnClickCrossButton);
 
         CrossHamsterSelectView.OnSlotSelect += OnSelectHamster;
+
+        CrossHamsterSelectView.gameObject.SetActive(false);
     }
 
     private void OnDisable()
