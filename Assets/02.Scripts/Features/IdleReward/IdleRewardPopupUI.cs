@@ -16,7 +16,7 @@ public class IdleRewardPopupUI : UIBase
     [SerializeField] private UIButton Button_GetReward;
     [SerializeField] private TMP_Text Text_Effect;
     [SerializeField] private GameObject Object_Loading;
-    [SerializeField] private float _buttonUnlockDelaySeconds = 8f;
+    [SerializeField] private float _buttonUnlockDelaySeconds = 0f;
 
     private void OnEnable()
     {
@@ -44,6 +44,10 @@ public class IdleRewardPopupUI : UIBase
 
         Object_Loading.SetActive(false);
         Button_GetReward.SetInteractable(true);
+
+#if UNITY_EDITOR
+        Debug.Log($"[팝업] 버튼 활성화됨 / 프레임 {Time.frameCount}");
+#endif
     }
 
     private void SetBuffText(float buffRate)
@@ -70,6 +74,10 @@ public class IdleRewardPopupUI : UIBase
 
     private void OnClickGetReward()
     {
+#if UNITY_EDITOR
+        Debug.Log($"[팝업] 클릭 도달 / 프레임 {Time.frameCount}");
+#endif
+
         InGameManager.Instance.ClaimIdleReward();
     }
 }

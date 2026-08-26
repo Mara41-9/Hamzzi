@@ -51,6 +51,8 @@ public class UserViewModel : ViewModelBase
             }
         }
     }
+
+    public float GoldPerSec { get; set; }
 }
 
 public static class UserViewModelExtension

@@ -126,10 +126,19 @@ public class InGameManager : SingletonBase<InGameManager>
 
         UserSaveData saveData = new UserSaveData
         {
-            GoldCount = userVm.SeedCount
+            GoldCount = userVm.SeedCount,
+            GoldPerSec = CalculateCurrentGoldPerSec()
         };
 
         await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID, saveData);
+    }
+
+    private float CalculateCurrentGoldPerSec()
+    {
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        float buffRate = userVm.GetSeedBuffRate();
+
+        return HamsterManager.Instance.TotalCollectSpeedPerSec * (1f + buffRate);
     }
 
     private async UniTask SaveInventory()

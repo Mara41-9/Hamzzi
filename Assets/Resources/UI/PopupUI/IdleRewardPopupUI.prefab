@@ -1566,7 +1566,7 @@ MonoBehaviour:
   Button_GetReward: {fileID: 6231039157475847564}
   Text_Effect: {fileID: 2820459352679867782}
   Object_Loading: {fileID: 6735250752195596806}
-  _buttonUnlockDelaySeconds: 4
+  _buttonUnlockDelaySeconds: 0
 --- !u!1 &5688005365545308697
 GameObject:
   m_ObjectHideFlags: 0
