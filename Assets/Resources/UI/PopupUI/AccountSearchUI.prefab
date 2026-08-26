@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AccountSearchView
   InputField_Id: {fileID: 7051589907273618899}
   Button_Search: {fileID: 3142485962338520883}
-  Button_Close: {fileID: 0}
+  Button_Close: {fileID: 8522596573037566913}
 --- !u!1 &4039241947061940469
 GameObject:
   m_ObjectHideFlags: 0
