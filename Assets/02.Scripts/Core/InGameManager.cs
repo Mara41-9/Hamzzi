@@ -40,6 +40,11 @@ public class InGameManager : SingletonBase<InGameManager>
     private void HandleCompleteLogin()
     {
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        if (loginVm != null && loginVm.UserUID != 0)
+        {
+            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
+        }
+
 
         _lastLoginTicks = loginVm.LastLoginTime.Ticks;
 
@@ -54,15 +59,7 @@ public class InGameManager : SingletonBase<InGameManager>
             return;
         }
 
-        LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
-        if (loginVm != null && loginVm.UserUID != 0)
-        {
-            GameManager.Instance.InitMap(loginVm.UserUID).Forget();
-        }
-
-        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-
-        float productionPerSec = userVm.GoldPerSec * IdleRewardRateMultiplier;
+        float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
         float elapsedSeconds = GameUtil.CalculateElapsedSeconds(_lastLoginTicks, IdleRewardCapSeconds);
         int idleReward = GameUtil.CalculateIdleReward(_lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
@@ -77,6 +74,7 @@ public class InGameManager : SingletonBase<InGameManager>
 
         _pendingIdleReward = idleReward;
 
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
         float buffRate = userVm.GetSeedBuffRate();
 
         UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);

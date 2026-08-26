@@ -95,37 +95,46 @@ public class BuildView : ViewBase
         }
     }
 
-    private bool GetInputPosition (out Vector3 inputPosition)
+    private bool GetInputPosition(out Vector3 inputPosition)
     {
         inputPosition = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            {
-                return false;
-            }
-
-            inputPosition = Input.mousePosition;
-            return true;
-        }
-#else
-    if (Input.touchCount > 0)
-    {
-        Touch touch = Input.GetTouch(0);
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        if (EventSystem.current.IsPointerOverGameObject())
         {
             return false;
         }
 
-        if (touch.phase == TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            inputPosition = touch.position;
+            inputPosition = Input.mousePosition;
             return true;
         }
-    }
+#else
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                return false;
+            }
+
+            PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = touch.position };
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            if (results.Count > 0)
+            {
+                return false;
+            }
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                inputPosition = touch.position;
+                return true;
+            }
+        }
 #endif
 
         return false;
@@ -140,11 +149,27 @@ public class BuildView : ViewBase
                 break;
 
             case nameof(_buildVM.DestroyBuild):
-                if (_spawnRoom.TryGetValue(_buildVM.DestroyBuild.InstanceID, out GameObject target))
+                if (_buildVM.DestroyBuild != null)
                 {
-                    GameObjectManager.Instance.RequestDestroyObject(target);
+                    string targetID = _buildVM.DestroyBuild.InstanceID;
+                    bool hasKey = _spawnRoom.TryGetValue(targetID, out GameObject target);
 
-                    _spawnRoom.Remove(_buildVM.DestroyBuild.InstanceID);
+                    if (hasKey && target != null)
+                    {
+                        GameObjectManager.Instance.RequestDestroyObject(target);
+                        _spawnRoom.Remove(targetID);
+                    }
+                }
+                break;
+
+            case nameof(_buildVM.DestroyedInstanceIDs):
+                foreach (string id in _buildVM.DestroyedInstanceIDs)
+                {
+                    if (_spawnRoom.TryGetValue(id, out GameObject obj) && obj != null)
+                    {
+                        GameObjectManager.Instance.RequestDestroyObject(obj);
+                        _spawnRoom.Remove(id);
+                    }
                 }
                 break;
         }
@@ -152,6 +177,11 @@ public class BuildView : ViewBase
 
     private async UniTaskVoid SpawnBuildPrefab(RoomViewModel roomVM)
     {
+        if (_spawnRoom.ContainsKey(roomVM.InstanceID))
+        {
+            return;
+        }
+
         float worldX = roomVM.OriginPos.x + (roomVM.Size.x * (1f * 0.5f));
         float worldY = roomVM.OriginPos.y + (roomVM.BuildType == BuildType.Room ? 2f : 0f);
 
@@ -161,6 +191,7 @@ public class BuildView : ViewBase
         Vector3 worldPos = new Vector3(worldX, worldY, 9f);
 
         string path = roomVM.BuildType == BuildType.Room ? "Prefabs/Room" : "Prefabs/Aisle";
+
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(roomVM.InstanceID, path, worldPos);
 
         _spawnRoom[roomVM.InstanceID] = prefab;
@@ -186,6 +217,21 @@ public class BuildView : ViewBase
             }
 
             prefab.transform.DOPunchScale(Vector3.one * 0.15f, 0.25f, 8, 1f);
+        }
+    }
+
+    public void SpawnAllLoadBuilds()
+    {
+        _spawnRoom.Clear();
+
+        HashSet<RoomViewModel> uniqueBuilds = new HashSet<RoomViewModel>(_buildVM.Builds.Values);
+
+        foreach (var roomVM in uniqueBuilds)
+        {
+            if (roomVM != null && !_spawnRoom.ContainsKey(roomVM.InstanceID))
+            {
+                SpawnBuildPrefab(roomVM).Forget();
+            }
         }
     }
 

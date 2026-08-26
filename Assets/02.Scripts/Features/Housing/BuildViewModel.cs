@@ -107,6 +107,17 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    private List<string> _destroyedInstanceIDs = new List<string>();
+    public List<string> DestroyedInstanceIDs
+    {
+        get => _destroyedInstanceIDs;
+        set
+        {
+            _destroyedInstanceIDs = value;
+            OnPropertyChanged(nameof(DestroyedInstanceIDs));
+        }
+    }
+
     public void ChooseRoom(RoomViewModel room)
     {
         if (room == null || room.BuildType != BuildType.Room)
@@ -157,6 +168,7 @@ public class BuildViewModel : ViewModelBase
                 }
 
                 var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
                 if (housingVM != null)
                 {
                     housingVM.RemoveFurnitureEffect(furniture);
@@ -187,15 +199,6 @@ public class BuildViewModel : ViewModelBase
 
         ServiceManager.Instance.BuildService.RefreshAisleNavMesh(Builds);
         ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
-    }
-
-    private async UniTaskVoid ReturnFurniture(string furnitureId)
-    {
-        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureId);
-
-        Sprite icon = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
-
-        ServiceManager.Instance.HousingService.AddItem(furnitureId, icon);
     }
 
     public void ClearAisle(List<Vector2Int> startPositions)
@@ -231,6 +234,11 @@ public class BuildViewModel : ViewModelBase
                         continue;
                     }
 
+                    if (next.BuildType == BuildType.Room)
+                    {
+                        continue;
+                    }
+
                     if (next.BuildType != BuildType.Aisle || next.IsDefault)
                     {
                         continue;
@@ -250,6 +258,16 @@ public class BuildViewModel : ViewModelBase
         }
     }
 
+    private async UniTaskVoid ReturnFurniture(string furnitureId)
+    {
+        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureId);
+
+        Sprite icon = await ResourceManager.Instance.LoadAsset<Sprite>(itemData.IconPath);
+
+        ServiceManager.Instance.HousingService.AddItem(furnitureId, icon);
+    }
+
+    
     public void EnterBuildMode()
     {
         CancelBuildMode();
@@ -324,7 +342,9 @@ public class BuildViewModel : ViewModelBase
     public bool TryBuildRoom(Vector2Int pos)
     {
         pos = SnapAisle(pos);
-        RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+
+        string uid = GameUtil.GenerateUID().ToString();
+        RoomViewModel newRoom = new RoomViewModel(uid,BuildType.Room, pos);
 
         if (!CanPlaceRoom(pos, newRoom.Size))
         {
@@ -347,7 +367,9 @@ public class BuildViewModel : ViewModelBase
     private void BuildDefaultRoom(Vector2Int pos)
     {
         pos = SnapAisle(pos);
-        RoomViewModel newRoom = new RoomViewModel(BuildType.Room, pos);
+
+        string uid = GameUtil.GenerateUID().ToString();
+        RoomViewModel newRoom = new RoomViewModel(uid, BuildType.Room, pos);
 
         newRoom.IsReady = true;
         newRoom.IsDefault = true;
@@ -365,7 +387,8 @@ public class BuildViewModel : ViewModelBase
             return;
         }
 
-        RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, pos);
+        string uid = GameUtil.GenerateUID().ToString();
+        RoomViewModel newAisle = new RoomViewModel(uid, BuildType.Aisle, pos);
         newAisle.IsDefault = true;
         RegisterAisle(newAisle, pos);
 
@@ -418,7 +441,8 @@ public class BuildViewModel : ViewModelBase
 
             if (!IsAreaOccupied(aislePos, new Vector2Int(AISLE_SIZE, AISLE_SIZE)))
             {
-                RoomViewModel newAisle = new RoomViewModel(BuildType.Aisle, aislePos);
+                string uid = GameUtil.GenerateUID().ToString();
+                RoomViewModel newAisle = new RoomViewModel(uid, BuildType.Aisle, aislePos);
                 RegisterAisle(newAisle, aislePos);
 
                 _waitingAisle.Add(newAisle);
@@ -445,7 +469,7 @@ public class BuildViewModel : ViewModelBase
     private Vector2Int SnapAisle(Vector2Int pos)
     {
         int x = Mathf.FloorToInt(pos.x / (float)AISLE_SIZE) * AISLE_SIZE;
-        int y = Mathf.FloorToInt(pos.y / (float)AISLE_SIZE) * AISLE_SIZE;
+        int y = Mathf.FloorToInt((pos.y + 1) / (float)AISLE_SIZE) * AISLE_SIZE;
 
         return new Vector2Int(x, y);
     }
