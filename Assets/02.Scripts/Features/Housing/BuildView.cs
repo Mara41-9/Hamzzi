@@ -242,4 +242,18 @@ public class BuildView : ViewBase
 
         return new Vector2Int(x, y);
     }
+
+    public void ClearAllBuilds()
+    {
+        foreach (GameObject room in _spawnRoom.Values)
+        {
+            if (room != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(room);
+            }
+        }
+
+        _spawnRoom.Clear();
+        _buildVM.Builds.Clear();
+    }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : SingletonBase<GameManager>
 {
+    private BuildView _buildView;
+
     // 게임 진입점에서 실행
     public async UniTask InitMap(long userUID)
     {
@@ -13,17 +15,22 @@ public class GameManager : SingletonBase<GameManager>
         }
 
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("Map", "Prefabs/Map", Vector3.zero);
-        BuildView buildView = prefab.GetComponent<BuildView>();
+        
+        if (_buildView == null)
+        {
+            _buildView = prefab.GetComponent<BuildView>();
+        }
+
         BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
 
-        buildView.BindViewModel(buildVM);
+        _buildView.BindViewModel(buildVM);
 
         bool hasSaveData = await ServiceManager.Instance.NetworkBuildService.HasUserRoomData(userUID);
 
         if (hasSaveData)
         {
             await ServiceManager.Instance.NetworkBuildService.LoadBuildAndFurnitureData(userUID);
-            buildView.SpawnAllLoadBuilds();
+            _buildView.SpawnAllLoadBuilds();
 
             foreach (var pair in buildVM.Builds)
             {
@@ -62,9 +69,9 @@ public class GameManager : SingletonBase<GameManager>
         }
         else
         {
-            if (buildView != null)
+            if (_buildView != null)
             {
-                buildVM.InitDefaultRoom(buildView.Transform_DefaultRoom, buildView.Transform_DefaultAisle);
+                buildVM.InitDefaultRoom(_buildView.Transform_DefaultRoom, _buildView.Transform_DefaultAisle);
             }
         }
 
@@ -75,5 +82,45 @@ public class GameManager : SingletonBase<GameManager>
         await UniTask.DelayFrame(2);
 
         NavigationManager.Instance.BuildNav();
+    }
+
+    private void ClearMap()
+    {
+        HousingService housingService = ServiceManager.Instance.HousingService;
+        HousingViewModel housingVM = housingService.GetHousingViewModel();
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+
+        if (housingVM != null)
+        {
+            var allFurniture = housingService.GetAllPlacedFurniture();
+
+            if (allFurniture != null)
+            {
+                foreach (var furniture in allFurniture)
+                {
+                    if (furniture != null && !string.IsNullOrEmpty(furniture.InstanceID))
+                    {
+                        housingService.RemoveSpawnFurniture(furniture.InstanceID);
+                    }
+                }
+            }
+        }
+
+        buildVM.Builds.Clear();
+
+        housingService.ClearAllFurniture();
+        housingVM.GardenFurnitureList.Clear();
+        housingVM.FurnitureVM = null;
+        housingVM.SelectedInstallFurniture = null;
+        housingVM.TargetRoom = null;
+
+        _buildView.ClearAllBuilds();
+    }
+
+    public async UniTask ChangeMap(long targetUserID)
+    {
+        ClearMap();
+
+        await InitMap(targetUserID);
     }
 }
