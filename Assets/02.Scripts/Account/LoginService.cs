@@ -102,7 +102,7 @@ public class LoginService
 
                             if (accountRows > 0)
                             {
-                                string insertGameDataQuery = $"INSERT INTO {DBConfig.UserGameTable} (User_UID, User_Name, User_Icon_Data_ID, Gold_Count) VALUES (@uid, @userName, @iconId, @gold);";
+                                string insertGameDataQuery = $"INSERT INTO {DBConfig.UserGameTable} (User_UID, User_Name, User_Icon_Data_ID, Gold_Count, Gold_Per_Sec, Gold_Bonus) VALUES (@uid, @userName, @iconId, @gold, @goldPerSec, @goldBonus);";
 
                                 using (MySqlCommand insertGameDataCmd = new MySqlCommand(insertGameDataQuery, conn))
                                 {
@@ -110,6 +110,8 @@ public class LoginService
                                     insertGameDataCmd.Parameters.AddWithValue("@userName", defaultName);
                                     insertGameDataCmd.Parameters.AddWithValue("@iconId", defaultIconAddress);
                                     insertGameDataCmd.Parameters.AddWithValue("@gold", 0);
+                                    insertGameDataCmd.Parameters.AddWithValue("@goldPerSec", 0);
+                                    insertGameDataCmd.Parameters.AddWithValue("@goldBonus ", 0);
 
                                     int gameDataRows = await insertGameDataCmd.ExecuteNonQueryAsync();
 
