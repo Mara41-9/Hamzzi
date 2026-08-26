@@ -8,6 +8,7 @@ public class AccountInfoData
     public long UserUid = 0;
     public string UserId = "";
     public string UserName = "";
+    public string UserIconId = "";
 }
 
 public class AccountInfoService
@@ -37,7 +38,7 @@ public class AccountInfoService
             {
                 await conn.OpenAsync();
 
-                string query = $"SELECT a.User_Id, g.User_Name FROM {DBConfig.UserAccountTable} a JOIN {DBConfig.UserGameTable} g ON a.User_UID = g.User_UID WHERE a.User_UID = @uid;";
+                string query = $"SELECT a.User_Id, g.User_Name, g.User_Icon_Data_ID FROM {DBConfig.UserAccountTable} a JOIN {DBConfig.UserGameTable} g ON a.User_UID = g.User_UID WHERE a.User_UID = @uid;";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
@@ -50,7 +51,8 @@ public class AccountInfoService
                             resultData = new AccountInfoData();
                             resultData.UserUid = targetUid;
                             resultData.UserId = reader.GetString(0);
-                            resultData.UserName = reader.GetString(1);
+                            resultData.UserName = reader.GetString(1); 
+                            resultData.UserIconId = reader.GetString(2);
                         }
                     }
                 }
