@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class AccountInfoView : UIBase
 {
@@ -8,7 +9,8 @@ public class AccountInfoView : UIBase
     [SerializeField] private TextMeshProUGUI TextMesh_UserName;
     [SerializeField] private UIButton Button_Close;
     [SerializeField] private UIButton Button_AddFriend;
-    [SerializeField] private UIButton Button_Visit;
+    [SerializeField] private UIButton Button_Visit; 
+    [SerializeField] private Image Image_UserIcon;
 
     private AccountInfoViewModel _vm;
 
@@ -20,16 +22,6 @@ public class AccountInfoView : UIBase
         {
             BindViewModel(service.GetViewModel());
         }
-    }
-
-    public void BindViewModel(AccountInfoViewModel vm)
-    {
-        _vm = vm;
-
-        _vm.PropertyChanged += OnPropChanged_View;
-        _vm.OnCompleteLoadInfo += OnCompleteLoadInfo_View;
-        _vm.OnCompleteAddFriend += OnCompleteAddFriend_View;
-        _vm.OnFailAddFriend += OnFailAddFriend_View;
     }
 
     private void OnEnable()
@@ -61,14 +53,33 @@ public class AccountInfoView : UIBase
 
     private void OnPropChanged_View(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AccountInfoViewModel.DisplayUserId))
+        switch (e.PropertyName)
         {
-            TextMesh_UserId.text = _vm.DisplayUserId;
+            case nameof(AccountInfoViewModel.DisplayUserId):
+                TextMesh_UserId.text = _vm.DisplayUserId;
+                break;
+
+            case nameof(AccountInfoViewModel.DisplayUserName):
+                TextMesh_UserName.text = _vm.DisplayUserName;
+                break;
+
+            case nameof(AccountInfoViewModel.DisplayUserIcon):
+                if (Image_UserIcon != null && _vm.DisplayUserIcon != null)
+                {
+                    Image_UserIcon.sprite = _vm.DisplayUserIcon;
+                }
+                break;
         }
-        else if (e.PropertyName == nameof(AccountInfoViewModel.DisplayUserName))
-        {
-            TextMesh_UserName.text = _vm.DisplayUserName;
-        }
+    }
+
+    public void BindViewModel(AccountInfoViewModel vm)
+    {
+        _vm = vm;
+
+        _vm.PropertyChanged += OnPropChanged_View;
+        _vm.OnCompleteLoadInfo += OnCompleteLoadInfo_View;
+        _vm.OnCompleteAddFriend += OnCompleteAddFriend_View;
+        _vm.OnFailAddFriend += OnFailAddFriend_View;
     }
 
     private void OnClickClose()

@@ -33,7 +33,8 @@ public enum UIType
     FeverTimeResultUI,
     WheelUI,
     DecorUI,
-    IdleRewardPopupUI
+    IdleRewardPopupUI,
+    FriendRequestListUI
 }
 
 public static class UIManagerExtension
