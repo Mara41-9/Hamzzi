@@ -51,6 +51,8 @@ public class UserViewModel : ViewModelBase
             }
         }
     }
+
+    public float GoldPerSec { get; set; }
 }
 
 public static class UserViewModelExtension
@@ -74,6 +76,12 @@ public static class UserViewModelExtension
 
             Debug.Log($"[보너스 지급] +" + $"{bonusAmount}");
         }
+    }
+
+    //방치보상 계산 전용 - 버프 중복 적용 막기 위해
+    public static void AddSeedWithoutBuff(this UserViewModel userVm, int amount)
+    {
+        userVm.SeedCount += amount;
     }
 
     public static void AddSeedBuff(this UserViewModel userVm, float amount)

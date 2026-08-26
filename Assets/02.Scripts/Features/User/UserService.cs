@@ -7,6 +7,8 @@ public class UserService
 {
     private UserViewModel _userViewModel;
 
+    public event Action OnUserDataLoaded;
+
     public UserViewModel GetUserViewModel()
     {
         if(_userViewModel == null)
@@ -45,6 +47,13 @@ public class UserService
         userVm.UserName = userData.UserName;
         userVm.UserIconId = userData.UserIconId;
         userVm.SeedCount = userData.GoldCount;
+        userVm.GoldPerSec = userData.GoldPerSec;
+
+#if UNITY_EDITOR
+        Debug.Log($"[유저 로드] 씨앗 {userData.GoldCount} / 초당 {userData.GoldPerSec}");
+#endif
+
+        OnUserDataLoaded?.Invoke();
     }
 
     public async UniTask<UserData> LoadUserDataAsync(long userUid)
@@ -59,7 +68,7 @@ public class UserService
                 {
                     await conn.OpenAsync();
 
-                    string query = $"SELECT User_Name, User_Icon_Data_ID, Gold_Count FROM User_Game_Data WHERE User_UID = @userUid";
+                    string query = $"SELECT User_Name, User_Icon_Data_ID, Gold_Count, Gold_Per_Sec FROM User_Game_Data WHERE User_UID = @userUid";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -73,6 +82,7 @@ public class UserService
                                 resultUserData.UserName = reader.GetString(0);
                                 resultUserData.UserIconId = reader.GetString(1);
                                 resultUserData.GoldCount = reader.GetInt32(2);
+                                resultUserData.GoldPerSec = reader.GetFloat(3);
                             }
                         }
                     }
@@ -100,11 +110,12 @@ public class UserService
             {
                 await conn.OpenAsync();
 
-                string query = $"UPDATE User_Game_Data SET Gold_Count = @goldCount WHERE User_UID = @userUid";
+                string query = $"UPDATE User_Game_Data SET Gold_Count = @goldCount, Gold_Per_Sec = @goldPerSec WHERE User_UID = @userUid";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@goldCount", userSaveData.GoldCount);
+                    cmd.Parameters.AddWithValue("@goldPerSec", userSaveData.GoldPerSec);
                     cmd.Parameters.AddWithValue("@userUid", userUid);
 
                     await cmd.ExecuteNonQueryAsync();

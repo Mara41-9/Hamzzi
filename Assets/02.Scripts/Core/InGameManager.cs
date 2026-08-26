@@ -19,7 +19,7 @@ public class InGameManager : SingletonBase<InGameManager>
         LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
         loginVm.OnCompleteLogin += HandleCompleteLogin;
 
-        ServiceManager.Instance.CollectionService.OnHamsterDataLoaded += HandleHamsterDataLoaded;
+        ServiceManager.Instance.UserService.OnUserDataLoaded += HandleUserDataLoaded;
     }
 
     private void OnDestroy()
@@ -30,10 +30,10 @@ public class InGameManager : SingletonBase<InGameManager>
             loginVm.OnCompleteLogin -= HandleCompleteLogin;
         }
 
-        NetworkCollectionService collectionService = ServiceManager.Instance.CollectionService;
-        if (collectionService != null)
+        UserService userService = ServiceManager.Instance.UserService;
+        if (userService != null)
         {
-            collectionService.OnHamsterDataLoaded -= HandleHamsterDataLoaded;
+            userService.OnUserDataLoaded -= HandleUserDataLoaded;
         }
     }
 
@@ -52,7 +52,7 @@ public class InGameManager : SingletonBase<InGameManager>
         AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
-    private void HandleHamsterDataLoaded()
+    private void HandleUserDataLoaded()
     {
         if (_lastLoginTicks == 0)
         {
@@ -74,11 +74,9 @@ public class InGameManager : SingletonBase<InGameManager>
 
         _pendingIdleReward = idleReward;
 
-        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-        int displayReward = userVm.PredictSeedGain(idleReward);
         float buffRate = userVm.GetSeedBuffRate();
 
-        UIManager.Instance.OpenIdleRewardPopupUI(displayReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);
+        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);
     }
 
     public void ClaimIdleReward()
@@ -94,7 +92,7 @@ public class InGameManager : SingletonBase<InGameManager>
         Debug.Log($"[방치 보상 수령] +{_pendingIdleReward}");
 #endif
 
-        userVm.AddSeed(_pendingIdleReward);
+        userVm.AddSeedWithoutBuff(_pendingIdleReward);
         _pendingIdleReward = 0;
 
         CloseIdleRewardPopupDelayed(this.GetCancellationTokenOnDestroy()).Forget();
@@ -125,10 +123,19 @@ public class InGameManager : SingletonBase<InGameManager>
 
         UserSaveData saveData = new UserSaveData
         {
-            GoldCount = userVm.SeedCount
+            GoldCount = userVm.SeedCount,
+            GoldPerSec = CalculateCurrentGoldPerSec()
         };
 
         await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID, saveData);
+    }
+
+    private float CalculateCurrentGoldPerSec()
+    {
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        float buffRate = userVm.GetSeedBuffRate();
+
+        return HamsterManager.Instance.TotalCollectSpeedPerSec * (1f + buffRate);
     }
 
     private async UniTask SaveInventory()

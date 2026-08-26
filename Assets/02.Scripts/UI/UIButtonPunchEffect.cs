@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class UIButtonPunchEffect : MonoBehaviour
 {
     [SerializeField] private Button Button_Target;
-    [SerializeField] private float _punchScaleMultiplier = 1.25f;
-    [SerializeField] private float _scaleUpDurationSeconds = 0.1f;
-    [SerializeField] private float _scaleDownDurationSeconds = 0.18f;
+    [SerializeField] private float _punchScaleMultiplier = 1.05f;
+    [SerializeField] private float _scaleUpDurationSeconds = 0.03f;
+    [SerializeField] private float _scaleDownDurationSeconds = 0.05f;
 
     private RectTransform _rectTransform;
     private Vector3 _originalScale;
@@ -56,10 +56,6 @@ public class UIButtonPunchEffect : MonoBehaviour
 
     private void OnClickButton()
     {
-#if UNITY_EDITOR
-        Debug.Log("[펀치] 클릭 수신");
-#endif
-
         PlayPunchEffect();
     }
 
