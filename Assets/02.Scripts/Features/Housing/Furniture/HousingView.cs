@@ -431,7 +431,7 @@ public class HousingView : ViewBase
                 return;
             }
 
-            if (_housingVM.CurrentState == HousingState.Placing)
+            if (_housingVM.CurrentState == HousingState.Placing && _ghostObject == null)
             {
                 if (_housingVM.TargetRoom != null)
                 {
