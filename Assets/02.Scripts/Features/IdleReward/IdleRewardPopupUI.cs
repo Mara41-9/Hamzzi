@@ -1,7 +1,4 @@
 ﻿// 방치 보상 수령 팝업 UI. 오프라인 경과 시간과 보상 수량을 표시한다
-using Cysharp.Threading.Tasks;
-using System;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -15,8 +12,6 @@ public class IdleRewardPopupUI : UIBase
     [SerializeField] private TMP_Text Text_RewardCount;
     [SerializeField] private UIButton Button_GetReward;
     [SerializeField] private TMP_Text Text_Effect;
-    [SerializeField] private GameObject Object_Loading;
-    [SerializeField] private float _buttonUnlockDelaySeconds = 0f;
 
     private void OnEnable()
     {
@@ -31,23 +26,6 @@ public class IdleRewardPopupUI : UIBase
         Text_OfflineTime.text = $"{BuildElapsedTimeText(elapsedSeconds)} (최대 {capHours}시간)";
 
         SetBuffText(buffRate);
-
-        PlayLoadingUntilReady(this.GetCancellationTokenOnDestroy()).Forget();
-    }
-
-    private async UniTask PlayLoadingUntilReady(CancellationToken token)
-    {
-        Object_Loading.SetActive(true);
-        Button_GetReward.SetInteractable(false);
-
-        await UniTask.Delay(TimeSpan.FromSeconds(_buttonUnlockDelaySeconds), cancellationToken: token);
-
-        Object_Loading.SetActive(false);
-        Button_GetReward.SetInteractable(true);
-
-#if UNITY_EDITOR
-        Debug.Log($"[팝업] 버튼 활성화됨 / 프레임 {Time.frameCount}");
-#endif
     }
 
     private void SetBuffText(float buffRate)
@@ -74,10 +52,6 @@ public class IdleRewardPopupUI : UIBase
 
     private void OnClickGetReward()
     {
-#if UNITY_EDITOR
-        Debug.Log($"[팝업] 클릭 도달 / 프레임 {Time.frameCount}");
-#endif
-
         InGameManager.Instance.ClaimIdleReward();
     }
 }
