@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class AccountInfoViewModel : ViewModelBase
 {
@@ -36,6 +37,20 @@ public class AccountInfoViewModel : ViewModelBase
         }
     }
 
+    private Sprite _displayUserIcon;
+    public Sprite DisplayUserIcon
+    {
+        get { return _displayUserIcon; }
+        set
+        {
+            if (_displayUserIcon != value)
+            {
+                _displayUserIcon = value;
+                OnPropertyChanged(nameof(DisplayUserIcon));
+            }
+        }
+    }
+
     public void SetService(AccountInfoService service)
     {
         _service = service;
@@ -57,6 +72,13 @@ public class AccountInfoViewModel : ViewModelBase
         {
             DisplayUserId = data.UserId;
             DisplayUserName = data.UserName;
+
+            if (data.UserIconId != "")
+            {
+                Sprite loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(data.UserIconId);
+                DisplayUserIcon = loadedSprite;
+            }
+
             InvokeCompleteLoadInfo();
         }
     }

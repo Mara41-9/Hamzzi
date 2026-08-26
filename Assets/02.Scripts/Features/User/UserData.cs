@@ -6,10 +6,12 @@ public class UserData : GameDataBase
     public string UserName;
     public string UserIconId;
     public int GoldCount;
+    public float GoldPerSec;
 }
 
 [System.Serializable]
 public class UserSaveData : GameDataBase
 {
     public int GoldCount;
+    public float GoldPerSec;
 }

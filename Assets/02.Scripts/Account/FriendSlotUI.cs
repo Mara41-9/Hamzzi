@@ -30,6 +30,7 @@ public class FriendSlotUI : UIBase
 
     private void OnClickVisit()
     {
+        ServiceManager.Instance.VisitedUserService.CurrentVisitedUid = _friendUid;
         Debug.Log($"방문하기 기능 대기 상태입니다. 대상 UID: {_friendUid}");
     }
 }
