@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
 
-public class CrossView : MonoBehaviour
+public class CrossView : ViewBase
 {
+    [Header("버튼")]
     [SerializeField] private UIButton ExitButton;
     [SerializeField] private UIButton MyHamsterSelectButton;
     [SerializeField] private UIButton FriendHamsterSelectButton;
-
     [SerializeField] private UIButton CrossButton;
+
+    [Header("햄스터 선택")]
+    [SerializeField] private CrossHamsterSelectView CrossHamsterSelectView;
 
     private CollectionViewModel _collectionViewModel;
 
     private void Start()
     {
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+        //_collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+    }
+
+    public void OpenUI()
+    {
+        UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.CrossUI);
     }
 
     private void OnEnable()
@@ -38,12 +46,14 @@ public class CrossView : MonoBehaviour
 
     private void OnClickMyHamsterSelectButton()
     {
-
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        CrossHamsterSelectView.OpenSelectView(userUID);
     }
 
     private void OnClickFirendHamsterSelectButton()
     {
-
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        CrossHamsterSelectView.OpenSelectView(userUID);
     }
 
     private void OnClickCrossButton()
