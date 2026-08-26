@@ -78,6 +78,12 @@ public static class UserViewModelExtension
         }
     }
 
+    //방치보상 계산 전용 - 버프 중복 적용 막기 위해
+    public static void AddSeedWithoutBuff(this UserViewModel userVm, int amount)
+    {
+        userVm.SeedCount += amount;
+    }
+
     public static void AddSeedBuff(this UserViewModel userVm, float amount)
     {
         _seedBuffRate += amount;

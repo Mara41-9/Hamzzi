@@ -31,7 +31,7 @@ public static class GameUtil
     {
         float elapsedSeconds = CalculateElapsedSeconds(lastActiveTicks, capSeconds);
 
-        return Mathf.FloorToInt(elapsedSeconds * productionPerSec);
+        return Mathf.CeilToInt(elapsedSeconds * productionPerSec); //올림 처리
     }
 
     // UID 생성 기능

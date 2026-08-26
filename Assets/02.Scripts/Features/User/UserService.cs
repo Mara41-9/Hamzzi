@@ -7,6 +7,8 @@ public class UserService
 {
     private UserViewModel _userViewModel;
 
+    public event Action OnUserDataLoaded;
+
     public UserViewModel GetUserViewModel()
     {
         if(_userViewModel == null)
@@ -50,6 +52,8 @@ public class UserService
 #if UNITY_EDITOR
         Debug.Log($"[유저 로드] 씨앗 {userData.GoldCount} / 초당 {userData.GoldPerSec}");
 #endif
+
+        OnUserDataLoaded?.Invoke();
     }
 
     public async UniTask<UserData> LoadUserDataAsync(long userUid)
