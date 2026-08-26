@@ -186,5 +186,15 @@ public class FeverTimeManager : SingletonBase<FeverTimeManager>
     {
         return _rewardSeedCount;
     }
-       
+
+    public FeverTimeData GetCurrentFeverTimeData()
+    {
+        return _currentFeverTimeData;
+    }
+
+    public float GetTapInputElapsedTime()
+    {
+        return _tapInputElapsedTime;
+    }
+  
 }
