@@ -50,6 +50,9 @@ public class NetworkCollectionService
     {
         List<HamsterSave> hamsterList = new List<HamsterSave>();
 
+        if (_collectionViewModelList.ContainsKey(userUID) == true)
+            return;
+
         using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
         {
             try

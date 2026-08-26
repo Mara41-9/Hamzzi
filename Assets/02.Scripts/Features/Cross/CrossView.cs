@@ -1,4 +1,14 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+public enum HamsterOwnerType
+{
+    None,
+    User,
+    Friend,
+}
 
 public class CrossView : ViewBase
 {
@@ -10,13 +20,8 @@ public class CrossView : ViewBase
 
     [Header("햄스터 선택")]
     [SerializeField] private CrossHamsterSelectView CrossHamsterSelectView;
-
-    private CollectionViewModel _collectionViewModel;
-
-    private void Start()
-    {
-        //_collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
-    }
+    [SerializeField] private Image MyHamsterImage;
+    [SerializeField] private Image FriendHamsterImage;
 
     public void OpenUI()
     {
@@ -29,6 +34,8 @@ public class CrossView : ViewBase
         MyHamsterSelectButton.BindOnClickButtonEvent(OnClickMyHamsterSelectButton);
         FriendHamsterSelectButton.BindOnClickButtonEvent(OnClickFirendHamsterSelectButton);
         CrossButton.BindOnClickButtonEvent(OnClickCrossButton);
+
+        CrossHamsterSelectView.OnSlotSelect += OnSelectHamster;
     }
 
     private void OnDisable()
@@ -37,6 +44,8 @@ public class CrossView : ViewBase
         MyHamsterSelectButton.UnBindOnClickButtonEvent(OnClickMyHamsterSelectButton);
         FriendHamsterSelectButton.UnBindOnClickButtonEvent(OnClickFirendHamsterSelectButton);
         CrossButton.UnBindOnClickButtonEvent(OnClickCrossButton);
+
+        CrossHamsterSelectView.OnSlotSelect -= OnSelectHamster;
     }
 
     private void OnClickExitButton()
@@ -44,16 +53,43 @@ public class CrossView : ViewBase
         UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.CrossUI);
     }
 
+    private void OnSelectHamster(string hamsterId, HamsterOwnerType ownerType)
+    {
+        Image iconImage = null;
+
+        switch (ownerType)
+        {
+            case HamsterOwnerType.User:
+                iconImage = MyHamsterImage;
+                break;
+            case HamsterOwnerType.Friend:
+                iconImage = FriendHamsterImage;
+                break;
+        }
+
+        UpdateIcon(hamsterId, iconImage).Forget();
+    }
+
+    private async UniTask UpdateIcon(string hamsterId, Image iconImage)
+    {
+        HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
+        if (hamsterData == null)
+            return;
+
+        var icon = await ResourceManager.Instance.LoadAsset<Sprite>(hamsterData.IconPath);
+        iconImage.sprite = icon;
+    }
+
     private void OnClickMyHamsterSelectButton()
     {
         long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
-        CrossHamsterSelectView.OpenSelectView(userUID);
+        CrossHamsterSelectView.OpenSelectView(userUID, HamsterOwnerType.User);
     }
 
     private void OnClickFirendHamsterSelectButton()
     {
-        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
-        CrossHamsterSelectView.OpenSelectView(userUID);
+        long friendUID = ServiceManager.Instance.VisitedUserService.CurrentVisitedUid;
+        CrossHamsterSelectView.OpenSelectView(friendUID, HamsterOwnerType.Friend);
     }
 
     private void OnClickCrossButton()

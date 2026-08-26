@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CrossHamsterSelectView : MonoBehaviour
@@ -10,7 +11,10 @@ public class CrossHamsterSelectView : MonoBehaviour
     [SerializeField] private Transform ContentTransform;
     [SerializeField] private GameObject SlotPrefab;
 
+    private HamsterOwnerType _onwerType;
     private List<HamsterSlot> _spawndSlotList = new List<HamsterSlot>();
+
+    public event Action<string, HamsterOwnerType> OnSlotSelect;
 
     private void OnEnable()
     {
@@ -28,9 +32,11 @@ public class CrossHamsterSelectView : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void OpenSelectView(long userUID)
+    public void OpenSelectView(long userUID, HamsterOwnerType ownerType)
     {
         gameObject.SetActive(true);
+
+        _onwerType = ownerType;
 
         // 보유 햄스터 불러오기
         var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
@@ -56,7 +62,9 @@ public class CrossHamsterSelectView : MonoBehaviour
 
     private void OnClickSlot(string hamsterId)
     {
+        OnSlotSelect?.Invoke(hamsterId, _onwerType);
 
+        gameObject.SetActive(false);
     }
 
     private void ResetSelectView()

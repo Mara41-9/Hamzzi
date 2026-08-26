@@ -990,6 +990,8 @@ MonoBehaviour:
   FriendHamsterSelectButton: {fileID: 285653807843936162}
   CrossButton: {fileID: 2120728845608444988}
   CrossHamsterSelectView: {fileID: 4427407958998623977}
+  MyHamsterImage: {fileID: 5054066860731478018}
+  FriendHamsterImage: {fileID: 6623019922179991049}
 --- !u!1 &4048012621876573118
 GameObject:
   m_ObjectHideFlags: 0

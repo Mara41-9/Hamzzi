@@ -34,7 +34,8 @@ public enum UIType
     WheelUI,
     DecorUI,
     IdleRewardPopupUI,
-    FriendRequestListUI
+    FriendRequestListUI,
+    CrossUI,
 }
 
 public static class UIManagerExtension

@@ -67,7 +67,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitCollectionService()
     {
         CollectionService = new NetworkCollectionService();
-        CollectionService.GetCollectionViewModel();
+        //CollectionService.GetCollectionViewModel();
         CollectionService.GetHamsterViewModel();
     }
 
@@ -129,6 +129,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         long userUID = loginVM.UserUID;
 
         Debug.Log($"User UID : {userUID}");
+        CollectionService.GetCollectionViewModel(userUID);
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
         UserService.InitUser(userUID).Forget();
         HousingService.LoadInventory(userUID).Forget();
