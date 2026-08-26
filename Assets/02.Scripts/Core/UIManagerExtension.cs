@@ -30,6 +30,7 @@ public enum UIType
     GachaUI,
     HousingUI,
     FeverTimeCutsceneUI,
+    FeverTimeResultUI,
     WheelUI,
     DecorUI,
     IdleRewardPopupUI
@@ -107,12 +108,22 @@ public static class UIManagerExtension
 
     public static void OpenFeverTimeCutsceneUI(this UIManager uiManager)
     {
-        uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.FeverTimeCutsceneUI);
     }
 
     public static void CloseFeverTimeCutsceneUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.FeverTimeCutsceneUI);
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.FeverTimeCutsceneUI);
+    }
+
+    public static void OpenFeverTimeResultUI(this UIManager uiManager)
+    {
+        uiManager.OpenUI(UIRootType.PopupUI, UIType.FeverTimeResultUI);
+    }
+
+    public static void CloseFeverTimeResultUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.FeverTimeResultUI);
     }
 
     public static void OpenDecorUI(this UIManager uiManager)
