@@ -132,6 +132,7 @@ public class WheelViewModel : ViewModelBase
 
     private Dictionary<long, HamsterSave> GetCollectHamsterID()
     {
-        return ServiceManager.Instance.CollectionService.GetCollectionViewModel().CollectedHamsterList;
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        return ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID).CollectedHamsterList;
     }
 }

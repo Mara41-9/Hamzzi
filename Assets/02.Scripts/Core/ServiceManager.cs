@@ -67,7 +67,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitCollectionService()
     {
         CollectionService = new NetworkCollectionService();
-        CollectionService.GetCollectionViewModel();
+        //CollectionService.GetCollectionViewModel();
+        CollectionService.GetHamsterViewModel();
     }
 
     private void InitGachaService()
@@ -129,6 +130,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
 
         Debug.Log($"User UID : {userUID}");
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        CollectionService.SetCurrentCollectionViewModel(userUID);
+        HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
         HousingService.LoadInventory(userUID).Forget();
     }
