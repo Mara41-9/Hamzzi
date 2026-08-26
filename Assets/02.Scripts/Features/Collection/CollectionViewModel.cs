@@ -15,7 +15,7 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
         get { return _collectedHamsterList; }
         set
         {
-            if(_collectedHamsterList != value)
+            if (_collectedHamsterList != value)
             {
                 _collectedHamsterList = value;
                 OnPropertyChanged(nameof(CollectedHamsterList));
@@ -78,14 +78,6 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
                 OnPropertyChanged(nameof(CurrentSelectedHamsterFaceId));
             }
         }
-    }
-
-    public void InvokeOnceOnInit()
-    {
-        OnPropertyChanged(nameof(CollectedHamsterList));
-        OnPropertyChanged(nameof(CollectedHamsterIdList));
-        OnPropertyChanged(nameof(CurrentSelectHamsterId));
-        OnPropertyChanged(nameof(CurrentSelectedHamsterFaceId));
     }
 
     public void InvokeContainerPropertyChanged(string containerName, ContainerEventType type, string id)

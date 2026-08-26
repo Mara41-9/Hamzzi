@@ -129,8 +129,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         long userUID = loginVM.UserUID;
 
         Debug.Log($"User UID : {userUID}");
-        CollectionService.GetCollectionViewModel(userUID);
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        CollectionService.SetCurrentCollectionViewModel(userUID);
         UserService.InitUser(userUID).Forget();
         HousingService.LoadInventory(userUID).Forget();
     }

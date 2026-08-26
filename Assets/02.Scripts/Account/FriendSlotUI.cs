@@ -34,7 +34,7 @@ public class FriendSlotUI : UIBase
         ServiceManager.Instance.VisitedUserService.CurrentVisitedUid = _friendUid;
         Debug.Log($"친구 방문. 대상 UID: {_friendUid}");
 
-        var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(_friendUid);
         ServiceManager.Instance.CollectionService.LoadHamsterCollectionData(_friendUid).Forget();
+        ServiceManager.Instance.CollectionService.SetCurrentCollectionViewModel(_friendUid);
     }
 }

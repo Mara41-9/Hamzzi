@@ -55,7 +55,6 @@ public class CollectionView : UIBase
         // 수집 데이터들 View에 표시
         _collectionViewModel.PropertyChanged += OnPropertyChanged;
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropChanged;
-        _collectionViewModel.InvokeOnceOnInit();
 
         // 슬롯이 없다면 초기화
         InitCollectionList();
@@ -213,6 +212,7 @@ public class CollectionView : UIBase
     private void InitFaceList()
     {
         List<string> allFaceList = _hamsterViewModel.AllFaceIdList;
+        Debug.Log("얼굴 초기화");
 
         if (_spawnedFaceSlotList.Count > 0)
             return;
@@ -386,27 +386,3 @@ public class CollectionView : UIBase
         HamsterAbility.text = $"{hamsterData.CollectSpeed}";
     }
 }
-
-
-// 그냥 유니크 키가 발급되어야 할 때 사용하려고 만든 것 (의미가 있는 건 아니므로 사용만 하세요)
-//public static long GenerateUniqueId()
-//{
-//    long newId = DateTime.UtcNow.Ticks;
-
-//    // 원자적 연산으로 안전하게 ID 갱신
-//    while (true)
-//    {
-//        long lastId = Volatile.Read(ref _lastId);
-
-//        // 만약 현재 시간이 이전 ID보다 작거나 같다면 (루프가 너무 빠른 경우 포함)
-//        // 이전 ID + 1로 강제 설정하여 중복 방지
-//        long idToAssign = (newId <= lastId) ? lastId + 1 : newId;
-
-//        // _lastId가 내가 읽은 시점과 같다면 idToAssign으로 교체 (성공 시 루프 탈출)
-//        if (Interlocked.CompareExchange(ref _lastId, idToAssign, lastId) == lastId)
-//        {
-//            return idToAssign;
-//        }
-//        // 그 사이 다른 스레드가 값을 바꿨다면 다시 시도
-//    }
-//}

@@ -6,17 +6,36 @@ using UnityEngine;
 
 public class NetworkCollectionService
 {
+    private CollectionViewModel _currentCollectionViewModel;
     private Dictionary<long, CollectionViewModel> _collectionViewModelList = new Dictionary<long, CollectionViewModel>();
     private HamsterViewModel _hamsterViewModel;
 
     public event Action OnHamsterDataLoaded;
+    public event Action OnChangedCurrentCollectionViewModel;
+
+    public CollectionViewModel GetCurrentCollectionViewModel()
+    {
+        if (_currentCollectionViewModel == null)
+        {
+            return null;
+        }
+
+        return _currentCollectionViewModel;
+    }
+
+    public void SetCurrentCollectionViewModel(long userUID)
+    {
+        var collectionViewModel = GetCollectionViewModel(userUID);
+        _currentCollectionViewModel = collectionViewModel;
+
+        OnChangedCurrentCollectionViewModel?.Invoke();
+    }
 
     public CollectionViewModel GetCollectionViewModel(long userUID)
     {
         if(_collectionViewModelList.ContainsKey(userUID) == false)
         {
-            var collectionViewModel = new CollectionViewModel();
-            _collectionViewModelList.Add(userUID, collectionViewModel);
+            return null;
         }
 
         return _collectionViewModelList[userUID];
@@ -48,11 +67,10 @@ public class NetworkCollectionService
 
     public async UniTask LoadHamsterCollectionData(long userUID)
     {
-        List<HamsterSave> hamsterList = new List<HamsterSave>();
-
         if (_collectionViewModelList.ContainsKey(userUID) == true)
             return;
 
+        _collectionViewModelList.Add(userUID, new CollectionViewModel());
         using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
         {
             try
@@ -76,8 +94,6 @@ public class NetworkCollectionService
                                 FaceId = reader.GetString("Face_Data_ID")
                             };
 
-                            // 2. 리스트에 추가
-                            hamsterList.Add(hamster);
                             _collectionViewModelList[userUID].AddCollectedHamsterList(hamster, true);
 
                             Debug.Log($"Hamster Data Load : {hamster.HamsterId}, {hamster.FaceId}");
