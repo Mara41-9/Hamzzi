@@ -142,8 +142,6 @@ public class BuildView : ViewBase
 
     private void OnPropertyChanged_View(object sender, PropertyChangedEventArgs e)
     {
-        Debug.Log($"BuildView가 PropertyChanged 이벤트 감지함! 속성 이름: {e.PropertyName}");
-
         switch (e.PropertyName)
         {
             case nameof(_buildVM.LastBuild):
@@ -151,42 +149,26 @@ public class BuildView : ViewBase
                 break;
 
             case nameof(_buildVM.DestroyBuild):
-                Debug.Log($"DestroyBuild 이벤트 들어옴. 대상 ID: {(_buildVM.DestroyBuild != null ? _buildVM.DestroyBuild.InstanceID : "null")}");
-
                 if (_buildVM.DestroyBuild != null)
                 {
                     string targetID = _buildVM.DestroyBuild.InstanceID;
                     bool hasKey = _spawnRoom.TryGetValue(targetID, out GameObject target);
-                    Debug.Log($"_spawnRoom 딕셔너리에 ID '{targetID}'가 존재함? {hasKey}");
 
                     if (hasKey && target != null)
                     {
                         GameObjectManager.Instance.RequestDestroyObject(target);
                         _spawnRoom.Remove(targetID);
-                        Debug.Log("오브젝트 파괴 요청 성공!");
-                    }
-                    else
-                    {
-                        Debug.LogWarning("_spawnRoom에서 오브젝트를 찾지 못했습니다!");
                     }
                 }
                 break;
 
             case nameof(_buildVM.DestroyedInstanceIDs):
-                Debug.Log($"DestroyedInstanceIDs 이벤트 수신함! 전달받은 ID 개수: {_buildVM.DestroyedInstanceIDs.Count}");
-
                 foreach (string id in _buildVM.DestroyedInstanceIDs)
                 {
                     if (_spawnRoom.TryGetValue(id, out GameObject obj) && obj != null)
                     {
                         GameObjectManager.Instance.RequestDestroyObject(obj);
-
                         _spawnRoom.Remove(id);
-                        Debug.Log($"오브젝트 파괴 완료: {id}");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"경고: _spawnRoom 딕셔너리에서 ID '{id}'에 해당하는 GameObject를 찾지 못했습니다!");
                     }
                 }
                 break;
@@ -195,6 +177,11 @@ public class BuildView : ViewBase
 
     private async UniTaskVoid SpawnBuildPrefab(RoomViewModel roomVM)
     {
+        if (_spawnRoom.ContainsKey(roomVM.InstanceID))
+        {
+            return;
+        }
+
         float worldX = roomVM.OriginPos.x + (roomVM.Size.x * (1f * 0.5f));
         float worldY = roomVM.OriginPos.y + (roomVM.BuildType == BuildType.Room ? 2f : 0f);
 
@@ -204,8 +191,8 @@ public class BuildView : ViewBase
         Vector3 worldPos = new Vector3(worldX, worldY, 9f);
 
         string path = roomVM.BuildType == BuildType.Room ? "Prefabs/Room" : "Prefabs/Aisle";
+
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(roomVM.InstanceID, path, worldPos);
-        Debug.Log($"프리팹 생성 완료 및 딕셔너리 등록. Key(InstanceID): {roomVM.InstanceID}, GameObject: {prefab.name}");
 
         _spawnRoom[roomVM.InstanceID] = prefab;
 
@@ -235,6 +222,8 @@ public class BuildView : ViewBase
 
     public void SpawnAllLoadBuilds()
     {
+        _spawnRoom.Clear();
+
         HashSet<RoomViewModel> uniqueBuilds = new HashSet<RoomViewModel>(_buildVM.Builds.Values);
 
         foreach (var roomVM in uniqueBuilds)

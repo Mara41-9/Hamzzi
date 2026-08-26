@@ -149,16 +149,12 @@ public class BuildViewModel : ViewModelBase
 
     public void DestroyRoom()
     {
-        Debug.Log("[로그] DestroyRoom 메서드가 호출되었습니다!");
-
         if (SelectRoom == null)
         {
-            Debug.Log("[로그] SelectRoom이 null이라서 철거 취소됨!");
             return;
         }
 
         RoomViewModel target = SelectRoom;
-        Debug.Log($"[로그] 철거하려는 방 ID: {target.InstanceID}, 타입: {target.BuildType}");
 
         if (target.FurnitureList != null && target.FurnitureList.Count > 0)
         {
@@ -172,6 +168,7 @@ public class BuildViewModel : ViewModelBase
                 }
 
                 var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+
                 if (housingVM != null)
                 {
                     housingVM.RemoveFurnitureEffect(furniture);

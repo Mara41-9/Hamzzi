@@ -27,6 +27,8 @@ public class NetworkBuildService
         buildVM.IsLoading = true;
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
+        buildVM.Builds.Clear();
+
         using (MySqlConnection conn = new MySqlConnection(DBConfig.ConnectionString))
         {
             try
@@ -81,8 +83,6 @@ public class NetworkBuildService
                                     buildVM.Builds[pos + new Vector2Int(x, y)] = roomVM;
                                 }
                             }
-
-                            buildVM.LastBuild = roomVM;
                         }
                     }
                 }
