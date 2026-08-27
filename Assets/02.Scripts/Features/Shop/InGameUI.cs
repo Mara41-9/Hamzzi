@@ -15,12 +15,14 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_Setting;
     [SerializeField] private Button Button_Garden;
     [SerializeField] private Button Button_Exit;
+    [SerializeField] private UIButton Button_GoHome;
 
     [Header("DB 연동")]
     [SerializeField] private Image Image_UserIcon;
     [SerializeField] private TMP_Text Text_UserName;
 
     private UserViewModel _userVm;
+    private VisitedUserViewModel _visitedUserVm;
 
     private HousingViewModel _housingVM;
     private CameraController _cameraController;
@@ -40,6 +42,7 @@ public class InGameUI : ViewBase
         Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
         Button_Garden.onClick.AddListener(OnClick_Garden);
         Button_Exit.onClick.AddListener(OnClick_Exit);
+        Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
 
         if (_housingVM == null)
         {
@@ -47,15 +50,19 @@ public class InGameUI : ViewBase
         }
 
         _housingVM.PropertyChanged += OnPropertyChanged_VM;
-        UpdateButton();
 
         FindUserViewModelAndBind();
+        FindVisitedViewModelAndBind();
+
+        UpdateButton();
     }
 
     private void OnDisable()
     {
         _userVm.PropertyChanged -= OnPropChanged_UserInfoView;
         _housingVM.PropertyChanged -= OnPropertyChanged_VM;
+        _visitedUserVm.PropertyChanged -= OnPropChanged_VisitedUserView;
+        _visitedUserVm.OnCompleteLoadInfo -= OnCompleteLoadVisitUserInfo;
     }
 
     private void FindUserViewModelAndBind()
@@ -65,6 +72,15 @@ public class InGameUI : ViewBase
 
         _userVm.PropertyChanged += OnPropChanged_UserInfoView;
         _userVm.InvokeOnceOnInit();
+    }
+
+    private void FindVisitedViewModelAndBind()
+    {
+        var visitedVm = ServiceManager.Instance.VisitedUserService.GetViewModel();
+        _visitedUserVm = visitedVm;
+
+        _visitedUserVm.PropertyChanged += OnPropChanged_VisitedUserView;
+        _visitedUserVm.OnCompleteLoadInfo += OnCompleteLoadVisitUserInfo;
     }
 
     private void OnPropChanged_UserInfoView(object sender, PropertyChangedEventArgs e)
@@ -80,6 +96,16 @@ public class InGameUI : ViewBase
         }
     }
 
+    private void OnPropChanged_VisitedUserView(object sender, PropertyChangedEventArgs e)
+    {
+        switch(e.PropertyName)
+        {
+            case nameof(VisitedUserViewModel.DisplayUid):
+                UpdateButton();
+                break;
+        }
+    }
+
     private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(_housingVM.CurrentViewMode) || e.PropertyName == nameof(_housingVM.TargetRoom))
@@ -88,18 +114,43 @@ public class InGameUI : ViewBase
         }
     }
 
+    private void OnCompleteLoadVisitUserInfo()
+    {
+        UpdateUserInfo().Forget();
+    }
+
     private async UniTask UpdateUserInfo()
     {
-        if (string.IsNullOrEmpty(_userVm.UserIconId) == false)
+        if(_visitedUserVm == null)
         {
-            Sprite loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
-
-            Image_UserIcon.sprite = loadedSprite;
+            return;
         }
 
-        if (string.IsNullOrEmpty(_userVm.UserName) == false)
+        if(_visitedUserVm.DisplayUid == 0)
         {
-            Text_UserName.text = _userVm.UserName;
+            if (string.IsNullOrEmpty(_userVm.UserIconId) == false)
+            {
+                Sprite loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(_userVm.UserIconId);
+
+                Image_UserIcon.sprite = loadedSprite;
+            }
+
+            if (string.IsNullOrEmpty(_userVm.UserName) == false)
+            {
+                Text_UserName.text = _userVm.UserName;
+            }
+        }
+        else
+        {
+            if (_visitedUserVm.DisplayUserIcon != null)
+            {
+                Image_UserIcon.sprite = _visitedUserVm.DisplayUserIcon;
+            }
+
+            if (string.IsNullOrEmpty(_visitedUserVm.DisplayUserName) == false)
+            {
+                Text_UserName.text = _visitedUserVm.DisplayUserName;
+            }
         }
     }
 
@@ -162,12 +213,41 @@ public class InGameUI : ViewBase
         UpdateButton();
     }
 
+    private void OnClick_GoHome()
+    {
+        UIManager.Instance.OpenLoadingUI();
+        UpdateButton();
+    }
+
     public void UpdateButton()
     {
+        if(_visitedUserVm == null)
+        {
+            return;
+        }
+
+        bool isVisiting = _visitedUserVm.DisplayUid != 0;
+        if(isVisiting == true)
+        {
+            SetVisitMode(true);
+            return;
+        }
+        else
+        {
+            SetVisitMode(false);
+        }
+
         bool isFollowing = (_cameraController != null && _cameraController.IsFollowing);
         bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null) || isFollowing;
 
         Button_Exit.gameObject.SetActive(isSubView);
         Button_Garden.gameObject.SetActive(!isSubView);
+    }
+
+    private void SetVisitMode(bool isVisiting)
+    {
+        Button_Exit.gameObject.SetActive(!isVisiting);
+        Button_Garden.gameObject.SetActive(!isVisiting);
+        Button_GoHome.gameObject.SetActive(isVisiting);
     }
 }
