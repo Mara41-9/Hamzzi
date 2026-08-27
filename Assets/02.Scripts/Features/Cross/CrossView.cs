@@ -23,6 +23,9 @@ public class CrossView : ViewBase
     [SerializeField] private Image MyHamsterImage;
     [SerializeField] private Image FriendHamsterImage;
 
+    [Header("결과")]
+    [SerializeField] private CrossResultView CrossResultView;
+
     private string _userHamsterId;
     private string _friendHamsterId;
 
@@ -48,6 +51,7 @@ public class CrossView : ViewBase
         CrossHamsterSelectView.OnSlotSelect += OnSelectHamster;
 
         CrossHamsterSelectView.gameObject.SetActive(false);
+        CrossResultView.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -122,5 +126,11 @@ public class CrossView : ViewBase
         hamsterSave.HamsterId = hamsterId;
         hamsterSave.FaceId = faceId;
         hamsterSave.UserUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+
+        CrossResultView.gameObject.SetActive(true);
+        CrossResultView.PlayGachaResult(hamsterId, faceId);
+
+        var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(hamsterSave.UserUID);
+        collectionViewModel.AddCollectedHamsterList(hamsterSave);
     }
 }
