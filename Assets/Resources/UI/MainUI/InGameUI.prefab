@@ -374,6 +374,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1 &1171543886354992147
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,6 +830,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1 &3647933072338424843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,6 +1357,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1 &4828574188251964650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +1958,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1 &5761563180049548914
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,6 +2263,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1 &6337944660420463752
 GameObject:
   m_ObjectHideFlags: 0
@@ -3351,6 +3371,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5e39f738799414bb2a60ca5b36cce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
+  Button_Target: {fileID: 0}
+  _punchScaleMultiplier: 1.05
+  _scaleUpDurationSeconds: 0.03
+  _scaleDownDurationSeconds: 0.05
 --- !u!1001 &4671576313309553736
 PrefabInstance:
   m_ObjectHideFlags: 0

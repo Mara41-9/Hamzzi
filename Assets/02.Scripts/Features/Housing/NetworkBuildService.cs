@@ -23,7 +23,6 @@ public class NetworkBuildService
     public async UniTask LoadBuildAndFurnitureData(long userUID)
     {
         BuildViewModel buildVM = GetBuildViewModel();
-        buildVM.IsLoading = true;
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
         buildVM.Builds.Clear();
@@ -177,7 +176,6 @@ public class NetworkBuildService
         NavigationManager.Instance.BuildNav();
         ServiceManager.Instance.HousingService.RefreshFurnitureBuff();
 
-        buildVM.IsLoading = false;
         Debug.Log("건설 및 가구 데이터 로드 완료");
     }
 

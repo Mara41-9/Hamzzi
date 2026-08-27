@@ -75,6 +75,19 @@ public class HousingService
         }
     }
 
+    public void ClearAllFurniture()
+    {
+        foreach (var pair in _spawnFurniture)
+        {
+            if (pair.Value != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(pair.Value);
+            }
+        }
+
+        _spawnFurniture.Clear();
+    }
+
     // DB에서 저장된 인벤토리 데이터를 조회해 리스트로 반환
     public async UniTask<List<InventoryData>> LoadInventoryData(long userUid)
     {
