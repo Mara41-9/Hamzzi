@@ -20,6 +20,7 @@ public class CrossView : ViewBase
 
     [Header("햄스터 선택")]
     [SerializeField] private CrossHamsterSelectView CrossHamsterSelectView;
+    [SerializeField] private Sprite BaseHamsterSprite;
     [SerializeField] private Image MyHamsterImage;
     [SerializeField] private Image FriendHamsterImage;
 
@@ -43,15 +44,28 @@ public class CrossView : ViewBase
 
     private void OnEnable()
     {
+        // 버튼 등록
         ExitButton.BindOnClickButtonEvent(OnClickExitButton);
         MyHamsterSelectButton.BindOnClickButtonEvent(OnClickMyHamsterSelectButton);
         FriendHamsterSelectButton.BindOnClickButtonEvent(OnClickFirendHamsterSelectButton);
         CrossButton.BindOnClickButtonEvent(OnClickCrossButton);
 
+        // 이벤트 등록
         CrossHamsterSelectView.OnSlotSelect += OnSelectHamster;
 
+        // 팝업창들 비활성화 
         CrossHamsterSelectView.gameObject.SetActive(false);
         CrossResultView.gameObject.SetActive(false);
+
+        // 햄스터 선택 초기화
+        _userHamsterId = string.Empty;
+        _friendHamsterId = string.Empty;
+
+        // 이미지 변경
+        MyHamsterImage.sprite = BaseHamsterSprite;
+        FriendHamsterImage.sprite = BaseHamsterSprite;
+
+        LockCrossButton();
     }
 
     private void OnDisable()
@@ -86,6 +100,7 @@ public class CrossView : ViewBase
         }
 
         UpdateIcon(hamsterId, iconImage).Forget();
+        LockCrossButton();
     }
 
     private async UniTask UpdateIcon(string hamsterId, Image iconImage)
@@ -132,5 +147,15 @@ public class CrossView : ViewBase
 
         var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(hamsterSave.UserUID);
         collectionViewModel.AddCollectedHamsterList(hamsterSave);
+    }
+
+    private void LockCrossButton()
+    {
+        // 햄스터를 선택하지 않은 경우
+        bool isAllHamsterSelected = _userHamsterId == string.Empty || _friendHamsterId == string.Empty;
+        CrossButton.SetInteractable(isAllHamsterSelected == false);
+
+        // 교배 횟수를 다 사용했을 경우
+
     }
 }
