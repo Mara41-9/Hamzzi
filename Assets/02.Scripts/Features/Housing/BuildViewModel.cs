@@ -167,12 +167,12 @@ public class BuildViewModel : ViewModelBase
                     furniture.AssignHamsterID = null;
                 }
 
-                var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
+                //var housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
-                if (housingVM != null)
-                {
-                    housingVM.RemoveFurnitureEffect(furniture);
-                }
+                //if (housingVM != null)
+                //{
+                //    housingVM.RemoveFurnitureEffect(furniture);
+                //}
 
                 ServiceManager.Instance.HousingService.GetHousingViewModel().DestroyFurniture = furniture;
                 ReturnFurniture(furniture.FurnitureID).Forget();
