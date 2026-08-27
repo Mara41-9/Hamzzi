@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,7 @@ public class CrossView : ViewBase
     private string _friendHamsterId;
 
     private HamsterViewModel _hamsterViewModel;
+    private UserViewModel _userViewModel;
 
     public void OpenUI()
     {
@@ -40,6 +42,7 @@ public class CrossView : ViewBase
     private void Start()
     {
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
+        _userViewModel = ServiceManager.Instance.UserService.GetUserViewModel();
     }
 
     private void OnEnable()
@@ -130,8 +133,8 @@ public class CrossView : ViewBase
         List<string> faceDataList = _hamsterViewModel.AllFaceIdList;
         int faceCount = faceDataList.Count;
 
-        int randomFace = Random.Range(0, faceCount);
-        int randomHamster = Random.Range(0, 2);
+        int randomFace = UnityEngine.Random.Range(0, faceCount);
+        int randomHamster = UnityEngine.Random.Range(0, 2);
 
         string faceId = faceDataList[randomFace];
         string hamsterId = randomHamster == 0 ? _userHamsterId : _friendHamsterId;
@@ -147,6 +150,11 @@ public class CrossView : ViewBase
 
         var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(hamsterSave.UserUID);
         collectionViewModel.AddCollectedHamsterList(hamsterSave);
+
+        DateTime lastCrossTime = DateTime.Now;
+        _userViewModel.SetLastCrossTime(lastCrossTime);
+
+        LockCrossButton();
     }
 
     private void LockCrossButton()
@@ -156,6 +164,15 @@ public class CrossView : ViewBase
         CrossButton.SetInteractable(isAllHamsterSelected == false);
 
         // 교배 횟수를 다 사용했을 경우
+        DateTime lastCrossTime = _userViewModel.LastCrossTime;
+        DateTime nowTime = DateTime.Now;
 
+        DateTime recentResetTime = new DateTime(nowTime.Year, nowTime.Month, nowTime.Day, 6, 0, 0);
+        if(nowTime.Hour < 6)
+        {
+            recentResetTime = recentResetTime.AddDays(-1);
+        }
+
+        CrossButton.SetInteractable(lastCrossTime < recentResetTime);
     }
 }
