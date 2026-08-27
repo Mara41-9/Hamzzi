@@ -14,7 +14,7 @@ public class AccountInfoView : UIBase
 
     private AccountInfoViewModel _vm;
 
-    private void Start()
+    private void Awake()
     {
         AccountInfoService service = ServiceManager.Instance.AccountInfoService;
 

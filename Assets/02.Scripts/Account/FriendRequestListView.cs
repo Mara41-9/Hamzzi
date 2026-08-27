@@ -6,12 +6,11 @@ public class FriendRequestListView : UIBase
 {
     [SerializeField] private Transform Transform_Content;
     [SerializeField] private GameObject Prefab_RequestSlot;
-    [SerializeField] private UIButton Button_Close;
 
     private FriendRequestViewModel _vm;
     private List<GameObject> _spawnedSlots = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         FriendRequestService service = ServiceManager.Instance.FriendRequestService;
 
@@ -23,7 +22,6 @@ public class FriendRequestListView : UIBase
 
     private void OnEnable()
     {
-        Button_Close.BindOnClickButtonEvent(OnClickClose);
 
         if (_vm != null)
         {
@@ -59,11 +57,6 @@ public class FriendRequestListView : UIBase
         _vm.OnCompleteLoadRequests += OnCompleteLoadRequests_View;
         _vm.OnCompleteAccept += OnCompleteAccept_View;
         _vm.OnCompleteReject += OnCompleteReject_View;
-    }
-
-    private void OnClickClose()
-    {
-        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.FriendRequestListUI); 
     }
 
     private void OnCompleteLoadRequests_View()
