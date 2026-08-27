@@ -1,10 +1,14 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 public class SoundManager : SingletonBase<SoundManager>
 {
     [SerializeField] private AudioSource AudioSource_BGM;
     [SerializeField] private AudioSource AudioSource_SFX;
+
+    public event Action<float> OnChangedBGMVolume;
+    public event Action<float> OnChangedSFXVolume;
 
     //[TODO] 나라: 일단 비지엠 시작 여기다 넣음
     private void Start()
@@ -72,6 +76,7 @@ public class SoundManager : SingletonBase<SoundManager>
         }
 
         AudioSource_BGM.volume = volume;
+        OnChangedBGMVolume?.Invoke(volume);
     }
 
     public float GetSFXVolume()
@@ -87,5 +92,6 @@ public class SoundManager : SingletonBase<SoundManager>
         }
 
         AudioSource_SFX.volume = volume;
+        OnChangedSFXVolume?.Invoke(volume);
     }
 }
