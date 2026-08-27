@@ -100,13 +100,14 @@ public class BuildView : ViewBase
         inputPosition = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return false;
-        }
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
             inputPosition = Input.mousePosition;
             return true;
         }

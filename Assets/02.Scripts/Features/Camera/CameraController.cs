@@ -432,6 +432,8 @@ public class CameraController : MonoBehaviour
 
         float elapsedTime = 0f;
 
+        Matrix4x4 currentMatrix = new Matrix4x4();
+
         while (elapsedTime < Duration)
         {
             if (token.IsCancellationRequested)
@@ -444,7 +446,7 @@ public class CameraController : MonoBehaviour
 
             Camera_Main.transform.position = Vector3.Lerp(startPos, targetPos, time);
             Camera_Main.transform.rotation = Quaternion.Lerp(startRot, targetRot, time);
-            Camera_Main.projectionMatrix = MatrixLerp(startMatrix, targetMatrix, time);
+            Camera_Main.projectionMatrix = MatrixLerp(startMatrix, targetMatrix, time, ref currentMatrix);
 
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
@@ -466,16 +468,14 @@ public class CameraController : MonoBehaviour
         _isTransition = false;
     }
 
-    private Matrix4x4 MatrixLerp(Matrix4x4 start, Matrix4x4 end, float time)
+    private Matrix4x4 MatrixLerp(Matrix4x4 start, Matrix4x4 end, float time, ref Matrix4x4 result)
     {
-        Matrix4x4 matrix = new Matrix4x4();
+        result.SetRow(0, Vector4.Lerp(start.GetRow(0), end.GetRow(0), time));
+        result.SetRow(1, Vector4.Lerp(start.GetRow(1), end.GetRow(1), time));
+        result.SetRow(2, Vector4.Lerp(start.GetRow(2), end.GetRow(2), time));
+        result.SetRow(3, Vector4.Lerp(start.GetRow(3), end.GetRow(3), time));
 
-        for (int i = 0; i < 16; i++)
-        {
-            matrix[i] = Mathf.Lerp(start[i], end[i], time);
-        }
-
-        return matrix;
+        return result;
     }
 
     private void SetOverview()
