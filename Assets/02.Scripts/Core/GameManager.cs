@@ -9,33 +9,68 @@ public class GameManager : SingletonBase<GameManager>
     {
         if (userUID == 0)
         {
-            Debug.LogError("아이디 없음");
             return;
         }
 
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync("Map", "Prefabs/Map", Vector3.zero);
+        BuildView buildView = prefab.GetComponent<BuildView>();
+        BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
+
+        buildView.BindViewModel(buildVM);
 
         bool hasSaveData = await ServiceManager.Instance.NetworkBuildService.HasUserRoomData(userUID);
 
         if (hasSaveData)
         {
             await ServiceManager.Instance.NetworkBuildService.LoadBuildAndFurnitureData(userUID);
+            buildView.SpawnAllLoadBuilds();
+
+            foreach (var pair in buildVM.Builds)
+            {
+                if (pair.Value.BuildType == BuildType.Aisle)
+                {
+                    buildVM.UpdateConnection(pair.Key);
+                }
+                else
+                {
+                    buildVM.UpdateRoomConnection(pair.Value);
+                }
+            }
+
+            RoomViewModel topAisle = null;
+            int maxY = int.MinValue;
+
+            foreach (var pair in buildVM.Builds)
+            {
+                if (pair.Value.BuildType == BuildType.Aisle)
+                {
+                    if (pair.Value.OriginPos.y > maxY)
+                    {
+                        maxY = pair.Value.OriginPos.y;
+                        topAisle = pair.Value;
+                    }
+                }
+            }
+
+            if (topAisle != null)
+            {
+                topAisle.SetWallActive(0, true);
+                topAisle.Refresh();
+            }
+
+            ServiceManager.Instance.BuildService.RefreshAisleNavMesh(buildVM.Builds);
         }
         else
         {
-            if (prefab.TryGetComponent(out BuildView buildView))
+            if (buildView != null)
             {
-                BuildViewModel buildVM = ServiceManager.Instance.BuildService.GetBuildViewModel();
-                buildView.BindViewModel(buildVM);
-
                 buildVM.InitDefaultRoom(buildView.Transform_DefaultRoom, buildView.Transform_DefaultAisle);
             }
         }
 
-        BuildViewModel build = ServiceManager.Instance.BuildService.GetBuildViewModel();
         HousingViewModel housing = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
-        Camera.main.GetComponent<CameraController>().BindViewModel(housing, build);
+        Camera.main.GetComponent<CameraController>().BindViewModel(housing, buildVM);
 
         await UniTask.DelayFrame(2);
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class WheelSlotData
 {
-    public string HamsterID;
+    public HamsterSave HamsterSaveData;
     public HamsterData HamsterData;
     public bool IsAssigned;
 }
@@ -20,14 +21,18 @@ public class WheelViewModel : ViewModelBase
     private string _assignHamsterID;
     public string AssignHamsterID
     {
-        get => TargetFurniture.AssignHamsterID;
+        get => TargetFurniture != null ? TargetFurniture.AssignHamsterID : _assignHamsterID;
         set
         {
-            if (TargetFurniture.AssignHamsterID != value)
+            if (TargetFurniture != null && TargetFurniture.AssignHamsterID != value)
             {
                 TargetFurniture.AssignHamsterID = value;
+                _assignHamsterID = value;
+
                 OnPropertyChanged(nameof(AssignHamsterID));
                 OnPropertyChanged(nameof(CurrentHamsterID));
+
+                ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
             }
         }
     }
@@ -46,9 +51,11 @@ public class WheelViewModel : ViewModelBase
         Dictionary<string, int> otherAssignCounts = GetAssignHamster();
 
         Dictionary<string, int> remainingAssigns = new Dictionary<string, int>(otherAssignCounts);
+        string currentAssigned = TargetFurniture?.AssignHamsterID;
 
         foreach (var kv in collectHamsters)
         {
+            long hamsterUID = kv.Key;
             HamsterSave hamsterSave = kv.Value;
             string hamsterID = hamsterSave.HamsterId;
 
@@ -59,9 +66,15 @@ public class WheelViewModel : ViewModelBase
             }
 
             HamsterData data = GameDataManager.Instance.GetData<HamsterData>(hamsterID);
-            bool isCurrent = (hamsterID == TargetFurniture.AssignHamsterID);
 
-            Hamsters.Add(new WheelSlotData { HamsterID = hamsterID, HamsterData = data, IsAssigned = isCurrent });
+            bool isCurrent = (hamsterUID.ToString() == currentAssigned);
+
+            Hamsters.Add(new WheelSlotData
+            {
+                HamsterSaveData = hamsterSave,
+                HamsterData = data,
+                IsAssigned = isCurrent
+            });
         }
 
         OnPropertyChanged(nameof(TargetFurniture));
@@ -72,12 +85,22 @@ public class WheelViewModel : ViewModelBase
     {
         Dictionary<string, int> counts = new Dictionary<string, int>();
         List<FurnitureViewModel> allFurniture = ServiceManager.Instance.HousingService.GetAllPlacedFurniture();
+        var collectHamsters = GetCollectHamsterID();
 
         foreach (var furniture in allFurniture)
         {
             if (furniture != TargetFurniture && !string.IsNullOrEmpty(furniture.AssignHamsterID))
             {
-                string hamsterID = furniture.AssignHamsterID;
+                string assignedVal = furniture.AssignHamsterID;
+                string hamsterID = assignedVal;
+
+                if (long.TryParse(assignedVal, out long assignedUID))
+                {
+                    if (collectHamsters.TryGetValue(assignedUID, out var save))
+                    {
+                        hamsterID = save.HamsterId;
+                    }
+                }
 
                 if (!counts.ContainsKey(hamsterID))
                 {
@@ -91,28 +114,25 @@ public class WheelViewModel : ViewModelBase
         return counts;
     }
 
-    public void AssignHamster(string hamsterID)
+    public void AssignHamster(string hamsterUIDStr)
     {
-        TargetFurniture.AssignHamsterID = hamsterID;
-        AssignHamsterID = hamsterID;
+        AssignHamsterID = hamsterUIDStr;
 
-        //ServiceManager.Instance.HousingService.SaveHousingData();
-
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
         RefreshHamsterList();
     }
 
     public void UnassignHamster()
     {
-        TargetFurniture.AssignHamsterID = null;
         AssignHamsterID = null;
 
-        //ServiceManager.Instance.HousingService.SaveHousingData();
-
+        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
         RefreshHamsterList();
     }
 
     private Dictionary<long, HamsterSave> GetCollectHamsterID()
     {
-        return ServiceManager.Instance.CollectionService.GetCollectionViewModel().CollectedHamsterList;
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        return ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID).CollectedHamsterList;
     }
 }

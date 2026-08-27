@@ -16,9 +16,21 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     public float TotalCollectSpeedPerSec { get; private set; }
 
-    private void Start()
+    public void Init()
     {
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel();
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
+        _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
+        ServiceManager.Instance.CollectionService.OnChangedCurrentCollectionViewModel += ChangedCollectionViewModel;
+
+        SyncCollectedHamsters();
+    }
+
+    private void ChangedCollectionViewModel()
+    {
+        // 햄스터 제거
+
+        _collectionViewModel.ContainerPropertyChanged -= OnContainerPropertyChanged;
+        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
 
         SyncCollectedHamsters();

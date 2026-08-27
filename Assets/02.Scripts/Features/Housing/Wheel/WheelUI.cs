@@ -26,6 +26,8 @@ public class WheelUI : ViewBase
     private WheelViewModel _wheelVM;
     private string _selectHamsterID;
 
+    private Dictionary<HamsterSlot, string> _slotUID = new Dictionary<HamsterSlot, string>();
+
     private void Start()
     {
         Button_Close.onClick.AddListener(OnClickClose);
@@ -38,7 +40,7 @@ public class WheelUI : ViewBase
         GameDataManager.Instance.LoadData<HamsterData>();
 
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
-        BindViewModel(new WheelViewModel(housingVM.RequestAssignHamster));
+        BindViewModel(new WheelViewModel(housingVM.FurnitureVM));
     }
 
     private void OnDisable()
@@ -76,19 +78,22 @@ public class WheelUI : ViewBase
             }
 
             _spawnSlotList.Clear();
+            _slotUID.Clear();
         }
 
         int index = 0;
         foreach (WheelSlotData slotData in _wheelVM.Hamsters)
         {
-            string hamsterId = slotData.HamsterID;
-
             GameObject prefab = Instantiate(Prefab_Slot, Parent_Hamsters);
 
             if (prefab.TryGetComponent<HamsterSlot>(out var hamsterSlot))
             {
                 hamsterSlot.InitSlot(slotData.HamsterData, true);
-                hamsterSlot.OnSlotClicked += SelectHamsterSlot;
+
+                string realUIDStr = slotData.HamsterSaveData.HamsterUID.ToString();
+                _slotUID[hamsterSlot] = realUIDStr;
+
+                hamsterSlot.OnSlotClicked += OnSlotClicked;
 
                 _spawnSlotList.Add(index, hamsterSlot);
                 index++;
@@ -120,28 +125,57 @@ public class WheelUI : ViewBase
 
         if (!string.IsNullOrEmpty(currentID))
         {
-            HamsterData data = GameDataManager.Instance.GetData<HamsterData>(currentID);
+            string targetDataID = currentID;
 
-            Text_PrevInfo.gameObject.SetActive(false);
-            Text_PrevDescription.gameObject.SetActive(true);
-            Text_PrevDescription.text = $"이름: {data.Name}\n해씨 수집율 {data.CollectSpeed * 100}%";
+            if (long.TryParse(currentID, out long uid))
+            {
+                long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+                var collectionList = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID).CollectedHamsterList;
 
-            Image_PrevHamster.gameObject.SetActive(true);
-            LoadIcon(Image_PrevHamster, data.IconPath).Forget();
+                if (collectionList.TryGetValue(uid, out var save))
+                {
+                    targetDataID = save.HamsterId; ;
+                }
+            }
+
+            HamsterData data = GameDataManager.Instance.GetData<HamsterData>(targetDataID);
+
+            if (data != null)
+            {
+                Text_PrevInfo.gameObject.SetActive(false);
+                Text_PrevDescription.gameObject.SetActive(true);
+                Text_PrevDescription.text = $"이름: {data.Name}\n해씨 수집율 {data.CollectSpeed * 100}%";
+
+                Image_PrevHamster.gameObject.SetActive(true);
+                LoadIcon(Image_PrevHamster, data.IconPath).Forget();
+                return;
+            }
         }
-        else
-        {
-            Text_PrevInfo.gameObject.SetActive(true);
-            Text_PrevDescription.gameObject.SetActive(false);
-            Image_PrevHamster.gameObject.SetActive(false);
-        }
+
+        Text_PrevInfo.gameObject.SetActive(true);
+        Text_PrevDescription.gameObject.SetActive(false);
+        Image_PrevHamster.gameObject.SetActive(false);
     }
 
     private void UpdateNextHamsterInfo()
     {
         if (!string.IsNullOrEmpty(_selectHamsterID))
         {
-            HamsterData data = GameDataManager.Instance.GetData<HamsterData>(_selectHamsterID);
+            string targetDataID = _selectHamsterID;
+
+            if (long.TryParse(_selectHamsterID, out long uid))
+            {
+                foreach (WheelSlotData slot in _wheelVM.Hamsters)
+                {
+                    if (slot.HamsterSaveData != null && slot.HamsterSaveData.HamsterUID == uid)
+                    {
+                        targetDataID = slot.HamsterSaveData.HamsterId;
+                        break;
+                    }
+                }
+            }
+
+            HamsterData data = GameDataManager.Instance.GetData<HamsterData>(targetDataID);
 
             Text_NextInfo.gameObject.SetActive(false);
             Text_NextDescription.gameObject.SetActive(true);
@@ -152,16 +186,11 @@ public class WheelUI : ViewBase
         }
         else
         {
+            Text_InfoText.SetActive(false);
             Text_NextInfo.gameObject.SetActive(true);
             Text_NextDescription.gameObject.SetActive(false);
             Image_NextHamster.gameObject.SetActive(false);
         }
-    }
-
-    private void SelectHamsterSlot(string hamsterID)
-    {
-        _selectHamsterID = hamsterID;
-        UpdateNextHamsterInfo();
     }
 
     private async UniTask LoadIcon(Image icon, string path)
@@ -193,5 +222,22 @@ public class WheelUI : ViewBase
         _wheelVM.UnassignHamster();
 
         OnClickClose();
+    }
+
+    private void OnSlotClicked(string dataID)
+    {
+        GameObject currentSelectedObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+
+        if (currentSelectedObj != null)
+        {
+            HamsterSlot clickedSlot = currentSelectedObj.GetComponentInParent<HamsterSlot>();
+
+            if (clickedSlot != null && _slotUID.TryGetValue(clickedSlot, out string realUID))
+            {
+                _selectHamsterID = realUID;
+            }
+        }
+
+        UpdateNextHamsterInfo();
     }
 }

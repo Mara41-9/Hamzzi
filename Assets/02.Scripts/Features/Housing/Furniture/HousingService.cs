@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class HousingService
 {
+    private Dictionary<string, GameObject> _spawnFurniture = new Dictionary<string, GameObject>();
+
     private HousingViewModel _housingVM;
 
     public HousingViewModel GetHousingViewModel()
@@ -51,6 +53,26 @@ public class HousingService
         }
 
         return allList;
+    }
+
+    public void RegisterSpawnFurniture(string instanceID, GameObject obj)
+    {
+        _spawnFurniture[instanceID] = obj;
+    }
+
+    public GameObject GetSpawnFurniture(string instanceID)
+    {
+        _spawnFurniture.TryGetValue(instanceID, out GameObject obj);
+        return obj;
+    }
+
+    public void RemoveSpawnFurniture(string instanceID)
+    {
+        if (_spawnFurniture.TryGetValue(instanceID, out GameObject obj))
+        {
+            GameObjectManager.Instance.RequestDestroyObject(obj);
+            _spawnFurniture.Remove(instanceID);
+        }
     }
 
     // DB에서 저장된 인벤토리 데이터를 조회해 리스트로 반환

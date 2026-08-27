@@ -17,6 +17,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public SetPlayerNameService SetPlayerNameService { get; private set; }
     public NetworkBuildService NetworkBuildService { get; private set; }
     public FriendRequestService FriendRequestService { get; private set; }
+    public VisitedUserService VisitedUserService { get; private set; }
 
     public void Start()
     {
@@ -40,6 +41,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitSetPlayerNameService();
         InitNetworkBuildService();
         InitFriendRequestService();
+        InitVisitedUserService();
     }
 
     private void InitShopService()
@@ -65,7 +67,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitCollectionService()
     {
         CollectionService = new NetworkCollectionService();
-        CollectionService.GetCollectionViewModel();
+        //CollectionService.GetCollectionViewModel();
+        CollectionService.GetHamsterViewModel();
     }
 
     private void InitGachaService()
@@ -114,6 +117,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
         FriendRequestService = new FriendRequestService();
     }
 
+    private void InitVisitedUserService()
+    {
+        VisitedUserService = new VisitedUserService();
+    }
+
 
     public void LoadDataFromDB()
     {
@@ -122,6 +130,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
 
         Debug.Log($"User UID : {userUID}");
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
+        CollectionService.SetCurrentCollectionViewModel(userUID);
+        HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
         HousingService.LoadInventory(userUID).Forget();
     }
