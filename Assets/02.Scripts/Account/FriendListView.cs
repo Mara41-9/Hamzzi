@@ -12,7 +12,7 @@ public class FriendListView : UIBase
     private FriendListViewModel _vm;
     private List<GameObject> _spawnedSlots = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         FriendListService service = ServiceManager.Instance.FriendListService;
 
