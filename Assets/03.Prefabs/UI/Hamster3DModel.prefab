@@ -2415,6 +2415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46832cbd4bb3a314aa0dc068d343ebb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hamster3DModelView
+  _hamsterTransform: {fileID: 3942856769663045957}
   FaceMesh: {fileID: 3989772259518028641}
   HamsterMesh: {fileID: 3989719665679832275}
 --- !u!1 &7087328157503703436

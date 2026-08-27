@@ -4,6 +4,7 @@ using UnityEngine;
 
 internal class Hamster3DModelView : MonoBehaviour
 {
+    [SerializeField] private Transform _hamsterTransform;
     [SerializeField] private SkinnedMeshRenderer FaceMesh;
     [SerializeField] private SkinnedMeshRenderer HamsterMesh;
 
@@ -51,15 +52,20 @@ internal class Hamster3DModelView : MonoBehaviour
     public void SetHamsterMesh()
     {
         string hamsterId = _hamsterModelViewModel.HamsterId;
-        LoadBodyMesh(hamsterId).Forget();
+        LoadHamsterMesh(hamsterId).Forget();
     }
 
-    private async UniTaskVoid LoadBodyMesh(string hamsterId)
+    private async UniTaskVoid LoadHamsterMesh(string hamsterId)
     {
         var HamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterId);
         string HamsterPath = HamsterData.MaterialPath;
 
         var hamsterMarteiral = await ResourceManager.Instance.LoadAsset<Material>(HamsterPath);
         HamsterMesh.material = hamsterMarteiral;
+    }
+
+    public Transform GetHamsterTransform()
+    {
+        return _hamsterTransform;
     }
 }

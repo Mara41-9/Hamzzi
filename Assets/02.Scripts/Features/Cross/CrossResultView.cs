@@ -12,9 +12,8 @@ public class CrossResultView : MonoBehaviour
 
     private HamsterModelViewModel _hamsterModelViewModel;
 
-    private void OnEnable()
+    private void Awake()
     {
-        Debug.Log("dd");
         _hamsterModelViewModel = ServiceManager.Instance.HamsterModelService.GetHamsterModelViewModel();
     }
 

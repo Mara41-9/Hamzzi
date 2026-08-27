@@ -2467,6 +2467,7 @@ GameObject:
   - component: {fileID: 3578700441144597071}
   - component: {fileID: 5544983573435928480}
   - component: {fileID: 9058555387357365362}
+  - component: {fileID: 6802644651056577650}
   m_Layer: 5
   m_Name: RawImage
   m_TagString: Untagged
@@ -2542,6 +2543,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 3
   m_AspectRatio: 1
+--- !u!114 &6802644651056577650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8684685716609319969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd26819f15317c54cbef1ddf099f410d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HamsterModelRotate
+  rotationSpeed: 0.5
 --- !u!1 &8725716365684749930
 GameObject:
   m_ObjectHideFlags: 0

@@ -80,6 +80,12 @@ public class CollectionViewModel : ViewModelBase, IContainerPropertyChanged<stri
         }
     }
 
+    public void InitInvokePropertyChanged()
+    {
+        OnPropertyChanged(nameof(CurrentSelectHamsterId));
+        OnPropertyChanged(nameof(CurrentSelectedHamsterFaceId));
+    }
+
     public void InvokeContainerPropertyChanged(string containerName, ContainerEventType type, string id)
     {
         ContainerPropertyChanged?.Invoke(containerName, type, id);
