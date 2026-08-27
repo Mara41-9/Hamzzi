@@ -7,15 +7,16 @@ using UnityEngine.UI;
 public class InGameUI : ViewBase
 {
     [Header("버튼")]
-    [SerializeField] private UIButton Button_OpenShopUI;
-    [SerializeField] private UIButton Button_OpenDecorUI;
-    [SerializeField] private UIButton Button_OpenFriendUI;
+    [SerializeField] private UIButton Button_ShopUI;
+    [SerializeField] private UIButton Button_DecorUI;
+    [SerializeField] private UIButton Button_FriendUI;
     [SerializeField] private UIButton Button_CollectionUI;
     [SerializeField] private UIButton Button_Gacha;
     [SerializeField] private UIButton Button_Setting;
     [SerializeField] private Button Button_Garden;
     [SerializeField] private Button Button_Exit;
     [SerializeField] private UIButton Button_GoHome;
+    [SerializeField] private UIButton Button_Breeding;
 
     [Header("DB 연동")]
     [SerializeField] private Image Image_UserIcon;
@@ -34,15 +35,16 @@ public class InGameUI : ViewBase
 
     private void OnEnable()
     {
-        Button_OpenShopUI.BindOnClickButtonEvent(OnClick_OpenShop);
-        Button_OpenDecorUI.BindOnClickButtonEvent(OnClick_OpenDecor);
-        Button_OpenFriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
+        Button_ShopUI.BindOnClickButtonEvent(OnClick_OpenShop);
+        Button_DecorUI.BindOnClickButtonEvent(OnClick_OpenDecor);
+        Button_FriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
         Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
         Button_Garden.onClick.AddListener(OnClick_Garden);
         Button_Exit.onClick.AddListener(OnClick_Exit);
         Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
+        Button_Breeding.BindOnClickButtonEvent(OnClick_Breeding);
 
         if (_housingVM == null)
         {
@@ -219,6 +221,11 @@ public class InGameUI : ViewBase
         UpdateButton();
     }
 
+    private void OnClick_Breeding()
+    {
+        
+    }
+
     public void UpdateButton()
     {
         if(_visitedUserVm == null)
@@ -248,6 +255,11 @@ public class InGameUI : ViewBase
     {
         Button_Exit.gameObject.SetActive(!isVisiting);
         Button_Garden.gameObject.SetActive(!isVisiting);
+        Button_ShopUI.gameObject.SetActive(!isVisiting);
+        Button_DecorUI.gameObject.SetActive(!isVisiting);
+        Button_Gacha.gameObject.SetActive(!isVisiting);
+
         Button_GoHome.gameObject.SetActive(isVisiting);
+        Button_Breeding.gameObject.SetActive(isVisiting);
     }
 }
