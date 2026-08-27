@@ -129,7 +129,8 @@ public class WheelUI : ViewBase
 
             if (long.TryParse(currentID, out long uid))
             {
-                var collectionList = ServiceManager.Instance.CollectionService.GetCollectionViewModel().CollectedHamsterList;
+                long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+                var collectionList = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID).CollectedHamsterList;
 
                 if (collectionList.TryGetValue(uid, out var save))
                 {

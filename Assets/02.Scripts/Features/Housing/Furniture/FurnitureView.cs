@@ -93,7 +93,8 @@ public class FurnitureView : MonoBehaviour
 
             if (long.TryParse(hamsterVal, out long uid))
             {
-                var collectionVM = ServiceManager.Instance.CollectionService?.GetCollectionViewModel();
+                long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+                var collectionVM = ServiceManager.Instance.CollectionService?.GetCollectionViewModel(userUID);
                 if (collectionVM != null && collectionVM.CollectedHamsterList.TryGetValue(uid, out var save))
                 {
                     targetHamsterID = save.HamsterId;
