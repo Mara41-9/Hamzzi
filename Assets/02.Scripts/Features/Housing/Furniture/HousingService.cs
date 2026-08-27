@@ -271,4 +271,34 @@ public class HousingService
     {
         AddInventoryItem(itemDataId, iconSprite);
     }
+
+    public void RefreshFurnitureBuff()
+    {
+        float totalBuffRate = 0f;
+
+        List<FurnitureViewModel> placedFurnitureList = GetAllPlacedFurniture();
+
+        foreach(var furnitureVm in placedFurnitureList)
+        {
+            var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVm.FurnitureID);
+            if (itemData == null)
+            {
+                return;
+            }
+
+            var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
+            if (subCategoryEffectData != null)
+            {
+                float itemEffect = subCategoryEffectData.SeedCollectionBonus;
+                totalBuffRate += itemEffect;
+                
+            }
+        }
+
+        var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        if (userVm != null)
+        {
+            userVm.SetFurnitureBuff(totalBuffRate);
+        }
+    }
 }
