@@ -178,11 +178,11 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.PopupUI, UIType.SetPlayerNameUI);
     }
 
-    public static void OpenIdleRewardPopupUI(this UIManager uiManager, int rewardAmount, float elapsedSeconds, float capSeconds, float buffRate)
+    public static void OpenIdleRewardPopupUI(this UIManager uiManager, int rewardAmount, float elapsedSeconds, float capSeconds)
     {
         UIBase openedUI = uiManager.OpenUI(UIRootType.PopupUI, UIType.IdleRewardPopupUI);
         IdleRewardPopupUI popupUI = openedUI as IdleRewardPopupUI;
-        popupUI.SetRewardInfo(rewardAmount, elapsedSeconds, capSeconds, buffRate);
+        popupUI.SetRewardInfo(rewardAmount, elapsedSeconds, capSeconds);
     }
 
     public static void CloseIdleRewardPopupUI(this UIManager uiManager)

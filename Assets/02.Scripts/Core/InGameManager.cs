@@ -76,9 +76,7 @@ public class InGameManager : SingletonBase<InGameManager>
 
         _pendingIdleReward = idleReward;
 
-        float buffRate = userVm.GetSeedBuffRate();
-
-        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);
+        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds);
     }
 
     public void ClaimIdleReward()
