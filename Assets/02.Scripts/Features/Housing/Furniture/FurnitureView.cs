@@ -6,6 +6,7 @@ using UnityEngine;
 public class FurnitureView : MonoBehaviour
 {
     [SerializeField] Renderer[] Renderers;
+    [SerializeField] private float YOffset = 0f;
 
     public FurnitureViewModel FurnitureVM { get; private set; }
 
@@ -18,6 +19,16 @@ public class FurnitureView : MonoBehaviour
         _originScale = transform.localScale;
         InitRederers();
         _feverTimeWheel = GetComponent<FeverTimeWheel>();
+    }
+
+    private void Start()
+    {
+        if (YOffset != 0f)
+        {
+            Vector3 pos = transform.position;
+            pos.y += YOffset;
+            transform.position = pos;
+        }
     }
 
     public void Bind(FurnitureViewModel furnitureVM)

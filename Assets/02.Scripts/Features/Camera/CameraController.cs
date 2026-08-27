@@ -434,38 +434,49 @@ public class CameraController : MonoBehaviour
 
         Matrix4x4 currentMatrix = new Matrix4x4();
 
-        while (elapsedTime < Duration)
+        try
         {
-            if (token.IsCancellationRequested)
+            while (elapsedTime < Duration)
             {
-                return;
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                elapsedTime += Time.deltaTime;
+                float time = Mathf.SmoothStep(0f, 1f, elapsedTime / Duration);
+
+                Camera_Main.transform.position = Vector3.Lerp(startPos, targetPos, time);
+                Camera_Main.transform.rotation = Quaternion.Lerp(startRot, targetRot, time);
+                Camera_Main.projectionMatrix = MatrixLerp(startMatrix, targetMatrix, time, ref currentMatrix);
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
-            elapsedTime += Time.deltaTime;
-            float time = Mathf.SmoothStep(0f, 1f, elapsedTime / Duration);
+            if (!token.IsCancellationRequested)
+            {
+                Camera_Main.transform.position = targetPos;
+                Camera_Main.transform.rotation = targetRot;
+                Camera_Main.orthographic = endIsOrtho;
+                Camera_Main.ResetProjectionMatrix();
 
-            Camera_Main.transform.position = Vector3.Lerp(startPos, targetPos, time);
-            Camera_Main.transform.rotation = Quaternion.Lerp(startRot, targetRot, time);
-            Camera_Main.projectionMatrix = MatrixLerp(startMatrix, targetMatrix, time, ref currentMatrix);
-
-            await UniTask.Yield(PlayerLoopTiming.Update, token);
+                if (endIsOrtho)
+                {
+                    Camera_Main.orthographicSize = Size_Ortho;
+                }
+                else
+                {
+                    Camera_Main.fieldOfView = targetFOV;
+                }
+            }
         }
-
-        Camera_Main.transform.position = targetPos;
-        Camera_Main.transform.rotation = targetRot;
-        Camera_Main.orthographic = endIsOrtho;
-        Camera_Main.ResetProjectionMatrix();
-
-        if (endIsOrtho)
+        catch (System.OperationCanceledException)
         {
-            Camera_Main.orthographicSize = Size_Ortho;
         }
-        else
+        finally
         {
-            Camera_Main.fieldOfView = targetFOV;
+            _isTransition = false;
         }
-
-        _isTransition = false;
     }
 
     private Matrix4x4 MatrixLerp(Matrix4x4 start, Matrix4x4 end, float time, ref Matrix4x4 result)
