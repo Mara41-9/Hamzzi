@@ -273,7 +273,7 @@ public class HousingViewModel : ViewModelBase
             FurnitureVM.AssignHamsterID = null;
         }
 
-        RemoveFurnitureEffect(FurnitureVM);
+        ServiceManager.Instance.HousingService.RefreshFurnitureBuff();
 
         if (CurrentViewMode == HousingViewMode.Garden)
         {
@@ -372,9 +372,9 @@ public class HousingViewModel : ViewModelBase
 
             if (CurrentState != HousingState.Editing)
             {
-                ApplyFurnitureEffect(furnitureVM);
+                ServiceManager.Instance.HousingService.RefreshFurnitureBuff();
             }
-                
+
 
             ResetPlacingState();
             NavigationManager.Instance.BuildNav();
@@ -404,48 +404,6 @@ public class HousingViewModel : ViewModelBase
 
                 OnPropertyChanged(nameof(ItemList));
                 return;
-            }
-        }
-    }
-
-    private void ApplyFurnitureEffect(FurnitureViewModel furnitureVM)
-    {
-        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
-        if (itemData == null)
-        {
-            return;
-        }
-
-        var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
-        if (subCategoryEffectData != null)
-        {
-            float itemEffect = subCategoryEffectData.SeedCollectionBonus;
-
-            var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-            if(userVm != null)
-            {
-                userVm.AddSeedBuff(itemEffect);
-            }
-        }
-    }
-
-    public void RemoveFurnitureEffect(FurnitureViewModel furnitureVM)
-    {
-        var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVM.FurnitureID);
-        if (itemData == null)
-        {
-            return;
-        }
-
-        var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
-        if (subCategoryEffectData != null)
-        {
-            float itemEffect = subCategoryEffectData.SeedCollectionBonus;
-
-            var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-            if (userVm != null)
-            {
-                userVm.RemoveSeedBuff(itemEffect);
             }
         }
     }

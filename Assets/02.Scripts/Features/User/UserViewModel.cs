@@ -84,14 +84,9 @@ public static class UserViewModelExtension
         userVm.SeedCount += amount;
     }
 
-    public static void AddSeedBuff(this UserViewModel userVm, float amount)
+    public static void SetFurnitureBuff(this UserViewModel userVm, float amount)
     {
-        _seedBuffRate += amount;
-    }
-
-    public static void RemoveSeedBuff(this UserViewModel userVm, float amount)
-    {
-        _seedBuffRate -= amount;
+        _seedBuffRate = amount;
     }
 
     public static float GetSeedBuffRate(this UserViewModel userVm)
