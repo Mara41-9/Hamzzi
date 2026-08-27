@@ -17,6 +17,18 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     public float TotalCollectSpeedPerSec { get; private set; }
 
+    public bool IsCurrentCollectionMine()
+    {
+        long myUserUid = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        CollectionViewModel myCollectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(myUserUid);
+
+        if (myCollectionViewModel == null)
+        {
+            return false;
+        }
+
+        return myCollectionViewModel == ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
+    }
     public void Init()
     {
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
@@ -157,6 +169,11 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     private void RecalculateTotalCollectSpeedPerSec()
     {
+        if (IsCurrentCollectionMine() == false)
+        {
+            return;
+        }
+
         float total = 0f;
 
         foreach (HamsterSave hamsterSave in _collectionViewModel.CollectedHamsterList.Values)
