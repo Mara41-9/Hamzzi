@@ -110,6 +110,24 @@ public class InGameUI : ViewBase
 
     private void OnClick_OpenDecor()
     {
+        if (_cameraController != null && _cameraController.IsFollowing)
+        {
+            _cameraController.StopFollowHamster();
+        }
+
+        bool isGarden = (_housingVM.CurrentViewMode == HousingViewMode.Garden);
+
+        if (isGarden)
+        {
+            _housingVM.TargetRoom = null;
+            _housingVM.EnterGardenMode();
+        }
+        else
+        {
+            _housingVM.TargetRoom = null;
+            _housingVM.EnterOverviewMode();
+        }
+
         UIManager.Instance.OpenDecorUI();
         UIManager.Instance.CloseInGameUI();
     }
@@ -146,10 +164,20 @@ public class InGameUI : ViewBase
     {
         if (_cameraController.IsFollowing)
         {
-            _cameraController.StopFollowHamster();
-            _cameraController.ShowOverview().Forget();
+            bool isGarden = (_housingVM.CurrentViewMode == HousingViewMode.Garden);
 
-            _housingVM.CurrentViewMode = HousingViewMode.OverView;
+            _cameraController.StopFollowHamster();
+
+            if (isGarden)
+            {
+                _cameraController.ShowGardenView().Forget();
+                _housingVM.CurrentViewMode = HousingViewMode.Garden;
+            }
+            else
+            {
+                _cameraController.ShowOverview().Forget();
+                _housingVM.CurrentViewMode = HousingViewMode.OverView;
+            }
 
             UpdateButton();
 
