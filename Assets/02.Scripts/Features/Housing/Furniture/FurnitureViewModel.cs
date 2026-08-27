@@ -131,6 +131,6 @@ public class FurnitureViewModel : ViewModelBase
         int temp = Size.x;
         Size = new Vector2Int(Size.y, temp);
 
-        LocalPos = new Vector2Int(Mathf.FloorToInt(currentCenterX - Size.x * 0.5f), Mathf.FloorToInt(currentCenterY - Size.y * 0.5f));
+        LocalPos = new Vector2Int(Mathf.RoundToInt(currentCenterX - Size.x * 0.5f), Mathf.RoundToInt(currentCenterY - Size.y * 0.5f));
     }
 }

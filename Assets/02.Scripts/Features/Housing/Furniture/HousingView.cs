@@ -356,6 +356,7 @@ public class HousingView : ViewBase
         float subCellSize = GetCurrentSubCellSize();
 
         _ghostObject.transform.position = pos;
+        _ghostObject.transform.rotation = rot;
 
         float currentAngle = _housingVM.FurnitureVM.RotationAngle;
 
@@ -431,17 +432,17 @@ public class HousingView : ViewBase
                 return;
             }
 
-            if (_housingVM.CurrentState == HousingState.Placing && _ghostObject == null)
+            if (_housingVM.CurrentState == HousingState.Placing)
             {
-                if (_housingVM.TargetRoom != null)
-                {
-                    Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);
-                    _housingVM.MovePos(roomCenterPos);
-                }
-                else
+                if (_housingVM.CurrentViewMode == HousingViewMode.Garden)
                 {
                     Vector2Int centerPos = GetGardenCenterPosition(calculatedSize);
                     _housingVM.MovePos(centerPos);
+                }
+                else if (_housingVM.TargetRoom != null)
+                {
+                    Vector2Int roomCenterPos = new Vector2Int(_housingVM.TargetRoom.SubGridSize.x / 2 - calculatedSize.x / 2, _housingVM.TargetRoom.SubGridSize.y / 2 - calculatedSize.y / 2);
+                    _housingVM.MovePos(roomCenterPos);
                 }
             }
         }
