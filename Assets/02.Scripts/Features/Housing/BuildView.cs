@@ -100,13 +100,14 @@ public class BuildView : ViewBase
         inputPosition = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return false;
-        }
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
             inputPosition = Input.mousePosition;
             return true;
         }
@@ -241,5 +242,19 @@ public class BuildView : ViewBase
         int y = Mathf.FloorToInt(worldPos.y / _cellSize);
 
         return new Vector2Int(x, y);
+    }
+
+    public void ClearAllBuilds()
+    {
+        foreach (GameObject room in _spawnRoom.Values)
+        {
+            if (room != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(room);
+            }
+        }
+
+        _spawnRoom.Clear();
+        _buildVM.Builds.Clear();
     }
 }

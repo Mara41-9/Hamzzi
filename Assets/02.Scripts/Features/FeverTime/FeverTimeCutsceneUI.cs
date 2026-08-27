@@ -10,6 +10,7 @@ public class FeverTimeCutsceneUI : UIBase
     [SerializeField] private TMP_Text Text_TapGuide;
     [SerializeField] private UIButton Button_Tap;
     [SerializeField] private Image Image_Fill;
+    [SerializeField] private TMP_Text Text_Timer;
 
     private VideoPlayer _cutsceneVideoPlayer;
 
@@ -32,15 +33,16 @@ public class FeverTimeCutsceneUI : UIBase
     private void Update()
     {
         var currentFeverTimeData = FeverTimeManager.Instance.GetCurrentFeverTimeData();
-        if(currentFeverTimeData == null)
+        if (currentFeverTimeData == null)
         {
             return;
         }
 
-        var elapsedTime = FeverTimeManager.Instance.GetTapInputElapsedTime();
-        var duration = currentFeverTimeData.TapDurationSec;
+        float elapsedTime = FeverTimeManager.Instance.GetTapInputElapsedTime();
+        float duration = currentFeverTimeData.TapDurationSec;
 
-        Image_Fill.fillAmount = (elapsedTime / duration);
+        Image_Fill.fillAmount = elapsedTime / duration;
+        Text_Timer.text = $"남은시간 : {Mathf.CeilToInt(duration - elapsedTime)}초";
     }
 
     private void OnClickTap()

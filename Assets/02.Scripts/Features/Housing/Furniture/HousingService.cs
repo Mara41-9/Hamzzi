@@ -75,6 +75,19 @@ public class HousingService
         }
     }
 
+    public void ClearAllFurniture()
+    {
+        foreach (var pair in _spawnFurniture)
+        {
+            if (pair.Value != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(pair.Value);
+            }
+        }
+
+        _spawnFurniture.Clear();
+    }
+
     // DB에서 저장된 인벤토리 데이터를 조회해 리스트로 반환
     public async UniTask<List<InventoryData>> LoadInventoryData(long userUid)
     {
@@ -257,5 +270,35 @@ public class HousingService
     public void AddItem(string itemDataId, Sprite iconSprite)
     {
         AddInventoryItem(itemDataId, iconSprite);
+    }
+
+    public void RefreshFurnitureBuff()
+    {
+        float totalBuffRate = 0f;
+
+        List<FurnitureViewModel> placedFurnitureList = GetAllPlacedFurniture();
+
+        foreach(var furnitureVm in placedFurnitureList)
+        {
+            var itemData = GameDataManager.Instance.GetData<ItemData>(furnitureVm.FurnitureID);
+            if (itemData == null)
+            {
+                return;
+            }
+
+            var subCategoryEffectData = GameDataManager.Instance.GetData<SubCategoryEffectData>(itemData.SubCategory);
+            if (subCategoryEffectData != null)
+            {
+                float itemEffect = subCategoryEffectData.SeedCollectionBonus;
+                totalBuffRate += itemEffect;
+                
+            }
+        }
+
+        var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        if (userVm != null)
+        {
+            userVm.SetFurnitureBuff(totalBuffRate);
+        }
     }
 }

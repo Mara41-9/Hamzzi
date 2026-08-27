@@ -59,12 +59,14 @@ public class InGameManager : SingletonBase<InGameManager>
             return;
         }
 
-        float productionPerSec = HamsterManager.Instance.TotalCollectSpeedPerSec * IdleRewardRateMultiplier;
+        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+
+        float productionPerSec = userVm.GoldPerSec * IdleRewardRateMultiplier;
         float elapsedSeconds = GameUtil.CalculateElapsedSeconds(_lastLoginTicks, IdleRewardCapSeconds);
         int idleReward = GameUtil.CalculateIdleReward(_lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
 #if UNITY_EDITOR
-        Debug.Log($"[방치 보상 계산] 초당 {productionPerSec} / 경과 {elapsedSeconds}초 / 보상 {idleReward}");
+        Debug.Log($"[방치 보상 계산] 저장된 초당 {userVm.GoldPerSec} / 적용 초당 {productionPerSec} / 경과 {elapsedSeconds}초 / 보상 {idleReward}");
 #endif
 
         if (idleReward <= 0)
@@ -74,10 +76,7 @@ public class InGameManager : SingletonBase<InGameManager>
 
         _pendingIdleReward = idleReward;
 
-        UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
-        float buffRate = userVm.GetSeedBuffRate();
-
-        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds, buffRate);
+        UIManager.Instance.OpenIdleRewardPopupUI(idleReward, elapsedSeconds, IdleRewardCapSeconds);
     }
 
     public void ClaimIdleReward()
@@ -112,7 +111,6 @@ public class InGameManager : SingletonBase<InGameManager>
         {
             await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
             await SaveSeedCount();
-            await SaveInventory();
         }
     }
 
@@ -139,16 +137,8 @@ public class InGameManager : SingletonBase<InGameManager>
         return HamsterManager.Instance.TotalCollectSpeedPerSec * (1f + buffRate);
     }
 
-    private async UniTask SaveInventory()
-    {
-        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
-
-        await ServiceManager.Instance.HousingService.SaveAllInventoryData(loginVm.UserUID);
-    }
-
     private void OnApplicationQuit()
     {
         SaveSeedCount().Forget();
-        SaveInventory().Forget();
     }
 }
