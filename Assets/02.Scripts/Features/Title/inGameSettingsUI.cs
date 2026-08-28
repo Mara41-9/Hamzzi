@@ -65,13 +65,9 @@ public class InGameSettingsUI : ViewBase
         var loginService = ServiceManager.Instance.LoginService;
         var userService = ServiceManager.Instance.UserService;
 
+        // DB 저장
         long userUID = loginService.GetViewModel().UserUID;
-        int seedCount = userService.GetUserViewModel().SeedCount;
-
-        UserSaveData saveData = new UserSaveData();
-        saveData.GoldCount = seedCount;
-
-        userService.SaveUserAsync(userUID, saveData).Forget();
+        userService.SaveUserAsync(userUID).Forget();
 
         if (loginService != null)
         {

@@ -38,6 +38,8 @@ public class CrossResultView : MonoBehaviour
         _hamsterModelViewModel.HamsterId = hamsterId;
         _hamsterModelViewModel.FaceId = faceId;
 
+        ServiceManager.Instance.HamsterModelService.SetHamsterAnimator("DanceTrigger");
+
         rawImageRect.localScale = Vector3.zero;
         rawImageCanvasGroup.alpha = 1;
 

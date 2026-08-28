@@ -134,12 +134,6 @@ public static class UserViewModelExtension
         userVm.LastCrossTime = lastCrossTime;
 
         long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
-
-        UserSaveData userSaveData = new UserSaveData();
-        userSaveData.GoldCount = userVm.SeedCount;
-        userSaveData.GoldPerSec = userVm.GoldPerSec;
-        userSaveData.LastCrossTime = lastCrossTime;
-
-        ServiceManager.Instance.UserService.SaveUserAsync(userUID, userSaveData).Forget();
+        ServiceManager.Instance.UserService.SaveUserAsync(userUID).Forget();
     }
 }
