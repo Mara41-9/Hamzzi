@@ -146,6 +146,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         Debug.Log($"User UID : {userUID}");
         CollectionService.LoadHamsterCollectionData(userUID).Forget();
         CollectionService.SetCurrentCollectionViewModel(userUID);
+        HamsterModelService.LoadHamsterModel().Forget();
         HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
     }

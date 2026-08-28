@@ -6,11 +6,6 @@ public class HamsterModelService
     private HamsterModelViewModel _modelViewrViewModel;
     private Hamster3DModelView _modelView;
 
-    public HamsterModelService()
-    {
-        LoadHamsterModel().Forget();
-    }
-
     public HamsterModelViewModel GetHamsterModelViewModel()
     {
         if (_modelViewrViewModel == null)
@@ -22,7 +17,7 @@ public class HamsterModelService
         return _modelViewrViewModel;
     }
 
-    private async UniTask LoadHamsterModel()
+    public async UniTask LoadHamsterModel()
     {
         var modelObject = await GameObjectManager.Instance.CreateObjectAsync(string.Empty, "Hamster3DModel", Vector3.one * 1000);
         var view = modelObject.GetComponent<Hamster3DModelView>();
