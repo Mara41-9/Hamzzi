@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TitleSettingsUI : ViewBase
@@ -24,12 +25,18 @@ public class TitleSettingsUI : ViewBase
 
         Slider_BGM.onValueChanged.AddListener(OnChangedBGMVolume);
         Slider_SFX.onValueChanged.AddListener(OnChangedSFXVolume);
+
+        SoundManager.Instance.OnChangedBGMVolume += UpdateBGMVolume;
+        SoundManager.Instance.OnChangedSFXVolume += UpdateSFXVolume;
     }
 
     private void OnDisable()
     {
         Slider_BGM.onValueChanged.RemoveListener(OnChangedBGMVolume);
         Slider_SFX.onValueChanged.RemoveListener(OnChangedSFXVolume);
+
+        SoundManager.Instance.OnChangedBGMVolume -= UpdateBGMVolume;
+        SoundManager.Instance.OnChangedSFXVolume -= UpdateSFXVolume;
     }
 
     private void OnClick_Close()
@@ -47,6 +54,16 @@ public class TitleSettingsUI : ViewBase
     {
         _sfxVolume = volume;
         SoundManager.Instance.SetSFXVolume(_sfxVolume);
+    }
+
+    private void UpdateBGMVolume(float volume)
+    {
+        Slider_BGM.SetValueWithoutNotify(volume);
+    }
+
+    private void UpdateSFXVolume(float volume)
+    {
+        Slider_SFX.SetValueWithoutNotify(volume);
     }
 }
 

@@ -16,6 +16,8 @@ public class VisitedUserService
 
     public long CurrentVisitedUid { get; set; }
 
+    public event Action<bool> OnVisitStateChange;
+
     public VisitedUserService()
     {
         _viewModel = new VisitedUserViewModel();
@@ -65,4 +67,5 @@ public class VisitedUserService
 
         return resultData;
     }
+
 }

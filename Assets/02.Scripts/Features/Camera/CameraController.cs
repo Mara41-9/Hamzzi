@@ -127,7 +127,10 @@ public class CameraController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _housingVM.PropertyChanged -= OnPropertyChanged_VM;
+        if(_housingVM != null)
+        {
+            _housingVM.PropertyChanged -= OnPropertyChanged_VM;
+        }
     }
 
     private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)

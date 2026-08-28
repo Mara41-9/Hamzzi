@@ -36,6 +36,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitUserService();
 
         LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
+        LoginService.GetViewModel().OnCompleteLogin += LoadInventory;
+
         InitAccountSearchService();
         InitFriendService();
         InitAccountInfoService();
@@ -139,6 +141,15 @@ public class ServiceManager : SingletonBase<ServiceManager>
         CollectionService.SetCurrentCollectionViewModel(userUID);
         HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
+        
+        GameManager.Instance.ChangeMap(userUID).Forget();
+    }
+
+    public void LoadInventory()
+    {
+        var loginVM = LoginService.GetViewModel();
+        long userUID = loginVM.UserUID;
+
         HousingService.LoadInventory(userUID).Forget();
     }
 }

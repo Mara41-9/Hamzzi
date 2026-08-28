@@ -10,7 +10,7 @@ public class UIButton : MonoBehaviour
     [SerializeField] private TMP_Text Text_Base;
 
     // 자동으로 이벤트를 제거할지 말지 구분하는 변수
-    private bool _isSlotManualUnbindEvent;
+    private bool _isSlotManualUnbindEvent = false;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class UIButton : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_isSlotManualUnbindEvent == false)
+        if (_isSlotManualUnbindEvent == true)
         {
             Button_Base.onClick.RemoveAllListeners();
         }
