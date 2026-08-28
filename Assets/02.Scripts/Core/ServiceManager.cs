@@ -141,8 +141,6 @@ public class ServiceManager : SingletonBase<ServiceManager>
         CollectionService.SetCurrentCollectionViewModel(userUID);
         HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
-        
-        GameManager.Instance.ChangeMap(userUID).Forget();
     }
 
     public void LoadInventory()

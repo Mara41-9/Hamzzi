@@ -87,7 +87,7 @@ public class GameManager : SingletonBase<GameManager>
         buildVM.IsLoading = false;
     }
 
-    private void ClearMap()
+    public void ClearMap()
     {
         HousingService housingService = ServiceManager.Instance.HousingService;
         HousingViewModel housingVM = housingService.GetHousingViewModel();
@@ -122,10 +122,7 @@ public class GameManager : SingletonBase<GameManager>
 
     public async UniTask ChangeMap(long targetUserID)
     {
-        if(_buildView != null)
-        {
-            ClearMap();
-        }
+        ClearMap();
 
         await InitMap(targetUserID);
     }
