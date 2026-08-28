@@ -16,7 +16,7 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_Garden;
     [SerializeField] private UIButton Button_Exit;
     [SerializeField] private UIButton Button_GoHome;
-    [SerializeField] private UIButton Button_Breeding;
+    [SerializeField] private UIButton Button_Cross;
 
     [Header("보유 씨앗")]
     [SerializeField] private GameObject Prefab_CurrencyUI;
@@ -48,7 +48,7 @@ public class InGameUI : ViewBase
         Button_Garden.BindOnClickButtonEvent(OnClick_Garden);
         Button_Exit.BindOnClickButtonEvent(OnClick_Exit);
         Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
-        Button_Breeding.BindOnClickButtonEvent(OnClick_Breeding);
+        Button_Cross.BindOnClickButtonEvent(OnClick_Cross);
 
         if (_housingVM == null)
         {
@@ -249,9 +249,9 @@ public class InGameUI : ViewBase
         
     }
 
-    private void OnClick_Breeding()
+    private void OnClick_Cross()
     {
-        
+        UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.CrossUI);
     }
 
     public void UpdateButton()
@@ -279,6 +279,6 @@ public class InGameUI : ViewBase
         Prefab_CurrencyUI.SetActive(!isVisiting);
 
         Button_GoHome.gameObject.SetActive(isVisiting);
-        Button_Breeding.gameObject.SetActive(isVisiting);
+        Button_Cross.gameObject.SetActive(isVisiting);
     }
 }

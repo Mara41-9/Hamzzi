@@ -36,11 +36,6 @@ public class CrossView : ViewBase
     private HamsterViewModel _hamsterViewModel;
     private UserViewModel _userViewModel;
 
-    public void OpenUI()
-    {
-        UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.CrossUI);
-    }
-
     private void Awake()
     {
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
