@@ -36,5 +36,7 @@ public class FriendSlotUI : UIBase
 
         ServiceManager.Instance.CollectionService.LoadHamsterCollectionData(_friendUid).Forget();
         ServiceManager.Instance.CollectionService.SetCurrentCollectionViewModel(_friendUid);
+
+        UIManager.Instance.CloseUI(UIRootType.PopupUI, UIType.FriendListUI);
     }
 }
