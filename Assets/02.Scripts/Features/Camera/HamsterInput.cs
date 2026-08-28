@@ -14,6 +14,11 @@ public class HamsterInput : MonoBehaviour
 
     private void Update()
     {
+        if (UIManager.Instance.IsOpenUI(UIType.HousingUI) || UIManager.Instance.IsOpenUI(UIType.BuildUI))
+        {
+            return;
+        }
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {

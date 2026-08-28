@@ -12,10 +12,23 @@ public class HamsterManager : SingletonBase<HamsterManager>
     [SerializeField] private Vector3 _gardenSpawnRangeMax;
 
     private CollectionViewModel _collectionViewModel;
-    private HashSet<long> _spawnedHamsterUidSet = new HashSet<long>();
+    private Dictionary<long, GameObject> _spawnedHamsterObjectDict = new Dictionary<long, GameObject>();
+    private int _collectionGeneration = 0;
 
     public float TotalCollectSpeedPerSec { get; private set; }
 
+    public bool IsCurrentCollectionMine()
+    {
+        long myUserUid = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+        CollectionViewModel myCollectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(myUserUid);
+
+        if (myCollectionViewModel == null)
+        {
+            return false;
+        }
+
+        return myCollectionViewModel == ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
+    }
     public void Init()
     {
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
@@ -27,10 +40,21 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     private void ChangedCollectionViewModel()
     {
-        // 햄스터 제거
+        RemoveAllSpawnedHamsters();
+        _collectionGeneration++;
 
-        _collectionViewModel.ContainerPropertyChanged -= OnContainerPropertyChanged;
+        if (_collectionViewModel != null)
+        {
+            _collectionViewModel.ContainerPropertyChanged -= OnContainerPropertyChanged;
+        }
+
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
+
+        if (_collectionViewModel == null)
+        {
+            return;
+        }
+
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
 
         SyncCollectedHamsters();
@@ -63,12 +87,12 @@ public class HamsterManager : SingletonBase<HamsterManager>
     {
         foreach (HamsterSave hamsterSave in _collectionViewModel.CollectedHamsterList.Values)
         {
-            if (_spawnedHamsterUidSet.Contains(hamsterSave.HamsterUID))
+            if (_spawnedHamsterObjectDict.ContainsKey(hamsterSave.HamsterUID))
             {
                 continue;
             }
 
-            _spawnedHamsterUidSet.Add(hamsterSave.HamsterUID);
+            _spawnedHamsterObjectDict.Add(hamsterSave.HamsterUID, null);
             SpawnHamster(hamsterSave);
         }
 
@@ -77,16 +101,28 @@ public class HamsterManager : SingletonBase<HamsterManager>
 
     private void SpawnHamster(HamsterSave hamsterSave)
     {
-        SpawnHamsterAsync(hamsterSave).Forget();
+        SpawnHamsterAsync(hamsterSave, _collectionGeneration).Forget();
     }
 
-    private async UniTaskVoid SpawnHamsterAsync(HamsterSave hamsterSave)
+    private async UniTaskVoid SpawnHamsterAsync(HamsterSave hamsterSave, int requestedGeneration)
     {
         Vector3 spawnSpot = GetRandomGardenSpawnPosition();
 
         GameObject hamsterObject = await GameObjectManager.Instance.CreateObjectAsync(hamsterSave.HamsterUID.ToString(), HamsterPrefabAddress, spawnSpot);
+
+        if (requestedGeneration != _collectionGeneration)
+        {
+            if (hamsterObject != null)
+            {
+                GameObjectManager.Instance.RequestDestroyObject(hamsterObject);
+            }
+
+            return;
+        }
+
         if (hamsterObject == null)
         {
+            _spawnedHamsterObjectDict.Remove(hamsterSave.HamsterUID);
             return;
         }
 
@@ -96,6 +132,7 @@ public class HamsterManager : SingletonBase<HamsterManager>
         HamsterForm hamsterForm = hamsterObject.GetComponent<HamsterForm>();
         if (hamsterForm == null)
         {
+            _spawnedHamsterObjectDict.Remove(hamsterSave.HamsterUID);
             return;
         }
 
@@ -103,6 +140,8 @@ public class HamsterManager : SingletonBase<HamsterManager>
         hamsterForm.SetFaceMesh(hamsterSave.FaceId);
 
         agent.enabled = true;
+
+        _spawnedHamsterObjectDict[hamsterSave.HamsterUID] = hamsterObject;
     }
 
     private Vector3 GetRandomGardenSpawnPosition()
@@ -113,8 +152,28 @@ public class HamsterManager : SingletonBase<HamsterManager>
             Random.Range(_gardenSpawnRangeMin.z, _gardenSpawnRangeMax.z));
     }
 
+    private void RemoveAllSpawnedHamsters()
+    {
+        foreach (GameObject hamsterObject in _spawnedHamsterObjectDict.Values)
+        {
+            if (hamsterObject == null)
+            {
+                continue;
+            }
+
+            GameObjectManager.Instance.RequestDestroyObject(hamsterObject);
+        }
+
+        _spawnedHamsterObjectDict.Clear();
+    }
+
     private void RecalculateTotalCollectSpeedPerSec()
     {
+        if (IsCurrentCollectionMine() == false)
+        {
+            return;
+        }
+
         float total = 0f;
 
         foreach (HamsterSave hamsterSave in _collectionViewModel.CollectedHamsterList.Values)

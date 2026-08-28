@@ -8,6 +8,10 @@ public class NetworkBuildService
 {
     private BuildViewModel _buildVM;
 
+    public event Action OnBuildAndFurnitureDataLoaded;
+
+    public bool IsBuildAndFurnitureDataLoaded { get; private set; }
+
     private const int GARDEN_ROOM_INDEX = 99;
 
     public BuildViewModel GetBuildViewModel()
@@ -23,7 +27,6 @@ public class NetworkBuildService
     public async UniTask LoadBuildAndFurnitureData(long userUID)
     {
         BuildViewModel buildVM = GetBuildViewModel();
-        buildVM.IsLoading = true;
         HousingViewModel housingVM = ServiceManager.Instance.HousingService.GetHousingViewModel();
 
         buildVM.Builds.Clear();
@@ -177,7 +180,9 @@ public class NetworkBuildService
         NavigationManager.Instance.BuildNav();
         ServiceManager.Instance.HousingService.RefreshFurnitureBuff();
 
-        buildVM.IsLoading = false;
+        IsBuildAndFurnitureDataLoaded = true;
+        OnBuildAndFurnitureDataLoaded?.Invoke();
+
         Debug.Log("건설 및 가구 데이터 로드 완료");
     }
 

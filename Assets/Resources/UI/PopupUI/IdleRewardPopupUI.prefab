@@ -732,8 +732,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonPunchEffect
   Button_Target: {fileID: 1559890788278253843}
   _punchScaleMultiplier: 1.1
-  _scaleUpDurationSeconds: 0.1
-  _scaleDownDurationSeconds: 0.2
+  _scaleUpDurationSeconds: 0.02
+  _scaleDownDurationSeconds: 0.01
 --- !u!1 &3848576300334185873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -136.20337, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
