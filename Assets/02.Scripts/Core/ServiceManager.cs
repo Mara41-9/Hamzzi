@@ -18,6 +18,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public NetworkBuildService NetworkBuildService { get; private set; }
     public FriendRequestService FriendRequestService { get; private set; }
     public VisitedUserService VisitedUserService { get; private set; }
+    public ProfileSettingService ProfileSettingService { get; private set; }
     public HamsterModelService HamsterModelService { get; private set; }
 
     public void Start()
@@ -45,6 +46,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitNetworkBuildService();
         InitFriendRequestService();
         InitVisitedUserService();
+        InitProfileSettingService();
         InitModelViewrService();
     }
 
@@ -124,6 +126,11 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitVisitedUserService()
     {
         VisitedUserService = new VisitedUserService();
+    }
+
+    private void InitProfileSettingService()
+    {
+        ProfileSettingService = new ProfileSettingService();
     }
 
     private void InitModelViewrService()

@@ -36,6 +36,7 @@ public enum UIType
     IdleRewardPopupUI,
     FriendRequestListUI,
     CrossUI,
+    ProfileSettingUI,
 }
 
 public static class UIManagerExtension
