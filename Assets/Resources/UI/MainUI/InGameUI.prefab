@@ -698,8 +698,8 @@ MonoBehaviour:
   Button_Exit: {fileID: 9152233406566012985}
   Button_GoHome: {fileID: 7837771626715815141}
   Button_Breeding: {fileID: 2339133032626867968}
+  Button_ProfileSetting: {fileID: 883627986909193043}
   Prefab_CurrencyUI: {fileID: 2395951975074356844}
-  Button_ProfileSetting: {fileID: 7281617391189042074}
   Image_UserIcon: {fileID: 187072094990481744}
   Text_UserName: {fileID: 8010814526321658313}
 --- !u!1 &1567128114378030302
