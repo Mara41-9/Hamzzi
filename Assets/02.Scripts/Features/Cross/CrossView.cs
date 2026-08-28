@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,7 @@ public class CrossView : ViewBase
     [SerializeField] private Sprite BaseHamsterSprite;
     [SerializeField] private Image MyHamsterImage;
     [SerializeField] private Image FriendHamsterImage;
+    [SerializeField] private TextMeshProUGUI CrossableText;
 
     [Header("결과")]
     [SerializeField] private CrossResultView CrossResultView;
@@ -39,7 +41,7 @@ public class CrossView : ViewBase
         UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.CrossUI);
     }
 
-    private void Start()
+    private void Awake()
     {
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
         _userViewModel = ServiceManager.Instance.UserService.GetUserViewModel();
@@ -159,20 +161,26 @@ public class CrossView : ViewBase
 
     private void LockCrossButton()
     {
-        // 햄스터를 선택하지 않은 경우
-        bool isAllHamsterSelected = _userHamsterId == string.Empty || _friendHamsterId == string.Empty;
-        CrossButton.SetInteractable(isAllHamsterSelected == false);
-
         // 교배 횟수를 다 사용했을 경우
         DateTime lastCrossTime = _userViewModel.LastCrossTime;
         DateTime nowTime = DateTime.Now;
 
         DateTime recentResetTime = new DateTime(nowTime.Year, nowTime.Month, nowTime.Day, 6, 0, 0);
-        if(nowTime.Hour < 6)
+        if (nowTime.Hour < 6)
         {
             recentResetTime = recentResetTime.AddDays(-1);
         }
 
-        CrossButton.SetInteractable(lastCrossTime < recentResetTime);
+        bool isCrossable = lastCrossTime < recentResetTime;
+        CrossButton.SetInteractable(isCrossable);
+        CrossableText.gameObject.SetActive(isCrossable == false);
+        if (isCrossable == false)
+        {
+            return;
+        }
+
+        // 햄스터를 선택하지 않은 경우
+        bool isAllHamsterSelected = _userHamsterId == string.Empty || _friendHamsterId == string.Empty;
+        CrossButton.SetInteractable(isAllHamsterSelected == false);
     }
 }
