@@ -122,7 +122,10 @@ public class GameManager : SingletonBase<GameManager>
 
     public async UniTask ChangeMap(long targetUserID)
     {
-        ClearMap();
+        if(_buildView != null)
+        {
+            ClearMap();
+        }
 
         await InitMap(targetUserID);
     }

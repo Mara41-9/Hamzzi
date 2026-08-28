@@ -13,8 +13,8 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_CollectionUI;
     [SerializeField] private UIButton Button_Gacha;
     [SerializeField] private UIButton Button_Setting;
-    [SerializeField] private Button Button_Garden;
-    [SerializeField] private Button Button_Exit;
+    [SerializeField] private UIButton Button_Garden;
+    [SerializeField] private UIButton Button_Exit;
     [SerializeField] private UIButton Button_GoHome;
     [SerializeField] private UIButton Button_Breeding;
 
@@ -41,8 +41,8 @@ public class InGameUI : ViewBase
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
         Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
         Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
-        Button_Garden.onClick.AddListener(OnClick_Garden);
-        Button_Exit.onClick.AddListener(OnClick_Exit);
+        Button_Garden.BindOnClickButtonEvent(OnClick_Garden);
+        Button_Exit.BindOnClickButtonEvent(OnClick_Exit);
         Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
         Button_Breeding.BindOnClickButtonEvent(OnClick_Breeding);
 
@@ -100,10 +100,15 @@ public class InGameUI : ViewBase
 
     private void OnPropChanged_VisitedUserView(object sender, PropertyChangedEventArgs e)
     {
-        switch(e.PropertyName)
+        switch (e.PropertyName)
         {
-            case nameof(VisitedUserViewModel.DisplayUid):
+            case nameof(_visitedUserVm.DisplayUid):
                 UpdateButton();
+                UpdateUserInfo().Forget();
+                break;
+            case nameof(_visitedUserVm.DisplayUserName):
+            case nameof(_visitedUserVm.DisplayUserIcon):
+                UpdateUserInfo().Forget();
                 break;
         }
     }
@@ -245,8 +250,15 @@ public class InGameUI : ViewBase
 
     private void OnClick_GoHome()
     {
+        var visitedService = ServiceManager.Instance.VisitedUserService;
+        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+
+        visitedService.CurrentVisitedUid = 0;
+        _visitedUserVm.DisplayUid = 0;
+
         UIManager.Instance.OpenLoadingUI();
-        UpdateButton();
+        ServiceManager.Instance.LoadDataFromDB();
+        
     }
 
     private void OnClick_Breeding()
@@ -262,15 +274,7 @@ public class InGameUI : ViewBase
         }
 
         bool isVisiting = _visitedUserVm.DisplayUid != 0;
-        if(isVisiting == true)
-        {
-            SetVisitMode(true);
-            return;
-        }
-        else
-        {
-            SetVisitMode(false);
-        }
+        SetVisitMode(isVisiting);
 
         bool isFollowing = (_cameraController != null && _cameraController.IsFollowing);
         bool isSubView = (_housingVM.CurrentViewMode == HousingViewMode.Garden) || (_housingVM.TargetRoom != null) || isFollowing;
@@ -281,8 +285,6 @@ public class InGameUI : ViewBase
 
     private void SetVisitMode(bool isVisiting)
     {
-        Button_Exit.gameObject.SetActive(!isVisiting);
-        Button_Garden.gameObject.SetActive(!isVisiting);
         Button_ShopUI.gameObject.SetActive(!isVisiting);
         Button_DecorUI.gameObject.SetActive(!isVisiting);
         Button_Gacha.gameObject.SetActive(!isVisiting);

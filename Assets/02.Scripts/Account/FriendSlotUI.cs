@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
 using TMPro;
-using Cysharp.Threading.Tasks;
+using UnityEditor.Overlays;
+using UnityEngine;
 
 public class FriendSlotUI : UIBase
 {
@@ -32,8 +33,17 @@ public class FriendSlotUI : UIBase
     private void OnClickVisit()
     {
         UIManager.Instance.OpenLoadingUI();
+
         ServiceManager.Instance.VisitedUserService.CurrentVisitedUid = _friendUid;
         Debug.Log($"친구 방문. 대상 UID: {_friendUid}");
+
+        var visitedUserVm = ServiceManager.Instance.VisitedUserService.GetViewModel();
+        if (visitedUserVm == null)
+        {
+            return;
+        }
+
+        visitedUserVm.RequestLoadVisitedInfo();
 
         ServiceManager.Instance.CollectionService.LoadHamsterCollectionData(_friendUid).Forget();
         ServiceManager.Instance.CollectionService.SetCurrentCollectionViewModel(_friendUid);

@@ -97,6 +97,12 @@ public class AccountInfoView : UIBase
 
     private void OnClickVisit()
     {
+        var visitedUserVm = ServiceManager.Instance.VisitedUserService.GetViewModel();
+        if(visitedUserVm != null)
+        {
+            visitedUserVm.RequestLoadVisitedInfo();
+        }
+
         UIManager.Instance.OpenLoadingUI();
         Debug.Log("방문하기");
     }
