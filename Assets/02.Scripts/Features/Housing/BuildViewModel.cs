@@ -249,7 +249,10 @@ public class BuildViewModel : ViewModelBase
 
         foreach (RoomViewModel aisle in removeAisles)
         {
-            RemoveBuild(aisle);
+            if (!aisle.IsDefault)
+            {
+                RemoveBuild(aisle);
+            }
         }
     }
 

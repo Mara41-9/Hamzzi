@@ -234,7 +234,8 @@ public class NetworkBuildService
                         {
                             roomIndexValue = 2;
                         }
-                        else if (build.IsDefault)
+                        
+                        if (build.IsDefault)
                         {
                             roomIndexValue = 0;
                         }

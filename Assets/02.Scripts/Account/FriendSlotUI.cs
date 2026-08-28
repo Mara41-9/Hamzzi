@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using TMPro;
-using UnityEditor.Overlays;
 using UnityEngine;
 
 public class FriendSlotUI : UIBase
