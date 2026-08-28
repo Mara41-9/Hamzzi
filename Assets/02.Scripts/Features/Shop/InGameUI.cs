@@ -16,7 +16,6 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_Garden;
     [SerializeField] private UIButton Button_Exit;
     [SerializeField] private UIButton Button_GoHome;
-    [SerializeField] private UIButton Button_Breeding;
     [SerializeField] private UIButton Button_ProfileSetting;
     [SerializeField] private UIButton Button_Cross;
 
@@ -50,7 +49,6 @@ public class InGameUI : ViewBase
         Button_Garden.BindOnClickButtonEvent(OnClick_Garden);
         Button_Exit.BindOnClickButtonEvent(OnClick_Exit);
         Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
-        Button_Breeding.BindOnClickButtonEvent(OnClick_Breeding);
         Button_ProfileSetting.BindOnClickButtonEvent(OnClick_ProfileSetting);
         Button_Cross.BindOnClickButtonEvent(OnClick_Cross);
 
