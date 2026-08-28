@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class NetworkGachaService
 {
-    private static int InstanceID = 0;
-
     private GachaViewModel _gachaViewModel;
 
     public GachaViewModel GetGachaViewModel()

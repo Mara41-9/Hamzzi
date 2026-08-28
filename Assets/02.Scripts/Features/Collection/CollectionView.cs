@@ -20,8 +20,7 @@ public class CollectionView : UIBase
     [SerializeField] private Transform SlotContent;
 
     [Header("햄스터 정보")]
-    [SerializeField] private GameObject HamsterModelPrefab;
-    [SerializeField] private CollectionHamsterRotate HamsterRotate;
+    [SerializeField] private HamsterModelRotate HamsterRotate;
     [SerializeField] private UIButton KickButton;
     [SerializeField] private KickUI KickUI;
     [SerializeField] private TextMeshProUGUI HamsterCount;
@@ -35,12 +34,14 @@ public class CollectionView : UIBase
 
     private CollectionViewModel _collectionViewModel;
     private HamsterViewModel _hamsterViewModel;
+    private HamsterModelViewModel _hamsterModelViewModel;
 
     private void Awake()
     {
         long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
+        _hamsterModelViewModel = ServiceManager.Instance.HamsterModelService.GetHamsterModelViewModel();
     }
 
     private void OnEnable()
@@ -64,13 +65,8 @@ public class CollectionView : UIBase
         UpdateHamsterSlot();
         UpdateFaceSlot();
 
-        // 햄스터 모델
-        if(_modelForm == null)
-        {
-            var modelObject = Instantiate(HamsterModelPrefab);
-            _modelForm = modelObject.GetComponentInChildren<HamsterForm>();
-            HamsterRotate.SetHamsterRoot(_modelForm.transform);
-        }
+        _collectionViewModel.InitInvokePropertyChanged();
+        ServiceManager.Instance.HamsterModelService.SetHamsterAnimator("IdleTrigger");
 
         KickUI.gameObject.SetActive(false);
     }
@@ -346,8 +342,8 @@ public class CollectionView : UIBase
 
     private void ChangedHamsterModel()
     {
-        if(_modelForm != null)
-            _modelForm.SetBodyMesh(_collectionViewModel.CurrentSelectHamsterId);
+        string hamsterId = _collectionViewModel.CurrentSelectHamsterId;
+        _hamsterModelViewModel.HamsterId = hamsterId;
     }
 
     private void ChangedFaceModel()
@@ -355,8 +351,7 @@ public class CollectionView : UIBase
         string faceId = _collectionViewModel.CurrentSelectedHamsterFaceId;
         string hamsterId = _collectionViewModel.CurrentSelectHamsterId;
 
-        if (_modelForm != null)
-            _modelForm.SetFaceMesh(faceId);
+        _hamsterModelViewModel.FaceId = faceId;
 
         int count = 0;
         if (_collectionViewModel.CollectedFaceByHamsterList.TryGetValue(hamsterId, out var faceDict))
