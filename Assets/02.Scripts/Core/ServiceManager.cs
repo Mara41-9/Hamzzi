@@ -19,6 +19,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     public FriendRequestService FriendRequestService { get; private set; }
     public VisitedUserService VisitedUserService { get; private set; }
     public ProfileSettingService ProfileSettingService { get; private set; }
+    public HamsterModelService HamsterModelService { get; private set; }
 
     public void Start()
     {
@@ -36,6 +37,8 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitUserService();
 
         LoginService.GetViewModel().OnCompleteLogin += LoadDataFromDB;
+        LoginService.GetViewModel().OnCompleteLogin += LoadInventory;
+
         InitAccountSearchService();
         InitFriendService();
         InitAccountInfoService();
@@ -44,6 +47,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
         InitFriendRequestService();
         InitVisitedUserService();
         InitProfileSettingService();
+        InitModelViewrService();
     }
 
     private void InitShopService()
@@ -129,6 +133,10 @@ public class ServiceManager : SingletonBase<ServiceManager>
         ProfileSettingService = new ProfileSettingService();
     }
 
+    private void InitModelViewrService()
+    {
+        HamsterModelService = new HamsterModelService();
+    }
 
     public void LoadDataFromDB()
     {
@@ -140,6 +148,15 @@ public class ServiceManager : SingletonBase<ServiceManager>
         CollectionService.SetCurrentCollectionViewModel(userUID);
         HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
+        
+        GameManager.Instance.ChangeMap(userUID).Forget();
+    }
+
+    public void LoadInventory()
+    {
+        var loginVM = LoginService.GetViewModel();
+        long userUID = loginVM.UserUID;
+
         HousingService.LoadInventory(userUID).Forget();
     }
 }

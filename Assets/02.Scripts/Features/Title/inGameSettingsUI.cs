@@ -28,6 +28,9 @@ public class InGameSettingsUI : ViewBase
         _sfxVolume = SoundManager.Instance.GetSFXVolume();
         Slider_SFX.value = _sfxVolume;
 
+        SoundManager.Instance.OnChangedBGMVolume += UpdateBGMVolume;
+        SoundManager.Instance.OnChangedSFXVolume += UpdateSFXVolume;
+
         Button_Logout.BindOnClickButtonEvent(LogoutInGame);
     }
 
@@ -38,6 +41,9 @@ public class InGameSettingsUI : ViewBase
 
         Slider_BGM.onValueChanged.RemoveListener(OnChangedBGMVolume);
         Slider_SFX.onValueChanged.RemoveListener(OnChangedSFXVolume);
+
+        SoundManager.Instance.OnChangedBGMVolume -= UpdateBGMVolume;
+        SoundManager.Instance.OnChangedSFXVolume -= UpdateSFXVolume;
 
         Button_Logout.UnBindOnClickButtonEvent(LogoutInGame);
     }
@@ -59,19 +65,26 @@ public class InGameSettingsUI : ViewBase
         SoundManager.Instance.SetSFXVolume(_sfxVolume);
     }
 
+    private void UpdateBGMVolume(float volume)
+    {
+        // Slider 값은 변경하지만 onValueChanged 이벤트는 발생 안 할 것
+        Slider_BGM.SetValueWithoutNotify(volume);
+    }
+
+    private void UpdateSFXVolume(float volume)
+    {
+        Slider_SFX.SetValueWithoutNotify(volume);
+    }
+
     private void LogoutInGame()
     {
         // 씨앗 저장
         var loginService = ServiceManager.Instance.LoginService;
         var userService = ServiceManager.Instance.UserService;
 
+        // DB 저장
         long userUID = loginService.GetViewModel().UserUID;
-        int seedCount = userService.GetUserViewModel().SeedCount;
-
-        UserSaveData saveData = new UserSaveData();
-        saveData.GoldCount = seedCount;
-
-        userService.SaveUserAsync(userUID, saveData).Forget();
+        userService.SaveUserAsync(userUID).Forget();
 
         if (loginService != null)
         {

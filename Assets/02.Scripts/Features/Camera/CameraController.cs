@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Camera Camera_Main;
+    [SerializeField] private LayerMask _priorityLayerMask;
 
     [Header("기본 시야")]
     [SerializeField] private Vector3 Position_Overview = new Vector3(3f, 4f, -10);
@@ -41,11 +42,6 @@ public class CameraController : MonoBehaviour
 
     private Transform _targetHamster;
     public bool IsFollowing { get; private set; } = false;
-
-    private void Awake()
-    {
-        SetOverview();
-    }
 
     private void Start()
     {
@@ -131,7 +127,10 @@ public class CameraController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _housingVM.PropertyChanged -= OnPropertyChanged_VM;
+        if(_housingVM != null)
+        {
+            _housingVM.PropertyChanged -= OnPropertyChanged_VM;
+        }
     }
 
     private void OnPropertyChanged_VM(object sender, PropertyChangedEventArgs e)
@@ -400,24 +399,33 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        if (isTriggered)
+        if (!isTriggered)
         {
-            Ray ray = Camera_Main.ScreenPointToRay(inputPosition);
-            Plane mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+            return;
+        }
 
-            if (mapPlane.Raycast(ray, out float hit))
+        Ray priorityRay = Camera_Main.ScreenPointToRay(inputPosition);
+
+        if (Physics.Raycast(priorityRay, out RaycastHit priorityHit, Mathf.Infinity, _priorityLayerMask))
+        {
+            return;
+        }
+
+        Ray ray = Camera_Main.ScreenPointToRay(inputPosition);
+        Plane mapPlane = new Plane(Vector3.forward, new Vector3(0, 0, 9f));
+
+        if (mapPlane.Raycast(ray, out float hit))
+        {
+            Vector3 hitPoint = ray.GetPoint(hit);
+            int gridX = Mathf.FloorToInt(hitPoint.x / 1.0f);
+            int gridY = Mathf.FloorToInt((hitPoint.y - 2.0f) / 1.0f);
+            Vector2Int gridPos = new Vector2Int(gridX, gridY);
+
+            if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
             {
-                Vector3 hitPoint = ray.GetPoint(hit);
-                int gridX = Mathf.FloorToInt(hitPoint.x / 1.0f);
-                int gridY = Mathf.FloorToInt((hitPoint.y - 2.0f) / 1.0f);
-                Vector2Int gridPos = new Vector2Int(gridX, gridY);
-
-                if (_buildVM.Builds.TryGetValue(gridPos, out RoomViewModel roomVM))
+                if (roomVM.BuildType == BuildType.Room)
                 {
-                    if (roomVM.BuildType == BuildType.Room)
-                    {
-                        FocusRoomInGame(roomVM);
-                    }
+                    FocusRoomInGame(roomVM);
                 }
             }
         }
@@ -487,15 +495,6 @@ public class CameraController : MonoBehaviour
         result.SetRow(3, Vector4.Lerp(start.GetRow(3), end.GetRow(3), time));
 
         return result;
-    }
-
-    private void SetOverview()
-    {
-        Camera_Main.orthographic = true;
-        Camera_Main.orthographicSize = Size_Ortho;
-        Camera_Main.transform.position = Position_Overview;
-        Camera_Main.transform.rotation = Quaternion.Euler(Rotation_Overview);
-        Camera_Main.ResetProjectionMatrix();
     }
 
     private Vector3 GetRoomCenterPos(RoomViewModel roomVM)

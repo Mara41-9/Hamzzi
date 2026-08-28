@@ -326,9 +326,7 @@ public class HousingViewModel : ViewModelBase
         FurnitureVM.Rotate();
         CheckCurrentPos();
 
-        var temp = FurnitureVM;
-        FurnitureVM = null;
-        FurnitureVM = temp;
+        OnPropertyChanged(nameof(FurnitureVM));
     }
 
     public void SetConfirmFurniture(FurnitureViewModel furnitureVM)
