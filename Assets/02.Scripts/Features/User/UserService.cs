@@ -48,6 +48,7 @@ public class UserService
         userVm.UserIconId = userData.UserIconId;
         userVm.SeedCount = userData.GoldCount;
         userVm.GoldPerSec = userData.GoldPerSec;
+        userVm.LastCrossTime = userData.LastCrossTime;
 
 #if UNITY_EDITOR
         Debug.Log($"[유저 로드] 씨앗 {userData.GoldCount} / 초당 {userData.GoldPerSec}");
