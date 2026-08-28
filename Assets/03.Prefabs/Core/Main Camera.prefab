@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   Camera_Main: {fileID: 8383616873101771492}
+  _priorityLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   Position_Overview: {x: 3, y: 4, z: -10}
   Rotation_Overview: {x: 0, y: 0, z: 0}
   Size_Ortho: 15

@@ -172,24 +172,6 @@ public class InGameUI : ViewBase
 
     private void OnClick_OpenDecor()
     {
-        if (_cameraController != null && _cameraController.IsFollowing)
-        {
-            _cameraController.StopFollowHamster();
-        }
-
-        bool isGarden = (_housingVM.CurrentViewMode == HousingViewMode.Garden);
-
-        if (isGarden)
-        {
-            _housingVM.TargetRoom = null;
-            _housingVM.EnterGardenMode();
-        }
-        else
-        {
-            _housingVM.TargetRoom = null;
-            _housingVM.EnterOverviewMode();
-        }
-
         UIManager.Instance.OpenDecorUI();
         UIManager.Instance.CloseInGameUI();
     }

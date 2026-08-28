@@ -714,7 +714,7 @@ public class BuildViewModel : ViewModelBase
 
     private bool CanPlaceRoom(Vector2Int pos, Vector2Int size)
     {
-        if (pos.y + size.y > 20 || pos.y < -40 || pos.x < -60 || pos.x + size.x > 60)
+        if (pos.y + size.y > 10 || pos.y < -40 || pos.x < -60 || pos.x + size.x > 60)
         {
             return false;
         }
