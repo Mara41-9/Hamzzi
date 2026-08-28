@@ -31,9 +31,24 @@ public class HamsterManager : SingletonBase<HamsterManager>
     }
     public void Init()
     {
-        _collectionViewModel = ServiceManager.Instance.CollectionService.GetCurrentCollectionViewModel();
+        NetworkCollectionService collectionService = ServiceManager.Instance.CollectionService;
+
+        collectionService.OnChangedCurrentCollectionViewModel -= ChangedCollectionViewModel;
+        collectionService.OnChangedCurrentCollectionViewModel += ChangedCollectionViewModel;
+
+        if (_collectionViewModel != null)
+        {
+            _collectionViewModel.ContainerPropertyChanged -= OnContainerPropertyChanged;
+        }
+
+        _collectionViewModel = collectionService.GetCurrentCollectionViewModel();
+
+        if (_collectionViewModel == null)
+        {
+            return;
+        }
+
         _collectionViewModel.ContainerPropertyChanged += OnContainerPropertyChanged;
-        ServiceManager.Instance.CollectionService.OnChangedCurrentCollectionViewModel += ChangedCollectionViewModel;
 
         SyncCollectedHamsters();
     }
@@ -65,6 +80,13 @@ public class HamsterManager : SingletonBase<HamsterManager>
         if (_collectionViewModel != null)
         {
             _collectionViewModel.ContainerPropertyChanged -= OnContainerPropertyChanged;
+        }
+
+        ServiceManager serviceManager = ServiceManager.Instance;
+
+        if (serviceManager != null && serviceManager.CollectionService != null)
+        {
+            serviceManager.CollectionService.OnChangedCurrentCollectionViewModel -= ChangedCollectionViewModel;
         }
     }
 
