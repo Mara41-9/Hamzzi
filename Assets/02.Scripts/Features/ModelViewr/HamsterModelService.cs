@@ -4,7 +4,7 @@ using UnityEngine;
 public class HamsterModelService
 {
     private HamsterModelViewModel _modelViewrViewModel;
-    private Transform _modelTransform;
+    private Hamster3DModelView _modelView;
 
     public HamsterModelService()
     {
@@ -26,11 +26,16 @@ public class HamsterModelService
     {
         var modelObject = await GameObjectManager.Instance.CreateObjectAsync(string.Empty, "Hamster3DModel", Vector3.one * 1000);
         var view = modelObject.GetComponent<Hamster3DModelView>();
-        _modelTransform = view.GetHamsterTransform();
+        _modelView = view;
     }
 
     public Transform GetModelTransform()
     {
-        return _modelTransform;
+        return _modelView.GetHamsterTransform();
+    }
+
+    public void SetHamsterAnimator(string parameter)
+    {
+        _modelView.SetHamsterAnimator(parameter);
     }
 }
