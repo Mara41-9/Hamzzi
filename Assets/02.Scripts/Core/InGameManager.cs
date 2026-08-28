@@ -119,14 +119,10 @@ public class InGameManager : SingletonBase<InGameManager>
         var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+        // TODO : 데이터 직접 접근 없애야 함
+        userVm.GoldPerSec = CalculateCurrentGoldPerSec();
 
-        UserSaveData saveData = new UserSaveData
-        {
-            GoldCount = userVm.SeedCount,
-            GoldPerSec = CalculateCurrentGoldPerSec()
-        };
-
-        await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID, saveData);
+        await ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID);
     }
 
     private float CalculateCurrentGoldPerSec()

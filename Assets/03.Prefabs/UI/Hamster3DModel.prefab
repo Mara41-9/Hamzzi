@@ -1096,7 +1096,7 @@ Animator:
   m_GameObject: {fileID: 3944444647364059049}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 74b2d35640879da43afa61140171c32a, type: 3}
-  m_Controller: {fileID: 9100000, guid: 90e6b583b25afc64a8bc7c4757a24cf9, type: 2}
+  m_Controller: {fileID: 9100000, guid: ae915eb84a497c14790cbf743b61e71e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2416,6 +2416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hamster3DModelView
   _hamsterTransform: {fileID: 3942856769663045957}
+  _animator: {fileID: 4029935126034233137}
   FaceMesh: {fileID: 3989772259518028641}
   HamsterMesh: {fileID: 3989719665679832275}
 --- !u!1 &7087328157503703436

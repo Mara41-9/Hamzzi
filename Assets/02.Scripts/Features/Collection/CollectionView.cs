@@ -66,6 +66,7 @@ public class CollectionView : UIBase
         UpdateFaceSlot();
 
         _collectionViewModel.InitInvokePropertyChanged();
+        ServiceManager.Instance.HamsterModelService.SetHamsterAnimator("IdleTrigger");
 
         KickUI.gameObject.SetActive(false);
     }

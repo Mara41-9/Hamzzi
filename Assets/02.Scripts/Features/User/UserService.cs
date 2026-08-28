@@ -98,9 +98,9 @@ public class UserService
         return resultUserData;
     }
 
-    public async UniTask SaveUserAsync(long userUid, UserSaveData userSaveData)
+    public async UniTask SaveUserAsync(long userUid)
     {
-        if (userUid == 0 || userSaveData == null)
+        if (userUid == 0)
         {
             return;
         }
@@ -115,10 +115,10 @@ public class UserService
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@goldCount", userSaveData.GoldCount);
-                    cmd.Parameters.AddWithValue("@goldPerSec", userSaveData.GoldPerSec);
+                    cmd.Parameters.AddWithValue("@goldCount", _userViewModel.SeedCount);
+                    cmd.Parameters.AddWithValue("@goldPerSec", _userViewModel.GoldPerSec);
                     cmd.Parameters.AddWithValue("@userUid", userUid);
-                    cmd.Parameters.AddWithValue("@lastCrossTime", userSaveData.LastCrossTime);
+                    cmd.Parameters.AddWithValue("@lastCrossTime", _userViewModel.LastCrossTime);
 
                     await cmd.ExecuteNonQueryAsync();
                 }
