@@ -97,6 +97,7 @@ public class AccountInfoView : UIBase
 
     private void OnClickVisit()
     {
+        UIManager.Instance.OpenLoadingUI();
         Debug.Log("방문하기");
     }
 

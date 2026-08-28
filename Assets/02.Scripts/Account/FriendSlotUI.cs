@@ -31,6 +31,7 @@ public class FriendSlotUI : UIBase
 
     private void OnClickVisit()
     {
+        UIManager.Instance.OpenLoadingUI();
         ServiceManager.Instance.VisitedUserService.CurrentVisitedUid = _friendUid;
         Debug.Log($"친구 방문. 대상 UID: {_friendUid}");
 
