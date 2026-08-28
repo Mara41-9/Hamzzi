@@ -241,6 +241,9 @@ public class InGameUI : ViewBase
         visitedService.CurrentVisitedUid = 0;
         _visitedUserVm.DisplayUid = 0;
 
+
+        GameManager.Instance.ChangeMap(ServiceManager.Instance.LoginService.GetViewModel().UserUID).Forget();
+
         UIManager.Instance.OpenLoadingUI();
         ServiceManager.Instance.LoadDataFromDB();
         

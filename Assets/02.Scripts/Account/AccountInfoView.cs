@@ -102,6 +102,7 @@ public class AccountInfoView : UIBase
         ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID).Forget();
 
         var visitedUserVm = ServiceManager.Instance.VisitedUserService.GetViewModel();
+
         if(visitedUserVm != null)
         {
             visitedUserVm.RequestLoadVisitedInfo();
@@ -109,6 +110,11 @@ public class AccountInfoView : UIBase
 
         UIManager.Instance.OpenLoadingUI();
         Debug.Log("방문하기");
+
+        ServiceManager.Instance.CollectionService.LoadHamsterCollectionData(visitedUserVm.DisplayUid).Forget();
+        ServiceManager.Instance.CollectionService.SetCurrentCollectionViewModel(visitedUserVm.DisplayUid);
+
+        GameManager.Instance.ChangeMap(visitedUserVm.DisplayUid).Forget();
     }
 
     private void OnCompleteLoadInfo_View()
