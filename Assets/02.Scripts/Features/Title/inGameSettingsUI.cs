@@ -73,6 +73,16 @@ public class InGameSettingsUI : ViewBase
 
         userService.SaveUserAsync(userUID, saveData).Forget();
 
+        if (loginService != null)
+        {
+            LoginViewModel loginVm = loginService.GetViewModel();
+
+            if (loginVm != null)
+            {
+                loginVm.RequestLogout();
+            }
+        }
+
         // 씬 리로드
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
