@@ -15,6 +15,7 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_Setting;
     [SerializeField] private Button Button_Garden;
     [SerializeField] private Button Button_Exit;
+    [SerializeField] private Button Button_ProfileSetting;
 
     [Header("DB 연동")]
     [SerializeField] private Image Image_UserIcon;
@@ -40,6 +41,7 @@ public class InGameUI : ViewBase
         Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
         Button_Garden.onClick.AddListener(OnClick_Garden);
         Button_Exit.onClick.AddListener(OnClick_Exit);
+        Button_ProfileSetting.onClick.AddListener(OnClick_ProfileSetting);
 
         if (_housingVM == null)
         {
@@ -188,6 +190,11 @@ public class InGameUI : ViewBase
         _housingVM.CurrentViewMode = HousingViewMode.OverView;
         _housingVM.EnterOverviewMode();
         UpdateButton();
+    }
+
+    private void OnClick_ProfileSetting()
+    {
+        UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.ProfileSettingUI);
     }
 
     public void UpdateButton()
