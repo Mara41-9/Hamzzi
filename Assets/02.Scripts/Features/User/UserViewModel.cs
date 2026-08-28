@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 public class UserViewModel : ViewModelBase
@@ -53,6 +54,20 @@ public class UserViewModel : ViewModelBase
     }
 
     public float GoldPerSec { get; set; }
+
+    private DateTime _lastCrossTime;
+    public DateTime LastCrossTime
+    {
+        get { return _lastCrossTime; }
+        set
+        {
+            if (_lastCrossTime != value)
+            {
+                _lastCrossTime = value;
+                OnPropertyChanged(nameof(LastCrossTime));
+            }
+        }
+    }
 }
 
 public static class UserViewModelExtension
@@ -112,5 +127,19 @@ public static class UserViewModelExtension
         userVm.SeedCount -= amount;
 
         return true;
+    }
+
+    public static void SetLastCrossTime(this UserViewModel userVm, DateTime lastCrossTime)
+    {
+        userVm.LastCrossTime = lastCrossTime;
+
+        long userUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+
+        UserSaveData userSaveData = new UserSaveData();
+        userSaveData.GoldCount = userVm.SeedCount;
+        userSaveData.GoldPerSec = userVm.GoldPerSec;
+        userSaveData.LastCrossTime = lastCrossTime;
+
+        ServiceManager.Instance.UserService.SaveUserAsync(userUID, userSaveData).Forget();
     }
 }

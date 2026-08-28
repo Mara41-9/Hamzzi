@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,13 +21,18 @@ public class CrossView : ViewBase
 
     [Header("햄스터 선택")]
     [SerializeField] private CrossHamsterSelectView CrossHamsterSelectView;
+    [SerializeField] private Sprite BaseHamsterSprite;
     [SerializeField] private Image MyHamsterImage;
     [SerializeField] private Image FriendHamsterImage;
+
+    [Header("결과")]
+    [SerializeField] private CrossResultView CrossResultView;
 
     private string _userHamsterId;
     private string _friendHamsterId;
 
     private HamsterViewModel _hamsterViewModel;
+    private UserViewModel _userViewModel;
 
     public void OpenUI()
     {
@@ -36,18 +42,33 @@ public class CrossView : ViewBase
     private void Start()
     {
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
+        _userViewModel = ServiceManager.Instance.UserService.GetUserViewModel();
     }
 
     private void OnEnable()
     {
+        // 버튼 등록
         ExitButton.BindOnClickButtonEvent(OnClickExitButton);
         MyHamsterSelectButton.BindOnClickButtonEvent(OnClickMyHamsterSelectButton);
         FriendHamsterSelectButton.BindOnClickButtonEvent(OnClickFirendHamsterSelectButton);
         CrossButton.BindOnClickButtonEvent(OnClickCrossButton);
 
+        // 이벤트 등록
         CrossHamsterSelectView.OnSlotSelect += OnSelectHamster;
 
+        // 팝업창들 비활성화 
         CrossHamsterSelectView.gameObject.SetActive(false);
+        CrossResultView.gameObject.SetActive(false);
+
+        // 햄스터 선택 초기화
+        _userHamsterId = string.Empty;
+        _friendHamsterId = string.Empty;
+
+        // 이미지 변경
+        MyHamsterImage.sprite = BaseHamsterSprite;
+        FriendHamsterImage.sprite = BaseHamsterSprite;
+
+        LockCrossButton();
     }
 
     private void OnDisable()
@@ -82,6 +103,7 @@ public class CrossView : ViewBase
         }
 
         UpdateIcon(hamsterId, iconImage).Forget();
+        LockCrossButton();
     }
 
     private async UniTask UpdateIcon(string hamsterId, Image iconImage)
@@ -111,8 +133,8 @@ public class CrossView : ViewBase
         List<string> faceDataList = _hamsterViewModel.AllFaceIdList;
         int faceCount = faceDataList.Count;
 
-        int randomFace = Random.Range(0, faceCount);
-        int randomHamster = Random.Range(0, 2);
+        int randomFace = UnityEngine.Random.Range(0, faceCount);
+        int randomHamster = UnityEngine.Random.Range(0, 2);
 
         string faceId = faceDataList[randomFace];
         string hamsterId = randomHamster == 0 ? _userHamsterId : _friendHamsterId;
@@ -122,5 +144,35 @@ public class CrossView : ViewBase
         hamsterSave.HamsterId = hamsterId;
         hamsterSave.FaceId = faceId;
         hamsterSave.UserUID = ServiceManager.Instance.LoginService.GetViewModel().UserUID;
+
+        CrossResultView.gameObject.SetActive(true);
+        CrossResultView.PlayGachaResult(hamsterId, faceId);
+
+        var collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(hamsterSave.UserUID);
+        collectionViewModel.AddCollectedHamsterList(hamsterSave);
+
+        DateTime lastCrossTime = DateTime.Now;
+        _userViewModel.SetLastCrossTime(lastCrossTime);
+
+        LockCrossButton();
+    }
+
+    private void LockCrossButton()
+    {
+        // 햄스터를 선택하지 않은 경우
+        bool isAllHamsterSelected = _userHamsterId == string.Empty || _friendHamsterId == string.Empty;
+        CrossButton.SetInteractable(isAllHamsterSelected == false);
+
+        // 교배 횟수를 다 사용했을 경우
+        DateTime lastCrossTime = _userViewModel.LastCrossTime;
+        DateTime nowTime = DateTime.Now;
+
+        DateTime recentResetTime = new DateTime(nowTime.Year, nowTime.Month, nowTime.Day, 6, 0, 0);
+        if(nowTime.Hour < 6)
+        {
+            recentResetTime = recentResetTime.AddDays(-1);
+        }
+
+        CrossButton.SetInteractable(lastCrossTime < recentResetTime);
     }
 }
