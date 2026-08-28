@@ -465,10 +465,32 @@ public class NetworkBuildService
             userUID = loginVm.UserUID;
         }
 
-        if (userUID != 0)
+        if (userUID == 0)
         {
-            ServiceManager.Instance.NetworkBuildService.SaveAllBuildAndFurnitureData(userUID).Forget();
+            return;
+        }
+
+        if (_isSaving)
+        {
+            _pendingSave = true;
+            return;
+        }
+
+        SaveLoop(userUID).Forget();
+    }
+
+    private async UniTask SaveLoop(long userUID)
+    {
+        _isSaving = true;
+
+        while (_pendingSave)
+        {
+            _pendingSave = false;
+            await SaveAllBuildAndFurnitureData(userUID);
+
             Debug.Log("건설/가구/인벤토리 데이터 저장 요청 완료");
         }
+
+        _isSaving = false;
     }
 }
