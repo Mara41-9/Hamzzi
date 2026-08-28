@@ -18,9 +18,13 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_GoHome;
     [SerializeField] private UIButton Button_Breeding;
 
+    [Header("보유 씨앗")]
+    [SerializeField] private GameObject Prefab_CurrencyUI;
+
     [Header("DB 연동")]
     [SerializeField] private Image Image_UserIcon;
     [SerializeField] private TMP_Text Text_UserName;
+
 
     private UserViewModel _userVm;
     private VisitedUserViewModel _visitedUserVm;
@@ -251,7 +255,6 @@ public class InGameUI : ViewBase
     private void OnClick_GoHome()
     {
         var visitedService = ServiceManager.Instance.VisitedUserService;
-        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         visitedService.CurrentVisitedUid = 0;
         _visitedUserVm.DisplayUid = 0;
@@ -288,6 +291,7 @@ public class InGameUI : ViewBase
         Button_ShopUI.gameObject.SetActive(!isVisiting);
         Button_DecorUI.gameObject.SetActive(!isVisiting);
         Button_Gacha.gameObject.SetActive(!isVisiting);
+        Prefab_CurrencyUI.SetActive(!isVisiting);
 
         Button_GoHome.gameObject.SetActive(isVisiting);
         Button_Breeding.gameObject.SetActive(isVisiting);

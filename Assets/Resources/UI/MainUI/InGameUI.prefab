@@ -698,6 +698,7 @@ MonoBehaviour:
   Button_Exit: {fileID: 9152233406566012985}
   Button_GoHome: {fileID: 7837771626715815141}
   Button_Breeding: {fileID: 2339133032626867968}
+  Prefab_CurrencyUI: {fileID: 2395951975074356844}
   Image_UserIcon: {fileID: 187072094990481744}
   Text_UserName: {fileID: 8010814526321658313}
 --- !u!1 &1567128114378030302
@@ -4440,6 +4441,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1c9c43c9f232aa479a76ad44da0d4d5, type: 3}
+--- !u!1 &2395951975074356844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7031495913482893860, guid: c1c9c43c9f232aa479a76ad44da0d4d5, type: 3}
+  m_PrefabInstance: {fileID: 4671576313309553736}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5355248334795056728 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 758130976852787728, guid: c1c9c43c9f232aa479a76ad44da0d4d5, type: 3}

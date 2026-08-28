@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public class AccountInfoView : UIBase
 {
@@ -97,6 +98,9 @@ public class AccountInfoView : UIBase
 
     private void OnClickVisit()
     {
+        var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        ServiceManager.Instance.UserService.SaveUserAsync(loginVm.UserUID).Forget();
+
         var visitedUserVm = ServiceManager.Instance.VisitedUserService.GetViewModel();
         if(visitedUserVm != null)
         {
