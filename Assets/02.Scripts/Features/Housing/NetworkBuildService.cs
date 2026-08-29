@@ -7,6 +7,8 @@ using UnityEngine;
 public class NetworkBuildService
 {
     private BuildViewModel _buildVM;
+    private bool _isSaving = false;
+    private bool _pendingSave = false;
 
     public event Action OnBuildAndFurnitureDataLoaded;
 
@@ -59,8 +61,8 @@ public class NetworkBuildService
                                 continue;
                             }
 
-                            BuildType buildType = (roomIndex == 2) ? BuildType.Aisle : BuildType.Room;
-                            bool isDefault = (roomIndex == 0);
+                            BuildType buildType = (roomIndex == 2 || roomIndex == 3) ? BuildType.Aisle : BuildType.Room;
+                            bool isDefault = (roomIndex == 0 || roomIndex == 3);
 
                             Vector2Int pos = new Vector2Int(posX, posY);
 
@@ -169,6 +171,19 @@ public class NetworkBuildService
                     }
                 }
 
+                HashSet<RoomViewModel> uniqueAisles = new HashSet<RoomViewModel>();
+                int defaultAisleCount = 0;
+                foreach (var vm in buildVM.Builds.Values)
+                {
+                    if (vm.BuildType == BuildType.Aisle && uniqueAisles.Add(vm))
+                    {
+                        if (vm.IsDefault)
+                        {
+                            defaultAisleCount++;
+                        }
+                    }
+                }
+
                 ServiceManager.Instance.BuildService.RefreshAisleNavMesh(buildVM.Builds);
             }
             catch (Exception ex)
@@ -229,15 +244,14 @@ public class NetworkBuildService
                             build.InstanceID = uid.ToString();
                         }
 
-                        int roomIndexValue = 1;
+                        int roomIndexValue;
                         if (build.BuildType == BuildType.Aisle)
                         {
-                            roomIndexValue = 2;
+                            roomIndexValue = build.IsDefault ? 3 : 2;
                         }
-                        
-                        if (build.IsDefault)
+                        else
                         {
-                            roomIndexValue = 0;
+                            roomIndexValue = build.IsDefault ? 0 : 1;
                         }
 
                         string insertQuery = $@"INSERT INTO {DBConfig.RoomTable} (Room_UID, Owner_User_UID, Room_Index, Position_X, Position_Y) VALUES (@roomUID, @userUID, @roomIndex, @roomPosX, @roomPosY)";
@@ -451,10 +465,32 @@ public class NetworkBuildService
             userUID = loginVm.UserUID;
         }
 
-        if (userUID != 0)
+        if (userUID == 0)
         {
-            ServiceManager.Instance.NetworkBuildService.SaveAllBuildAndFurnitureData(userUID).Forget();
+            return;
+        }
+
+        if (_isSaving)
+        {
+            _pendingSave = true;
+            return;
+        }
+
+        SaveLoop(userUID).Forget();
+    }
+
+    private async UniTask SaveLoop(long userUID)
+    {
+        _isSaving = true;
+
+        while (_pendingSave)
+        {
+            _pendingSave = false;
+            await SaveAllBuildAndFurnitureData(userUID);
+
             Debug.Log("건설/가구/인벤토리 데이터 저장 요청 완료");
         }
+
+        _isSaving = false;
     }
 }
