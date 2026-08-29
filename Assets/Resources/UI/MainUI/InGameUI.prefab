@@ -697,8 +697,7 @@ MonoBehaviour:
   Button_Garden: {fileID: 425177620620317418}
   Button_Exit: {fileID: 9152233406566012985}
   Button_GoHome: {fileID: 7837771626715815141}
-  Button_Breeding: {fileID: 2339133032626867968}
-  Button_ProfileSetting: {fileID: 883627986909193043}
+  Button_Cross: {fileID: 2339133032626867968}
   Prefab_CurrencyUI: {fileID: 2395951975074356844}
   Image_UserIcon: {fileID: 187072094990481744}
   Text_UserName: {fileID: 8010814526321658313}
@@ -1434,7 +1433,7 @@ GameObject:
   - component: {fileID: 1532840914828878727}
   - component: {fileID: 2339133032626867968}
   m_Layer: 5
-  m_Name: Btn_Breeding
+  m_Name: Btn_Cross
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
