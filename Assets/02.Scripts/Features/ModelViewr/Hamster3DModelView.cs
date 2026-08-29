@@ -4,12 +4,22 @@ using UnityEngine;
 
 internal class Hamster3DModelView : MonoBehaviour
 {
+    [Header("카메라 관련")]
+    [SerializeField] private Camera Camera;
+
+    [Header("햄스터 관련")]
     [SerializeField] private Transform _hamsterTransform;
     [SerializeField] private Animator _animator;
     [SerializeField] private SkinnedMeshRenderer FaceMesh;
     [SerializeField] private SkinnedMeshRenderer HamsterMesh;
 
     private HamsterModelViewModel _hamsterModelViewModel;
+
+    private void Start()
+    {
+        var hamsterRender = ServiceManager.Instance.HamsterModelService.HamsterTexture;
+        Camera.targetTexture = hamsterRender;
+    }
 
     private void OnEnable()
     {

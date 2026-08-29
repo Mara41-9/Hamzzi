@@ -498,16 +498,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5599485543628639591, guid: 96929dfdef2f2d744b4197b5ce48179c, type: 3}
   m_PrefabInstance: {fileID: 758158003}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &829560955 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3942856769663045957, guid: 4221b9c9edd4ca6408e86abe602e4ec6, type: 3}
-  m_PrefabInstance: {fileID: 2828615645460722056}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &829560957 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4029935126034233137, guid: 4221b9c9edd4ca6408e86abe602e4ec6, type: 3}
-  m_PrefabInstance: {fileID: 2828615645460722056}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &857765370 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2730868996129756127, guid: 62efbf2b731500641a86add7049bff82, type: 3}
@@ -1326,7 +1316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1445090209
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1797,10 +1787,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c87f524215ce73049a222d647f4d2a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrossResultView
+  ExitButton: {fileID: 0}
   rawImageRect: {fileID: 1075447563}
   rawImageCanvasGroup: {fileID: 1810863827}
-  characterModel: {fileID: 829560955}
-  characterAnimator: {fileID: 829560957}
 --- !u!225 &1810863827
 CanvasGroup:
   m_ObjectHideFlags: 0
