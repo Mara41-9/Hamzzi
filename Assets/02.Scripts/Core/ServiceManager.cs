@@ -136,6 +136,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitModelViewrService()
     {
         HamsterModelService = new HamsterModelService();
+        HamsterModelService.GetHamsterModelViewModel();
     }
 
     public void LoadDataFromDB()

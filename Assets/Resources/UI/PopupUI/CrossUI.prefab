@@ -397,7 +397,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2942873591675006621
 RectTransform:
   m_ObjectHideFlags: 0
@@ -699,7 +699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3203001638301774796
 RectTransform:
   m_ObjectHideFlags: 0
@@ -735,6 +735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrossResultView
   ExitButton: {fileID: 3824662652395811722}
+  HamsterModelImage: {fileID: 5544983573435928480}
   rawImageRect: {fileID: 3880914106889803446}
   rawImageCanvasGroup: {fileID: 9049725050566280373}
 --- !u!225 &9049725050566280373
@@ -2708,7 +2709,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &8112879201254176924
 MonoBehaviour:
@@ -2920,9 +2921,9 @@ RectTransform:
   m_Father: {fileID: 3203001638301774796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -524.80005, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3578700441144597071
 CanvasRenderer:

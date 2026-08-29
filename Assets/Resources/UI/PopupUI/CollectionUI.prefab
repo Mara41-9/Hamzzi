@@ -2163,7 +2163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 98417eee6f001d14185a4d9c5ce3b0b4, type: 2}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -6710,10 +6710,10 @@ MonoBehaviour:
   HamsterSlotPrefab: {fileID: 3531889357708306709, guid: d0701dad4a61db84fbd2f65606c8065a, type: 3}
   FaceSlotPrefab: {fileID: 852566108727002345, guid: f474d07a0c71ffd459de62ba6ab016c4, type: 3}
   SlotContent: {fileID: 267101620537615182}
-  HamsterModelPrefab: {fileID: 7012912615587124373, guid: 4221b9c9edd4ca6408e86abe602e4ec6, type: 3}
   HamsterRotate: {fileID: 7002461750789726769}
   KickButton: {fileID: 764345663472159914}
   KickUI: {fileID: 2376417598939697688}
+  HamsterModelImage: {fileID: 8101450170884179559}
   HamsterCount: {fileID: 1823588923595215542}
   HamsterName: {fileID: 6278430250142350198}
   HamsterAbility: {fileID: 3587662553030463766}
