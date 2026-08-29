@@ -246,7 +246,7 @@ public class LoginViewModel : ViewModelBase
         InvokeCompleteLogout();
     }
 
-    private void InvokeCompleteLogin()
+    public void InvokeCompleteLogin()
     {
         if (OnCompleteLogin != null)
         {
