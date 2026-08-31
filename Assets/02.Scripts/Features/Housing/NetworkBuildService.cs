@@ -483,13 +483,14 @@ public class NetworkBuildService
     {
         _isSaving = true;
 
-        while (_pendingSave)
+        do
         {
             _pendingSave = false;
             await SaveAllBuildAndFurnitureData(userUID);
 
             Debug.Log("건설/가구/인벤토리 데이터 저장 요청 완료");
         }
+        while (_pendingSave);
 
         _isSaving = false;
     }
