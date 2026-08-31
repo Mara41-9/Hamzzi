@@ -375,9 +375,8 @@ public class NetworkBuildService
 
         roomVM.AddFurniture(furnitureVM);
 
-        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
-        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
-        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+        int sizeX = furnitureVM.Size.x;
+        int sizeY = furnitureVM.Size.y;
 
         float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
         float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
@@ -413,9 +412,8 @@ public class NetworkBuildService
 
         housingVM.LoadGardenFurniture(furnitureVM);
 
-        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
-        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
-        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+        int sizeX = furnitureVM.Size.x;
+        int sizeY = furnitureVM.Size.y;
 
         float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
         float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
