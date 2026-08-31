@@ -136,8 +136,7 @@ public class NetworkBuildService
                             {
                                 if (housingVM != null)
                                 {
-                                    housingVM.LoadGardenFurniture(furnitureVM);
-                                    SpawnLoadGardenFurniture(furnitureVM).Forget();
+                                    SpawnLoadGardenFurniture(housingVM, furnitureVM).Forget();
                                 }
                             }
                             else
@@ -146,7 +145,6 @@ public class NetworkBuildService
                                 {
                                     if (room.InstanceID == roomUID.ToString())
                                     {
-                                        room.AddFurniture(furnitureVM);
                                         SpawnLoadFurniture(room, furnitureVM).Forget();
                                         break;
                                     }
@@ -369,12 +367,16 @@ public class NetworkBuildService
 
         if (prefab.TryGetComponent(out FurnitureView furnitureView))
         {
-            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+            Vector2Int rawSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            bool rotatedFlag = (furnitureVM.RotationAngle / 90) % 2 != 0;
+            furnitureVM.Size = rotatedFlag ? new Vector2Int(rawSize.y, rawSize.x) : rawSize;
         }
 
-        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
-        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
-        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+        roomVM.AddFurniture(furnitureVM);
+
+        int sizeX = furnitureVM.Size.x;
+        int sizeY = furnitureVM.Size.y;
 
         float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
         float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
@@ -393,7 +395,7 @@ public class NetworkBuildService
         ServiceManager.Instance.HousingService.RegisterSpawnFurniture(furnitureVM.InstanceID, prefab);
     }
 
-    private async UniTaskVoid SpawnLoadGardenFurniture(FurnitureViewModel furnitureVM)
+    private async UniTaskVoid SpawnLoadGardenFurniture(HousingViewModel housingVM, FurnitureViewModel furnitureVM)
     {
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID.ToString(), furnitureVM.PrefabPath, Vector3.zero);
         prefab.transform.rotation = Quaternion.identity;
@@ -402,12 +404,16 @@ public class NetworkBuildService
 
         if (prefab.TryGetComponent(out FurnitureView furnitureView))
         {
-            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+            Vector2Int rawSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            bool rotatedFlag = (furnitureVM.RotationAngle / 90) % 2 != 0;
+            furnitureVM.Size = rotatedFlag ? new Vector2Int(rawSize.y, rawSize.x) : rawSize;
         }
 
-        bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
-        int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
-        int sizeY = isRotated ? furnitureVM.Size.x : furnitureVM.Size.y;
+        housingVM.LoadGardenFurniture(furnitureVM);
+
+        int sizeX = furnitureVM.Size.x;
+        int sizeY = furnitureVM.Size.y;
 
         float localX = (furnitureVM.LocalPos.x + sizeX * 0.5f) * subCellSize;
         float localZ = (furnitureVM.LocalPos.y + sizeY * 0.5f) * subCellSize;
@@ -483,13 +489,14 @@ public class NetworkBuildService
     {
         _isSaving = true;
 
-        while (_pendingSave)
+        do
         {
             _pendingSave = false;
             await SaveAllBuildAndFurnitureData(userUID);
 
             Debug.Log("건설/가구/인벤토리 데이터 저장 요청 완료");
         }
+        while (_pendingSave);
 
         _isSaving = false;
     }

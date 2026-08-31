@@ -119,6 +119,7 @@ public class HousingView : ViewBase
                 if (_housingVM.ConfirmFurniture != null)
                 {
                     SpawnFurniture(_housingVM.ConfirmFurniture).Forget();
+                    _housingService.SaveAllInventoryData(ServiceManager.Instance.LoginService.GetViewModel().UserUID).Forget();
                 }
                 break;
 
@@ -127,6 +128,7 @@ public class HousingView : ViewBase
                 {
                     string id = _housingVM.DestroyFurniture.InstanceID;
                     _housingService.RemoveSpawnFurniture(id);
+                    _housingService.SaveAllInventoryData(ServiceManager.Instance.LoginService.GetViewModel().UserUID).Forget();
                 }
                 break;
         }
@@ -345,7 +347,7 @@ public class HousingView : ViewBase
         }
     }
 
-    private void UpdateGhostTransform()
+    public void UpdateGhostTransform()
     {
         if (_housingVM.FurnitureVM == null)
         {
@@ -356,7 +358,6 @@ public class HousingView : ViewBase
         float subCellSize = GetCurrentSubCellSize();
 
         _ghostObject.transform.position = pos;
-        _ghostObject.transform.rotation = rot;
 
         float currentAngle = _housingVM.FurnitureVM.RotationAngle;
 
@@ -380,11 +381,6 @@ public class HousingView : ViewBase
             SpriteRenderer_Tile.transform.rotation = Quaternion.Euler(90f, 0f, currentAngle);
 
             Vector2Int baseSize = _housingVM.FurnitureVM.Size;
-            if (_ghostObject.TryGetComponent<FurnitureView>(out var fView))
-            {
-                baseSize = fView.GetFurnitureSize(subCellSize);
-                _housingVM.FurnitureVM.Size = baseSize;
-            }
 
             bool isRotated = Mathf.Approximately(currentAngle, 90f) || Mathf.Approximately(currentAngle, 270f) || ((int)currentAngle / 90) % 2 != 0;
             int sizeX = isRotated ? baseSize.y : baseSize.x;
@@ -394,7 +390,6 @@ public class HousingView : ViewBase
             float tileHeight = sizeY * subCellSize;
 
             SpriteRenderer_Tile.transform.localScale = new Vector3(tileWidth, tileHeight, 1f);
-
             SpriteRenderer_Tile.color = _housingVM.FurnitureVM.IsValid ? Color_Valid : Color_Invalid;
         }
     }
