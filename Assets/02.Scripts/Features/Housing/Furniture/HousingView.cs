@@ -119,6 +119,7 @@ public class HousingView : ViewBase
                 if (_housingVM.ConfirmFurniture != null)
                 {
                     SpawnFurniture(_housingVM.ConfirmFurniture).Forget();
+                    _housingService.SaveAllInventoryData(ServiceManager.Instance.LoginService.GetViewModel().UserUID).Forget();
                 }
                 break;
 
@@ -127,6 +128,7 @@ public class HousingView : ViewBase
                 {
                     string id = _housingVM.DestroyFurniture.InstanceID;
                     _housingService.RemoveSpawnFurniture(id);
+                    _housingService.SaveAllInventoryData(ServiceManager.Instance.LoginService.GetViewModel().UserUID).Forget();
                 }
                 break;
         }

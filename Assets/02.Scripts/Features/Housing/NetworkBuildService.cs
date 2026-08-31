@@ -136,8 +136,7 @@ public class NetworkBuildService
                             {
                                 if (housingVM != null)
                                 {
-                                    housingVM.LoadGardenFurniture(furnitureVM);
-                                    SpawnLoadGardenFurniture(furnitureVM).Forget();
+                                    SpawnLoadGardenFurniture(housingVM, furnitureVM).Forget();
                                 }
                             }
                             else
@@ -146,7 +145,6 @@ public class NetworkBuildService
                                 {
                                     if (room.InstanceID == roomUID.ToString())
                                     {
-                                        room.AddFurniture(furnitureVM);
                                         SpawnLoadFurniture(room, furnitureVM).Forget();
                                         break;
                                     }
@@ -369,8 +367,13 @@ public class NetworkBuildService
 
         if (prefab.TryGetComponent(out FurnitureView furnitureView))
         {
-            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+            Vector2Int rawSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            bool rotatedFlag = (furnitureVM.RotationAngle / 90) % 2 != 0;
+            furnitureVM.Size = rotatedFlag ? new Vector2Int(rawSize.y, rawSize.x) : rawSize;
         }
+
+        roomVM.AddFurniture(furnitureVM);
 
         bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
         int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
@@ -393,7 +396,7 @@ public class NetworkBuildService
         ServiceManager.Instance.HousingService.RegisterSpawnFurniture(furnitureVM.InstanceID, prefab);
     }
 
-    private async UniTaskVoid SpawnLoadGardenFurniture(FurnitureViewModel furnitureVM)
+    private async UniTaskVoid SpawnLoadGardenFurniture(HousingViewModel housingVM, FurnitureViewModel furnitureVM)
     {
         GameObject prefab = await GameObjectManager.Instance.CreateObjectAsync(furnitureVM.InstanceID.ToString(), furnitureVM.PrefabPath, Vector3.zero);
         prefab.transform.rotation = Quaternion.identity;
@@ -402,8 +405,13 @@ public class NetworkBuildService
 
         if (prefab.TryGetComponent(out FurnitureView furnitureView))
         {
-            furnitureVM.Size = furnitureView.GetFurnitureSize(subCellSize);
+            Vector2Int rawSize = furnitureView.GetFurnitureSize(subCellSize);
+
+            bool rotatedFlag = (furnitureVM.RotationAngle / 90) % 2 != 0;
+            furnitureVM.Size = rotatedFlag ? new Vector2Int(rawSize.y, rawSize.x) : rawSize;
         }
+
+        housingVM.LoadGardenFurniture(furnitureVM);
 
         bool isRotated = (furnitureVM.RotationAngle / 90) % 2 != 0;
         int sizeX = isRotated ? furnitureVM.Size.y : furnitureVM.Size.x;
