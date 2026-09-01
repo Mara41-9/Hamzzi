@@ -23,6 +23,7 @@ public class CollectionView : UIBase
     [SerializeField] private HamsterModelRotate HamsterRotate;
     [SerializeField] private UIButton KickButton;
     [SerializeField] private KickUI KickUI;
+    [SerializeField] private RawImage HamsterModelImage;
     [SerializeField] private TextMeshProUGUI HamsterCount;
     [SerializeField] private TextMeshProUGUI HamsterName;
     [SerializeField] private TextMeshProUGUI HamsterAbility;
@@ -42,6 +43,9 @@ public class CollectionView : UIBase
         _collectionViewModel = ServiceManager.Instance.CollectionService.GetCollectionViewModel(userUID);
         _hamsterViewModel = ServiceManager.Instance.CollectionService.GetHamsterViewModel();
         _hamsterModelViewModel = ServiceManager.Instance.HamsterModelService.GetHamsterModelViewModel();
+
+        var hamsterRender = ServiceManager.Instance.HamsterModelService.HamsterTexture;
+        HamsterModelImage.texture = hamsterRender;
     }
 
     private void OnEnable()

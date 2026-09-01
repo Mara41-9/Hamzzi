@@ -117,16 +117,12 @@ public class WheelViewModel : ViewModelBase
     public void AssignHamster(string hamsterUIDStr)
     {
         AssignHamsterID = hamsterUIDStr;
-
-        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
         RefreshHamsterList();
     }
 
     public void UnassignHamster()
     {
         AssignHamsterID = null;
-
-        ServiceManager.Instance.NetworkBuildService.RequestSaveHousingData();
         RefreshHamsterList();
     }
 

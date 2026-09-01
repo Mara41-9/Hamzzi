@@ -136,6 +136,7 @@ public class ServiceManager : SingletonBase<ServiceManager>
     private void InitModelViewrService()
     {
         HamsterModelService = new HamsterModelService();
+        HamsterModelService.GetHamsterModelViewModel();
     }
 
     public void LoadDataFromDB()
@@ -144,11 +145,12 @@ public class ServiceManager : SingletonBase<ServiceManager>
         long userUID = loginVM.UserUID;
 
         Debug.Log($"User UID : {userUID}");
-        CollectionService.LoadHamsterCollectionData(userUID).Forget();
-        CollectionService.SetCurrentCollectionViewModel(userUID);
+        CollectionService.LoadHamsterCollectionData(userUID).Forget();  
         HamsterModelService.LoadHamsterModel().Forget();
         HamsterManager.Instance.Init();
         UserService.InitUser(userUID).Forget();
+
+        CollectionService.SetCurrentCollectionViewModel(userUID);
     }
 
     public void LoadInventory()
