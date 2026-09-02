@@ -10,7 +10,7 @@ public class InGameManager : SingletonBase<InGameManager>
     private const float IdleRewardRateMultiplier = 0.7f;
     private const float PopupCloseDelaySeconds = 0.3f;
     private const float IdleRewardMinIntervalSeconds = 30f * 60f;
-    private const float AutoSaveIntervalMinutes = 1f;
+    private const float AutoSaveIntervalMinutes = 5f;
 
     private int _pendingIdleReward;
     private long _lastLoginTicks;
