@@ -28,11 +28,12 @@ public class HamsterModelService
 
     public async UniTask LoadHamsterModel()
     {
+        if (_modelView != null)
+            return;
+
         var modelObject = await GameObjectManager.Instance.CreateObjectAsync(string.Empty, "Hamster3DModel", Vector3.one * 1000);
         var view = modelObject.GetComponent<Hamster3DModelView>();
         _modelView = view;
-
-        
     }
 
     public Transform GetModelTransform()
