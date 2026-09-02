@@ -35,7 +35,7 @@ public class NetworkCollectionService
     {
         if(_collectionViewModelList.ContainsKey(userUID) == false)
         {
-            return null;
+            _collectionViewModelList.Add(userUID, new CollectionViewModel());
         }
 
         return _collectionViewModelList[userUID];

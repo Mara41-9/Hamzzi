@@ -8,6 +8,7 @@ public class CrossResultView : MonoBehaviour
     [SerializeField] private UIButton ExitButton;
 
     [Header("햄스터 외형")]
+    [SerializeField] private RawImage HamsterModelImage;
     [SerializeField] private RectTransform rawImageRect;
     [SerializeField] private CanvasGroup rawImageCanvasGroup;
 
@@ -16,6 +17,7 @@ public class CrossResultView : MonoBehaviour
     private void Awake()
     {
         _hamsterModelViewModel = ServiceManager.Instance.HamsterModelService.GetHamsterModelViewModel();
+        HamsterModelImage.texture = ServiceManager.Instance.HamsterModelService.HamsterTexture;
     }
 
     private void OnEnable()

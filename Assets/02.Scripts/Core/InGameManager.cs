@@ -9,9 +9,12 @@ public class InGameManager : SingletonBase<InGameManager>
     private const float IdleRewardCapSeconds = 12f * 60f * 60f;
     private const float IdleRewardRateMultiplier = 0.7f;
     private const float PopupCloseDelaySeconds = 0.3f;
+    private const float IdleRewardMinIntervalSeconds = 30f * 60f;
+    private const float AutoSaveIntervalMinutes = 5f;
 
     private int _pendingIdleReward;
     private long _lastLoginTicks;
+    private bool _canReceiveIdleReward;
 
 
     private void Start()
@@ -45,8 +48,8 @@ public class InGameManager : SingletonBase<InGameManager>
             GameManager.Instance.InitMap(loginVm.UserUID).Forget();
         }
 
-
         _lastLoginTicks = loginVm.LastLoginTime.Ticks;
+        _canReceiveIdleReward = true;
 
         loginVm.RequestUpdateLastLogin();
         AutoSaveGameData(this.GetCancellationTokenOnDestroy()).Forget();
@@ -59,10 +62,23 @@ public class InGameManager : SingletonBase<InGameManager>
             return;
         }
 
+        if (_canReceiveIdleReward == false)
+        {
+            return;
+        }
+
+        _canReceiveIdleReward = false;
+
         UserViewModel userVm = ServiceManager.Instance.UserService.GetUserViewModel();
 
         float productionPerSec = userVm.GoldPerSec * IdleRewardRateMultiplier;
         float elapsedSeconds = GameUtil.CalculateElapsedSeconds(_lastLoginTicks, IdleRewardCapSeconds);
+
+        if (elapsedSeconds < IdleRewardMinIntervalSeconds)
+        {
+            return;
+        }
+
         int idleReward = GameUtil.CalculateIdleReward(_lastLoginTicks, productionPerSec, IdleRewardCapSeconds);
 
 #if UNITY_EDITOR
@@ -109,8 +125,14 @@ public class InGameManager : SingletonBase<InGameManager>
     {
         while(true)
         {
-            await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromMinutes(AutoSaveIntervalMinutes), cancellationToken: token);
             await SaveSeedCount();
+
+            LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+            if (loginVm != null)
+            {
+                loginVm.RequestUpdateLastLogin();
+            }
         }
     }
 
@@ -119,6 +141,9 @@ public class InGameManager : SingletonBase<InGameManager>
         var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+
+        HamsterManager.Instance.RefreshTotalCollectSpeedPerSec();
+
         // TODO : 데이터 직접 접근 없애야 함
         userVm.GoldPerSec = CalculateCurrentGoldPerSec();
 
@@ -133,8 +158,29 @@ public class InGameManager : SingletonBase<InGameManager>
         return HamsterManager.Instance.TotalCollectSpeedPerSec * (1f + buffRate);
     }
 
-    private void OnApplicationQuit()
+    private void SaveGameDataOnAppStop() // 앱 멈출 때 저장, 밑의 Quit과 Pause를 아우름
     {
         SaveSeedCount().Forget();
+
+        LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
+        if (loginVm != null)
+        {
+            loginVm.RequestUpdateLastLogin();
+        }
+    }
+
+    private void OnApplicationQuit() // 앱 완전 종료
+    {
+        SaveGameDataOnAppStop();
+    }
+
+    private void OnApplicationPause(bool pauseStatus) // 앱 백그라운드 전환(홈 버튼, 앱 전환 등)
+    {
+        if (pauseStatus == false)
+        {
+            return;
+        }
+
+        SaveGameDataOnAppStop();
     }
 }

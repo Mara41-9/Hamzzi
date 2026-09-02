@@ -16,7 +16,6 @@ public class InGameUI : ViewBase
     [SerializeField] private UIButton Button_Garden;
     [SerializeField] private UIButton Button_Exit;
     [SerializeField] private UIButton Button_GoHome;
-    [SerializeField] private UIButton Button_Breeding;
     [SerializeField] private UIButton Button_ProfileSetting;
     [SerializeField] private UIButton Button_Cross;
 
@@ -41,18 +40,17 @@ public class InGameUI : ViewBase
 
     private void OnEnable()
     {
-        Button_ShopUI.BindOnClickButtonEvent(OnClick_OpenShop);
-        Button_DecorUI.BindOnClickButtonEvent(OnClick_OpenDecor);
+        Button_ShopUI.BindOnClickButtonEvent(OnClick_OpenShop, true);
+        Button_DecorUI.BindOnClickButtonEvent(OnClick_OpenDecor, true);
         Button_FriendUI.BindOnClickButtonEvent(OnClick_OpenFriend);
         Button_CollectionUI.BindOnClickButtonEvent(OnClick_OpenCollectionUI);
-        Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI);
+        Button_Gacha.BindOnClickButtonEvent(OnClick_OpenGachaUI, true);
         Button_Setting.BindOnClickButtonEvent(OnClick_OpenSetting);
-        Button_Garden.BindOnClickButtonEvent(OnClick_Garden);
-        Button_Exit.BindOnClickButtonEvent(OnClick_Exit);
-        Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome);
-        Button_Breeding.BindOnClickButtonEvent(OnClick_Breeding);
+        Button_Garden.BindOnClickButtonEvent(OnClick_Garden, true);
+        Button_Exit.BindOnClickButtonEvent(OnClick_Exit, true);
+        Button_GoHome.BindOnClickButtonEvent(OnClick_GoHome, true);
         Button_ProfileSetting.BindOnClickButtonEvent(OnClick_ProfileSetting);
-        Button_Cross.BindOnClickButtonEvent(OnClick_Cross);
+        Button_Cross.BindOnClickButtonEvent(OnClick_Cross, true);
 
         if (_housingVM == null)
         {
@@ -73,6 +71,14 @@ public class InGameUI : ViewBase
         _housingVM.PropertyChanged -= OnPropertyChanged_VM;
         _visitedUserVm.PropertyChanged -= OnPropChanged_VisitedUserView;
         _visitedUserVm.OnCompleteLoadInfo -= OnCompleteLoadVisitUserInfo;
+
+        Button_ShopUI.UnBindOnClickButtonEvent(OnClick_OpenShop);
+        Button_DecorUI.UnBindOnClickButtonEvent(OnClick_OpenDecor);
+        Button_Gacha.UnBindOnClickButtonEvent(OnClick_OpenGachaUI);
+        Button_Garden.UnBindOnClickButtonEvent(OnClick_Garden);
+        Button_Exit.UnBindOnClickButtonEvent(OnClick_Exit);
+        Button_GoHome.UnBindOnClickButtonEvent(OnClick_GoHome);
+        Button_Cross.UnBindOnClickButtonEvent(OnClick_Cross);
     }
 
     private void FindUserViewModelAndBind()

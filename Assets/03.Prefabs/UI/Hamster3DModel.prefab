@@ -2415,6 +2415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46832cbd4bb3a314aa0dc068d343ebb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hamster3DModelView
+  Camera: {fileID: 2336610347214708371}
   _hamsterTransform: {fileID: 3942856769663045957}
   _animator: {fileID: 4029935126034233137}
   FaceMesh: {fileID: 3989772259518028641}
@@ -2493,8 +2494,8 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 98417eee6f001d14185a4d9c5ce3b0b4, type: 2}
-  m_TargetDisplay: 0
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1

@@ -9,7 +9,7 @@ public class UIButton : MonoBehaviour
     [SerializeField] private Image Image_Base;
     [SerializeField] private TMP_Text Text_Base;
 
-    // 자동으로 이벤트를 제거할지 말지 구분하는 변수
+    // true면 외부에서 직접 이벤트 해제
     private bool _isSlotManualUnbindEvent = false;
 
     private void Awake()
@@ -19,7 +19,7 @@ public class UIButton : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_isSlotManualUnbindEvent == true)
+        if (_isSlotManualUnbindEvent == false)
         {
             Button_Base.onClick.RemoveAllListeners();
         }
@@ -39,12 +39,12 @@ public class UIButton : MonoBehaviour
         }
     }
 
-    public void BindOnClickButtonEvent(Action onClickCallback, bool isMenualUnbindEvent = false)
+    public void BindOnClickButtonEvent(Action onClickCallback, bool isManualUnbindEvent = false)
     {
         if (Button_Base == null) return;
 
         Button_Base.onClick.AddListener(new UnityEngine.Events.UnityAction(onClickCallback));
-        _isSlotManualUnbindEvent = isMenualUnbindEvent;
+        _isSlotManualUnbindEvent = isManualUnbindEvent;
     }
 
     public void UnBindOnClickButtonEvent(Action onClickCallback)
