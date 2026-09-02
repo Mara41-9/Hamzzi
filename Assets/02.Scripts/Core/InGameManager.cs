@@ -10,7 +10,7 @@ public class InGameManager : SingletonBase<InGameManager>
     private const float IdleRewardRateMultiplier = 0.7f;
     private const float PopupCloseDelaySeconds = 0.3f;
     private const float IdleRewardMinIntervalSeconds = 30f * 60f;
-    private const float AutoSaveIntervalMinutes = 5f;
+    private const float AutoSaveIntervalMinutes = 1f;
 
     private int _pendingIdleReward;
     private long _lastLoginTicks;
@@ -125,7 +125,7 @@ public class InGameManager : SingletonBase<InGameManager>
     {
         while(true)
         {
-            await UniTask.Delay(TimeSpan.FromMinutes(5), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromMinutes(AutoSaveIntervalMinutes), cancellationToken: token);
             await SaveSeedCount();
 
             LoginViewModel loginVm = ServiceManager.Instance.LoginService.GetViewModel();
@@ -141,6 +141,9 @@ public class InGameManager : SingletonBase<InGameManager>
         var loginVm = ServiceManager.Instance.LoginService.GetViewModel();
 
         var userVm = ServiceManager.Instance.UserService.GetUserViewModel();
+
+        HamsterManager.Instance.RefreshTotalCollectSpeedPerSec();
+
         // TODO : 데이터 직접 접근 없애야 함
         userVm.GoldPerSec = CalculateCurrentGoldPerSec();
 

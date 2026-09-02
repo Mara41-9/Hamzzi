@@ -16,6 +16,8 @@ public class HamsterManager : SingletonBase<HamsterManager>
     private int _collectionGeneration = 0;
 
     public float TotalCollectSpeedPerSec { get; private set; }
+    private int _collectCount = 0;
+    private float _measureStartTime = 0f;
 
     public bool IsCurrentCollectionMine()
     {
@@ -118,7 +120,7 @@ public class HamsterManager : SingletonBase<HamsterManager>
             SpawnHamster(hamsterSave);
         }
 
-        RecalculateTotalCollectSpeedPerSec();
+        ResetCollectMeasure();
     }
 
     private void SpawnHamster(HamsterSave hamsterSave)
@@ -189,24 +191,29 @@ public class HamsterManager : SingletonBase<HamsterManager>
         _spawnedHamsterObjectDict.Clear();
     }
 
-    private void RecalculateTotalCollectSpeedPerSec()
+    // BT가 씨앗을 채집할 때마다 호출해 측정 구간의 채집 횟수를 누적한다
+    public void AddCollectCount()
     {
-        if (IsCurrentCollectionMine() == false)
+        _collectCount++;
+    }
+
+    // 측정 구간의 실제 채집 횟수로 초당 채집량을 갱신하고 구간을 새로 연다
+    public void RefreshTotalCollectSpeedPerSec()
+    {
+        float elapsedSeconds = Time.time - _measureStartTime;
+
+        if (elapsedSeconds > 0f)
         {
-            return;
+            TotalCollectSpeedPerSec = _collectCount / elapsedSeconds;
         }
 
-        float total = 0f;
+        ResetCollectMeasure();
+    }
 
-        foreach (HamsterSave hamsterSave in _collectionViewModel.CollectedHamsterList.Values)
-        {
-            HamsterData hamsterData = GameDataManager.Instance.GetData<HamsterData>(hamsterSave.HamsterId);
-            if (hamsterData != null)
-            {
-                total += hamsterData.CollectSpeed;
-            }
-        }
-
-        TotalCollectSpeedPerSec = total;
+    // 측정 구간만 새로 연다. 컬렉션이 바뀌어 이전 구간을 쓸 수 없을 때 호출한다
+    public void ResetCollectMeasure()
+    {
+        _collectCount = 0;
+        _measureStartTime = Time.time;
     }
 }
