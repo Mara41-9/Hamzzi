@@ -111,7 +111,7 @@ public class LoginService
                                     insertGameDataCmd.Parameters.AddWithValue("@iconId", defaultIconAddress);
                                     insertGameDataCmd.Parameters.AddWithValue("@gold", 0);
                                     insertGameDataCmd.Parameters.AddWithValue("@goldPerSec", 0);
-                                    insertGameDataCmd.Parameters.AddWithValue("@goldBonus ", 0);
+                                    insertGameDataCmd.Parameters.AddWithValue("@goldBonus", 0);
 
                                     int gameDataRows = await insertGameDataCmd.ExecuteNonQueryAsync();
 
