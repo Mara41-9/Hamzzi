@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FriendSlotUI
   TextMesh_FriendName: {fileID: 688084004000391952}
-  TextMesh_FriendUid: {fileID: 256040224434767705}
+  TextMesh_FriendId: {fileID: 256040224434767705}
   Button_Visit: {fileID: 1757350217039165477}
 --- !u!114 &1757350217039165477
 MonoBehaviour:
