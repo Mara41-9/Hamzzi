@@ -206,6 +206,7 @@ public class LoginViewModel : ViewModelBase
             {
                 UserUID = resultUid;
                 LoggedUserId = _inputId;
+                LastLoginTime = DateTime.UtcNow;
 
                 FeedbackMessage = "계정 생성 성공!";
                 InvokeCompleteCreateAccount();
