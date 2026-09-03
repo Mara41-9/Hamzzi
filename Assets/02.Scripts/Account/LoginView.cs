@@ -98,6 +98,10 @@ public class LoginView : UIBase
             case nameof(LoginViewModel.IsAutoLogin):
                 Toggle_AutoLogin.isOn = _vm.IsAutoLogin;
                 break;
+
+            case nameof(LoginViewModel.FeedbackMessage):
+                TextMesh_Feedback.text = _vm.FeedbackMessage;
+                break;
         }
     }
 

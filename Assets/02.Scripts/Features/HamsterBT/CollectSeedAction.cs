@@ -28,6 +28,7 @@ public partial class CollectSeedAction : Action
             if (userVm != null)
             {
                 userVm.AddSeed(SeedPerCollect);
+                HamsterManager.Instance.AddCollectCount();
             }
         }
 

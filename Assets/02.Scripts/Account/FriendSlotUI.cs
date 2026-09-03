@@ -1,22 +1,33 @@
 ﻿using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FriendSlotUI : UIBase
 {
+    [SerializeField] private Image Image_FriendIcon;
     [SerializeField] private TextMeshProUGUI TextMesh_FriendName;
-    [SerializeField] private TextMeshProUGUI TextMesh_FriendUid; 
+    [SerializeField] private TextMeshProUGUI TextMesh_FriendId; 
     [SerializeField] private UIButton Button_Visit;
 
     private long _friendUid = 0;
-
-    public void SetFriendData(FriendInfoData data)
+    public async void SetFriendData(FriendInfoData data)
     {
         if (data != null)
         {
             TextMesh_FriendName.text = data.FriendName;
-            TextMesh_FriendUid.text = data.FriendUid.ToString();
+            TextMesh_FriendId.text = data.FriendId.ToString();
             _friendUid = data.FriendUid;
+
+            if (data.FriendIconId != "")
+            {
+                Sprite loadedSprite = await ResourceManager.Instance.LoadAsset<Sprite>(data.FriendIconId);
+
+                if (Image_FriendIcon != null && loadedSprite != null)
+                {
+                    Image_FriendIcon.sprite = loadedSprite;
+                }
+            }
         }
     }
 
